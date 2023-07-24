@@ -1,0 +1,382 @@
+/* HEADER //
+///////////*/
+
+/* bar above the main header that contains login/regi */
+.account-masthead {
+    background-color: #000;
+}
+
+/* account masthead options */
+.account-masthead .account ul li a {
+    color: white;
+    background-color: #000;
+}
+.account-masthead .account ul li a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* main header that contains logo, nav links and search */
+.masthead {
+    background: #354753 url(../../../base/images/bg.png);
+}
+
+/* main nav bar logo */
+.masthead .navbar .logo img {
+    max-height: 48px;
+}
+
+/* navbar title */
+.masthead .navbar .navbar-title {
+    font-size: 1.4rem;
+    color: white;
+    margin-right: 135px;
+}
+
+/* nav pill list */
+.masthead .main-navbar ul {
+    padding-right: 0px;
+}
+
+/* nav pill list item */
+.masthead .main-navbar ul li {
+    padding-right: 0px;
+    padding-top: 5px;
+}
+
+/* nav pill links */
+.masthead .main-navbar ul li a {
+    padding: 0.8rem 1.5rem;
+    border-left: grey 2.2px solid;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+/* nav pill states */
+.masthead .main-navbar ul li:hover a, .masthead .main-navbar ul li:focus a, .masthead .main-navbar ul li.active a {
+    background-color: #354753;
+    text-decoration: underline;
+    border-radius: 0;
+}
+
+.navbar {
+    padding: 0px;
+}
+
+/* FOOTER //
+///////////*/
+
+.site-footer {
+    background: #354753 url(../../../base/images/bg.png);
+    border-top: 10px solid;
+    border-image: linear-gradient(to right,#6bc9df 0%,#6bc9df 25%,#79decc 25%,#79decc 50%,#f8859c 50%,#f8859c 74%,#f8859c 75%,#ffd900 75%,#ffd900 97%) 1 0 0 0;
+}
+
+/* LANDING PAGE //
+///////////////*/
+
+/* base background color #354753 */
+body {
+    background: #fff url(../../../base/images/bg.png);
+}
+
+/* two thirds container width */
+.container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+    max-width: 990px;
+}
+
+main {
+    font-size: 16px;
+    line-height: 1.3157894737;
+    padding-top: 0px;
+}
+
+/* homepage background padding */
+.homepage [role=main] {
+    padding: 0px 0;
+    padding-top: 2px;
+}
+.homepage .stats {
+    margin-top: 20px;
+}
+
+/* search data box position */
+.homepage.layout-1 .row1 .col2 {
+    top: 0;
+}
+
+/* search data box background color */
+.homepage .module-search .module-content {
+    background-color: #354753;
+}
+
+.media-overlay .media-heading {
+    background-color: #354753;
+}
+
+/* SEARCH PAGE //
+///////////////*/
+
+input.gem-c-search__item.gem-c-search__input {
+    margin-bottom: 25px;
+    border: 2px solid;
+    padding: 8px;
+    width: 85%;
+    float: left;
+}
+
+input.gem-c-search__input:focus {
+    outline: 3px solid #fd0;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 2px;
+}
+
+button.gem-c-search__submit {
+    border-radius: 0;
+    border-color: #1d70b8;
+    background-color: #1d70b8;
+    width: 15%;
+    padding: 8px;
+    float: left;
+}
+
+i.fa.fa-search {
+    color: white;
+}
+
+.search-title {
+    margin-left: 34%;
+}
+
+.topics_list {
+    columns: 3;
+}
+
+.topics_list li {
+    display: inline-block;
+    width: 100%;
+}
+
+.topics_heading {
+    margin-bottom: 5px;
+    font-size: 19px;
+}
+
+h1.gem-c-title__text.govuk-heading-x2 {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+p.gem-c-lead-paragraph {
+    margin-bottom: 40px;
+    font-size: 22px;
+    line-height: 1.25;
+}
+
+.govuk-select {
+    width: 100%;
+    min-width: 0px;
+}
+
+.select-sort {
+    width: auto;
+}
+
+.sort {
+    float: right;
+}
+
+.sort-label {
+    font-size: 16px;
+}
+
+.filters h2 {
+  margin-top: 0px;
+}
+
+/* results count */
+.results_summary {
+    display: inline-block;
+}
+
+/* dataset cards */
+.dataset-listclass {
+    margin-top: 30px;
+    list-style-type: none;
+    padding: 0px;
+}
+
+.dataset-heading a {
+    color: #206b82;
+    text-decoration: underline;
+}
+
+.dataset-itemclass {
+    border-top: 0.5px solid #ccc;
+    padding-top: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #354753;
+}
+
+.govuk-button {
+    font-size: 16px;
+}
+
+.heading-small {
+    font-size: 16px;
+    line-height: 1.25;
+}
+
+.heading-medium {
+    font-size: 24px;
+    line-height: 1.25;
+}
+
+.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+.pagination > li {
+    display: inline;
+}
+.pagination > li > a,
+.pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #206b82;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+    z-index: 2;
+    color: #113845;
+    background-color: #eeeeee;
+    border-color: #ddd;
+}
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #206b82;
+    border-color: #206b82;
+}
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+    color: #777777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+/* PRODUCT PAGE //
+///////////////*/
+
+.column-one-third {
+    float: left;
+    width: 33.33%;
+}
+
+.column-two-thirds {
+    float: left;
+    width: 66.66%;
+}
+
+.metadata-heading {
+    font-size: 28px;
+    line-height: 1.25;
+    margin-bottom: 20px;
+}
+
+.dataset-right-sidebar {
+    margin-bottom: 20px;
+}
+
+.dataset-marking {
+    float: right;
+}
+
+.dataset-private, .dataset-public  {
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.dataset-private {
+    background-color: #9d9d1b;
+}
+
+.dataset-public {
+    background-color: green;
+}
+
+.metadata-box--in-dataset {
+    background: #eee;
+    padding: 25px 30px 15px 30px;
+}
+
+.metadata-box {
+    margin-bottom: 10px;
+}
+
+.metadata-box dt, .metadata-box dd  {
+    display: inline-block;
+    margin-bottom: 5px;
+    vertical-align: text-top;
+}
+
+.metadata-box dt {
+    width: 30%;
+    font-weight: bold;
+    white-space: nowrap;
+    margin-right: 5px;
+}
+
+.metadata-box dd {
+    width: 60%;
+}
+
+.dataset-right {
+    padding-left: 25px;
+}
+
+.product-column {
+    margin-top: 50px;
+}
+
+
+/* temp flask debug overflow fix */
+#flDebug, #flDebug * {
+    overflow-y: auto;
+}

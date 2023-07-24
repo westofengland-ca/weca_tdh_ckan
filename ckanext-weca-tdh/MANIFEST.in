@@ -1,0 +1,5 @@
+include README.rst
+include LICENSE
+include requirements.txt
+recursive-include ckanext/weca_tdh *.html *.json *.js *.less *.css *.mo *.yml
+recursive-include ckanext/weca_tdh/migration *.ini *.py *.mako

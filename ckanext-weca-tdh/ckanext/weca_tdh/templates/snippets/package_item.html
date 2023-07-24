@@ -1,0 +1,9 @@
+{% ckan_extends %}
+
+{% block notes %}
+  <div class="dataset-meta">
+    <p><b>Published by:</b> {{ package.organization.title }}</p>
+    <p><b>Last Updated:</b> {{ h.filter_datetime(package.metadata_modified, 'short') }}</p>
+  </div>
+  {{ super() }}
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "page.html" %}
+
+{% from "components/button/macro.html" import govukButton %}
+
+{% block subtitle %}{{ _("Search") }}{% endblock %}
+
+{% block content %}
+  {% block primary_content %}
+    <div class="govuk-width-container">
+      <form action="/dataset" method="GET">
+        <main role="main" id="main-content" class="govuk-main-wrapper">
+          <div class="govuk-width-container">
+            <h1 class="gem-c-heading govuk-heading-xl govuk-!-margin-bottom-6 search-title">Search results</h1>            
+            <div class="govuk-grid-row filters">
+            
+              {% block search_filters %}             
+                <div class="govuk-grid-column-one-third">
+                  <h2 class="heading-medium">Filter by</h2>
+                  <label class="govuk-label sort-label" for="sort">Keywords</label>
+                  <div class="gem-c-search__item-wrapper">
+                    <input class="gem-c-search__item gem-c-search__input" type="text" placeholder="Search Transport Data Hub" name="q">           
+                    <button class="gem-c-search__submit" type="submit"><i class="fa fa-search"></i></button>
+                  </div>
+                  {% set facetLabels = ["organization", "groups", "res_format"] %}
+                  {% for facet in facetLabels %}
+                    {{ h.snippet('package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped) }}
+                  {% endfor %}
+                  {{ govukButton({
+                    'text': "Apply filters"
+                  }) }}
+                  <p class="govuk-body sort-label">
+                    <a class="govuk-link" href="/dataset">Remove filters</a>
+                  </p> 
+                </div> 
+              {% endblock %}
+
+              <div class="govuk-grid-column-two-thirds dgu-results">
+                {% block search_sort %}
+                  <div class="sort"> 
+                    {{ h.snippet('package/snippets/search_sort.html', sort_by_selected=sort_by_selected) }}
+                  </div>
+                {% endblock %}
+
+                {% block search_results_count %}
+                  <span class="results_summary">
+                    <span class="govuk-body-m govuk-!-font-weight-bold">{% snippet 'snippets/search_result_text.html', query=q, sorting=sorting, count=page.item_count, type=dataset_type %}</span>
+                  </span>
+                {% endblock %}
+
+                {% block package_search_results_list %}
+                  {{ h.snippet('snippets/package_list.html', packages=page.items, list_class='dataset-listclass', item_class='dataset-itemclass') }}
+                {% endblock %}
+
+                {% block page_pagination %}
+                  {{ page.pager(q=q) }}
+                {% endblock %}
+              </div>
+            </div>
+          </div>
+        </main>
+      </form>
+    </div>
+  {% endblock %}
+{% endblock %}

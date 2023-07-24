@@ -1,0 +1,36 @@
+{#
+  Renders a single data resource
+
+  res - A resource dict to render
+  pkg - A package dict that the resource belongs to
+  can_edit - Whether the user is allowed to edit the resource
+
+  Example: {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource, can_edit=can_edit %}
+#}
+
+{% block resource_item %}
+  {% set url_action = pkg.type ~ ('_resource.edit' if url_is_edit and can_edit else '_resource.read') %}
+  {% set url = url or h.url_for(url_action, id=pkg.name, resource_id=res.id) %}
+
+  <tr class="govuk-table__row">
+    <td class="govuk-table__cell">
+      <a class="govuk-link" href="{{ url }}">{{ h.resource_display_name(res) | truncate(50) }}</a>
+    </td>
+    <td class="govuk-table__cell">
+      {{ res.format or 'data' }}
+    </td>
+    <td class="govuk-table__cell">
+      {{ h.filter_datetime(res.created, 'short') }}
+    </td>
+    <td class="govuk-table__cell">
+      {{ 'Restricted' if pkg.private else 'Open' }}
+    </td>
+    <td class="govuk-table__cell">
+      <span><a class="govuk-link" href="">{{ _('Preview') }}</a>
+        {% if can_edit %}
+          | <a>{% link_for _('Edit'), named_route=pkg.type ~ '_resource.edit', id=pkg.name, resource_id=res.id %}</a>
+        {% endif %}
+      </span>
+    </td>
+  </tr>
+{% endblock %}

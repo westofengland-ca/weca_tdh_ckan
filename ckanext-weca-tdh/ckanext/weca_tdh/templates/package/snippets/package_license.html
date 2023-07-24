@@ -1,0 +1,19 @@
+{#
+  Renders package license information
+
+  pkg_dict - A package dict that the resource belongs to
+
+  Example: {% snippet "package/snippets/package_license.html", pkg_dict=pkg %}
+#}
+
+{% block license_string %}
+  {% if 'license_url' in pkg_dict %}
+    <a href="{{ pkg_dict.license_url }}" rel="dc:rights">{{ pkg_dict.license_title }}</a>
+  {% else %}
+    {% if pkg_dict.license_id %}
+      <span property="dc:rights">{{ pkg_dict.license_title }}</span>
+    {% else %}
+      <span>{{ _('No License Provided') }}</span>
+    {% endif %}
+  {% endif %}
+{% endblock %}

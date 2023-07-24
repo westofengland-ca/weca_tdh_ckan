@@ -1,0 +1,32 @@
+{#
+  Populates dataset filter selector items
+
+  name - The field name identifying the facet field, eg. "tags"
+  search_facets - A dictionary with search facets
+  fields_grouped - A list of fields
+
+  Example: h.snippet('package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped)
+#}
+
+{% from "components/select/macro.html" import govukSelect %}
+
+{% block filter_items %}
+    {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format"} %}
+    {% set filter_items = [{'value': "", 'text': ""}] %}
+
+    {% set items = h.get_facet_items_dict(name, search_facets) %}
+    {% for item in items %}    
+        {% if ''.join(fields_grouped[name]) == item.name %}
+            {% set selected = true %}   
+        {% endif %}
+        {{ filter_items.append({'value': item.name, 'text': item.display_name, 'selected': selected}) or "" }}
+    {% endfor %}
+
+    <label class="govuk-label sort-label" for="sort">{{ filter_labels[name] }}</label>
+    {{ govukSelect({
+        'id': name,
+        'name': name,
+        'items': filter_items
+        }) 
+    }}
+{% endblock %}

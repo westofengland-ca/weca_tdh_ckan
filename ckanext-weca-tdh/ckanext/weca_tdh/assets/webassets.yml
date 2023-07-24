@@ -1,0 +1,9 @@
+weca_tdh-js:
+  output: weca_tdh/govuk.js
+  contents:
+    - scripts/govuk.js
+
+weca_tdh-css:
+  output: weca_tdh/weca_tdh.css
+  contents:
+    - styles/weca_tdh.css

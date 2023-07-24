@@ -1,0 +1,20 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _('License') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('License'), named_route='weca_tdh.license' %}</li>
+{% endblock %}
+
+{% block primary %}
+  <article class="module" role="main">
+    <div class="module-content">
+      {% block license %}
+        <h1 class="page-heading">{{ _('License') }}</h1>
+        {% snippet 'snippets/license_text.html' %}
+      {% endblock %}
+    </div>
+  </article>
+{% endblock %}
+
+{% block secondary %}{% endblock %}

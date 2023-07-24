@@ -1,0 +1,20 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _('Cookie Policy') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('Cookie Policy'), named_route='weca_tdh.policy' %}</li>
+{% endblock %}
+
+{% block primary %}
+  <article class="module" role="main">
+    <div class="module-content">
+      {% block policy %}
+        <h1 class="page-heading">{{ _('Cookie Policy') }}</h1>
+        {% snippet 'snippets/policy_text.html' %}
+      {% endblock %}
+    </div>
+  </article>
+{% endblock %}
+
+{% block secondary %}{% endblock %}

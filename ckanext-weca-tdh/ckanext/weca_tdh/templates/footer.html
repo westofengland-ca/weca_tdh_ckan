@@ -1,0 +1,27 @@
+{% ckan_extends %}
+
+{% block footer_nav %}
+    <ul class="list-unstyled">
+    {% block footer_links %}
+        <li><a href="{{ h.url_for('home.about') }}">{{ _('About {0}').format(g.site_title) }}</a></li>
+    {% endblock %}
+    </ul>
+    <ul class="list-unstyled">
+    {% block footer_links_ckan %}
+        <li><a href="/contact">{{ _('Contact Us') }}</a></li>
+        <li><a href="/policy">{{ _('Cookie Policy') }}</a></li>
+        <li><a href="/license">{{ _('License') }}</a></li>
+        <li><a href="https://www.westofengland-ca.gov.uk/">{{ _('WECA') }}</a></li>
+        <li><a href="http://www.opendefinition.org/okd/"><img src="{{ h.url_for_static('/base/images/od_80x15_blue.png') }}" alt="Open Data"></a></li>
+    {% endblock %}
+    </ul>
+{% endblock %}
+
+{% block footer_attribution %}
+<p><strong>Powered by</strong><br>
+    <img src="/assets/images/weca-logo.png" height="50px" alt="WECA Logo" title="WECA"/></p>
+{% endblock %}
+
+{% block footer_lang %}
+{# Remove language selector #}
+{% endblock %}
