@@ -5,9 +5,10 @@ Imports a list of publishers from a CSV file via the CKAN API.
 import argparse
 from urllib.request import Request, urlopen
 from urllib.parse import quote
-from urllib.error import HTTPError
+from urllib.error import URLError, HTTPError
 import csv
 import json
+import csv_column_headers
 
 parser = argparse.ArgumentParser("create_publishers", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--filename", dest="filename", help="Input file path", type=str, required=True)
@@ -15,9 +16,7 @@ parser.add_argument("--ckan_url", dest="ckan_url", help="Target CKAN instance.",
 parser.add_argument("--api_key", dest="api_key", help="API Key with necessary write permissions", type=str, required=True)
 args = parser.parse_args()
 
-count = 0
-
-def create_publisher(pub_dict):
+def import_publisher(pub_dict):
     # Use the json module to dump the dictionary to a string for posting. URL encode.
     data_string = quote(json.dumps(pub_dict)).encode('utf-8')
 
@@ -29,32 +28,31 @@ def create_publisher(pub_dict):
 
     # Make the HTTP request.
     try:
-        response = urlopen(request, data_string)
-        assert response.code == 200
-
-        global count 
-        count += 1
+        urlopen(request, data_string)      
     except HTTPError as err:
         if err.code == 409:
-            print(f"{err}. Data conflict in row {row}")
-        else:
-            print(err)
+            raise Exception(f'import_publisher(): data conflict in row {row}')
+        raise Exception(f'import_publisher(): failed to import publisher. {err}')
+    except URLError:
+        raise Exception(f'import_publisher(): invalid URL')
 
 try:
     with open(args.filename, 'r') as csvfile:
         reader = csv.DictReader(csvfile)
+        count = 0
         print("Running...")
 
         for row in reader:
             publisher_dict = {
-                'id': row['GUID'],
-                'name': row['Slug'],
-                'title': row['Title'],
-                'description': row['Description']
+                'id': row[csv_column_headers.PUBLISHER_GUID],
+                'name': row[csv_column_headers.PUBLISHER_SLUG],
+                'title': row[csv_column_headers.PUBLISHER_TITLE],
+                'description': row[csv_column_headers.PUBLISHER_DESC]
             }
-            create_publisher(publisher_dict)
+            import_publisher(publisher_dict)
+            count += 1
 
-except FileNotFoundError as err:
+    print(f'Imported {count} Publishers.')
+
+except Exception as err:
     print(err)
-
-print(f'Created {count} total Publishers.')

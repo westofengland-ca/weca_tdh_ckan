@@ -5,13 +5,13 @@ Outputs data to three seperate .json files, zipped up.
 
 import argparse
 from urllib.request import Request, urlopen
-from urllib.error import HTTPError
+from urllib.error import URLError, HTTPError
 from datetime import datetime
 import getpass
 import json
 import zipfile
 import io
-import common
+import tdh_package
 
 parser = argparse.ArgumentParser("ckan_export", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--ckan_url", dest="ckan_url", help="Target CKAN instance.", default="http://localhost:5000", type=str)
@@ -24,7 +24,8 @@ def get_info():
     dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     export_info = {
-        'name': 'CKAN export - json',
+        'name': tdh_package.PACKAGE_NAME,
+        'version': tdh_package.VERSION_NO,
         'user': getpass.getuser(),
         'created': dt_string,
         'CKAN_URL': args.ckan_url
@@ -42,18 +43,20 @@ def get_datasets():
 
     # Make the HTTP request.
     try:
-        response = urlopen(request)
-        assert response.code == 200
+        with urlopen(request) as response:
+            if response.code == 200:
+                response_dict = json.loads(response.read())
+                if response_dict['success'] == True:
+                  datasets = response_dict['result']
+                  datasets_file = io.BytesIO(json.dumps(datasets).encode())
+                  return datasets_file.getvalue()
 
-        response_dict = json.loads(response.read())
-        assert response_dict['success'] is True
-
-        datasets = response_dict['result']
-        datasets_file = io.BytesIO(json.dumps(datasets).encode())
-        return datasets_file.getvalue()      
+            raise Exception(f'get_datasets(): failed to get datasets. {response.code}')
 
     except HTTPError as err:
-        print(err)
+        raise Exception(f'get_datasets(): failed to get datasets. {err}')
+    except URLError:
+        raise Exception(f'get_datasets(): invalid URL')
 
 def get_publishers():
     # Gets list of all organisations with all fields.
@@ -64,18 +67,20 @@ def get_publishers():
 
     # Make the HTTP request.
     try:
-        response = urlopen(request)
-        assert response.code == 200
-
-        response_dict = json.loads(response.read())
-        assert response_dict['success'] is True
-
-        publishers = response_dict['result']
-        publishers_file = io.BytesIO(json.dumps(publishers).encode())
-        return publishers_file.getvalue()
+        with urlopen(request) as response:
+            if response.code == 200:
+                response_dict = json.loads(response.read())
+                if response_dict['success'] == True:
+                  publishers = response_dict['result']
+                  publishers_file = io.BytesIO(json.dumps(publishers).encode())
+                  return publishers_file.getvalue()
+                
+            raise Exception(f'get_datasets(): failed to get datasets. {response.code}')
 
     except HTTPError as err:
-        print(err)
+        raise Exception(f'get_publishers(): failed to get publishers. {err}')
+    except URLError:
+        raise Exception(f'get_publishers(): invalid URL')
 
 def get_topics():
     # Gets list of all groups with all fields.
@@ -86,26 +91,33 @@ def get_topics():
 
     # Make the HTTP request.
     try:
-        response = urlopen(request)
-        assert response.code == 200
-
-        response_dict = json.loads(response.read())
-        assert response_dict['success'] is True
-    
-        topics = response_dict['result']
-        topics_file = io.BytesIO(json.dumps(topics).encode())
-        return topics_file.getvalue()
+        with urlopen(request) as response:
+            if response.code == 200:
+                response_dict = json.loads(response.read())
+                if response_dict['success'] == True:
+                  topics = response_dict['result']
+                  topics_file = io.BytesIO(json.dumps(topics).encode())
+                  return topics_file.getvalue()
+                
+            raise Exception(f'get_datasets(): failed to get datasets. {response.code}')
 
     except HTTPError as err:
-        print(err)
+        raise Exception(f'get_topics(): failed to get topics. {err}')
+    except URLError:
+        raise Exception(f'get_topics(): invalid URL')
 
-with io.BytesIO() as zip_buffer:
-    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        zipf.writestr(common.FILENAMES['info'], get_info())
-        zipf.writestr(common.FILENAMES['datasets'], get_datasets())
-        zipf.writestr(common.FILENAMES['publishers'], get_publishers())
-        zipf.writestr(common.FILENAMES['topics'], get_topics())
+try:
+    with io.BytesIO() as zip_buffer:
+        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            zipf.writestr(tdh_package.INFO_FILENAME, get_info())
+            zipf.writestr(tdh_package.DATASETS_FILENAME, get_datasets())
+            zipf.writestr(tdh_package.PUBLISHERS_FILENAME, get_publishers())
+            zipf.writestr(tdh_package.TOPICS_FILENAME, get_topics())
 
-    #zip_path = args.output_file or 'ckan-export.zip'
-    with open(args.output_file, 'wb') as output_zip:
-        output_zip.write(zip_buffer.getvalue())
+        with open(args.output_file, 'wb') as output_zip:
+            output_zip.write(zip_buffer.getvalue())
+
+        print(f'Exported data to {args.output_file}')
+
+except Exception as err:
+    print(err)

@@ -5,10 +5,10 @@ Imports CKAN data from a Zip file via the CKAN API.
 import argparse
 from urllib.request import Request, urlopen
 from urllib.parse import quote
-from urllib.error import HTTPError
+from urllib.error import URLError, HTTPError
 import json
 import zipfile
-import common
+import tdh_package
 
 parser = argparse.ArgumentParser("create_datasets", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--zipfile", dest="zipfile", help="Input zip file path", type=str, required=True)
@@ -43,14 +43,15 @@ def import_publishers(publishers):
 
         # Make the HTTP request.
         try:
-            response = urlopen(request, data_string)
-            assert response.code == 200
+            urlopen(request, data_string)
             count += 1
         except HTTPError as err:
             if err.code == 409:
-                print(f"{err}. Data conflict")
-            else:
-                print(err)
+                raise Exception(f'import_publishers(): data conflict in row {publisher}')
+            raise Exception(f'import_publishers(): failed to import publisher. {err}')
+        except URLError:
+            raise Exception(f'import_publishers(): invalid URL')
+        
     return count
 
 def import_topics(topics):
@@ -68,14 +69,15 @@ def import_topics(topics):
 
         # Make the HTTP request.
         try:
-            response = urlopen(request, data_string)
-            assert response.code == 200
+            urlopen(request, data_string)
             count += 1
         except HTTPError as err:
             if err.code == 409:
-                print(f"{err}. Data conflict")
-            else:
-                print(err)
+                raise Exception(f'import_topics(): data conflict in row {topic}')
+            raise Exception(f'import_topics(): failed to import topic. {err}')
+        except URLError:
+            raise Exception(f'import_topics(): invalid URL')
+            
     return count
 
 def import_datasets(datasets):
@@ -93,24 +95,29 @@ def import_datasets(datasets):
 
         # Make the HTTP request.
         try:
-            response = urlopen(request, data_string)
-            assert response.code == 200
+            urlopen(request, data_string)
             count += 1
         except HTTPError as err:
             if err.code == 409:
-                print(f"{err}. Data conflict")
-            else:
-                print(err)
+                raise Exception(f'import_datasets(): data conflict in row {dataset}')
+            raise Exception(f'import_datasets(): failed to import dataset. {err}')
+        except URLError:
+            raise Exception(f'import_datasets(): invalid URL')
+        
     return count
 
-json_files = get_json_files_from_zip(args.zipfile)
-print('Running...')
+try:
+    json_files = get_json_files_from_zip(args.zipfile)
+    print('Running...')
 
-pub_count = import_publishers(json_files[common.FILENAMES['publishers']])
-print(f'Imported {pub_count} Publishers')
+    pub_count = import_publishers(json_files[tdh_package.PUBLISHERS_FILENAME])
+    print(f'Imported {pub_count} Publishers')
 
-topic_count = import_topics(json_files[common.FILENAMES['topics']])
-print(f'Imported {topic_count} Topics')
+    topic_count = import_topics(json_files[tdh_package.TOPICS_FILENAME])
+    print(f'Imported {topic_count} Topics')
 
-dataset_count = import_datasets(json_files[common.FILENAMES['datasets']])
-print(f'Imported {dataset_count} Datasets')
+    dataset_count = import_datasets(json_files[tdh_package.DATASETS_FILENAME])
+    print(f'Imported {dataset_count} Datasets')
+
+except Exception as err:
+    print(err)
