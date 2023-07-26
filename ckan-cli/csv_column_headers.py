@@ -1,0 +1,31 @@
+# Dataset column headers
+DATASET_SLUG = 'Slug'
+DATASET_TITLE = 'Title'
+DATASET_DESC = 'Description'
+DATASET_PUBLISHER = 'Source'
+DATASET_VISIBILITY = 'Data Sharing Agreement Category'
+DATASET_RESOURCE_NAME = 'extract'
+DATASET_RESOURCE_PATH = 'Link to data'
+DATASET_RESOURCE_FORMAT = 'File format'
+DATASET_RESOURCE_DESC = 'Description'
+DATASET_TOPICS = 'Topics'
+DATASET_TYPE = 'Data type'
+DATASET_TRANSFER_METHOD = 'Method of transfer'
+DATASET_VOLUME = 'Volume'
+DATASET_CHANGE_FREQUENCY = 'Frequency of change'
+DATASET_DATA_OWNER = 'Data Owner'
+DATASET_DATA_AGREEMENTS = 'Data agreements'
+DATASET_STATUS = 'Status'
+DATASET_CONTACT = 'Contact'
+
+# Publisher column headers
+PUBLISHER_GUID = 'GUID'
+PUBLISHER_SLUG = 'Slug'
+PUBLISHER_TITLE = 'Title'
+PUBLISHER_DESC = 'Description'
+
+# Topic column headers
+TOPIC_GUID = 'GUID'
+TOPIC_SLUG = 'Slug'
+TOPIC_TITLE = 'Title'
+TOPIC_DESC = 'Description'
