@@ -4,10 +4,10 @@ GUID,Slug,Title,Description
 dc6cc828-ca83-4507-b289-887ecd7e43ed,british_geological_survey,British Geological Survey,Brief description of Publisher.
 ff46925c-1e65-413a-adb7-31e6d16bf839,bus_open_data_service,Bus Open Data Service,Brief description of Publisher.
 f61b45d5-3171-4ebb-a5e0-cf3941d91726,ctrac_inrix_dft,CTRAC/Inrix (contracted by DfT),Brief description of Publisher.
-255069f7-bb0b-4bba-a71e-2c0764201b9b,department_for_education,Department for Education (DfE),Brief description of Publisher.
-5770b461-df9f-4ac5-b688-22a2c0b9a9da,department_for_levelling_up_housing_and_communites,"Department for Levelling Up, Housing and Communities (DLUHC)",Brief description of Publisher.
-a422fe6d-36f2-4d5f-8f98-59b14c70013a,department_for_transport,Department for Transport (DfT),Brief description of Publisher.
-d2735f51-6d7c-4256-a4dc-42c77247860e,department_of_business_energy_and_skills,Department of Business Energy and Skills (BEIS),Brief description of Publisher.
+255069f7-bb0b-4bba-a71e-2c0764201b9b,dpt_for_education,Department for Education (DfE),Brief description of Publisher.
+5770b461-df9f-4ac5-b688-22a2c0b9a9da,dpt_levelling_housing_and_communites,"Department for Levelling Up, Housing and Communities (DLUHC)",Brief description of Publisher.
+a422fe6d-36f2-4d5f-8f98-59b14c70013a,dpt_for_transport,Department for Transport (DfT),Brief description of Publisher.
+d2735f51-6d7c-4256-a4dc-42c77247860e,dpt_of_business_energy_and_skills,Department of Business Energy and Skills (BEIS),Brief description of Publisher.
 d15d9058-063d-48cf-8682-1d73a515f1e7,environment_agency,Environment Agency,Brief description of Publisher.
 f4e7ccfa-28ee-4219-8c50-2ae6c6e38263,hm_treasury,HM Treasury,Brief description of Publisher.
 5f34b86f-727a-4a63-bfed-7e473500b3a2,local_authorities,Local Authorities,Brief description of Publisher.
@@ -19,7 +19,7 @@ f4e7ccfa-28ee-4219-8c50-2ae6c6e38263,hm_treasury,HM Treasury,Brief description o
 c8057dc9-737b-48e6-862b-020cebca1ddc,office_of_national_statistics,Office of National Statistics (ONS),Brief description of Publisher.
 be80e492-2e52-45fe-be9e-34b0864e2f45,office_of_rail_and_road,Office of Rail and Road (ORR),Brief description of Publisher.
 ebf476b3-9749-414e-b985-7ff142cade41,one_network,One.network,Brief description of Publisher.
-164958cc-359a-41c4-a6a7-4f7003ce7a50,open_data_crowdsourced,Open Data (crowdsourced),Brief description of Publisher.
+164958cc-359a-41c4-a6a7-4f7003ce7a50,open_data_cs,Open Data (crowdsourced),Brief description of Publisher.
 fb2e7fe2-0a74-4f33-be2d-259ae2e0d87e,ordnance_survey,Ordnance Survey (OS),Brief description of Publisher.
 87621519-c2d3-489f-9253-7e2dfe483afb,prospective,Prospective,Brief description of Publisher.
 0769d96b-d737-48f3-8562-b3232f867990,south_gloucestershire_council,South Gloucestershire Council,Brief description of Publisher.
@@ -28,6 +28,5 @@ e14577f7-6491-486d-85e9-b179e6d79d5a,telectrac_navman_dft,Telectrac Navman (cont
 4a6e451c-17f9-4f85-b292-31a0aea6e4c9,telefonica,Telefonica,Brief description of Publisher.
 3ed32c52-8f45-4f44-86a9-91a21c20cf5b,traveline,Traveline,Brief description of Publisher.
 cf59f7f3-dc2d-4272-bc09-a860edd6c46a,university_of_leeds,University of Leeds,Brief description of Publisher.
-00cf6f46-d68b-4b44-b135-a09af2278f06,west_of_england_combined_authority,West of England Combined Authority,Brief description of Publisher.
-828113b6-c61d-49c6-bd48-dff8e45b45bc,west_of_england_combined_authority_internal,West of England Combined Authority (Internal),Brief description of Publisher.
-306107c1-678d-4474-9e10-1064fa52a41s,other,Other,Brief description of Publisher.
+00cf6f46-d68b-4b44-b135-a09af2278f06,weca,West of England Combined Authority,Brief description of Publisher.
+828113b6-c61d-49c6-bd48-dff8e45b45bc,weca_internal,West of England Combined Authority (Internal),Brief description of Publisher.
