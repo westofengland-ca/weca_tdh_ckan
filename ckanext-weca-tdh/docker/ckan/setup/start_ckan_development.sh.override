@@ -31,8 +31,19 @@ do
             echo "Found setup.py file in $i"
             cd $APP_DIR
         fi
+
+        # Point `use` in test.ini to location of `test-core.ini`
+        if [ -f $i/test.ini ];
+        then
+            echo "Updating \`test.ini\` reference to \`test-core.ini\` for plugin $i"
+            ckan config-tool $i/test.ini "use = config:../../src/ckan/test-core.ini"
+        fi
     fi
 done
+
+# Set debug to true
+echo "Enabling debug mode"
+ckan config-tool $CKAN_INI -s DEFAULT "debug = true"
 
 # Add ckan.datapusher.api_token to the CKAN config file (updated with corrected value later)
 ckan config-tool $CKAN_INI ckan.datapusher.api_token=xxx
@@ -49,14 +60,27 @@ then
     ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=${JWT_SECRET}"
 fi
 
-# Set the SQLAlchemy URL
-ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL"
+# Update the plugins setting in the ini file with the values defined in the env var
+echo "Loading the following plugins: $CKAN__PLUGINS"
+ckan config-tool $CKAN_INI "ckan.plugins = $CKAN__PLUGINS"
 
-# Set the SOLR URL
-ckan config-tool $CKAN_INI "solr_url = $CKAN_SOLR_URL"
+# Set the SQLAlchemy URL and CKAN core settings
+ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL" \
+    "solr_url = $CKAN_SOLR_URL" \
+    "ckan.redis.url = $CKAN_REDIS_URL" \
+    "ckan.site_id = $CKAN_SITE_ID" \
+    "ckan.site_title = $CKAN_SITE_TITLE" \
+    "ckan.site_description = $CKAN_SITE_DESCRIPTION" \
+    "ckan.group_and_organization_list_all_fields_max = $CKAN_GROUP_AND_ORGANIZATION_LIST_ALL_FIELDS_MAX"
 
-# Set the site ID
-ckan config-tool $CKAN_INI "ckan.site_id = $CKAN_SITE_ID"
+# Update test-core.ini DB, SOLR & Redis settings
+echo "Loading test settings into test-core.ini"
+ckan config-tool $SRC_DIR/ckan/test-core.ini \
+    "sqlalchemy.url = $TEST_CKAN_SQLALCHEMY_URL" \
+    "ckan.datastore.write_url = $TEST_CKAN_DATASTORE_WRITE_URL" \
+    "ckan.datastore.read_url = $TEST_CKAN_DATASTORE_READ_URL" \
+    "solr_url = $TEST_CKAN_SOLR_URL" \
+    "ckan.redis.url = $TEST_CKAN_REDIS_URL"
 
 # Run the prerun script to init CKAN and create the default admin user
 sudo -u ckan -EH python3 prerun.py
@@ -77,24 +101,8 @@ then
     done
 fi
 
-# Set the common uwsgi options
-UWSGI_OPTS="--plugins http,python \
-            --socket /tmp/uwsgi.sock \
-            --wsgi-file /srv/app/wsgi.py \
-            --module wsgi:application \
-            --uid 92 --gid 92 \
-            --http 0.0.0.0:5000 \
-            --master --enable-threads \
-            --lazy-apps \
-            -p 2 -L -b 32768 --vacuum \
-            --harakiri $UWSGI_HARAKIRI"
+# Start supervisord
+supervisord --configuration /etc/supervisord.conf &
 
-if [ $? -eq 0 ]
-then
-    # Start supervisord
-    supervisord --configuration /etc/supervisord.conf &
-    # Start uwsgi
-    sudo -u ckan -EH uwsgi $UWSGI_OPTS
-else
-  echo "[prerun] failed...not starting CKAN."
-fi
+# Start the development server with automatic reload
+sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0
