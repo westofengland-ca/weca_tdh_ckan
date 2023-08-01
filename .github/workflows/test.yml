@@ -1,11 +1,11 @@
-name: Tests
+name: ckanext-weca-tdh tests
 on: 
   push:
     paths:
-      - 'ckanext-weca-tdh'
+      - 'ckanext-weca-tdh/**'
   pull_request:
     paths:
-      - 'ckanext-weca-tdh'
+      - 'ckanext-weca-tdh/**'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -34,6 +34,10 @@ jobs:
       CKAN_SOLR_URL: http://solr:8983/solr/ckan
       CKAN_REDIS_URL: redis://redis:6379/1
 
+    defaults:
+      run:
+        working-directory: ckanext-weca-tdh
+
     steps:
     - uses: actions/checkout@v2
     - name: Install requirements
@@ -51,4 +55,3 @@ jobs:
         ckan -c test.ini db init
     - name: Run tests
       run: pytest --ckan-ini=test.ini --cov=ckanext.weca_tdh --disable-warnings ckanext/weca_tdh
-
