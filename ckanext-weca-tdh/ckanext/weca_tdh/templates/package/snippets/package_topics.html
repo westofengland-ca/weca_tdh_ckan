@@ -1,0 +1,19 @@
+{#
+  Renders associated package topics
+
+  pkg_dict - A package dict that the resource belongs to
+
+  Example: {% snippet "package/snippets/package_topics.html", pkg_dict=pkg %}
+#}
+
+{% block package_topics %}
+  {% if pkg_dict.groups %}
+    {% set group_list = [] %}
+    {% for group in pkg_dict.groups %}
+      {{ group_list.append(group.title) or "" }}
+    {% endfor %}
+    <dd>{{ ', '.join(group_list) }}</dd>
+  {% else %}
+    <dd>{{ _('No associated topics') }}</dd>
+  {% endif %}
+{% endblock %}

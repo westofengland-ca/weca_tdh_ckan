@@ -51,12 +51,8 @@
                       <dd property="dc:creator">{{ pkg.organization.title }}</dd>
                       <dt>{{ _('Last updated:') }}</dt>
                       <dd property="dc:date">{{ h.filter_datetime(pkg.metadata_modified, 'short') }}</dd>
-                      <dt>{{ _('Topic:') }}</dt>
-                      {% if pkg.groups %}
-                        <dd>{{ pkg.groups[0].title }}</dd>
-                      {% else %}
-                        <dd>{{ _('No associated topics') }}</dd>
-                      {% endif %}
+                      <dt>{{ _('Topics:') }}</dt>
+                        {% snippet "package/snippets/package_topics.html", pkg_dict=pkg %}
                       <dt>{{ _('Licence:') }}</dt>
                       <dd property="dc:rights">
                         {% snippet "package/snippets/package_license.html", pkg_dict=pkg %}
