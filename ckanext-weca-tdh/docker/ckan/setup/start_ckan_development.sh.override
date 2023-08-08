@@ -69,6 +69,7 @@ ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL" \
     "solr_url = $CKAN_SOLR_URL" \
     "ckan.redis.url = $CKAN_REDIS_URL" \
     "ckan.site_id = $CKAN_SITE_ID" \
+    "ckan.site_url = $CKAN_SITE_URL" \
     "ckan.site_title = $CKAN_SITE_TITLE" \
     "ckan.site_description = $CKAN_SITE_DESCRIPTION" \
     "ckan.group_and_organization_list_all_fields_max = $CKAN_GROUP_AND_ORGANIZATION_LIST_ALL_FIELDS_MAX"

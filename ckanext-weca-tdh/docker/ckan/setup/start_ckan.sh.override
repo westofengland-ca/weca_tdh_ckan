@@ -58,6 +58,9 @@ ckan config-tool $CKAN_INI "solr_url = $CKAN_SOLR_URL"
 # Set the site ID
 ckan config-tool $CKAN_INI "ckan.site_id = $CKAN_SITE_ID"
 
+# Set the site URL
+ckan config-tool $CKAN_INI "ckan.site_url = $CKAN_SITE_URL"
+
 # Set group and org list limit
 ckan config-tool $CKAN_INI "ckan.group_and_organization_list_all_fields_max = $CKAN_GROUP_AND_ORGANIZATION_LIST_ALL_FIELDS_MAX"
 
