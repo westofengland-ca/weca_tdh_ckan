@@ -49,26 +49,35 @@ then
     ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=${JWT_SECRET}"
 fi
 
-# Set the SQLAlchemy URL
+# Set the SQLAlchemy (postgres) URL
 ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL"
 
 # Set the SOLR URL
 ckan config-tool $CKAN_INI "solr_url = $CKAN_SOLR_URL"
 
-# Set the site ID
+# Set the ckan site settings
 ckan config-tool $CKAN_INI "ckan.site_id = $CKAN_SITE_ID"
-
-# Set the site URL
 ckan config-tool $CKAN_INI "ckan.site_url = $CKAN_SITE_URL"
+ckan config-tool $CKAN_INI "ckan.site_title = $CKAN_SITE_TITLE"
+ckan config-tool $CKAN_INI "ckan.site_description = $CKAN_SITE_DESCRIPTION"
 
-# Set group and org list limit
-ckan config-tool $CKAN_INI "ckan.group_and_organization_list_all_fields_max = $CKAN_GROUP_AND_ORGANIZATION_LIST_ALL_FIELDS_MAX"
+# Set the Datapusher plugin config
+ckan config-tool $CKAN_INI "ckan.datapusher.url = $CKAN_DATAPUSHER_URL"
+
+# Set the Datastore plugin config
+ckan config-tool $CKAN_INI "ckan.datastore.write_url = $CKAN_DATASTORE_WRITE_URL"
+ckan config-tool $CKAN_INI "ckan.datastore.read_url = $CKAN_DATASTORE_READ_URL"
+
+# Set the search result configs
+ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000
+ckan config-tool $CKAN_INI search.facets.limit=1000
+ckan config-tool $CKAN_INI search.facets.default=1000
 
 # Run the prerun script to init CKAN and create the default admin user
 sudo -u ckan -EH python3 prerun.py
 
 echo "Set up ckan.datapusher.api_token in the CKAN config file"
-ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add ckan_admin datapusher | tail -n 1 | tr -d '\t')"
+ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add $CKAN_SYSADMIN_NAME datapusher | tail -n 1 | tr -d '\t')"
 
 # Run any startup scripts provided by images extending this one
 if [[ -d "/docker-entrypoint.d" ]]
