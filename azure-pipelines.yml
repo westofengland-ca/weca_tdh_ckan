@@ -1,0 +1,26 @@
+pool:
+  name: Azure Pipelines
+steps:
+  # Print env variables
+  # - script: |
+  #     echo env
+  - task: Docker@0
+    displayName: Build an image
+    inputs:
+      containerregistrytype: Azure Container Registry
+      azureSubscription: $(AZURE_SUBSCRIPTION)
+      azureContainerRegistry: $(AZURE_CONTAINER_REGISTRY)
+      dockerFile: '**/Dockerfile'
+      defaultContext: false
+      context: ckanext-weca-tdh
+      azureSubscriptionEndpoint: Azure Endpoint
+      imageName: $(CKAN_IMAGE_NAME_TAG)
+  - task: Docker@0
+    displayName: Push an image
+    inputs:
+      containerregistrytype: Azure Container Registry
+      azureSubscription: $(AZURE_SUBSCRIPTION)
+      azureContainerRegistry: $(AZURE_CONTAINER_REGISTRY)
+      action: Push an image
+      azureSubscriptionEndpoint: Azure Endpoint
+      imageName: $(CKAN_IMAGE_NAME_TAG)

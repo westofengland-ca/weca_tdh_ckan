@@ -2,6 +2,7 @@ FROM ckan/ckan-base:ckan-2.10.0
 
 # Set up environment variables
 ENV APP_DIR=/srv/app
+ENV SRC_EXTENSIONS_DIR=/srv/app/src_extensions
 ENV TZ=UTC
 RUN echo ${TZ} > /etc/timezone
 
@@ -12,6 +13,7 @@ RUN if ! [ /usr/share/zoneinfo/${TZ} -ef /etc/localtime ]; then \
 
 # Override the default start_ckan script
 COPY docker/ckan/setup/start_ckan.sh.override ${APP_DIR}/start_ckan.sh
+RUN chmod +x ${APP_DIR}/start_ckan.sh
 
 # Override the default prerun script
 COPY docker/ckan/setup/prerun.py.override ${APP_DIR}/prerun.py
