@@ -33,19 +33,10 @@ for deployment and local development.
 
 ## Branching model
 
-This repository uses a standard Gitflow Workflow (see
-https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
-with work being developed on feature branches taken from a develop branch. The
-develop branch can then be deployed, as part of a CI/CD process to a development
-environment. main and release branches are used to control the release of
-code with release builds being built from the release branches.
+This repository uses Trunk Based Development see (https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development).
+Work takes place on short-lived feature branches taken from and merging back
+into the main branch. The main branch can then be deployed, as part of a CI/CD
+process to a development environment.
 
-The development environment will deploy from the develop branch. The preprod
-and prod environments have no build process. CKAN is deployed to these environments
-from containers built from release branches. Semantic version numbering will be
-used to mange the releases.
-
-This primarily affects the CKAN docker container - but by keeping everything in
-the same repository and managing it as a whole then all the CKAN artefacts (CLI,
-extension, docker container) are all kept aligned form a coherent package that
-works together.
+Releases are made from the main branch and are simply tagged using a semantic
+version number.
