@@ -20,4 +20,3 @@ steps:
       action: Push an image
       azureSubscriptionEndpoint: Azure Endpoint
       imageName: $(CKAN_IMAGE_NAME_TAG)
-      s
