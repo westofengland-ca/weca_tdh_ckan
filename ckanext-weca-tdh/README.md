@@ -1,6 +1,8 @@
 # ckanext-weca-tdh
 
-CKAN extension containing templates and styling for WECA TDH Data Catalogue.
+CKAN extension for the TDH data catalogue. Adds custom functionality and themeing to CKAN.
+
+Uses the [GOV.UK Design System](https://github.com/alphagov/govuk-design-system) in combination with [GOV.UK frontend Jinja macros](https://github.com/LandRegistry/govuk-frontend-jinja) for templates and styling, and Azure Active Directory (AD) for authentication.
 
 ## Compatability
 
@@ -12,45 +14,42 @@ Compatibility with core CKAN versions:
 | 2.9             | yes           |
 | 2.10            | yes           |
 
-## Docker Installation
+## Local development
 
-Clone latest `ckan-docker`:
+### Docker installation
+Clone latest `weca_tdh_ckan`:
 
-	git clone https://github.com/ckan/ckan-docker.git
-	
-Edit the `.env` file and add `weca_tdh` to the start of `CKAN__PLUGINS` list.
+	git clone https://github.com/westofengland-ca/weca_tdh_ckan.git
 
-Clone latest `ckanext-weca-tdh` into `ckan-docker/src`:
+Go to docker directory:
 
-	git clone https://github.com/RoweIT/ckanext-weca-tdh
-
-`ckan-docker/src` is the mounted CKAN volume for local extensions.
+	cd ckanext-weca-tdh/docker
 
 Build the images:
-
+##### dev build
 	docker compose -f docker-compose.dev.yml build
-	
-Start the containers:
+ 	docker compose -f docker-compose.dev.yml up
 
-	docker compose -f docker-compose.dev.yml up
+##### prod build
+	docker compose build
+ 	docker compose up
 
-The image build will automatically install ‘requirements.txt’ and run ‘setup.py’ for the extension. 
+The docker build will automatically install ‘requirements.txt’ and run ‘setup.py’ for the extension.
 
-## VM Installation
+Live changes are enabled for templates. Any Python changes require a restart to the ckan container.
 
-To install ckanext-weca-tdh on a vM:
+### VM installation
+
+To install ckanext-weca-tdh on a CKAN VM:
 
 Activate your CKAN virtual environment, for example:
 
      . /usr/lib/ckan/default/bin/activate
 
 Clone the source and install it on the virtualenv
-
-
-    cd /usr/lib/ckan/default/src
     
-    git clone https://github.com/RoweIT/ckanext-weca-tdh.git
-    
+    git clone https://github.com/westofengland-ca/weca_tdh_ckan.git
+    mv ckanext-weca-tdh /usr/lib/ckan/default/src   
     
 Install dependencies
 
@@ -68,7 +67,7 @@ Restart CKAN web server
 
      sudo supervisorctl restart ckan-uwsgi:*
 
-### VM developer installation
+#### VM developer installation
 
 To install ckanext-weca-tdh for development, activate your CKAN virtualenv and
 do:
@@ -78,14 +77,10 @@ do:
     python setup.py develop
     pip install -r dev-requirements.txt
 
-## Local development
-To develop the extension locally, clone the repository and cd to the `ckanext` directory. Then run `npm install` to install dependencies. To compile the styles you will need to have Sass installed and then run the script `npm run sass` to compile and watch for changes.
 
 ## Tests
-TODO
-To run the tests, do:
+Tests are run automatically on commit or PR via GitHub Actions.
+
+To run the tests locally:
 
     pytest --ckan-ini=test.ini
-
-## License
-TODO

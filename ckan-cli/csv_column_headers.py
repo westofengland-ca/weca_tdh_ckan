@@ -2,7 +2,7 @@
 DATASET_SLUG = 'Slug'
 DATASET_TITLE = 'Title'
 DATASET_DESC = 'Description'
-DATASET_PUBLISHER = 'Source'
+DATASET_PUBLISHER = 'Publisher'
 DATASET_VISIBILITY = 'Data Sharing Agreement Category'
 DATASET_RESOURCE_NAME = 'extract'
 DATASET_RESOURCE_PATH = 'Link to data'
