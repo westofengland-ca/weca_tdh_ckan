@@ -1,0 +1,5 @@
+{% ckan_extends %}
+
+{% block form %}
+  <div class="alert alert-danger">{{ _("You're already logged in as {user}.").format(user=current_user.name) }} <a href="{{ logout_url }}">{{ _('Logout') }}</a>?</div>
+{% endblock %}
