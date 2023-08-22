@@ -78,7 +78,7 @@
 
 /* base background color #354753 */
 body {
-    background: #fff url(../../../base/images/bg.png);
+    background-color: #fff;
 }
 
 /* two thirds container width */
@@ -134,9 +134,11 @@ input.gem-c-search__input:focus {
 
 button.gem-c-search__submit {
     border-radius: 0;
-    border-color: #1d70b8;
+    border: 2px solid;
+    border-left: 0px;
     background-color: #1d70b8;
     width: 15%;
+    max-width: 50px;
     padding: 8px;
     float: left;
 }
