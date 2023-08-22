@@ -7661,6 +7661,18 @@ p.gem-c-lead-paragraph {
   background-color: green;
 }
 
+.resource-private, .resource-public {
+  text-transform: uppercase;
+}
+
+.resource-private {
+  background-color: #9d9d1b;
+}
+
+.resource-public {
+  background-color: green;
+}
+
 .metadata-box--in-dataset {
   background: #eee;
   padding: 25px 30px 15px 30px;
@@ -7693,6 +7705,10 @@ p.gem-c-lead-paragraph {
 
 .product-column {
   margin-top: 50px;
+}
+
+.govuk-table__cell {
+  vertical-align: middle;
 }
 
 /* LOGIN PAGE //
