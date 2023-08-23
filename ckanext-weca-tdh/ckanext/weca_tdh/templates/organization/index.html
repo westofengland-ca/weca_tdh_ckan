@@ -1,0 +1,70 @@
+{% extends "page.html" %}
+
+{% from "components/button/macro.html" import govukButton %}
+
+{% block subtitle %}{{ _("Publishers") }}{% endblock %}
+
+{% block content %}
+  {% block primary_content %}
+    <div class="govuk-width-container">
+      <form action="/organization" method="GET">
+        <main role="main" id="main-content" class="govuk-main-wrapper">
+          <div class="govuk-width-container">
+            <h1 class="gem-c-heading govuk-heading-xl govuk-!-margin-bottom-6 search-title">Publishers</h1>
+            <div class="govuk-grid-row filters">
+
+              {% block publisher_sidebar %}
+                <div class="govuk-grid-column-one-third">
+                  {% block search_bar %}
+                    <h2 class="heading-medium">Filter by</h2>
+                    <label class="govuk-label sort-label" for="sort">Keywords</label>
+                    <div class="gem-c-search__item-wrapper">
+                      <input class="gem-c-search__item gem-c-search__input" type="text" placeholder="Search publishers..." name="q" value="{{ query }}">           
+                      <button class="gem-c-search__submit" type="submit"><i class="fa fa-search"></i></button>
+                    </div>
+                  {% endblock %}      
+                  {% snippet "organization/snippets/organization_sidebar.html", group_type=group_type %}       
+                </div>
+              {% endblock %}
+              
+              {% block publisher_list %}
+                <div class="govuk-grid-column-two-thirds">                
+                  {% block search_sort %}
+                    <div class="sort"> 
+                      {{ h.snippet('snippets/search_sort.html', sorting_selected=sort_by_selected) }}
+                    </div>
+                  {% endblock %}
+                  {% block search_results_count %}
+                    <span class="results_summary">
+                      <span class="govuk-body-m govuk-!-font-weight-bold">{% snippet 'snippets/search_result_text.html', query=q, sort_by_selected=sort_by_selected, count=page.item_count, type=group_type %}</span>
+                    </span>
+                  {% endblock %}
+
+                  {% block organizations_list %}
+                    <div class="group-listclass">
+                      {% if page.items or request.args %}
+                        {% if page.items %}
+                          {% snippet "organization/snippets/organization_list.html", organizations=page.items %}
+                        {% endif %}
+                      {% else %}
+                        <p class="empty">
+                          {{ _('There are currently no organizations for this site') }}.
+                          {% if h.check_access('organization_create') %}
+                            {% link_for _('How about creating one?'), named_route=group_type+'.new' %}</a>.
+                          {% endif %}
+                        </p>
+                      {% endif %}
+                    </div>
+                  {% endblock %}
+                  {% block page_pagination %}
+                    {{ page.pager(q=q or '', sort=sort_by_selected or '') }}
+                  {% endblock %} 
+                </div> 
+              {% endblock %}  
+            </div>
+          </div>
+        </main>
+      </form>
+    </div>
+  {% endblock %}
+{% endblock %}

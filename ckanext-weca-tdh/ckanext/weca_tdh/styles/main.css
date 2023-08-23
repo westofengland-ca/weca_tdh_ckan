@@ -402,6 +402,17 @@ p.gem-c-lead-paragraph {
   border-bottom: 0.5px solid #ccc;
 }
 
+/* PUBLISHER & TOPIC PAGE //
+///////////////*/
+
+.group-listclass {
+  margin-top: 30px;
+}
+
+.group-sidebar {
+  display: inline-grid;
+}
+
 
 /* temp flask debug overflow fix */
 #flDebug, #flDebug * {
