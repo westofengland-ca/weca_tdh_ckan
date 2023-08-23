@@ -1,0 +1,31 @@
+{#
+  Populates sort selector options
+
+  sorting_selected - The selected sort option 
+
+  Example: h.snippet('package/snippets/search_sort.html', sort_by_selected=sort_by_selected)
+#}
+
+{% from "components/select/macro.html" import govukSelect %}
+
+{% set sort_options = sort_options if sort_options else [(_('Name Ascending'), 'name asc'), (_('Name Descending'), 'name desc')] %}
+
+{% block search_sort %}                     
+  {% set sort_items = [] %}
+  {% for label, value in sort_options %}
+    {% if label and value %}    
+      {% if sorting_selected == value %}
+        {% set selected = true %}
+      {% endif %}
+      {{ sort_items.append({'value': value, 'text': label, 'selected': selected}) or "" }}
+    {% endif %}
+  {% endfor %}
+
+  {{ govukSelect({
+    'id': "sort",
+    'name': "sort",
+    'items': sort_items,
+    'attributes': {'onchange': "this.form.submit()"},
+    }) 
+  }}
+{% endblock %}
