@@ -6,6 +6,7 @@ import ckan.lib.helpers as h
 from flask import Blueprint
 from inspect import getmembers, isfunction
 from ckanext.weca_tdh.lib import helpers
+import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.auth import ADAuth
 
@@ -50,7 +51,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         """
         session.clear()
         toolkit.logout_user()
-        return h.redirect_to('user.logged_out_page')
+        return h.redirect_to(C.CKAN_ROUTE_AD_LOGOUT)
 
     def get_blueprint(self):      
         '''

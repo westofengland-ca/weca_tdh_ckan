@@ -8,11 +8,11 @@ from ckan.common import config
 from flask import request, Blueprint
 
 log = logging.getLogger(__name__)
-authbp = Blueprint('auth', __name__,) #url_prefix='/adauth'
+authbp = Blueprint('auth', __name__,)
 
 class ADAuth():
     
-    @authbp.route("/user/ad-login")
+    @authbp.route("/auth/aad")
     def login():
         try:
             claims_map = ADAuth.map_user_claims()
@@ -23,16 +23,8 @@ class ADAuth():
                 # start user session
                 User.start_session(user)
 
-                # get url refferer
-                referrer = request.referrer              
-                if referrer:
-                    # check if request came from logout page
-                    if referrer == f"{request.host_url}user/logged_out_redirect":
-                        return h.redirect_to(f'/user/{user}')
-                    else:
-                        return h.redirect_to(referrer)
-                else:
-                    return h.redirect_to(f'/user/{user}')
+                # redirect to landing page
+                return h.redirect_to('/')
 
         except Exception as e:
             log.error(f"Login failed: {e}")
@@ -69,8 +61,9 @@ class ADAuth():
                 elif claim_type == f"{claim_url}/{C.AD_CLAIM_SURNAME}":
                     claims_map[C.CKAN_USER_SURNAME] = claim_value
 
-                if claim_type == f"{claim_url}/{C.CKAN_ROLE_SYSADMIN}" and config[C.FF_AD_SYSADMIN] == 'True':
-                    claims_map[C.CKAN_ROLE_SYSADMIN] = True
+                elif claim_type == C.AD_CLAIM_GROUPS:
+                    if claim_value == C.AD_GROUP_SYSADMIN_ID and config[C.FF_AD_SYSADMIN] == 'True':
+                        claims_map[C.CKAN_ROLE_SYSADMIN] = True
 
         return claims_map
 
