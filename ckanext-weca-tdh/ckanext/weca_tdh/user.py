@@ -25,21 +25,13 @@ class User(object):
         
         try:
             user = toolkit.get_action('user_show')(data_dict = {C.CKAN_USER_ID: ckan_id})
-            
+
             if config[C.FF_AD_UPDATE_USER] == 'True':
-                update = False
-
-                if user[C.CKAN_USER_EMAIL] != email:
-                    update = True
-
-                if user[C.CKAN_USER_FULLNAME] != fullname:                  
-                    user[C.CKAN_USER_FULLNAME] = fullname    
-                    update = True
-
-                if update:
-                    log.info(f"Detected changes in user details on login for user: {user}. Updating record.")
-                    user[C.CKAN_USER_EMAIL] = email # email must be set on update
-                    user = toolkit.get_action('user_update')(context = {'ignore_auth': True}, data_dict = user)
+                # update user records. Only email and fullname can be updated
+                log.info(f"Updating user records on login for user: {user}.")
+                user[C.CKAN_USER_EMAIL] = email # email cannot be retrieved, but must be set on update
+                user[C.CKAN_USER_FULLNAME] = fullname 
+                user = toolkit.get_action('user_update')(context = {'ignore_auth': True}, data_dict = user)
 
             return user[C.CKAN_USER_NAME]
 

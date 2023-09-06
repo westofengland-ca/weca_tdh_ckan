@@ -75,7 +75,7 @@ class ADUser(unittest.TestCase):
             mock_user_show.assert_called_once_with(data_dict={'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000'})
             
             # Assert that 'user_update' was not called
-            mock_user_update.assert_not_called()
+            mock_user_update.assert_called_once()
 
             # Assert that 'user_create' was not called
             mock_user_create.assert_not_called()
