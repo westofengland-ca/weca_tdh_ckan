@@ -78,6 +78,14 @@ ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000
 ckan config-tool $CKAN_INI search.facets.limit=1000
 ckan config-tool $CKAN_INI search.facets.default=1000
 
+# Set dataset level auth control
+ckan config-tool $CKAN_INI "ckan.auth.allow_dataset_collaborators = $CKAN_AUTH_ALLOW_DATASET_COLLABORATORS"
+
+# Set the feature flag configs 
+ckan config-tool $CKAN_INI "feature_flag.auth.external_only = $FEATURE_FLAG_AUTH_EXTERNAL_ONLY"
+ckan config-tool $CKAN_INI "feature_flag.ad.update_user = $FEATURE_FLAG_AD_UPDATE_USER"
+ckan config-tool $CKAN_INI "feature_flag.ad.sysadmin = $FEATURE_FLAG_AD_SYSADMIN"
+
 # Update test-core.ini DB, SOLR & Redis settings
 echo "Loading test settings into test-core.ini"
 ckan config-tool $SRC_DIR/ckan/test-core.ini \

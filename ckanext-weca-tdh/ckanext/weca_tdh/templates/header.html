@@ -1,5 +1,24 @@
 {% ckan_extends %}
 
+{% block header_account_container_content %} 
+  {% if c.userobj %}
+    {{ super() }}
+  {% else %}
+  <nav class="account not-authed" aria-label="{{ _('Account') }}">
+    <ul class="list-unstyled">
+      {% block header_account_notlogged %}
+        <li>{% link_for _('Log in'), named_route='user.login' %}</li>
+        {% if config['feature_flag.auth.external_only'] == 'False' %}
+          {% if h.check_access('user_create') %}
+          <li>{% link_for _('Register'), named_route='user.register', class_='sub' %}</li>
+          {% endif %} 
+        {% endif %}
+      {% endblock %}
+    </ul>
+  </nav>
+  {% endif %} 
+{% endblock %}
+
 {% block header_logo %}
 {% if g.site_logo %}
 <a class="logo" href="{{ h.url_for('home.index') }}">

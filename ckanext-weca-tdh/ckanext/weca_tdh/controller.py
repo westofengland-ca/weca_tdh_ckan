@@ -9,4 +9,3 @@ class RouteController():
     
     def render_license_page():
         return render_template('license.html')
-    
