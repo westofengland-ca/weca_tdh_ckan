@@ -15,7 +15,7 @@ class User(object):
     def get_or_create_ad_user(claims: dict):
         ad_id = claims[C.CKAN_USER_ID]
         if not ad_id:
-            log.error(f"User claims: missing 'id' in claims")
+            log.error(f"Error in user claims. Missing 'id'")
             raise PermissionError
 
         ckan_id = f'ad-{ad_id}'
@@ -25,20 +25,26 @@ class User(object):
         
         try:
             user = toolkit.get_action('user_show')(data_dict = {C.CKAN_USER_ID: ckan_id})
-            log.info(f"User found: {user}")
             
             if config[C.FF_AD_UPDATE_USER] == 'True':
-                if user[C.CKAN_USER_FULLNAME] != fullname:
-                    log.info("Updating user...")
+                update = False
 
-                    user[C.CKAN_USER_FULLNAME] = fullname                 
-                    user[C.CKAN_USER_EMAIL] = email
+                if user[C.CKAN_USER_EMAIL] != email:
+                    update = True
+
+                if user[C.CKAN_USER_FULLNAME] != fullname:                  
+                    user[C.CKAN_USER_FULLNAME] = fullname    
+                    update = True
+
+                if update:
+                    log.info(f"Detected changes in user details on login for user: {user}. Updating record.")
+                    user[C.CKAN_USER_EMAIL] = email # email must be set on update
                     user = toolkit.get_action('user_update')(context = {'ignore_auth': True}, data_dict = user)
 
             return user[C.CKAN_USER_NAME]
-        
+
         except NotFound:
-            log.info("Creating new user...")
+            log.debug("Creating new user...")
             try:
                 # Create new ckan user obj
                 new_user = model.User()
@@ -58,7 +64,7 @@ class User(object):
                 # Commit the changes to the database
                 model.Session.commit()
 
-                log.info(f"User '{new_user.name}' created successfully")
+                log.info(f"No user record found for user: {new_user.name}. New user record created.")
                 return new_user.name
 
             except Exception as e:
