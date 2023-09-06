@@ -15,7 +15,7 @@ class ADAuth():
     @authbp.route("/auth/aad")
     def login():
         try:
-            claims_map = ADAuth.map_user_claims()
+            claims_map = ADAuth.get_user_claims()
             if claims_map:
                 # get or create user obj
                 user = User.get_or_create_ad_user(claims_map)
@@ -30,45 +30,46 @@ class ADAuth():
             log.error(f"Login failed: {e}")
             return h.redirect_to('user.login')
 
-    def map_user_claims():
-        claims_map = {}
-
-        claims_map[C.CKAN_USER_ID] = request.headers.get(C.AD_USER_ID)      
-        claims_map[C.CKAN_USER_NAME] = request.headers.get(C.AD_USER_NAME)
-
-        # decode base64 access token
+    def get_user_claims():
         try:
-            token = ADAuth.decode_token(request.headers.get(C.AD_ID_TOKEN))
+            token = ADAuth.decode_token(request.headers.get(C.AD_ID_TOKEN)) # decode base64 access token
         except Exception as e:
             raise Exception(f"Invalid AD access token: {e}")
 
         user_info = json.loads(token)
         claims = user_info.get("claims", [])
 
-        # map claims to ckan user obj
-        if claims:          
-            claim_url = C.AD_CLAIM_URL
-            for claim in claims:
-                claim_type = claim.get(C.AD_CLAIM_TYPE)
-                claim_value = claim.get(C.AD_CLAIM_VALUE)
+        if claims:
+            claims_map = ADAuth.map_user_claims(claims)
+            claims_map[C.CKAN_USER_ID] = request.headers.get(C.AD_USER_ID)      
+            claims_map[C.CKAN_USER_NAME] = request.headers.get(C.AD_USER_NAME)
+            return claims_map
 
-                if claim_type == f"{claim_url}/{C.AD_CLAIM_EMAIL}":
-                    claims_map[C.CKAN_USER_EMAIL] = claim_value
+    def map_user_claims(claims):
+        claims_map = {}
+        claim_url = C.AD_CLAIM_URL
 
-                elif claim_type == f"{claim_url}/{C.AD_CLAIM_GIVEN_NAME}":
-                    claims_map[C.CKAN_USER_GIVEN_NAME] = claim_value
+        for claim in claims:
+            claim_type = claim.get(C.AD_CLAIM_TYPE)
+            claim_value = claim.get(C.AD_CLAIM_VALUE)
 
-                elif claim_type == f"{claim_url}/{C.AD_CLAIM_SURNAME}":
-                    claims_map[C.CKAN_USER_SURNAME] = claim_value
+            if claim_type == f"{claim_url}/{C.AD_CLAIM_EMAIL}":
+                claims_map[C.CKAN_USER_EMAIL] = claim_value
 
-                elif claim_type == C.AD_CLAIM_GROUPS:
-                    if claim_value == C.AD_GROUP_SYSADMIN_ID and config[C.FF_AD_SYSADMIN] == 'True':
-                        claims_map[C.CKAN_ROLE_SYSADMIN] = True
+            elif claim_type == f"{claim_url}/{C.AD_CLAIM_GIVEN_NAME}":
+                claims_map[C.CKAN_USER_GIVEN_NAME] = claim_value
+
+            elif claim_type == f"{claim_url}/{C.AD_CLAIM_SURNAME}":
+                claims_map[C.CKAN_USER_SURNAME] = claim_value
+
+            elif claim_type == C.AD_CLAIM_GROUPS:
+                if claim_value == C.AD_GROUP_SYSADMIN_ID and config[C.FF_AD_SYSADMIN] == 'True':
+                    claims_map[C.CKAN_ROLE_SYSADMIN] = True
 
         return claims_map
 
     def decode_token(token):
         return base64.b64decode(token + '==').decode('utf-8')
-    
+
     def get_blueprint():
         return authbp
