@@ -7376,6 +7376,7 @@
 
 .navbar {
   padding: 0px;
+  font-family: "GDS Transport", arial, sans-serif;
 }
 
 /* FOOTER //
@@ -7390,7 +7391,7 @@
 ///////////////*/
 /* base background color #354753 */
 body {
-  background: #fff url(../../../base/images/bg.png);
+  background-color: #fff;
 }
 
 /* two thirds container width */
@@ -7446,9 +7447,11 @@ input.gem-c-search__input:focus {
 
 button.gem-c-search__submit {
   border-radius: 0;
-  border-color: #1d70b8;
+  border: 2px solid;
+  border-left: 0px;
   background-color: #1d70b8;
   width: 15%;
+  max-width: 50px;
   padding: 8px;
   float: left;
 }
@@ -7659,6 +7662,18 @@ p.gem-c-lead-paragraph {
   background-color: green;
 }
 
+.resource-private, .resource-public {
+  text-transform: uppercase;
+}
+
+.resource-private {
+  background-color: #9d9d1b;
+}
+
+.resource-public {
+  background-color: green;
+}
+
 .metadata-box--in-dataset {
   background: #eee;
   padding: 25px 30px 15px 30px;
@@ -7693,12 +7708,26 @@ p.gem-c-lead-paragraph {
   margin-top: 50px;
 }
 
+.govuk-table__cell {
+  vertical-align: middle;
+}
+
 /* LOGIN PAGE //
 ///////////////*/
 .auth-providers {
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 0.5px solid #ccc;
+}
+
+/* PUBLISHER & TOPIC PAGE //
+///////////////*/
+.group-listclass {
+  margin-top: 30px;
+}
+
+.group-sidebar {
+  display: inline-grid;
 }
 
 /* temp flask debug overflow fix */

@@ -21,10 +21,10 @@
                 <div class="metadata-box metadata-box--in-dataset">   
                   {% block package_visibility %}
                     {% if pkg.private %}
-                      <p class="dataset-private badge pull-right dataset-marking">
+                      <span class="dataset-private badge pull-right dataset-marking">
                         <i class="fa fa-lock"></i>
                         {{ _('Restricted') }}
-                      </p>
+                      </span>
                     {% else %}
                       <span class="dataset-public badge pull-right dataset-marking">
                         <i class="fa fa-lock-open"></i>

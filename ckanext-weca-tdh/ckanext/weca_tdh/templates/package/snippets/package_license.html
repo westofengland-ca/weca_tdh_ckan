@@ -12,9 +12,9 @@
   {% else %}
     {% if pkg_dict.license_id %}
       <span property="dc:rights">{{ pkg_dict.license_id }}</span>
-    {% elif pkg_dict.extras[3].value %}
-      <span property="dc:rights">{{ pkg_dict.extras[3].value }}</span>
-    {% else %} 
+    {% elif pkg_dict.extras[3:4] %}
+      <span property="dc:rights">{{ pkg_dict.extras[3:4][0].value }}</span>
+    {% else %}
       <span property="dc:rights">{{ _('No License Provided') }}</span>
     {% endif %}
   {% endif %}

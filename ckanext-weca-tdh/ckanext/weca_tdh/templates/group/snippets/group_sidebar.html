@@ -1,0 +1,30 @@
+{% block topic_desc %}
+<div class="module module-narrow module-shallow group-sidebar">
+  <h2 class="module-heading">
+    <i class="fa fa-info-circle"></i>
+    {{ _('What are Topics?') }}
+  </h2>
+  <div class="module-content">
+    <p>
+      {% trans %}
+        You can use Topics to create and manage collections of datasets.
+        This could be to catalogue datasets for a particular project or team,
+        or on a particular theme, or as a very simple way to help people find
+        and search your own published datasets..
+      {% endtrans %}
+    </p>
+  </div>
+  {% endblock %}
+
+  {% block page_primary_action %}
+    {% if h.check_access('group_create') %}
+      <h2 class="module-heading">
+        <i class="fa fa-gavel"></i>
+        {{ _('Admin tools') }}
+      </h2>
+      <div class="module-content">
+        {% link_for h.humanize_entity_type('group', group_type, 'add link') or _('Add Topic'), named_route=group_type ~ '.new', class_='btn btn-primary', icon='plus-square' %}
+      </div>                        
+    {% endif %}
+  {% endblock %}
+</div>

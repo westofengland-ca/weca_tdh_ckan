@@ -15,7 +15,7 @@
             
               {% block search_filters %}             
                 <div class="govuk-grid-column-one-third">
-                  <h2 class="heading-medium">Filter by</h2>
+                  <h2 class="govuk-body-m govuk-!-font-weight-bold">Filter by</h2>
                   <label class="govuk-label sort-label" for="sort">Keywords</label>
                   <div class="gem-c-search__item-wrapper">
                     <input class="gem-c-search__item gem-c-search__input" type="text" placeholder="Search Transport Data Hub" name="q">           
@@ -36,8 +36,15 @@
 
               <div class="govuk-grid-column-two-thirds dgu-results">
                 {% block search_sort %}
+                  {% set sorting = [
+                    (_('Relevance'), 'score desc, metadata_modified desc'),
+                    (_('Name Ascending'), 'title_string asc'),
+                    (_('Name Descending'), 'title_string desc'),
+                    (_('Last Modified'), 'metadata_modified desc'),
+                    (_('Popular'), 'views_recent desc') if g.tracking_enabled else (False, False) ]
+                  %}
                   <div class="sort"> 
-                    {{ h.snippet('package/snippets/search_sort.html', sort_by_selected=sort_by_selected) }}
+                    {{ h.snippet('snippets/search_sort.html', sort_options=sorting, sorting_selected=sort_by_selected) }}
                   </div>
                 {% endblock %}
 
@@ -48,7 +55,7 @@
                 {% endblock %}
 
                 {% block package_search_results_list %}
-                  {{ h.snippet('snippets/package_list.html', packages=page.items, list_class='dataset-listclass', item_class='dataset-itemclass') }}
+                  {{ h.snippet('snippets/package_list.html', packages=page.items, list_class='dataset-listclass govuk-body-s', item_class='dataset-itemclass') }}
                 {% endblock %}
 
                 {% block page_pagination %}
