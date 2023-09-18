@@ -6,6 +6,21 @@ volumes:
   solr_data:
 
 services:
+  ckan-job:
+    container_name: ckan-job
+    build:
+      context: ../
+      dockerfile: docker/ckan/Dockerfile.dev
+      args:
+        - TZ=${TZ}
+    env_file:
+      - .env.job
+    depends_on:
+      ckan-dev:
+        condition: service_healthy
+    volumes:
+      - ckan_storage:/var/lib/ckan
+      - ../:/srv/app/src_extensions/ckanext-weca-tdh
 
   ckan-dev:
     container_name: ${CKAN_CONTAINER_NAME}

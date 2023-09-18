@@ -1,38 +1,43 @@
 #!/bin/sh
 
-# Install any local extensions in the src_extensions volume
-echo "Looking for local extensions to install..."
-echo "Extension dir contents:"
-ls -la $SRC_EXTENSIONS_DIR
-for i in $SRC_EXTENSIONS_DIR/*
-do
-    if [ -d $i ];
-    then
 
-        if [ -f $i/pip-requirements.txt ];
+# Install local extensions if not running in job mode
+if [ -z "${CKAN_JOB_MODE}" ]
+then
+    # Install any local extensions in the src_extensions volume
+    echo "Looking for local extensions to install..."
+    echo "Extension dir contents:"
+    ls -la $SRC_EXTENSIONS_DIR
+    for i in $SRC_EXTENSIONS_DIR/*
+    do
+        if [ -d $i ];
         then
-            pip install -r $i/pip-requirements.txt
-            echo "Found requirements file in $i"
+
+            if [ -f $i/pip-requirements.txt ];
+            then
+                pip install -r $i/pip-requirements.txt
+                echo "Found requirements file in $i"
+            fi
+            if [ -f $i/requirements.txt ];
+            then
+                pip install -r $i/requirements.txt
+                echo "Found requirements file in $i"
+            fi
+            if [ -f $i/dev-requirements.txt ];
+            then
+                pip install -r $i/dev-requirements.txt
+                echo "Found dev-requirements file in $i"
+            fi
+            if [ -f $i/setup.py ];
+            then
+                cd $i
+                python3 $i/setup.py develop
+                echo "Found setup.py file in $i"
+                cd $APP_DIR
+            fi
         fi
-        if [ -f $i/requirements.txt ];
-        then
-            pip install -r $i/requirements.txt
-            echo "Found requirements file in $i"
-        fi
-        if [ -f $i/dev-requirements.txt ];
-        then
-            pip install -r $i/dev-requirements.txt
-            echo "Found dev-requirements file in $i"
-        fi
-        if [ -f $i/setup.py ];
-        then
-            cd $i
-            python3 $i/setup.py develop
-            echo "Found setup.py file in $i"
-            cd $APP_DIR
-        fi
-    fi
-done
+    done
+fi
 
 # Add ckan.datapusher.api_token to the CKAN config file (updated with corrected value later)
 ckan config-tool $CKAN_INI ckan.datapusher.api_token=xxx
@@ -114,10 +119,18 @@ UWSGI_OPTS="--plugins http,python \
 
 if [ $? -eq 0 ]
 then
-    # Start supervisord
-    supervisord --configuration /etc/supervisord.conf &
-    # Start uwsgi
-    sudo -u ckan -EH uwsgi $UWSGI_OPTS
+    # If the CKAN_JOB_MODE environment variable isn't set, run the HTTP server.
+# Otherwise, rebuild the SOLR search index using the "only-missing" mode.
+    if [ -z "${CKAN_JOB_MODE}" ]
+    then
+        # Start supervisord
+        supervisord --configuration /etc/supervisord.conf &
+        # Start uwsgi
+        sudo -u ckan -EH uwsgi $UWSGI_OPTS
+    else
+        echo "Running in job mode, rebuilding search index."
+        ckan search-index rebuild -o
+    fi
 else
   echo "[prerun] failed...not starting CKAN."
 fi

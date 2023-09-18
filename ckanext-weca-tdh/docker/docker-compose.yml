@@ -7,6 +7,22 @@ volumes:
 
 services:
 
+  ckan-job:
+    container_name: ckan-job
+    build:
+      context: ../
+      dockerfile: docker/ckan/Dockerfile
+      args:
+        - TZ=${TZ}
+    env_file:
+      - .env.job
+    depends_on:
+      ckan:
+        condition: service_healthy
+    volumes:
+      - ckan_storage:/var/lib/ckan
+      - ../:/srv/app/src_extensions/ckanext-weca-tdh
+
   nginx:
     container_name: ${NGINX_CONTAINER_NAME}
     build:
