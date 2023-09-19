@@ -26,7 +26,8 @@
     {{ govukSelect({
         'id': name,
         'name': name,
-        'items': filter_items
+        'items': filter_items,
+        'attributes': {'data-cy': 'filter-' + name}
         }) 
     }}
 {% endblock %}
