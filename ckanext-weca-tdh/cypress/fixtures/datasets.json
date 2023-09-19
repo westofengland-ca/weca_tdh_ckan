@@ -1,0 +1,47 @@
+[
+  {
+    "name": "bus_timetable_e2e_test",
+    "title": "Bus timetable data (e2e)",
+    "notes": "Data describing current bus timetables.",
+    "owner_org": "gloucester_e2e",
+    "groups": [{"name": "bus_e2e"}, {"name": "e2e_test"}],
+    "resources": [
+      {
+        "name": "Timetable data",
+        "path": "https://bustimetable.com/data",
+        "format": "JSON",
+        "description": "Latest bus timetable data"
+      }           
+    ]
+  },
+  {
+    "name": "train_stops_e2e_test",
+    "title": "Train stop locations (e2e)",
+    "notes": "Locations of train stops.",
+    "owner_org": "plymouth_council_e2e",
+    "groups": [{"name": "train_e2e"}, {"name": "e2e_test"}],
+    "resources": [
+      {
+        "name": "Train stop locations",
+        "path": "https://trainstopmap.com/data",
+        "format": "CSV",
+        "description": "Latest train stop locations"
+      }           
+    ]
+  },
+  {
+    "name": "bus_network_usage_e2e_test",
+    "title": "Bus network usage (e2e)",
+    "notes": "Bus network usage data in Bristol City.",
+    "owner_org": "bristol_city_council_e2e",
+    "groups": [{"name": "demographic_e2e"}, {"name": "bus_e2e"}, {"name": "e2e_test"}],
+    "resources": [
+      {
+        "name": "Network usage",
+        "path": "https://busnetworkusage.com/data",
+        "format": "CSV",
+        "description": "Latest bus network usage data"
+      }           
+    ]
+  }
+]
