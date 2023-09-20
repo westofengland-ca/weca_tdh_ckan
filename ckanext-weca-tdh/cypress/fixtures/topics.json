@@ -1,22 +1,17 @@
 [
   {
-    "name": "e2e_test",
-    "title": "e2e Test",
-    "description": "Datasets belonging to e2e test data"
-  },
-  {
-    "name": "bus_e2e",
-    "title": "Bus (e2e)",
+    "name": "bus",
+    "title": "Bus",
     "description": "Group of datasets relating to Buses"
   },
   {
-    "name": "train_e2e",
-    "title": "Train (e2e)",
+    "name": "train",
+    "title": "Train",
     "description": "Group of datasets relating to Trains"
   },
   {
-    "name": "demographic_e2e",
-    "title": "Demographic (e2e)",
+    "name": "demographic",
+    "title": "Demographic",
     "description": "Group of datasets relating to Demographic"
   }
 ]

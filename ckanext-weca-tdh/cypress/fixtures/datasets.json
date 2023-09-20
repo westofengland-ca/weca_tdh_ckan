@@ -1,10 +1,10 @@
 [
   {
-    "name": "bus_timetable_e2e_test",
-    "title": "Bus timetable data (e2e)",
+    "name": "bus_timetable",
+    "title": "Bus timetable data",
     "notes": "Data describing current bus timetables.",
-    "owner_org": "gloucester_e2e",
-    "groups": [{"name": "bus_e2e"}, {"name": "e2e_test"}],
+    "owner_org": "gloucester",
+    "groups": [{"name": "bus"}],
     "resources": [
       {
         "name": "Timetable data",
@@ -15,11 +15,11 @@
     ]
   },
   {
-    "name": "train_stops_e2e_test",
-    "title": "Train stop locations (e2e)",
+    "name": "train_stops",
+    "title": "Train stop locations",
     "notes": "Locations of train stops.",
-    "owner_org": "plymouth_council_e2e",
-    "groups": [{"name": "train_e2e"}, {"name": "e2e_test"}],
+    "owner_org": "plymouth_council",
+    "groups": [{"name": "train"}],
     "resources": [
       {
         "name": "Train stop locations",
@@ -30,11 +30,11 @@
     ]
   },
   {
-    "name": "bus_network_usage_e2e_test",
-    "title": "Bus network usage (e2e)",
+    "name": "bus_network_usage",
+    "title": "Bus network usage",
     "notes": "Bus network usage data in Bristol City.",
-    "owner_org": "bristol_city_council_e2e",
-    "groups": [{"name": "demographic_e2e"}, {"name": "bus_e2e"}, {"name": "e2e_test"}],
+    "owner_org": "bristol_city_council",
+    "groups": [{"name": "demographic"}, {"name": "bus"}],
     "resources": [
       {
         "name": "Network usage",

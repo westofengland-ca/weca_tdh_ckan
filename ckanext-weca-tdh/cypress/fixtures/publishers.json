@@ -1,17 +1,17 @@
 [
   {
-    "name": "gloucester_e2e",
-    "title": "Gloucester (e2e)",
+    "name": "gloucester",
+    "title": "Gloucester",
     "description": "Gloucester area"
   },
   {
-    "name": "plymouth_council_e2e",
-    "title": "Plymouth Council (e2e)",
+    "name": "plymouth_council",
+    "title": "Plymouth Council",
     "description": "Plymouth Council area"
   },
   {
-    "name": "bristol_city_council_e2e",
-    "title": "Bristol City Council (e2e)",
+    "name": "bristol_city_council",
+    "title": "Bristol City Council",
     "description": "Bristol City Council & sorrounding areas"
   }
 ]

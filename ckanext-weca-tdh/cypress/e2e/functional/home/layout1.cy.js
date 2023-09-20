@@ -42,6 +42,6 @@ describe('Landing page', () => {
       .find('[data-cy="topic-link"]')
       .click()
     
-    cy.url().should('contain', Cypress.config().baseUrl + 'group')
+    cy.url().should('contain', Cypress.config().baseUrl + 'group/bus')
   })
 })
