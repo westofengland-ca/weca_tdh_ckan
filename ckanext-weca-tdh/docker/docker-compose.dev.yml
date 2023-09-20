@@ -14,7 +14,7 @@ services:
       args:
         - TZ=${TZ}
     env_file:
-      - .env.job
+      - .env.job.dev
     depends_on:
       ckan-dev:
         condition: service_healthy

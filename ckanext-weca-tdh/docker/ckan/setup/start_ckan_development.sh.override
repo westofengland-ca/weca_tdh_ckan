@@ -128,6 +128,21 @@ then
     # Start the development server with automatic reload
     sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0
 else
-    echo "Running in job mode, rebuilding search index."
-    ckan search-index rebuild -o
+    echo "Running in job mode."
+    if [ ${CKAN_INDEX_REBUILD_TYPE} == 'rebuild' ]
+    then
+        echo "Rebuilding entire search index."
+        ckan search-index rebuild
+    elif [ ${CKAN_INDEX_REBUILD_TYPE} == 'rebuild-clear' ]
+    then
+        echo "Rebuilding entire search index, clearing first."
+        ckan search-index rebuild --clear
+    elif [ ${CKAN_INDEX_REBUILD_TYPE} == 'clear' ]
+    then
+        echo "Clearing search index."
+        ckan search-index clear
+    else    
+        echo "Rebuilding search index (missing packages only)"
+        ckan search-index rebuild -o
+    fi
 fi
