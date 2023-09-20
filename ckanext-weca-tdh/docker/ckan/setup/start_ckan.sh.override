@@ -144,7 +144,7 @@ then
         else
             echo "Rebuilding search index (missing packages only)."
             ckan search-index rebuild -o
-        fia
+        fi
     fi
 else
   echo "[prerun] failed...not starting CKAN."
