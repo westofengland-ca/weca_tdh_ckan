@@ -3,17 +3,12 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.model as model
 import ckan.lib.helpers as h
-from flask import Blueprint, render_template
+from flask import Blueprint, request
 from inspect import getmembers, isfunction
 from ckanext.weca_tdh.lib import helpers
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.auth import ADAuth
-
-def login_aad_redirect():
-    if not session.get('user'):
-        return h.redirect_to('auth.login')
-    return render_template('home/index.html')
 
 def logout_aad_redirect():
     return h.redirect_to('/')
@@ -23,7 +18,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IBlueprint, inherit=True)
     plugins.implements(plugins.IAuthenticator, inherit=True)
-    
+
     # IConfigurer
     def update_config(self, config: CKANConfig):
         toolkit.add_template_directory(config, "templates")
@@ -49,7 +44,11 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         if session.get('user'):
             user = model.User.get(session.get('user'))
             toolkit.login_user(user)
-    
+        elif C.AD_SESSION_COOKIE in request.cookies:
+            ADAuth.login()
+            user = model.User.get(session.get('user'))
+            toolkit.login_user(user)
+
     def login(self):
         pass
     
@@ -67,8 +66,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         '''       
         staticbp = Blueprint(self.name, self.__module__, template_folder='templates')
         rules = [
-            ('/', 'index', login_aad_redirect)
-            ('/user/logged_out_redirect', 'logout', logout_aad_redirect)
+            ('/user/logged_out_redirect', 'logout', logout_aad_redirect),
             ('/contact', 'contact', RouteController.render_contact_page),
             ('/policy', 'policy', RouteController.render_policy_page),
             ('/license', 'license', RouteController.render_license_page)
@@ -76,4 +74,4 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         for rule in rules:
             staticbp.add_url_rule(*rule)
 
-        return [staticbp, ADAuth.get_blueprint()]
+        return staticbp

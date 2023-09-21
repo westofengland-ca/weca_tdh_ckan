@@ -17,6 +17,7 @@ CKAN_ROUTE_AD_LOGOUT = "/.auth/logout?post_logout_redirect_uri=/user/logged_out_
 AD_USER_ID = "X-Ms-Client-Principal-Id"
 AD_USER_NAME = "X-Ms-Client-Principal-Name"
 AD_ID_TOKEN = "X-Ms-Client-Principal"
+AD_SESSION_COOKIE = 'AppServiceAuthSession'
 
 # AD Claims
 AD_CLAIM_URL = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims"

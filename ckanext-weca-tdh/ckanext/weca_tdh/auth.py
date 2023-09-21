@@ -3,16 +3,12 @@ import json
 import logging
 from ckanext.weca_tdh.user import User
 import ckanext.weca_tdh.config as C
-import ckan.lib.helpers as h
 from ckan.common import config
-from flask import request, Blueprint
+from flask import request
 
 log = logging.getLogger(__name__)
-authbp = Blueprint('auth', __name__,)
 
 class ADAuth():
-    
-    @authbp.route("/auth/aad")
     def login():
         try:
             claims_map = ADAuth.get_user_claims()
@@ -23,12 +19,8 @@ class ADAuth():
                 # start user session
                 User.start_session(user)
 
-                # redirect to landing page
-                return h.redirect_to('/')
-
         except Exception as e:
             log.error(f"Login failed: {e}")
-            return h.redirect_to('user.login')
 
     def get_user_claims():
         try:
@@ -70,6 +62,3 @@ class ADAuth():
 
     def decode_token(token):
         return base64.b64decode(token + '==').decode('utf-8')
-
-    def get_blueprint():
-        return authbp
