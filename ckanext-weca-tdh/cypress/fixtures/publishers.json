@@ -1,0 +1,17 @@
+[
+  {
+    "name": "gloucester",
+    "title": "Gloucester",
+    "description": "Gloucester area"
+  },
+  {
+    "name": "plymouth_council",
+    "title": "Plymouth Council",
+    "description": "Plymouth Council area"
+  },
+  {
+    "name": "bristol_city_council",
+    "title": "Bristol City Council",
+    "description": "Bristol City Council & sorrounding areas"
+  }
+]

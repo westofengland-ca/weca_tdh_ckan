@@ -18,18 +18,19 @@
                   <h2 class="govuk-body-m govuk-!-font-weight-bold">Filter by</h2>
                   <label class="govuk-label sort-label" for="sort">Keywords</label>
                   <div class="gem-c-search__item-wrapper">
-                    <input class="gem-c-search__item gem-c-search__input" type="text" placeholder="Search Transport Data Hub" name="q">           
-                    <button class="gem-c-search__submit" type="submit"><i class="fa fa-search"></i></button>
+                    <input class="gem-c-search__item gem-c-search__input" type="text" placeholder="Search Transport Data Hub" name="q" value="{{ q }}" data-cy="search-input">           
+                    <button class="gem-c-search__submit" type="submit" data-cy="search-button"><i class="fa fa-search"></i></button>
                   </div>
                   {% set facetLabels = ["organization", "groups", "res_format"] %}
                   {% for facet in facetLabels %}
                     {{ h.snippet('package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped) }}
                   {% endfor %}
                   {{ govukButton({
-                    'text': "Apply filters"
+                    'text': "Apply filters",
+                    'attributes': {'data-cy': 'filter-button'}
                   }) }}
                   <p class="govuk-body sort-label">
-                    <a class="govuk-link" href="/dataset">Remove filters</a>
+                    <a class="govuk-link" href="/dataset" data-cy="filter-remove">Remove filters</a>
                   </p> 
                 </div> 
               {% endblock %}
@@ -49,7 +50,7 @@
                 {% endblock %}
 
                 {% block search_results_count %}
-                  <span class="results_summary">
+                  <span class="results_summary" data-cy="results-summary">
                     <span class="govuk-body-m govuk-!-font-weight-bold">{% snippet 'snippets/search_result_text.html', query=q, sorting=sorting, count=page.item_count, type=dataset_type %}</span>
                   </span>
                 {% endblock %}
