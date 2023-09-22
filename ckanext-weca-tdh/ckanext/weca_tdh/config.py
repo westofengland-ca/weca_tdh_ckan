@@ -1,3 +1,5 @@
+from ckan.common import config
+
 # CKAN user
 CKAN_USER_ID = "id"
 CKAN_USER_NAME = "name"
@@ -32,6 +34,7 @@ AD_CLAIM_GROUPS = "groups"
 AD_GROUP_SYSADMIN_ID = "6e6f8da9-d632-468f-a698-db9436f4cd8a"
 
 # Feature flags
-FF_AUTH_EXTERNAL_ONLY = "feature_flag.auth.external_only"
-FF_AD_UPDATE_USER = "feature_flag.ad.update_user"
-FF_AD_SYSADMIN = "feature_flag.ad.sysadmin"
+FF_AUTH_EXTERNAL_ONLY = config['feature_flag.auth.external_only']
+FF_AUTH_USER_GROUP_ONLY = config['feature_flag.auth.user_group_only']
+FF_AD_UPDATE_USER = config['feature_flag.ad.update_user']
+FF_AD_SYSADMIN = config['feature_flag.ad.sysadmin']

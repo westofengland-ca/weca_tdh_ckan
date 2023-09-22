@@ -1,14 +1,14 @@
 from ckan.common import CKANConfig, session
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
-import ckan.model as model
 import ckan.lib.helpers as h
 from flask import Blueprint, request
 from inspect import getmembers, isfunction
 from ckanext.weca_tdh.lib import helpers
 import ckanext.weca_tdh.config as C
-from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.auth import ADAuth
+from ckanext.weca_tdh.controller import RouteController
+from ckanext.weca_tdh.user import User
 
 def logout_aad_redirect():
     return h.redirect_to('/')
@@ -42,12 +42,10 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         Called on each request to identify a user.
         """
         if session.get('user'):
-            user = model.User.get(session.get('user'))
-            toolkit.login_user(user)
+            User.login(session.get('user'))
         elif C.AD_SESSION_COOKIE in request.cookies:
-            ADAuth.login()
-            user = model.User.get(session.get('user'))
-            toolkit.login_user(user)
+            ADAuth.authorise()
+            User.login(session.get('user'))
 
     def login(self):
         pass

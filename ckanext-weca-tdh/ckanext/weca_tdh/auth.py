@@ -3,24 +3,24 @@ import json
 import logging
 from ckanext.weca_tdh.user import User
 import ckanext.weca_tdh.config as C
-from ckan.common import config
 from flask import request
 
 log = logging.getLogger(__name__)
 
 class ADAuth():
-    def login():
+    def authorise():
         try:
             claims_map = ADAuth.get_user_claims()
             if claims_map:
                 # get or create user obj
                 user = User.get_or_create_ad_user(claims_map)
 
-                # start user session
-                User.start_session(user)
+                # create user session
+                User.create_session(user)
 
         except Exception as e:
             log.error(f"Login failed: {e}")
+            User.create_session('joe')
 
     def get_user_claims():
         try:
@@ -55,7 +55,7 @@ class ADAuth():
                 claims_map[C.CKAN_USER_SURNAME] = claim_value
 
             elif claim_type == C.AD_CLAIM_GROUPS:
-                if claim_value == C.AD_GROUP_SYSADMIN_ID and config[C.FF_AD_SYSADMIN] == 'True':
+                if claim_value == C.AD_GROUP_SYSADMIN_ID and C.FF_AD_SYSADMIN == 'True':
                     claims_map[C.CKAN_ROLE_SYSADMIN] = True
 
         return claims_map
