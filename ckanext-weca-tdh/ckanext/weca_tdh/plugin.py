@@ -9,6 +9,9 @@ import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.auth import ADAuth
 from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.user import User
+import logging
+
+log = logging.getLogger(__name__)
 
 def logout_aad_redirect():
     return h.redirect_to('/')
@@ -43,9 +46,13 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         """
         if session.get('user'):
             User.login(session.get('user'))
-        elif C.AD_SESSION_COOKIE in request.cookies:
-            ADAuth.authorise()
-            User.login(session.get('user'))
+        elif not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):
+            try:
+                ADAuth.authorise()
+                User.login(session.get('user'))
+            except Exception as e:
+                log.error(e)
+                return toolkit.abort(403, "Authorisation failed")
 
     def login(self):
         pass

@@ -24,7 +24,7 @@ class User(object):
 
         ckan_id = f'ad-{ad_id}'
         email = claims[C.CKAN_USER_EMAIL]
-        fullname = f'{claims[C.CKAN_USER_GIVEN_NAME]} {claims[C.CKAN_USER_SURNAME]}'
+        fullname = claims[C.CKAN_USER_FULLNAME]
         is_sysadmin = claims.get(C.CKAN_ROLE_SYSADMIN, False)
 
         try:

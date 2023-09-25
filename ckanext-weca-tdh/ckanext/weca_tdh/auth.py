@@ -19,8 +19,7 @@ class ADAuth():
                 User.create_session(user)
 
         except Exception as e:
-            log.error(f"Login failed: {e}")
-            User.create_session('joe')
+            raise Exception(f"Authorisation failed: {e}")
 
     def get_user_claims():
         try:
@@ -34,29 +33,31 @@ class ADAuth():
         if claims:
             claims_map = ADAuth.map_user_claims(claims)
             claims_map[C.CKAN_USER_ID] = request.headers.get(C.AD_USER_ID)      
-            claims_map[C.CKAN_USER_NAME] = request.headers.get(C.AD_USER_NAME)
             return claims_map
 
     def map_user_claims(claims):
         claims_map = {}
         claim_url = C.AD_CLAIM_URL
+        in_user_group = False
 
         for claim in claims:
             claim_type = claim.get(C.AD_CLAIM_TYPE)
             claim_value = claim.get(C.AD_CLAIM_VALUE)
 
+            if claim_type == C.AD_CLAIM_NAME:
+                claims_map[C.CKAN_USER_FULLNAME] = claim_value
+
             if claim_type == f"{claim_url}/{C.AD_CLAIM_EMAIL}":
                 claims_map[C.CKAN_USER_EMAIL] = claim_value
 
-            elif claim_type == f"{claim_url}/{C.AD_CLAIM_GIVEN_NAME}":
-                claims_map[C.CKAN_USER_GIVEN_NAME] = claim_value
-
-            elif claim_type == f"{claim_url}/{C.AD_CLAIM_SURNAME}":
-                claims_map[C.CKAN_USER_SURNAME] = claim_value
-
             elif claim_type == C.AD_CLAIM_GROUPS:
-                if claim_value == C.AD_GROUP_SYSADMIN_ID and C.FF_AD_SYSADMIN == 'True':
+                if claim_value == C.AD_GROUP_CKAN_ID:
+                    in_user_group = True
+                elif claim_value == C.AD_GROUP_SYSADMIN_ID and C.FF_AD_SYSADMIN == 'True':
                     claims_map[C.CKAN_ROLE_SYSADMIN] = True
+
+        if C.FF_AUTH_USER_GROUP_ONLY == 'True' and not in_user_group:
+            raise Exception("Account not in user group")
 
         return claims_map
 
