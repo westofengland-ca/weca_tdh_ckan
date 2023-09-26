@@ -44,15 +44,16 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         """
         Called on each request to identify a user.
         """
-        if session.get('user'):
-            User.login(session.get('user'))
-        elif not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):
-            try:
-                ADAuth.authorise()
+        if C.FF_AUTH_EXTERNAL_ONLY == 'True':
+            if session.get('user'):
                 User.login(session.get('user'))
-            except Exception as e:
-                log.error(e)
-                return toolkit.abort(403, "Authorisation failed")
+            elif not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):
+                try:
+                    ADAuth.authorise()
+                    User.login(session.get('user'))
+                except Exception as e:
+                    log.error(e)
+                    return toolkit.abort(403, "Authorisation failed")
 
     def login(self):
         pass
