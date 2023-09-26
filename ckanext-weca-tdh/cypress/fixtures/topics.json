@@ -1,0 +1,17 @@
+[
+  {
+    "name": "bus",
+    "title": "Bus",
+    "description": "Group of datasets relating to Buses"
+  },
+  {
+    "name": "train",
+    "title": "Train",
+    "description": "Group of datasets relating to Trains"
+  },
+  {
+    "name": "demographic",
+    "title": "Demographic",
+    "description": "Group of datasets relating to Demographic"
+  }
+]

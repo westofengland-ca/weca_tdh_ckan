@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "sass": "sass ckanext/weca_tdh/styles/weca_tdh.scss:ckanext/weca_tdh/assets/styles/weca_tdh.css",
-    "sass-dev": "sass --watch ckanext/weca_tdh/styles/weca_tdh.scss:ckanext/weca_tdh/assets/styles/weca_tdh.css"
+    "sass-dev": "sass --watch ckanext/weca_tdh/styles/weca_tdh.scss:ckanext/weca_tdh/assets/styles/weca_tdh.css",
+    "cypress-open": "cypress open"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "govuk-frontend": "^4.5.0"
   },
   "devDependencies": {
+    "cypress": "^13.1.0",
     "sass": "^1.63.2"
   }
 }

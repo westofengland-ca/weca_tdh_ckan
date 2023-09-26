@@ -1,0 +1,47 @@
+[
+  {
+    "name": "bus_timetable",
+    "title": "Bus timetable data",
+    "notes": "Data describing current bus timetables.",
+    "owner_org": "gloucester",
+    "groups": [{"name": "bus"}],
+    "resources": [
+      {
+        "name": "Timetable data",
+        "path": "https://bustimetable.com/data",
+        "format": "JSON",
+        "description": "Latest bus timetable data"
+      }           
+    ]
+  },
+  {
+    "name": "train_stops",
+    "title": "Train stop locations",
+    "notes": "Locations of train stops.",
+    "owner_org": "plymouth_council",
+    "groups": [{"name": "train"}],
+    "resources": [
+      {
+        "name": "Train stop locations",
+        "path": "https://trainstopmap.com/data",
+        "format": "CSV",
+        "description": "Latest train stop locations"
+      }           
+    ]
+  },
+  {
+    "name": "bus_network_usage",
+    "title": "Bus network usage",
+    "notes": "Bus network usage data in Bristol City.",
+    "owner_org": "bristol_city_council",
+    "groups": [{"name": "demographic"}, {"name": "bus"}],
+    "resources": [
+      {
+        "name": "Network usage",
+        "path": "https://busnetworkusage.com/data",
+        "format": "CSV",
+        "description": "Latest bus network usage data"
+      }           
+    ]
+  }
+]

@@ -1,45 +1,49 @@
 #!/bin/sh
 
-# Install any local extensions in the src_extensions volume
-echo "Looking for local extensions to install..."
-echo "Extension dir contents:"
-ls -la $SRC_EXTENSIONS_DIR
-for i in $SRC_EXTENSIONS_DIR/*
-do
-    if [ -d $i ];
-    then
+# Install local extensions if not running in job mode
+if [ -z "${CKAN_JOB_MODE}" ]
+then
+    # Install any local extensions in the src_extensions volume
+    echo "Looking for local extensions to install..."
+    echo "Extension dir contents:"
+    ls -la $SRC_EXTENSIONS_DIR
+    for i in $SRC_EXTENSIONS_DIR/*
+    do
+        if [ -d $i ];
+        then
 
-        if [ -f $i/pip-requirements.txt ];
-        then
-            pip install -r $i/pip-requirements.txt
-            echo "Found requirements file in $i"
-        fi
-        if [ -f $i/requirements.txt ];
-        then
-            pip install -r $i/requirements.txt
-            echo "Found requirements file in $i"
-        fi
-        if [ -f $i/dev-requirements.txt ];
-        then
-            pip install -r $i/dev-requirements.txt
-            echo "Found dev-requirements file in $i"
-        fi
-        if [ -f $i/setup.py ];
-        then
-            cd $i
-            python3 $i/setup.py develop
-            echo "Found setup.py file in $i"
-            cd $APP_DIR
-        fi
+            if [ -f $i/pip-requirements.txt ];
+            then
+                pip install -r $i/pip-requirements.txt
+                echo "Found requirements file in $i"
+            fi
+            if [ -f $i/requirements.txt ];
+            then
+                pip install -r $i/requirements.txt
+                echo "Found requirements file in $i"
+            fi
+            if [ -f $i/dev-requirements.txt ];
+            then
+                pip install -r $i/dev-requirements.txt
+                echo "Found dev-requirements file in $i"
+            fi
+            if [ -f $i/setup.py ];
+            then
+                cd $i
+                python3 $i/setup.py develop
+                echo "Found setup.py file in $i"
+                cd $APP_DIR
+            fi
 
-        # Point `use` in test.ini to location of `test-core.ini`
-        if [ -f $i/test.ini ];
-        then
-            echo "Updating \`test.ini\` reference to \`test-core.ini\` for plugin $i"
-            ckan config-tool $i/test.ini "use = config:../../src/ckan/test-core.ini"
+            # Point `use` in test.ini to location of `test-core.ini`
+            if [ -f $i/test.ini ];
+            then
+                echo "Updating \`test.ini\` reference to \`test-core.ini\` for plugin $i"
+                ckan config-tool $i/test.ini "use = config:../../src/ckan/test-core.ini"
+            fi
         fi
-    fi
-done
+    done
+fi
 
 # Set debug to true
 echo "Enabling debug mode"
@@ -119,8 +123,31 @@ then
     done
 fi
 
-# Start supervisord
-supervisord --configuration /etc/supervisord.conf &
+# If the CKAN_JOB_MODE environment variable isn't set, run the HTTP server.
+# Otherwise, rebuild the SOLR search index using the "only-missing" mode.
+if [ -z "${CKAN_JOB_MODE}" ]
+then
+    # Start supervisord
+    supervisord --configuration /etc/supervisord.conf &
 
-# Start the development server with automatic reload
-sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0
+    # Start the development server with automatic reload
+    sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0
+else
+    echo "Running in job mode."
+    if [ ${CKAN_INDEX_REBUILD_TYPE} == 'rebuild' ]
+    then
+        echo "Rebuilding entire search index."
+        ckan search-index rebuild
+    elif [ ${CKAN_INDEX_REBUILD_TYPE} == 'rebuild-clear' ]
+    then
+        echo "Rebuilding entire search index, clearing first."
+        ckan search-index rebuild --clear
+    elif [ ${CKAN_INDEX_REBUILD_TYPE} == 'clear' ]
+    then
+        echo "Clearing search index."
+        ckan search-index clear
+    else    
+        echo "Rebuilding search index (missing packages only)"
+        ckan search-index rebuild -o
+    fi
+fi
