@@ -2,7 +2,7 @@ import logging
 import uuid
 import random
 import string
-from ckan.common import session, config
+from ckan.common import session
 from ckan import model
 from ckan.logic import NotFound
 import ckan.plugins.toolkit as toolkit
@@ -12,6 +12,10 @@ log = logging.getLogger(__name__)
 
 class User(object):
 
+    def login(username: str):
+        userobj = model.User.get(username)
+        toolkit.login_user(userobj)
+
     def get_or_create_ad_user(claims: dict):
         ad_id = claims[C.CKAN_USER_ID]
         if not ad_id:
@@ -20,13 +24,13 @@ class User(object):
 
         ckan_id = f'ad-{ad_id}'
         email = claims[C.CKAN_USER_EMAIL]
-        fullname = f'{claims[C.CKAN_USER_GIVEN_NAME]} {claims[C.CKAN_USER_SURNAME]}'
+        fullname = claims[C.CKAN_USER_FULLNAME]
         is_sysadmin = claims.get(C.CKAN_ROLE_SYSADMIN, False)
-        
+
         try:
             user = toolkit.get_action('user_show')(data_dict = {C.CKAN_USER_ID: ckan_id})
 
-            if config[C.FF_AD_UPDATE_USER] == 'True':
+            if C.FF_AD_UPDATE_USER == 'True':
                 # update user records. Only email and fullname can be updated
                 log.info(f"Updating user records on login for user: {user}.")
                 user[C.CKAN_USER_EMAIL] = email # email cannot be retrieved, but must be set on update
@@ -66,7 +70,7 @@ class User(object):
         except KeyError as e:
             raise Exception(f"Key error in claims: {e}")
 
-    def start_session(username: str):
+    def create_session(username: str):
         session['user'] = username
         session.save()
 

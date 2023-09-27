@@ -35,8 +35,7 @@ class ADUser(unittest.TestCase):
             claims_map = {
                 'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
                 'email': 'mockuser@email.com',
-                'given_name': 'Mock',
-                'surname': 'User',
+                'fullname': 'Mock User',
                 'sysadmin': False
             }
 
@@ -64,8 +63,7 @@ class ADUser(unittest.TestCase):
             claims_map = {
                 'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
                 'email': 'mockuser@email.com',
-                'given_name': 'Mock',
-                'surname': 'User',
+                'fullname': 'Mock User',
                 'sysadmin': False
             }
 
@@ -96,8 +94,7 @@ class ADUser(unittest.TestCase):
             claims_map = {
                 'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
                 'email': 'mockuser@email.com',
-                'given_name': 'Updated',
-                'surname': 'User',
+                'fullname': 'Updated User',
                 'sysadmin': False
             }
 
