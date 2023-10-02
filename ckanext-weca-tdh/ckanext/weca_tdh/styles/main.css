@@ -148,10 +148,6 @@ i.fa.fa-search {
     color: white;
 }
 
-.search-title {
-    margin-left: 34%;
-}
-
 .topics_list {
     columns: 3;
 }
@@ -414,6 +410,23 @@ p.gem-c-lead-paragraph {
   display: inline-grid;
 }
 
+
+/* GLOBAL /
+////////*/
+
+.tdh-row {
+  margin-right: -15px;
+  margin-left: -15px;
+  /*--bs-gutter-x: 0rem;*/
+}
+
+.page-heading-result {
+  margin-left:33%;
+}
+
+.search-main {
+  width: 66%;
+}
 
 /* temp flask debug overflow fix */
 #flDebug, #flDebug * {

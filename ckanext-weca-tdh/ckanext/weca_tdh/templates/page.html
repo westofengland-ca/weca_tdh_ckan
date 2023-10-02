@@ -40,45 +40,49 @@
             </div>
           {% endblock %}
           <div class="govuk-width-container">
-            <div class="row tdh-row {% block wrapper_class %}{% endblock %}{% if self.secondary()|trim == '' or c.action=='resource_read' %} no-nav{% endif %}">
-              {% block pre_primary %}{% endblock %}
+            <form action="{{ request.path }}" method="get">
+              <div class="row tdh-row {% block wrapper_class %}{% endblock %}{% if self.secondary()|trim == '' or c.action=='resource_read' %} no-nav{% endif %}">
+                {% block pre_primary %}{% endblock %}
+                
+                {% block heading %}{% endblock %}
+                
+                {% block secondary %}
+                  <div class="secondary col-md-4">
+                    {% block secondary_content %}{% endblock %}
+                  </div>
+                {% endblock %}
 
-              {% block secondary %}
-                <div class="secondary col-md-4">
-                  {% block secondary_content %}{% endblock %}
-                </div>
-              {% endblock %}
-
-              {% block primary %}
-                <div class="primary {% if self.primary_class() %}{% block primary_class %}{% endblock %}{% else %}col-md-8{% endif %}">
-                  {% block primary_content %}
-                    <article class="module">
-                      {% block page_header %}
-                        <header class="module-content page-header">
-                          {% if self.content_action() | trim %}
-                            <div class="content_action">
-                              {% block content_action %}{% endblock %}
+                {% block primary %}
+                  <div class="primary {% if self.primary_class() %}{% block primary_class %}{% endblock %}{% else %}col-md-8{% endif %}">
+                    {% block primary_content %}
+                      <article class="module">
+                        {% block page_header %}
+                          <header class="module-content page-header">
+                            {% if self.content_action() | trim %}
+                              <div class="content_action">
+                                {% block content_action %}{% endblock %}
+                              </div>
+                            {% endif %}
+                            <ul class="nav nav-tabs">
+                              {% block content_primary_nav %}{% endblock %}
+                            </ul>
+                          </header>
+                        {% endblock %}
+                        <div class="module-content">
+                          {% if self.page_primary_action() | trim %}
+                            <div class="page_primary_action">
+                              {% block page_primary_action %}{% endblock %}
                             </div>
                           {% endif %}
-                          <ul class="nav nav-tabs">
-                            {% block content_primary_nav %}{% endblock %}
-                          </ul>
-                        </header>
-                      {% endblock %}
-                      <div class="module-content">
-                        {% if self.page_primary_action() | trim %}
-                          <div class="page_primary_action">
-                            {% block page_primary_action %}{% endblock %}
-                          </div>
-                        {% endif %}
-                        {% block primary_content_inner %}
-                        {% endblock %}
-                      </div>
-                    </article>
-                  {% endblock %}
-                </div>
-              {% endblock %}
-            </div>
+                          {% block primary_content_inner %}
+                          {% endblock %}
+                        </div>
+                      </article>
+                    {% endblock %}
+                  </div>
+                {% endblock %}           
+              </div>
+            </form>
           </div>
         {% endblock %}
       </div>

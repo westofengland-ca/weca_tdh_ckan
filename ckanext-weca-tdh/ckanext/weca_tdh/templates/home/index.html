@@ -3,7 +3,7 @@
 {% block subtitle %}{{ _("Welcome") }}{% endblock %}
 
 {% block toolbar %}{% endblock %}
-{% block primary_class %}govuk-width-container{% endblock %}
+{% block primary_class %}landing-page{% endblock %}
 
 {% block primary_content %}
   {% block landing_page_about %} 
@@ -16,13 +16,10 @@
   {% endblock %}
 
   {% block landing_page_search %}
-    <div class="govuk-grid-row">
-      <form action="/dataset" class="govuk-grid-column-two-thirds">
-        <div class="gem-c-search__item-wrapper">
-          <input class="gem-c-search__item gem-c-search__input" type="text" placeholder="Search Transport Data Hub" name="q" data-cy="search-input">           
-          <button class="gem-c-search__submit" type="submit" data-cy="search-button"><i class="fa fa-search"></i></button>
-        </div>
-      </form>
+    <div class="row search-main">
+      {% block search_input %}
+        {% snippet "snippets/search_form.html", query=q %}  
+      {% endblock %}
     </div>
   {% endblock %}
 
