@@ -1,0 +1,43 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _("Welcome") }}{% endblock %}
+
+{% block toolbar %}{% endblock %}
+{% block primary_class %}govuk-width-container{% endblock %}
+
+{% block primary_content %}
+  {% block landing_page_about %} 
+    <div class="gem-c-title govuk-!-margin-bottom-4">
+      <h1 class="gem-c-title__text govuk-heading-l" data-cy="landing-heading">{{ g.site_description }}</h1>
+    </div>
+    <p class="gem-c-lead-paragraph govuk-body" data-cy="landing-desc">
+      {{ h.snippet('snippets/landing_description.html') }}
+    </p>
+  {% endblock %}
+
+  {% block landing_page_search %}
+    <div class="govuk-grid-row">
+      <form action="/dataset" class="govuk-grid-column-two-thirds">
+        <div class="gem-c-search__item-wrapper">
+          <input class="gem-c-search__item gem-c-search__input" type="text" placeholder="Search Transport Data Hub" name="q" data-cy="search-input">           
+          <button class="gem-c-search__submit" type="submit" data-cy="search-button"><i class="fa fa-search"></i></button>
+        </div>
+      </form>
+    </div>
+  {% endblock %}
+
+  {% block landing_page_topic_list %}
+    <ul class="govuk-list topics_list" data-cy="topic-list">
+      {% set topics = h.get_featured_groups(12) %}
+      {% for topic in topics %}
+      <li>
+        <h3 class="govuk-heading-s topics_heading" data-cy="topic-heading">
+          <a class="govuk-link" href="{{ h.url_for(topic.type ~ '.read', id=topic.name) }}" data-cy="topic-link">
+            {{ topic.title }}<a>
+        </h3>
+        <p class="govuk-body" data-cy="topic-desc">{{ topic.description }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endblock %}
+{% endblock %}

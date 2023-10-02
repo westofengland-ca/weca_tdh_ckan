@@ -2,13 +2,11 @@
 {% import 'macros/form.html' as form %}
 {% from "components/button/macro.html" import govukButton %}
 
-{% block main_class %}bg-white{% endblock %}
-{% block primary_class %}govuk-width-container{% endblock %}
+{% block primary_class %}search{% endblock %}
 {% block subtitle %}{{ _("Search") }}{% endblock %}
+{% block toolbar %}{% endblock %}
 
 {% block primary_content %}
-  <section class="module">
-    <div class="module-content">
       <h1 class="gem-c-heading govuk-heading-xl govuk-!-margin-bottom-6 search-title">Search results</h1>
       <form action="/dataset" method="GET">  
         {% block search_filters %}  
@@ -64,6 +62,4 @@
           </div>
         {% endblock %}
       </form>
-    </div>
-  </section>
 {% endblock %}
