@@ -7415,6 +7415,10 @@ main {
   margin-top: 20px;
 }
 
+.search-main {
+  width: 66%;
+}
+
 /* search data box position */
 .homepage.layout-1 .row1 .col2 {
   top: 0;
@@ -7736,10 +7740,6 @@ p.gem-c-lead-paragraph {
 
 .page-heading-result {
   margin-left: 33%;
-}
-
-.search-main {
-  width: 66%;
 }
 
 /* temp flask debug overflow fix */

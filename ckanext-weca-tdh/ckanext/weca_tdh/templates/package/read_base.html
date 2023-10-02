@@ -3,7 +3,7 @@
 {% set default_group_type = h.default_group_type('group') %}
 
 {% block subtitle %}{{ h.dataset_display_name(pkg) }} {{ g.template_title_delimiter }} {{ super() }}{% endblock %}
+{% block toolbar %}{% endblock %}
 
-{% block content %}
-  {% block primary_content %}{% endblock %}
-{% endblock %}
+{% block secondary_content %}{% endblock %}
+{% block primary_content %}{% endblock %}
