@@ -102,6 +102,10 @@ main {
     margin-top: 20px;
 }
 
+.search-main {
+  width: 66%;
+}
+
 /* search data box position */
 .homepage.layout-1 .row1 .col2 {
     top: 0;
@@ -146,10 +150,6 @@ button.gem-c-search__submit {
 
 i.fa.fa-search {
     color: white;
-}
-
-.search-title {
-    margin-left: 34%;
 }
 
 .topics_list {
@@ -414,6 +414,19 @@ p.gem-c-lead-paragraph {
   display: inline-grid;
 }
 
+
+/* GLOBAL /
+////////*/
+
+.tdh-row {
+  margin-right: -15px;
+  margin-left: -15px;
+  /*--bs-gutter-x: 0rem;*/
+}
+
+.page-heading-result {
+  margin-left:33%;
+}
 
 /* temp flask debug overflow fix */
 #flDebug, #flDebug * {

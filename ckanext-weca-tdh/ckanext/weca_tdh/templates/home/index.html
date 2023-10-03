@@ -1,0 +1,39 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _("Welcome") }}{% endblock %}
+{% block toolbar %}{% endblock %}
+{% block primary_class %}landing-page{% endblock %}
+
+{% block primary_content %}
+  {% block landing_page_about %} 
+    <div class="gem-c-title govuk-!-margin-bottom-4">
+      <h1 class="gem-c-title__text govuk-heading-l" data-cy="landing-heading">{{ g.site_description }}</h1>
+    </div>
+    <p class="gem-c-lead-paragraph govuk-body" data-cy="landing-desc">
+      {{ h.snippet('snippets/landing_description.html') }}
+    </p>
+  {% endblock %}
+
+  {% block landing_page_search %}
+    <div class="row search-main">
+      {% block search_input %}
+        {% snippet "snippets/search_form.html", query=q %}  
+      {% endblock %}
+    </div>
+  {% endblock %}
+
+  {% block landing_page_topic_list %}
+    <ul class="govuk-list topics_list" data-cy="topic-list">
+      {% set topics = h.get_featured_groups(12) %}
+      {% for topic in topics %}
+      <li>
+        <h3 class="govuk-heading-s topics_heading" data-cy="topic-heading">
+          <a class="govuk-link" href="{{ h.url_for(topic.type ~ '.read', id=topic.name) }}" data-cy="topic-link">
+            {{ topic.title }}<a>
+        </h3>
+        <p class="govuk-body" data-cy="topic-desc">{{ topic.description }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endblock %}
+{% endblock %}

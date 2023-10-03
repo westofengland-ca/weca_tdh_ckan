@@ -1,0 +1,21 @@
+{#
+  Creates search input form
+
+  label - The search input label
+  placeholder - The search input placeholder text
+  query - The search query
+
+  Example: {% snippet "snippets/search_form.html", query=q, placeholder="Search topics..." %} 
+#}
+
+{% set placeholder = placeholder if placeholder else _('Search Transport Data Hub...') %}
+
+{% block search_form %}
+  {% if label %}
+    <label class="govuk-label sort-label" for="sort">{{ label }}</label>
+  {% endif %}
+  <div class="gem-c-search__item-wrapper">
+    <input class="gem-c-search__item gem-c-search__input" type="text" placeholder="{{ placeholder }}" name="q" value="{{ query }}">           
+    <button class="gem-c-search__submit" type="submit"><i class="fa fa-search"></i></button>
+  </div>
+{% endblock %}    
