@@ -7732,6 +7732,12 @@ p.gem-c-lead-paragraph {
   display: inline-grid;
 }
 
+/* RESOURCE PAGE //
+///////////////*/
+.resource-wrapper {
+  padding: 0px;
+}
+
 /* GLOBAL /
 ////////*/
 .tdh-row {

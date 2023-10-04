@@ -22,7 +22,7 @@
       </thead>
       <tbody class="govuk-table__body">              
         {% for resource in pkg.resources %}
-          {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource, can_edit=can_edit %}
+          {% snippet 'package/snippets/resource_row_item.html', pkg=pkg, res=resource, can_edit=can_edit %}
         {% endfor %}
       </tbody>
     </table>  

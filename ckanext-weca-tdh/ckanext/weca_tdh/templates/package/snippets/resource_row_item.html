@@ -1,0 +1,75 @@
+{#
+  Renders a single data resource
+
+  res - A resource dict to render
+  pkg - A package dict that the resource belongs to
+  can_edit - Whether the user is allowed to edit the resource
+
+  Example: {% snippet 'package/snippets/resource_row_item.html', pkg=pkg, res=resource, can_edit=can_edit %}
+#}
+
+{% set url_action = pkg.type ~ ('_resource.edit' if url_is_edit and can_edit else '_resource.read') %}
+{% set url = url or h.url_for(url_action, id=pkg.name, resource_id=res.id) %}
+
+{% block resource_item %}
+  <tr class="govuk-table__row">
+    <td class="govuk-table__cell">
+      <a class="govuk-link" href="{{ url }}">{{ h.resource_display_name(res) | truncate(50) }}</a>
+    </td>
+    <td class="govuk-table__cell">
+      {{ res.format or 'data' }}
+    </td>
+    <td class="govuk-table__cell">
+      {{ h.filter_datetime(res.created, 'short') }}
+    </td>
+    <td class="govuk-table__cell">
+      {% if pkg.private %}
+        <span class="resource-private badge">{{ _('Restricted') }}</span>
+      {% else %}
+        <span class="resource-public badge">{{ _('Open') }}</span>
+      {% endif %}
+    </td>
+    <td class="govuk-table__cell">
+      {% block resource_item_explore %}
+        {% if not url_is_edit %}
+        <div class="dropdown btn-group">
+          <a href="#" class="btn btn-primary dropdown-toggle" type="button" id="dropdownExplorer" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-share"></i>
+            {{ _('Explore') }}
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownExplorer">
+            {% block resource_item_explore_links %}
+              {% block explore_view %}
+                <li>
+                  <a class="dropdown-item" href="{{ url }}">
+                    {% if res.has_views %}
+                      <i class="fa fa-chart-bar"></i>
+                      {{ _('Preview') }}
+                    {% else %}
+                      <i class="fa fa-info-circle"></i>
+                      {{ _('More information') }}
+                    {% endif %}
+                  </a>
+                </li>
+              {% endblock explore_view %}
+
+              {% if res.url and h.is_url(res.url) %}
+                <li>
+                  <a class="dropdown-item resource-url-analytics" href="{{ res.url }}" target="_blank" rel="noreferrer">
+                    <i class="fa fa-external-link"></i>
+                    {{ _('Go to resource') }}
+                  </a>
+                </li>
+              {% endif %}
+              {% if can_edit %}
+                <li>{% link_for _('Edit resource'), named_route=pkg.type ~ '_resource.edit', id=pkg.name, resource_id=res.id, class_='dropdown-item', icon='pencil' %}</li>
+              {% endif %}
+            {% endblock %}
+          </ul>
+        </div>
+        {% endif %}
+      {% endblock %}
+    </td>
+  </tr>
+{% endblock %}
