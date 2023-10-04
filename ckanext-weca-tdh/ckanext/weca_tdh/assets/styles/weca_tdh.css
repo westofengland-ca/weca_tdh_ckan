@@ -7435,29 +7435,35 @@ main {
 
 /* SEARCH PAGE //
 ///////////////*/
-input.gem-c-search__item.gem-c-search__input {
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+input.search-input {
   margin-bottom: 25px;
   border: 2px solid;
   padding: 8px;
-  width: 85%;
+  width: 100%;
   float: left;
 }
 
-input.gem-c-search__input:focus {
+input.search-input:focus {
   outline: 3px solid #fd0;
   outline-offset: 0;
   box-shadow: inset 0 0 0 2px;
 }
 
-button.gem-c-search__submit {
+button.search-submit {
   border-radius: 0;
   border: 2px solid;
-  border-left: 0px;
   background-color: #1d70b8;
-  width: 15%;
-  max-width: 50px;
+  width: 10%;
+  min-width: 45px;
   padding: 8px;
-  float: left;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 i.fa.fa-search {
@@ -7677,10 +7683,6 @@ p.gem-c-lead-paragraph {
 .metadata-box--in-dataset {
   background: #eee;
   padding: 25px 30px 15px 30px;
-}
-
-.metadata-box {
-  margin-bottom: 10px;
 }
 
 .metadata-box dt, .metadata-box dd {

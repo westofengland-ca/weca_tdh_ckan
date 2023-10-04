@@ -12,7 +12,7 @@
 
   {# The content block allows you to replace the content of the page if needed #}
   {%- block content %}
-    {% block maintag %}<main role="main" id="main-content" class="govuk-main-wrapper">{% endblock %}
+    {% block maintag %}<main role="main" id="main-content" class="govuk-main-wrapper govuk-body">{% endblock %}
       <div id="content" class="govuk-width-container">
         {% block main_content %}
           {% block flash %}
@@ -40,7 +40,7 @@
             </div>
           {% endblock %}
           <div class="govuk-width-container">
-            <form action="{{ request.path }}" method="get">
+            {% block form_wrapper %}
               <div class="row tdh-row {% block wrapper_class %}{% endblock %}{% if self.secondary()|trim == '' or c.action=='resource_read' %} no-nav{% endif %}">
                 {% block pre_primary %}{% endblock %}
                 
@@ -82,7 +82,7 @@
                   </div>
                 {% endblock %}           
               </div>
-            </form>
+            {% endblock %}
           </div>
         {% endblock %}
       </div>

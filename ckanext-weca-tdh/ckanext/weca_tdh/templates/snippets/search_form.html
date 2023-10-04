@@ -14,8 +14,8 @@
   {% if label %}
     <label class="govuk-label sort-label" for="sort">{{ label }}</label>
   {% endif %}
-  <div class="gem-c-search__item-wrapper">
-    <input class="gem-c-search__item gem-c-search__input" type="text" placeholder="{{ placeholder }}" name="q" value="{{ query }}">           
-    <button class="gem-c-search__submit" type="submit"><i class="fa fa-search"></i></button>
+  <div class="search-wrapper">
+    <input class="search-input" type="text" placeholder="{{ placeholder }}" name="q" value="{{ query }}">           
+    <button class="search-submit" type="submit"><i class="fa fa-search"></i></button>
   </div>
 {% endblock %}    
