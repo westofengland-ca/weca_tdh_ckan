@@ -6,11 +6,6 @@
 {% block primary_class %}package-read{% endblock %}
 
 {% block primary_content %}
-  {% block breadcrumbs %}
-    {{ govukBreadcrumbs({
-      'items': [{'text': "Home", 'href': "/"}, {'text': "Search", 'href': "/dataset"}, {'text': pkg.title}]
-    }) }}
-  {% endblock %}
   <div class="row">
     <section class="meta-data">
       {% block package_metadata %}
