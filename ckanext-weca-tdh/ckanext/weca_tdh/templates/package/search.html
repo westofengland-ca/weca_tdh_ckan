@@ -4,6 +4,12 @@
 {% block subtitle %}{{ _("Search") }}{% endblock %}
 {% block toolbar %}{% endblock %}
 
+{% block form_wrapper %}
+  <form action="{{ action }}" method="get">
+    {{ super() }}
+  </form>
+{% endblock %}
+
 {% block heading %}
   <h1 class="page-heading-result govuk-heading-xl govuk-!-margin-bottom-6 search-title">Search results</h1>
 {% endblock %}
@@ -13,17 +19,19 @@
   {% block search_input %}
     {% snippet "snippets/search_form.html", label="Keywords", query=q %}  
   {% endblock %}
-  {% set facetLabels = ["organization", "groups", "res_format"] %}
-  {% for facet in facetLabels %}
-    {{ h.snippet('package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped) }}
-  {% endfor %}
-  {{ govukButton({
-    'text': "Apply filters",
-    'attributes': {'data-cy': 'filter-button'}
-  }) }}
-  <p class="govuk-body sort-label">
-    <a class="govuk-link" href="/dataset" data-cy="filter-remove">Remove filters</a>
-  </p> 
+  {% block search_filters %}
+    {% set facetLabels = ["organization", "groups", "res_format"] %}
+    {% for facet in facetLabels %}
+      {{ h.snippet('package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped) }}
+    {% endfor %}
+    {{ govukButton({
+      'text': "Apply filters",
+      'attributes': {'data-cy': 'filter-button'}
+    }) }}
+    <p class="govuk-body sort-label">
+      <a class="govuk-link" href="/dataset" data-cy="filter-remove">Remove filters</a>
+    </p>
+  {% endblock %}
 {% endblock %}
 
 {% block primary_content %}    

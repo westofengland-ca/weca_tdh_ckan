@@ -4,6 +4,12 @@
 {% block subtitle %}{{ _("Publishers") }}{% endblock %}
 {% block toolbar %}{% endblock %}
 
+{% block form_wrapper %}
+  <form action="{{ action }}" method="get">
+    {{ super() }}
+  </form>
+{% endblock %}
+
 {% block heading %}
   <h1 class="page-heading-result govuk-heading-xl govuk-!-margin-bottom-6">Publishers</h1>
 {% endblock %}
