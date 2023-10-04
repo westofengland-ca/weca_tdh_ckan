@@ -1,0 +1,22 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _('Support') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('Support'), named_route='home.about' %}</li>
+{% endblock %}
+
+{% block primary %}
+  <article class="module govuk-body" role="main">
+      {% block about %}
+        {% if g.site_about %}
+          {{ h.render_markdown(g.site_about) }}
+        {% else %}
+          <h1 class="page-heading">{{ _('About Transport Data Hub') }}</h1>
+          {% snippet 'home/snippets/about_text.html' %}
+        {% endif %}
+      {% endblock %}
+  </article>
+{% endblock %}
+
+{% block secondary %}{% endblock %}
