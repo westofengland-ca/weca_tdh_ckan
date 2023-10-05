@@ -5,7 +5,7 @@
   pkg - A package dict that the resource belongs to
   can_edit - Whether the user is allowed to edit the resource
 
-  Example: {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource, can_edit=can_edit %}
+  Example: {% snippet 'package/snippets/resource_row_item.html', pkg=pkg, res=resource, can_edit=can_edit %}
 #}
 
 {% set url_action = pkg.type ~ ('_resource.edit' if url_is_edit and can_edit else '_resource.read') %}
