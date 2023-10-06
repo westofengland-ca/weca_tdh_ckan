@@ -73,6 +73,11 @@ ckan config-tool $CKAN_INI "ckan.datapusher.url = $CKAN_DATAPUSHER_URL"
 ckan config-tool $CKAN_INI "ckan.datastore.write_url = $CKAN_DATASTORE_WRITE_URL"
 ckan config-tool $CKAN_INI "ckan.datastore.read_url = $CKAN_DATASTORE_READ_URL"
 
+# Set the beaker session config
+ckan config-tool $CKAN_INI beaker.session.cookie_expires=True
+ckan config-tool $CKAN_INI beaker.session.secure=True
+ckan config-tool $CKAN_INI beaker.session.timeout=3600
+
 # Set the search result configs
 ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000
 ckan config-tool $CKAN_INI search.facets.limit=1000
