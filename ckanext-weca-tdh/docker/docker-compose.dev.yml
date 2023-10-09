@@ -97,7 +97,7 @@ services:
       - ckan-network
 
   smtp4dev:
-    container_name: ${SMTP4DEV_CONTAINER_NAME}
+    container_name: smtp4dev
     image: rnwood/smtp4dev
     restart: unless-stopped
     ports:
