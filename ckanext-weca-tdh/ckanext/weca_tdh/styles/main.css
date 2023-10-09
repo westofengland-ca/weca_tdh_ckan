@@ -9,7 +9,6 @@
 /* account masthead options */
 .account-masthead .account ul li a {
     color: white;
-    background-color: #000;
 }
 .account-masthead .account ul li a:hover {
     color: white;
@@ -401,7 +400,6 @@ p.gem-c-lead-paragraph {
 
 .auth-providers {
   margin-bottom: 20px;
-  padding-bottom: 20px;
   border-bottom: 0.5px solid #ccc;
 }
 
