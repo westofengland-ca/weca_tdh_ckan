@@ -5,7 +5,7 @@
     {{ super() }}
   {% else %}
   <nav class="account not-authed" aria-label="{{ _('Account') }}">
-    <ul class="list-unstyled">
+    <ul class="govuk-body">
       {% block header_account_notlogged %}
         <li>{% link_for _('Log in'), named_route='user.login' %}</li>
         {% if config['feature_flag.auth.external_only'] == 'False' %}
