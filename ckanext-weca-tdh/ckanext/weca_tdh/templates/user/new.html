@@ -1,0 +1,15 @@
+{% ckan_extends %}
+
+{% block toolbar %}{% endblock %}
+
+{% block heading %}
+  <h1 class="page-heading-result govuk-heading-xl govuk-!-margin-bottom-6">{{ _('Register for an Account') }}</h1>
+{% endblock %}
+
+{% block primary_content %}
+  <article class="module">
+    {% block primary_content_inner %}
+      {{ form | safe }}
+    {% endblock %}
+  </article>
+{% endblock %}

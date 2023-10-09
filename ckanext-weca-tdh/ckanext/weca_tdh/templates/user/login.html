@@ -2,14 +2,17 @@
 
 {% set external_only = config['feature_flag.auth.external_only'] %}
 
+{% block toolbar %}{% endblock %}
+
+{% block heading %}
+  <h1 class="page-heading-result govuk-heading-xl govuk-!-margin-bottom-6">{{ _('Login') }}</h1>
+{% endblock %}
+
 {% block primary_content %}
 <section class="module">
-  <div class="module-content">
-    <h1 class="page-heading">{% block page_heading %}{{ _('Login') }}{% endblock %}</h1>
-    {% block form %}
-        {% snippet "user/snippets/login_form.html", external_only=external_only, error_summary=error_summary %}
-    {% endblock %}
-  </div>
+  {% block form %}
+      {% snippet "user/snippets/login_form.html", external_only=external_only, error_summary=error_summary %}
+  {% endblock %}
 </section>
 {% endblock %}
 

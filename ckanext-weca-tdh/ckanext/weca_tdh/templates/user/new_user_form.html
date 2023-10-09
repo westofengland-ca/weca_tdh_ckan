@@ -1,0 +1,11 @@
+{% ckan_extends %}
+
+{% from "components/button/macro.html" import govukButton %}
+
+{% block form_actions %}
+  {{ govukButton({
+    'text': "Create Account",
+    'type': "submit",
+    'name': "save"
+  }) }}
+{% endblock %}
