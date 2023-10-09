@@ -5,6 +5,10 @@ volumes:
   pg_data:
   solr_data:
 
+networks:
+    ckan-network:
+        driver: bridge
+
 services:
   ckan-job:
     container_name: ckan-job
@@ -46,6 +50,8 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000"]
+    networks:
+      - ckan-network
 
   db:
     container_name: ${POSTGRESQL_CONTAINER_NAME}
@@ -65,6 +71,8 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "ckan"]
+    networks:
+      - ckan-network
 
   solr:
     container_name: ${SOLR_CONTAINER_NAME}
@@ -76,6 +84,8 @@ services:
       - "0.0.0.0:8983:8983"
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8983/solr/"]
+    networks:
+      - ckan-network
 
   redis:
     container_name: ${REDIS_CONTAINER_NAME}
@@ -83,6 +93,18 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "-e", "QUIT"]
+    networks:
+      - ckan-network
+
+  smtp4dev:
+    container_name: ${SMTP4DEV_CONTAINER_NAME}
+    image: rnwood/smtp4dev
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+      - "25:25"
+    networks:
+      - ckan-network
 
   # datapusher:
   #   container_name: ${DATAPUSHER_CONTAINER_NAME}

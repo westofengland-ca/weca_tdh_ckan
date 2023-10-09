@@ -1,7 +1,6 @@
 FROM ckan/ckan-base:ckan-2.10.0-dev
 
 # Set up environment variables
-ENV APP_DIR=/srv/app
 ENV TZ=UTC
 RUN echo ${TZ} > /etc/timezone
 
