@@ -38,3 +38,8 @@ FF_AD_SYSADMIN = config['feature_flag.ad.sysadmin']
 
 # URL filter
 EXLUDED_SUBPATHS = ('/assets/', '/api/', '/base/', '/scripts/', '/webassets/')
+
+# Cookie config
+CC_API_KEY = config['cc.api_key']
+CC_LICENSE = 'community' # update to new subscription
+CC_INITIAL_STATE = 'notify'

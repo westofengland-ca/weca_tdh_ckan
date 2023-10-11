@@ -96,6 +96,9 @@ ckan config-tool $CKAN_INI "feature_flag.ad.sysadmin = $FEATURE_FLAG_AD_SYSADMIN
 ckan config-tool $CKAN_INI "ad.group.ckan_id = $AD_USER_GROUP_CKAN_ID"
 ckan config-tool $CKAN_INI "ad.group.sysadmin_id = $AD_USER_GROUP_SYSADMIN_ID"
 
+# Set Cookie Control API key
+ckan config-tool $CKAN_INI "cc.api_key = $CC_API_KEY" 
+
 # Run the prerun script to init CKAN and create the default admin user
 sudo -u ckan -EH python3 prerun.py
 
