@@ -4,28 +4,36 @@ trigger:
       - main
 pool:
   name: Azure Pipelines
+variables:
+    buildDate: $[format('{0:yyyyMMdd}', pipeline.startTime)]
 steps:
   - task: Docker@2
     displayName: Build and push
     inputs:
       containerRegistry: $(ACR_SERVICE_CONNECTION)
-      repository: $(CKAN_IMAGE_NAME)
+      repository: $(NAMESPACE)/$(CKAN_IMAGE_NAME)
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
       buildContext: 'ckanext-weca-tdh'
+      tags: ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
+
+  - script: mkdir -p $(Build.ArtifactStagingDirectory)/$(NAMESPACE)
+    displayName: 'Create Directory'
+
   - task: Docker@2
     displayName: Save an image
     inputs:
-      repository: '$(CKAN_IMAGE_NAME)'
+      repository: $(NAMESPACE)/$(CKAN_IMAGE_NAME)
       command: 'save'
-      arguments: '-o $(build.artifactstagingdirectory)/$(CKAN_IMAGE_NAME).image.tar $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(CKAN_IMAGE_NAME):$(Build.BuildId)'  
+      arguments: '-o $(Build.ArtifactStagingDirectory)/$(NAMESPACE)/$(CKAN_IMAGE_NAME).image.tar $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)'
+
   - task: AzureContainerApps@1
     displayName: Update revision
     inputs:
       connectedServiceNameARM: $(ARM_SERVICE_CONNECTION)
       containerAppName: $(CONTAINER_APP_NAME)
       resourceGroup: $(CONTAINER_APP_RESOURCE_GROUP)
-      imageToDeploy: $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(CKAN_IMAGE_NAME):$(Build.BuildId)
+      imageToDeploy: $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
   - task: PublishBuildArtifacts@1
     displayName: Publish artifacts
     inputs:
