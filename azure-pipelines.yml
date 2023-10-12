@@ -1,22 +1,34 @@
+trigger:
+  branches:
+    include:
+      - main
 pool:
   name: Azure Pipelines
 steps:
-  - task: Docker@0
-    displayName: Build an image
+  - task: Docker@2
+    displayName: Build and push
     inputs:
-      containerregistrytype: Azure Container Registry
-      azureSubscription: $(AZURE_SUBSCRIPTION)
-      azureContainerRegistry: $(AZURE_CONTAINER_REGISTRY)
-      defaultContext: false
-      context: ckanext-weca-tdh
-      azureSubscriptionEndpoint: Azure Endpoint
-      imageName: $(CKAN_IMAGE_NAME_TAG)
-  - task: Docker@0
-    displayName: Push an image
+      containerRegistry: $(ACR_SERVICE_CONNECTION)
+      repository: $(CKAN_IMAGE_NAME)
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
+      buildContext: 'ckanext-weca-tdh'
+  - task: Docker@2
+    displayName: Save an image
     inputs:
-      containerregistrytype: Azure Container Registry
-      azureSubscription: $(AZURE_SUBSCRIPTION)
-      azureContainerRegistry: $(AZURE_CONTAINER_REGISTRY)
-      action: Push an image
-      azureSubscriptionEndpoint: Azure Endpoint
-      imageName: $(CKAN_IMAGE_NAME_TAG)
+      repository: '$(CKAN_IMAGE_NAME)'
+      command: 'save'
+      arguments: '-o $(build.artifactstagingdirectory)/$(CKAN_IMAGE_NAME).image.tar $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(CKAN_IMAGE_NAME):$(Build.BuildId)'  
+  - task: AzureContainerApps@1
+    displayName: Update revision
+    inputs:
+      connectedServiceNameARM: $(ARM_SERVICE_CONNECTION)
+      containerAppName: $(CONTAINER_APP_NAME)
+      resourceGroup: $(CONTAINER_APP_RESOURCE_GROUP)
+      imageToDeploy: $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(CKAN_IMAGE_NAME):$(Build.BuildId)
+  - task: PublishBuildArtifacts@1
+    displayName: Publish artifacts
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'ckan-build'
+      publishLocation: 'Container'
