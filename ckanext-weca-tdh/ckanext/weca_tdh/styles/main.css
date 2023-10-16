@@ -420,6 +420,10 @@ p.gem-c-lead-paragraph {
 /* GLOBAL /
 ////////*/
 
+html {
+  background-color: #354753;
+}
+
 .tdh-row {
   margin-right: -15px;
   margin-left: -15px;
