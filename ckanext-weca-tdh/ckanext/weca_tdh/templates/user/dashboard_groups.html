@@ -1,7 +1,26 @@
-{% ckan_extends %}
+{% extends "user/dashboard.html" %}
+
+{% set group_type = h.default_group_type('group') %}
 
 {% block page_primary_action %}
   {% if h.check_access('group_create') %}
     {% link_for _('Add Topic'), named_route=group_type ~ '.new', class_="btn btn-primary", icon="plus-square" %}
+  {% endif %}
+{% endblock %}
+
+{% block primary_content_inner %}
+  <h2 class="hide-heading">{{ _('My Topics') }}</h2>
+  {% set groups = h.groups_available(am_member=True) %}
+  {% if groups %}
+    <div class="wide">
+      {% snippet "group/snippets/group_list.html", groups=groups, show_capacity=True %}
+    </div>
+  {% else %}
+    <p class="empty">
+      {{ _('You are not a member of any topics.') }}
+      {% if h.check_access('group_create') %}
+        {% link_for _('Create one now?'), named_route=group_type ~ '.new' %}
+      {% endif %}
+    </p>
   {% endif %}
 {% endblock %}
