@@ -30,6 +30,9 @@ class User(object):
         try:
             user = toolkit.get_action('user_show')(data_dict = {C.CKAN_USER_ID: ckan_id})
 
+            if user.get(C.CKAN_USER_STATE) == 'deleted':
+                raise Exception(f"Account for {user[C.CKAN_USER_NAME]} deleted.")
+
             if C.FF_AD_UPDATE_USER == 'True':
                 # update user records. Only email and fullname can be updated
                 log.info(f"Updating user records on login for user: {user}.")
