@@ -17,7 +17,7 @@
 
 /* main header that contains logo, nav links and search */
 .masthead {
-    background: #354753 url(../../../base/images/bg.png);
+    background: #354753;
 }
 
 /* main nav bar logo */
@@ -68,7 +68,7 @@
 ///////////*/
 
 .site-footer {
-    background: #354753 url(../../../base/images/bg.png);
+    background: #354753;
     border-top: 10px solid;
     border-image: linear-gradient(to right,#6bc9df 0%,#6bc9df 25%,#79decc 25%,#79decc 50%,#f8859c 50%,#f8859c 74%,#f8859c 75%,#ffd900 75%,#ffd900 97%) 1 0 0 0;
 }
@@ -191,11 +191,11 @@ p.gem-c-lead-paragraph {
     width: auto;
 }
 
-.sort {
+.dataset-marking, .sort, .attribution  {
     float: right;
 }
 
-.sort-label {
+.footer-links, .sort-label {
     font-size: 16px;
 }
 
@@ -332,10 +332,6 @@ p.gem-c-lead-paragraph {
     margin-bottom: 20px;
 }
 
-.dataset-marking {
-    float: right;
-}
-
 .dataset-private, .dataset-public  {
     margin-top: 10px;
     text-transform: uppercase;
@@ -387,8 +383,8 @@ p.gem-c-lead-paragraph {
     padding-left: 25px;
 }
 
-.product-column {
-    margin-top: 50px;
+.package-content {
+    margin-bottom: 50px;
 }
 
 .govuk-table__cell {
@@ -424,10 +420,18 @@ p.gem-c-lead-paragraph {
 /* GLOBAL /
 ////////*/
 
+html {
+  background-color: #354753;
+}
+
 .tdh-row {
   margin-right: -15px;
   margin-left: -15px;
-  /*--bs-gutter-x: 0rem;*/
+}
+
+.toolbar .breadcrumb li {
+  padding-left: 0rem;
+  padding-right: 0.5rem;
 }
 
 .page-heading-result {

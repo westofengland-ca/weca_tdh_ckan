@@ -8,12 +8,10 @@
 
 {% block primary %}
   <article class="module govuk-body" role="main">
-    <div class="module-content">
       {% block license %}
         <h1 class="page-heading">{{ _('License') }}</h1>
         {% snippet 'snippets/license_text.html' %}
       {% endblock %}
-    </div>
   </article>
 {% endblock %}
 

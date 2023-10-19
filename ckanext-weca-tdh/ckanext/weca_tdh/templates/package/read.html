@@ -9,7 +9,7 @@
   <div class="row">
     <section class="meta-data">
       {% block package_metadata %}
-        <div class="column-two-thirds">
+        <div class="column-two-thirds package-content">
           <div class="metadata-box metadata-box--in-dataset">   
             {% block package_visibility %}
               {% if pkg.private %}
@@ -89,7 +89,7 @@
   <div class="row">
       {% block data_links %}
         <section class="data-links">
-          <div class="product-column">
+          <div class="package-content">
             {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources, can_edit=can_edit %}
           </div>
         </section>
@@ -97,7 +97,7 @@
 
       {% block contact %}
         <section class="contact">
-          <div class="product-column">
+          <div class="package-content">
             <h2 class="heading-medium">{{ _('Contact') }}</h2>
             <p>{{ _('Get in touch about this dataset by') }} <a class="govuk-link" href="/contact">{{ _('filling out a contact form.') }}</a></p>
           </div>
@@ -107,13 +107,17 @@
       {% block sign_in %}
         {% if not can_edit %}
           <section class="edit">
-            <div class="product-column">
+            <div class="package-content">
               <h2 class="heading-medium">{{ _('Edit this dataset') }}</h2>
-              <p>{{ _('You must have an account to suggest edits to this dataset') }}</p>
-              {{ govukButton({
-                'text': "Sign in",
-                'href': "/user/login"
-              }) }}
+              {% if not c.userobj %}
+                <p>{{ _('You must have an account to suggest edits to this dataset') }}</p>
+                {{ govukButton({
+                  'text': "Sign in",
+                  'href': "/user/login"
+                }) }}
+              {% else %}
+                <p>{{ _('You must be an admin for this publisher to make edits to this dataset') }}</p>
+              {% endif %}         
             </div>
           </section>
         {% endif %}

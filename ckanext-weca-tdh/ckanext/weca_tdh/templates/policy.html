@@ -8,12 +8,10 @@
 
 {% block primary %}
   <article class="module govuk-body" role="main">
-    <div class="module-content">
-      {% block policy %}
-        <h1 class="page-heading">{{ _('Cookie Policy') }}</h1>
-        {% snippet 'snippets/policy_text.html' %}
-      {% endblock %}
-    </div>
+    {% block policy %}
+      <h1 class="page-heading">{{ _('Cookie Policy') }}</h1>
+      {% snippet 'snippets/policy_text.html' %}
+    {% endblock %}
   </article>
 {% endblock %}
 

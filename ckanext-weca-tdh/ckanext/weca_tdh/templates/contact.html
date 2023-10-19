@@ -8,12 +8,10 @@
 
 {% block primary %}
   <article class="module govuk-body" role="main">
-    <div class="module-content">
       {% block contact %}
         <h1 class="page-heading">{{ _('Contact') }}</h1>
         {% snippet 'snippets/contact_text.html' %}
       {% endblock %}
-    </div>
   </article>
 {% endblock %}
 
