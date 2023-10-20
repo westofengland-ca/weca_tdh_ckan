@@ -1,15 +1,15 @@
 GUID,Slug,Title,Description
-b7ee7e77-de86-4ba2-825e-055159c4126b,accessibility,Accessibility,Brief description of topic.
-27c211ec-82bd-4638-9237-ce0ab3016573,buses,Buses,Brief description of topic.
-4a20eb8e-77b1-48e1-a06f-641f196b3797,demographic,Demographic,Brief description of topic.
-1f027106-0508-42ae-bdd8-4600724c21d3,electric_vehicles,"Electric vehicles (cars, vans & escooter)",Brief description of topic.
-1107b912-f0e2-4a8a-95f9-50546e44a92e,environmental,Environmental,Brief description of topic.
-64ae3633-a2b4-4445-9adf-20c04199fd77,maps_and_locations,Maps & locations,Brief description of topic.
-f19f50e6-5e70-46ca-8911-ee42c60b0d15,micro_mobility,Micro mobility,Brief description of topic.
-d36f0d9d-de41-4b56-a76b-855b296186c3,network_statistics,Network statistics,Brief description of topic.
-f0440219-050e-4527-a4c8-3907b144e4a6,rail,Rail,Brief description of topic.
-4ebe6e73-d7fa-4d25-be5b-605861581605,road_accidents_and_safety,Road accidents & safety,Brief description of topic.
-cbb643ea-bea0-4175-826d-3606c1cfa679,road_traffic_travel_and_parking,"Road traffic, travel & parking",Brief description of topic.
-306107c1-678d-4474-9e10-1064fa52a41s,social,Social,Brief description of topic.
-1306d4c6-9acf-495f-b1c8-b313b4673539,transport_planning,Transport planning,Brief description of topic.
-0d4de5e7-5701-4662-9a54-aba10e2a3f41,walking_and_cycling,Walking & cycling,Brief description of topic.
+b7ee7e77-de86-4ba2-825e-055159c4126b,accessibility,Accessibility,How transportation systems accommodate the needs of individuals with disabilities.
+27c211ec-82bd-4638-9237-ce0ab3016573,buses,Buses,Operation and usage of buses as a mode of transportation.
+4a20eb8e-77b1-48e1-a06f-641f196b3797,demographic,Demographic,"Characteristics of users, such as age, gender, and income."
+1f027106-0508-42ae-bdd8-4600724c21d3,electric_vehicles,"Electric vehicles (cars, vans & escooter)","Vehicles that are powered by electricity, including cars, vans, and electric scooters."
+1107b912-f0e2-4a8a-95f9-50546e44a92e,environmental,Environmental,"Environmental impact of transportation, including emissions and energy use."
+64ae3633-a2b4-4445-9adf-20c04199fd77,maps_and_locations,Maps & locations,Geographic locations and mapping of transportation infrastructure and services.
+f19f50e6-5e70-46ca-8911-ee42c60b0d15,micro_mobility,Micro mobility,"Small, lightweight modes of transportation, such as electic bicycles and scooters."
+d36f0d9d-de41-4b56-a76b-855b296186c3,network_statistics,Network statistics,"The usage and performance of transportation networks, such as highways and public transit systems."
+f0440219-050e-4527-a4c8-3907b144e4a6,rail,Rail,"Operations and usage of rail systems, such as trains."
+4ebe6e73-d7fa-4d25-be5b-605861581605,road_accidents_and_safety,Road accidents & safety,"Road safety, including accidents, injuries, and fatalities."
+cbb643ea-bea0-4175-826d-3606c1cfa679,road_traffic_travel_and_parking,"Road traffic, travel & parking","Movement of vehicles on roads and highways, as well as parking and availability."
+306107c1-678d-4474-9e10-1064fa52a41s,social,Social,Data pertaining to societal impact.
+1306d4c6-9acf-495f-b1c8-b313b4673539,transport_planning,Transport planning,Planning and management of transportation systems and infrastructure.
+0d4de5e7-5701-4662-9a54-aba10e2a3f41,walking_and_cycling,Walking & cycling,"Pedestrian and bicycle usage, including infrastructure and safety measures."

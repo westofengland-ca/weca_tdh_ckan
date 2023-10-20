@@ -54,10 +54,10 @@ try:
                 'notes': row[csv_column_headers.DATASET_DESC] or "No description provided",
                 'resources': [
                   {
-                    'name': csv_column_headers.DATASET_RESOURCE_NAME,
-                    'path': row[csv_column_headers.DATASET_RESOURCE_PATH],
+                    'name': row[csv_column_headers.DATASET_TITLE],
+                    'url': row[csv_column_headers.DATASET_RESOURCE_PATH],
                     'format': row[csv_column_headers.DATASET_RESOURCE_FORMAT],
-                    'description': row[csv_column_headers.DATASET_RESOURCE_DESC]
+                    'description': row[csv_column_headers.DATASET_RESOURCE_DESC] or "No description provided"
                   }           
                 ],
                 'groups': [] if not row[csv_column_headers.DATASET_TOPICS] else list([{'name': topic.strip()} for topic in row[csv_column_headers.DATASET_TOPICS].split(';')]),
@@ -67,7 +67,7 @@ try:
                     'value': row[csv_column_headers.DATASET_TYPE]
                   },
                   {
-                    'key': 'Method of transfer',
+                    'key': 'Method of access',
                     'value': row[csv_column_headers.DATASET_TRANSFER_METHOD]
                   },
                   {
