@@ -8,7 +8,7 @@
     <p>
       {% trans %}
         Publishers are used to create, manage and publish collections
-        of datasets. Users can have different roles within an Organization,
+        of datasets. Users can have different roles within a Publisher,
         depending on their level of authorisation to create, edit and publish.
       {% endtrans %}
     </p>
@@ -22,7 +22,7 @@
         {{ _('Admin tools') }}
       </h2>
       <div class="module-content">
-        {% link_for h.humanize_entity_type('organization', group_type, 'add link') or _('Add Publisher'), named_route=group_type ~ '.new', class_='btn btn-primary', icon='plus-square' %}
+        {% link_for _('Add Publisher'), named_route=group_type ~ '.new', class_='btn btn-primary', icon='plus-square' %}
       </div>                        
     {% endif %}
   {% endblock %}
