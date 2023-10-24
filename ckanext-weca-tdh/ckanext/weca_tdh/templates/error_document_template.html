@@ -1,7 +1,17 @@
 {% ckan_extends %}
 
-{% block login_redirect %}
-  <div class="module-content govuk-body">
-    {{ _("You are not authorised to access the Data Catalogue.") }} <a href="/.auth/logout">{{ _("Click here to logout") }}</a> 
-  </div>
+{% block primary %}
+  <article class="module govuk-body">
+    {% if name %}
+      <h1>{{ code }} {{ name }}</h1>
+    {% endif %}
+    {{ content }}
+    {% block login_redirect %}
+      {% if show_login_redirect_link %}
+        <div>
+          <br>{{ _("You do not have permission to access this page.") }} <a href="{{ h.url_for('user.login') }}">{{ _("Click here to login") }}</a>
+        </div>
+      {% endif %}
+    {% endblock %}
+  </article>
 {% endblock %}

@@ -50,7 +50,7 @@
 
 {% block secondary_content %}
   {% snippet "group/snippets/info.html", group=group_dict, show_nums=true %}
-  {% set facet_titles = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format", "license_id": "Licenses"} %}
+  {% set facet_titles = {'organization': "Publishers", 'groups': "Topics", 'res_format': "Formats", "license_id": "Licenses"} %}
   <div class="filters">
     <div>
       {% for facet in facet_titles %}

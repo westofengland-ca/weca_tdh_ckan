@@ -1,5 +1,9 @@
 {% ckan_extends %}
 
+{% block links -%}
+  <link rel="shortcut icon" href="/assets/images/weca-favicon.png" />
+{% endblock -%}
+
 {% block styles %}
   {{ super() }}
   {% asset 'weca_tdh/weca_tdh-css' %}

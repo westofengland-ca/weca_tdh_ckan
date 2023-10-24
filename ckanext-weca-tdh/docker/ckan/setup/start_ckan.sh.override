@@ -83,6 +83,13 @@ ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000
 ckan config-tool $CKAN_INI search.facets.limit=1000
 ckan config-tool $CKAN_INI search.facets.default=1000
 
+# Set the default user permissions
+ckan config-tool $CKAN_INI ckan.auth.user_create_groups=False
+ckan config-tool $CKAN_INI ckan.auth.user_create_organizations=False
+ckan config-tool $CKAN_INI ckan.auth.create_dataset_if_not_in_organization=False
+ckan config-tool $CKAN_INI ckan.auth.user_delete_organizations=False
+ckan config-tool $CKAN_INI ckan.auth.user_delete_groups=False
+
 # Set dataset level auth control
 ckan config-tool $CKAN_INI "ckan.auth.allow_dataset_collaborators = $CKAN_AUTH_ALLOW_DATASET_COLLABORATORS"
 
@@ -100,7 +107,7 @@ ckan config-tool $CKAN_INI "ad.group.sysadmin_id = $AD_USER_GROUP_SYSADMIN_ID"
 ckan config-tool $CKAN_INI "cc.api_key = $CC_API_KEY" 
 
 # Run the prerun script to init CKAN and create the default admin user
-sudo -u ckan -EH python3 prerun.py
+python3 prerun.py
 
 echo "Set up ckan.datapusher.api_token in the CKAN config file"
 ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add $CKAN_SYSADMIN_NAME datapusher | tail -n 1 | tr -d '\t')"
@@ -139,7 +146,7 @@ then
         # Start supervisord
         supervisord --configuration /etc/supervisord.conf &
         # Start uwsgi
-        sudo -u ckan -EH uwsgi $UWSGI_OPTS
+        uwsgi $UWSGI_OPTS
     else
         echo "Running in job mode."
         if [ ${CKAN_INDEX_REBUILD_TYPE} == 'rebuild' ]

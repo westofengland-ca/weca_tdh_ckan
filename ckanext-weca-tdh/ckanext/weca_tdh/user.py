@@ -17,18 +17,17 @@ class User(object):
         toolkit.login_user(userobj)
 
     def get_or_create_ad_user(claims: dict):
-        ad_id = claims[C.CKAN_USER_ID]
-        if not ad_id:
-            log.error(f"Error in user claims. Missing 'id'")
-            raise PermissionError
-
-        ckan_id = f'ad-{ad_id}'
-        email = claims[C.CKAN_USER_EMAIL]
-        fullname = claims[C.CKAN_USER_FULLNAME]
-        is_sysadmin = claims.get(C.CKAN_ROLE_SYSADMIN, False)
-
         try:
+            ad_id = claims[C.CKAN_USER_ID]
+            ckan_id = f'ad-{ad_id}'
+            email = claims[C.CKAN_USER_EMAIL]
+            fullname = claims[C.CKAN_USER_FULLNAME]
+            is_sysadmin = claims.get(C.CKAN_ROLE_SYSADMIN, False)
+
             user = toolkit.get_action('user_show')(data_dict = {C.CKAN_USER_ID: ckan_id})
+
+            if user.get(C.CKAN_USER_STATE) == 'deleted':
+                raise Exception(f"account for {user[C.CKAN_USER_NAME]} deleted.")
 
             if C.FF_AD_UPDATE_USER == 'True':
                 # update user records. Only email and fullname can be updated
@@ -65,10 +64,11 @@ class User(object):
 
             except Exception as e:
                 model.Session.rollback()
-                raise Exception(f"Failed to create user: {e}")
+                raise Exception(f"failed to create user: {e}.")
 
         except KeyError as e:
-            raise Exception(f"Key error in claims: {e}")
+            log.error(f"Key error in claims: {e}")
+            raise Exception("invalid credentials.")
 
     def create_session(username: str):
         session['user'] = username
