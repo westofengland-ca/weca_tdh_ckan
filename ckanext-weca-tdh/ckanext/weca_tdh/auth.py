@@ -25,7 +25,7 @@ class ADAuth():
         try:
             token = ADAuth.decode_token(request.headers.get(C.AD_ID_TOKEN)) # decode base64 access token
         except Exception as e:
-            raise Exception(f"Invalid AD access token: {e}")
+            raise Exception(f"invalid AD access token.")
 
         user_info = json.loads(token)
         claims = user_info.get("claims", [])
@@ -57,7 +57,7 @@ class ADAuth():
                     claims_map[C.CKAN_ROLE_SYSADMIN] = True
 
         if C.FF_AUTH_USER_GROUP_ONLY == 'True' and not in_user_group:
-            raise Exception("Account not in user group")
+            raise Exception("account not in user group.")
 
         return claims_map
 

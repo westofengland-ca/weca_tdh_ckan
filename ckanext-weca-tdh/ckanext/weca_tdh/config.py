@@ -5,6 +5,7 @@ CKAN_USER_ID = "id"
 CKAN_USER_NAME = "name"
 CKAN_USER_EMAIL = "email"
 CKAN_USER_FULLNAME = "fullname"
+CKAN_USER_STATE = 'state'
 
 # CKAN roles
 CKAN_ROLE_SYSADMIN = "sysadmin"

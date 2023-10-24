@@ -53,7 +53,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
                     User.login(session.get('user'))
                 except Exception as e:
                     log.error(e)
-                    return toolkit.abort(403, "Authorisation failed")
+                    return toolkit.abort(403, e)
 
     def login(self):
         pass
@@ -64,7 +64,10 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         """
         session.clear()
         toolkit.logout_user()
-        return h.redirect_to(C.CKAN_ROUTE_AD_LOGOUT)
+
+        # if user logged in using AD, log out of AD
+        if C.AD_SESSION_COOKIE in request.cookies:
+            return h.redirect_to(C.CKAN_ROUTE_AD_LOGOUT)
 
     def get_blueprint(self):      
         '''
