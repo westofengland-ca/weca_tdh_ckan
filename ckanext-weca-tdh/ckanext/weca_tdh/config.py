@@ -32,6 +32,7 @@ AD_GROUP_CKAN_ID = config['ad.group.ckan_id']
 AD_GROUP_SYSADMIN_ID = config['ad.group.sysadmin_id']
 
 # Feature flags
+FF_AUTH_RESTRICTED_ACCESS = config['feature_flag.auth.restricted_access']
 FF_AUTH_EXTERNAL_ONLY = config['feature_flag.auth.external_only']
 FF_AUTH_USER_GROUP_ONLY = config['feature_flag.auth.user_group_only']
 FF_AD_UPDATE_USER = config['feature_flag.ad.update_user']
