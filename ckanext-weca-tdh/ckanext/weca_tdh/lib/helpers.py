@@ -13,13 +13,10 @@ def filter_datetime(string, format='full'):
 def get_cookie_control_config():
     cookie_control_config = {}
 
-    api_key = C.CC_API_KEY
+    api_key = C.CCC_API_KEY
     cookie_control_config['api_key'] = api_key
 
-    license_type = C.CC_LICENSE
+    license_type = C.CCC_LICENSE
     cookie_control_config['license_type'] = license_type
-
-    initial_state = C.CC_INITIAL_STATE
-    cookie_control_config['initial_state'] = initial_state
 
     return cookie_control_config

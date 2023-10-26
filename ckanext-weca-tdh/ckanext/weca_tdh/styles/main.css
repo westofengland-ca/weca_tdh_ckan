@@ -438,6 +438,25 @@ html {
   margin-left:33%;
 }
 
+/* Cookie Control /
+////////////////*/
+
+.ccc-notify-text h1 {
+  font-size: 20px !important;
+}
+
+.ccc-notify-button.ccc-reject-button {
+  border-color: #ffffff50 !important;
+}
+
+.ccc-notify-link {
+    outline: none !important;
+}
+
+.ccc-intro a, .ccc-info a {
+  text-decoration: underline !important;
+}
+
 /* temp flask debug overflow fix */
 #flDebug, #flDebug * {
     overflow-y: auto;
