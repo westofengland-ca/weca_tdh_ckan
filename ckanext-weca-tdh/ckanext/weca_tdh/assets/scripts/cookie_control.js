@@ -36,7 +36,7 @@ ckan.module('cookie_control', function (jQuery) {
             outline: true
           },
           necessaryCookies: ['ckan', 'fldt', 'AppServiceAuthSession'],
-          optionalCookies: [
+          /*optionalCookies: [ // config for Google Analytics
             {
                 name: 'analytics',
                 label: 'Analytical Cookies',
@@ -49,7 +49,7 @@ ckan.module('cookie_control', function (jQuery) {
                   ckan_sandbox.publish('analytics_enabled', false);
                 }
             }
-          ],
+          ],*/
       };
       CookieControl.load( config );
     }
