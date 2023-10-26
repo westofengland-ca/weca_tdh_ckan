@@ -105,7 +105,7 @@ ckan config-tool $CKAN_INI "ad.group.ckan_id = $AD_USER_GROUP_CKAN_ID"
 ckan config-tool $CKAN_INI "ad.group.sysadmin_id = $AD_USER_GROUP_SYSADMIN_ID"
 
 # Set Cookie Control API key
-ckan config-tool $CKAN_INI "cc.api_key = $CC_API_KEY" 
+ckan config-tool $CKAN_INI "ccc.api_key = $CCC_API_KEY" 
 
 # Run the prerun script to init CKAN and create the default admin user
 python3 prerun.py
