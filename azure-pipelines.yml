@@ -19,21 +19,6 @@ variables:
   value: ROWE-DEV-WECA-TDH-TEST
 - group: Pipeline_vars
 steps:
-# Updating image tag variable. This is essential
-# the variable will be passed to the release pipeline
-# and the tag is used to push image to acr. There is
-# no option to easily recreate the tag in the release pipeline
-- powershell: |
-    # Base64-encodes the Personal Access Token (PAT) appropriately 
-    $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f "", "$(PAT)")))
-    
-    $url = "https://dev.azure.com/$(organization_name)/$(project_name)/_apis/distributedtask/variablegroups/$(group_id)?api-version=5.0-preview.1"
-    
-    $json = '{"type":"Vsts","name":"$(group_name)","variables":{"imagetag":{"isSecret":false,"value":"$(ckantag)"}}}'    
-    $pipeline = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
-  displayName: 'Run PowerShell Script'
-
-
 - task: Docker@2
   displayName: Build and push
   inputs:
@@ -61,6 +46,7 @@ steps:
     containerAppName: $(CONTAINER_APP_NAME)
     resourceGroup: $(CONTAINER_APP_RESOURCE_GROUP)
     imageToDeploy: $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
+    
 - task: AzureCLI@2
   displayName: Update index rebuild job
   inputs:
@@ -70,10 +56,21 @@ steps:
     inlineScript: |
      az containerapp job update --name $(DEV_CKAN_INDEX_REBUILD_JOB_NAME) --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --image $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId) 
 
-
 - task: PublishBuildArtifacts@1
   displayName: Publish artifacts
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'ckan-build'
     publishLocation: 'Container'
+  # Updating image tag variable whcih is passed to the release pipeline
+- powershell: |
+    # Base64-encodes the Personal Access Token (PAT) appropriately 
+    $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f "", "$(PAT)")))
+    
+    $url = "https://dev.azure.com/$(organization_name)/$(project_name)/_apis/distributedtask/variablegroups/$(group_id)?api-version=5.0-preview.1"
+    
+    $json = '{"type":"Vsts","name":"$(group_name)","variables":{"imagetag":{"isSecret":false,"value":"$(ckantag)"}}}'    
+    $pipeline = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
+  displayName: 'Run PowerShell Script'
+
+
