@@ -106,9 +106,13 @@ services:
     networks:
       - ckan-network
 
-  # datapusher:
-  #   container_name: ${DATAPUSHER_CONTAINER_NAME}
-  #   image: ckan/ckan-base-datapusher:${DATAPUSHER_VERSION}
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8800"]
+  datapusher:
+    container_name: ${DATAPUSHER_CONTAINER_NAME}
+    image: ckan/ckan-base-datapusher:${DATAPUSHER_VERSION}
+    restart: unless-stopped
+    ports: 
+      - "0.0.0.0:8800:8800"
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8800"]
+    networks:
+      - ckan-network
