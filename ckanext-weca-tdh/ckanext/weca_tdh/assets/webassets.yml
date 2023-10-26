@@ -1,9 +1,14 @@
-weca_tdh-js:
-  output: weca_tdh/govuk.js
+govuk-js:
+  output: weca_tdh/%(version)s_govuk.js
   contents:
     - scripts/govuk.js
 
+cookie_control-js:
+  output: weca_tdh/%(version)s_cookie_control.js
+  contents:
+    - scripts/cookie_control.js
+
 weca_tdh-css:
-  output: weca_tdh/weca_tdh.css
+  output: weca_tdh/%(version)s_weca_tdh.css
   contents:
     - styles/weca_tdh.css
