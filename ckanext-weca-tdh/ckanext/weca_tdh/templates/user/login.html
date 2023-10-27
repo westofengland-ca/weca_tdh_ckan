@@ -5,15 +5,21 @@
 {% block toolbar %}{% endblock %}
 
 {% block heading %}
-  <h1 class="page-heading-result govuk-heading-xl govuk-!-margin-bottom-6">{{ _('Login') }}</h1>
+  <h1 class="{{ 'page-heading-result' if external_only == 'False' }} govuk-heading-xl govuk-!-margin-bottom-6">{{ _('Login') }}</h1>
 {% endblock %}
 
-{% block primary_content %}
-<section class="module">
-  {% block form %}
-      {% snippet "user/snippets/login_form.html", external_only=external_only, error_summary=error_summary %}
-  {% endblock %}
-</section>
+{% block primary %}
+  {% if external_only == 'True' %}
+    {% block primary_content %}
+      <section class="module">
+        {% block form %}
+          {% snippet "user/snippets/login_form.html", external_only=external_only, error_summary=error_summary %}
+        {% endblock %}
+      </section>
+    {% endblock %}
+  {% else %}
+    {{super()}}
+  {% endif %}
 {% endblock %}
 
 {% block secondary %}
