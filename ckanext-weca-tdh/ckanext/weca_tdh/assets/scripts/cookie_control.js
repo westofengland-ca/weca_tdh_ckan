@@ -7,6 +7,8 @@ ckan.module('cookie_control', function (jQuery) {
       var config = {
           apiKey: this.options.api_key,
           product: this.options.license_type,
+          subDomains: false,
+          encodeCookie: true,         
           position: 'right',
           initialState: "notify",
           setInnerHTML: true,
