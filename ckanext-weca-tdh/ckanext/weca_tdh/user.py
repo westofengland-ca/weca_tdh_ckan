@@ -20,7 +20,7 @@ class User(object):
         try:
             ad_id = claims[C.CKAN_USER_ID]
             ckan_id = f'ad-{ad_id}'
-            email = claims[C.CKAN_USER_EMAIL]
+            email = claims.get(C.CKAN_USER_EMAIL)
             fullname = claims[C.CKAN_USER_FULLNAME]
             is_sysadmin = claims.get(C.CKAN_ROLE_SYSADMIN, False)
 
@@ -29,9 +29,8 @@ class User(object):
             if user.get(C.CKAN_USER_STATE) == 'deleted':
                 raise Exception(f"account for {user[C.CKAN_USER_NAME]} deleted.")
 
-            if C.FF_AD_UPDATE_USER == 'True':
+            if C.FF_AD_UPDATE_USER == 'True' and email:
                 # update user records. Only email and fullname can be updated
-                log.info(f"Updating user records on login for user: {user}.")
                 user[C.CKAN_USER_EMAIL] = email # email cannot be retrieved, but must be set on update
                 user[C.CKAN_USER_FULLNAME] = fullname 
                 user = toolkit.get_action('user_update')(context = {'ignore_auth': True}, data_dict = user)
@@ -47,7 +46,8 @@ class User(object):
                 new_user.name = User.generate_username(fullname) # generate unique username
                 new_user.password = str(uuid.uuid4())  # generate unique password
                 new_user.fullname = fullname
-                new_user.email = email
+                if email:
+                    new_user.email = email
                 new_user.sysadmin = is_sysadmin
                 new_user.plugin_extras = {
                     'ad_id': ad_id
