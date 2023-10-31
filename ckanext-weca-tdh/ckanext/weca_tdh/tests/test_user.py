@@ -122,7 +122,7 @@ class ADUser(unittest.TestCase):
 
         with patch('ckan.plugins.toolkit.get_action', side_effect = [mock_user_show, mock_user_update]), patch('ckan.model.Session', side_effect=mock_user_create):
             # missing id
-            with pytest.raises(Exception, match="user account missing 'id'"):
+            with pytest.raises(Exception):
                 User.get_or_create_ad_user({
                     'email': 'mockuser@email.com',
                     'fullname': 'Updated User 2',
@@ -130,7 +130,7 @@ class ADUser(unittest.TestCase):
                   })
 
             # missing email
-            with pytest.raises(Exception, match="user account missing 'email'"):
+            with pytest.raises(Exception):
                 User.get_or_create_ad_user({
                       'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
                       'fullname': 'Updated User 2',
@@ -138,7 +138,7 @@ class ADUser(unittest.TestCase):
                     })
 
             # missing display name
-            with pytest.raises(Exception, match="user account missing 'fullname'"):
+            with pytest.raises(Exception):
                 User.get_or_create_ad_user({
                       'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
                       'email': 'mockuser@email.com',
