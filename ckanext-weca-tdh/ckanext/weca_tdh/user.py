@@ -27,6 +27,7 @@ class User(object):
             user = toolkit.get_action('user_show')(data_dict = {C.CKAN_USER_ID: ckan_id})
 
             if user.get(C.CKAN_USER_STATE) == 'deleted':
+                log.error(f"failed to authenticate user {ad_id}. Account deleted.")
                 raise Exception(f"account for {user[C.CKAN_USER_NAME]} deleted.")
 
             if C.FF_AD_UPDATE_USER == 'True':
@@ -66,8 +67,8 @@ class User(object):
                 raise Exception(f"failed to create user: {e}.")
 
         except KeyError as e:
-            log.error(f"Key error in claims: {e}")
-            raise Exception(f"user account missing {e}")
+            log.error(f"failed to authenticate user {ad_id} because the claims received from Azure AD are missing the {e} claim.")
+            raise Exception(f"user account missing {e}.")
 
     def create_session(username: str):
         session['user'] = username
