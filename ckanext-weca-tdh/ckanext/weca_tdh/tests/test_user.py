@@ -50,31 +50,6 @@ class ADUser(unittest.TestCase):
             # Assert a user was created
             assert username is not None
 
-    def test_get_or_create_ad_user_new_user_missing_email(self):
-        # Test the scenario where the user does not exist and should be created
-        # Set up the mocks
-        mock_user_show = MagicMock(side_effect=NotFound)
-        mock_user_update = MagicMock(side_effect=setup_mock_user_update)
-
-        with patch('ckan.plugins.toolkit.get_action', side_effect = [mock_user_show, mock_user_update]), patch('ckan.model.Session', autospec=True):
-            # Prepare the claims data
-            claims_map = {
-                'id': '6f43883e-63a8-4dc6-a070-b27681a5d000',
-                'fullname': 'Mock User 2',
-                'sysadmin': False
-            }
-
-            username = User.get_or_create_ad_user(claims_map)
-
-            # Assert that 'user_show' was called once with user id
-            mock_user_show.assert_called_once_with(data_dict={'id': 'ad-6f43883e-63a8-4dc6-a070-b27681a5d000'})
-
-            # Assert that 'user_update' was not called
-            mock_user_update.assert_not_called()
-
-            # Assert a user was created
-            assert username is not None
-
     @pytest.mark.ckan_config("feature_flag.ad.update_user", 'True')
     def test_get_or_create_ad_user_existing_user(self):
         # Test the scenario where the user does exist and should not be updated
@@ -138,31 +113,40 @@ class ADUser(unittest.TestCase):
             assert username == 'muser10789'
     
     @pytest.mark.ckan_config("feature_flag.ad.update_user", 'True')
-    def test_get_or_create_ad_user_existing_user_update_missing_email(self):
-        # Test the scenario where the user does exist and should be updated
+    def test_get_or_create_ad_user_missing_claims(self):
+        # Test the scenario where mandatory user claims are missing
         # Set up the mocks
         mock_user_show = MagicMock(side_effect=setup_mock_user_show)
         mock_user_update = MagicMock(side_effect=setup_mock_user_update)
         mock_user_create = MagicMock()
 
         with patch('ckan.plugins.toolkit.get_action', side_effect = [mock_user_show, mock_user_update]), patch('ckan.model.Session', side_effect=mock_user_create):
+            # missing id
+            with pytest.raises(Exception, match="user account missing 'id'"):
+                User.get_or_create_ad_user({
+                    'email': 'mockuser@email.com',
+                    'fullname': 'Updated User 2',
+                    'sysadmin': False
+                  })
 
-            # Prepare the claims data
-            claims_map = {
-                'id': '6f43883e-63a8-4dc6-a070-b27681a5d001',
-                'fullname': 'Updated User 2',
-                'sysadmin': False
-            }
+            # missing email
+            with pytest.raises(Exception, match="user account missing 'email'"):
+                User.get_or_create_ad_user({
+                      'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
+                      'fullname': 'Updated User 2',
+                      'sysadmin': False
+                    })
 
-            username = User.get_or_create_ad_user(claims_map)
+            # missing display name
+            with pytest.raises(Exception, match="user account missing 'fullname'"):
+                User.get_or_create_ad_user({
+                      'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
+                      'email': 'mockuser@email.com',
+                      'sysadmin': False
+                    })
 
-            # Assert that 'user_show' was called once with user id
-            mock_user_show.assert_called_once_with(data_dict={'id': 'ad-6f43883e-63a8-4dc6-a070-b27681a5d001'})
-
-            # Assert that 'user_update' was not called when email claim is misisng
+            mock_user_show.assert_not_called()
             mock_user_update.assert_not_called()
-
-            # Assert that 'user_create' was not called
             mock_user_create.assert_not_called()
 
     def test_generate_username(self):
