@@ -20,7 +20,7 @@ class User(object):
         try:
             ad_id = claims[C.CKAN_USER_ID]
             ckan_id = f'ad-{ad_id}'
-            email = claims[C.CKAN_USER_EMAIL]      
+            email = claims[C.CKAN_USER_EMAIL]
             fullname = claims[C.CKAN_USER_FULLNAME]
             is_sysadmin = claims.get(C.CKAN_ROLE_SYSADMIN, False)
 
