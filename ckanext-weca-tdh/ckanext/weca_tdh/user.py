@@ -67,8 +67,8 @@ class User(object):
                 raise Exception(f"failed to create user: {e}.")
 
         except KeyError as e:
-            log.error(f"failed to authenticate user {ad_id} because the claims received from Azure AD are missing the {e} claim.")
-            raise Exception(f"user account missing {e}.")
+            log.error(f"failed to authenticate user {ad_id}. The claims received from Azure AD are missing the {e} claim.")
+            raise Exception(f"the claims received from Azure AD are missing the {e} claim.")
 
     def create_session(username: str):
         session['user'] = username
