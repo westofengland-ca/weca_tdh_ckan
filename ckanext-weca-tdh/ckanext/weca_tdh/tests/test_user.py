@@ -9,10 +9,10 @@ from ckanext.weca_tdh.user import User
 from ckan.logic import NotFound
 
 user_data = {
-        'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000',
-        'name': 'muser10789', 
-        'fullname': 'Mock User'
-    }
+    'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000',
+    'name': 'muser10789', 
+    'fullname': 'Mock User'
+}
 
 def setup_mock_user_show(data_dict):
     # Helper function to set up the mock for user_show action
@@ -111,6 +111,43 @@ class ADUser(unittest.TestCase):
             mock_user_create.assert_not_called()
 
             assert username == 'muser10789'
+    
+    @pytest.mark.ckan_config("feature_flag.ad.update_user", 'True')
+    def test_get_or_create_ad_user_missing_claims(self):
+        # Test the scenario where mandatory user claims are missing
+        # Set up the mocks
+        mock_user_show = MagicMock(side_effect=setup_mock_user_show)
+        mock_user_update = MagicMock(side_effect=setup_mock_user_update)
+        mock_user_create = MagicMock()
+
+        with patch('ckan.plugins.toolkit.get_action', side_effect = [mock_user_show, mock_user_update]), patch('ckan.model.Session', side_effect=mock_user_create):
+            # missing id
+            with pytest.raises(Exception):
+                User.get_or_create_ad_user({
+                    'email': 'mockuser@email.com',
+                    'fullname': 'Updated User 2',
+                    'sysadmin': False
+                  })
+
+            # missing email
+            with pytest.raises(Exception):
+                User.get_or_create_ad_user({
+                      'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
+                      'fullname': 'Updated User 2',
+                      'sysadmin': False
+                    })
+
+            # missing display name
+            with pytest.raises(Exception):
+                User.get_or_create_ad_user({
+                      'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
+                      'email': 'mockuser@email.com',
+                      'sysadmin': False
+                    })
+
+            mock_user_show.assert_not_called()
+            mock_user_update.assert_not_called()
+            mock_user_create.assert_not_called()
 
     def test_generate_username(self):
       # Test the username generation function
