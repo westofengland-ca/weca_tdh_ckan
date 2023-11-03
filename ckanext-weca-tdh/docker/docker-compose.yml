@@ -102,5 +102,3 @@ services:
       - "0.0.0.0:8800:8800"
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8800"]
-    networks:
-      - ckan-network
