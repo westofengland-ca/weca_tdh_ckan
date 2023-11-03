@@ -6,8 +6,21 @@
 
 {% block styles %}
   {{ super() }}
-
   {% asset 'weca_tdh/weca_tdh-css' %}
-  {% asset 'weca_tdh/weca_tdh-js' %}
+{% endblock %}
 
+{% block scripts %}
+  {{ super() }}
+  {% asset 'weca_tdh/govuk-js' %}
+  {% block cookie_control %}
+    {% asset 'weca_tdh/cookie_control-js' %}
+    <script src="https://cc.cdn.civiccomputing.com/9/cookieControl-9.x.min.js"></script>
+
+    {% set cookie_control_config = h.get_cookie_control_config() %}
+
+    <div id="cookie-control" class="js-hide" data-module="cookie_control"
+        data-module-api_key="{{ cookie_control_config.get('api_key') }}"
+        data-module-license_type="{{ cookie_control_config.get('license_type') }}">
+    </div>
+  {% endblock %}
 {% endblock %}

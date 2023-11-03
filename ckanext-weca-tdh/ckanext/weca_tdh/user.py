@@ -27,11 +27,11 @@ class User(object):
             user = toolkit.get_action('user_show')(data_dict = {C.CKAN_USER_ID: ckan_id})
 
             if user.get(C.CKAN_USER_STATE) == 'deleted':
+                log.error(f"failed to authenticate user {ad_id}. Account deleted.")
                 raise Exception(f"account for {user[C.CKAN_USER_NAME]} deleted.")
 
             if C.FF_AD_UPDATE_USER == 'True':
                 # update user records. Only email and fullname can be updated
-                log.info(f"Updating user records on login for user: {user}.")
                 user[C.CKAN_USER_EMAIL] = email # email cannot be retrieved, but must be set on update
                 user[C.CKAN_USER_FULLNAME] = fullname 
                 user = toolkit.get_action('user_update')(context = {'ignore_auth': True}, data_dict = user)
@@ -67,8 +67,8 @@ class User(object):
                 raise Exception(f"failed to create user: {e}.")
 
         except KeyError as e:
-            log.error(f"Key error in claims: {e}")
-            raise Exception("invalid credentials.")
+            log.error(f"failed to authenticate user {claims.get(C.CKAN_USER_ID, '')}. The claims received from Azure AD are missing the {e} claim.")
+            raise Exception(f"the claims received from Azure AD are missing the {e} claim.")
 
     def create_session(username: str):
         session['user'] = username
