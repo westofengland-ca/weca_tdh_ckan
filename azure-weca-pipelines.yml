@@ -10,7 +10,7 @@ variables:
 - name: ckantag
   value: ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
 - name: group_id
-  value: 6
+  value: 1
 - name: group_name
   value: Pipeline_vars
 - name: organization_name
