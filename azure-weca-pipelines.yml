@@ -1,7 +1,7 @@
-trigger:
-  branches:
-    include:
-      - main
+trigger: none
+  # branches:
+  #   include:
+  #     - main
 pool:
   name: Azure Pipelines
 variables:
