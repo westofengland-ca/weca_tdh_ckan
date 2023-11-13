@@ -120,6 +120,10 @@ ckan config-tool $SRC_DIR/ckan/test-core.ini \
     "solr_url = $TEST_CKAN_SOLR_URL" \
     "ckan.redis.url = $TEST_CKAN_REDIS_URL"
 
+# Configure logging
+ckan config-tool $CKAN_INI --section logger_ckan "level = WARNING"
+ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
+
 # Run the prerun script to init CKAN and create the default admin user
 python3 prerun.py
 
