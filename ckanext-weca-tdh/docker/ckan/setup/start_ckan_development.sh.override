@@ -103,6 +103,7 @@ ckan config-tool $CKAN_INI "feature_flag.auth.external_only = $FEATURE_FLAG_AUTH
 ckan config-tool $CKAN_INI "feature_flag.auth.user_group_only = $FEATURE_FLAG_AUTH_USER_GROUP_ONLY"
 ckan config-tool $CKAN_INI "feature_flag.ad.update_user = $FEATURE_FLAG_AD_UPDATE_USER"
 ckan config-tool $CKAN_INI "feature_flag.ad.sysadmin = $FEATURE_FLAG_AD_SYSADMIN"
+ckan config-tool $CKAN_INI "feature_flag.ga.enabled = $FEATURE_FLAG_GA_ENABLED"
 
 # Set Azure AD user group id's
 ckan config-tool $CKAN_INI "ad.group.ckan_id = $AD_USER_GROUP_CKAN_ID"
@@ -110,6 +111,9 @@ ckan config-tool $CKAN_INI "ad.group.sysadmin_id = $AD_USER_GROUP_SYSADMIN_ID"
 
 # Set Cookie Control API key
 ckan config-tool $CKAN_INI "ccc.api_key = $CCC_API_KEY" 
+
+# Set Google Analytics config
+ckan config-tool $CKAN_INI "ga.id = $GA_ID" 
 
 # Update test-core.ini DB, SOLR & Redis settings
 echo "Loading test settings into test-core.ini"
