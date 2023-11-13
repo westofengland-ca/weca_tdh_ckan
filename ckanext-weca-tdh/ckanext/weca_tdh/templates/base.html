@@ -12,6 +12,19 @@
 {% block scripts %}
   {{ super() }}
   {% asset 'weca_tdh/govuk-js' %}
+
+  {% if config['feature_flag.ga.enabled'] == 'True' %}
+    {% block google_analytics %}
+        {% asset 'weca_tdh/google_analytics-js' %}
+        {% set ga_config = h.get_google_analytics_config() %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_config.get('ga_id') }}"></script>
+
+        <div class="js-hide" data-module="google_analytics"
+          data-module-ga_id="{{ ga_config.get('ga_id') }}">
+        </div>
+    {% endblock %}
+  {% endif %}
+
   {% block cookie_control %}
     {% asset 'weca_tdh/cookie_control-js' %}
     <script src="https://cc.cdn.civiccomputing.com/9/cookieControl-9.x.min.js"></script>
@@ -20,7 +33,9 @@
 
     <div id="cookie-control" class="js-hide" data-module="cookie_control"
         data-module-api_key="{{ cookie_control_config.get('api_key') }}"
-        data-module-license_type="{{ cookie_control_config.get('license_type') }}">
+        data-module-license_type="{{ cookie_control_config.get('license_type') }}"
+        data-module-analytics_enabled="{{ config['feature_flag.ga.enabled'] }}">
     </div>
   {% endblock %}
+
 {% endblock %}

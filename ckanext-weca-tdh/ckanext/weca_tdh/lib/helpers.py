@@ -20,3 +20,11 @@ def get_cookie_control_config():
     cookie_control_config['license_type'] = license_type
 
     return cookie_control_config
+
+def get_google_analytics_config():
+    google_analytics_config = {}
+
+    ga_id = C.GA_ID
+    google_analytics_config['ga_id'] = ga_id
+
+    return google_analytics_config

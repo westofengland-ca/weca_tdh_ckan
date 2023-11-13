@@ -1,4 +1,7 @@
 trigger: none
+  # branches:
+  #   include:
+  #     - main
 pool:
   name: Azure Pipelines
 variables:
@@ -7,13 +10,13 @@ variables:
 - name: ckantag
   value: ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
 - name: group_id
-  value: 6
+  value: 1
 - name: group_name
   value: Pipeline_vars
 - name: organization_name
-  value: ROWE-DEV-WECA-TDH-TEST
+  value: westofengland-ca
 - name: project_name
-  value: ROWE-DEV-WECA-TDH-TEST
+  value: weca-tdh
 - group: Pipeline_vars
 steps:
 - task: Docker@2
