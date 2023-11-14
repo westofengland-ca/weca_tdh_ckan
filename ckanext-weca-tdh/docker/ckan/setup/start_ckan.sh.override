@@ -111,6 +111,13 @@ ckan config-tool $CKAN_INI "ccc.api_key = $CCC_API_KEY"
 # Set Google Analytics config
 ckan config-tool $CKAN_INI "ga.id = $GA_ID" 
 
+# Set TDH contact email
+ckan config-tool $CKAN_INI "tdh.contact_email = $TDH_CONTACT_EMAIL" 
+
+# Configure logging
+ckan config-tool $CKAN_INI --section logger_ckan "level = WARNING"
+ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
+
 # Run the prerun script to init CKAN and create the default admin user
 python3 prerun.py
 

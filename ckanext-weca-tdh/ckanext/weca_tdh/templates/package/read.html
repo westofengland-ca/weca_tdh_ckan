@@ -96,10 +96,11 @@
       {% endblock %}
 
       {% block contact %}
+        {% set contact_email = config.get('tdh.contact_email', 'ftz@westofengland-ca.gov.uk') %}
         <section class="contact">
           <div class="package-content">
             <h2 class="heading-medium">{{ _('Contact') }}</h2>
-            <p>{{ _('Get in touch about this dataset by') }} <a class="govuk-link" href="/contact">{{ _('filling out a contact form.') }}</a></p>
+            <p>{{ _('Get in touch about this dataset by emailing') }} <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.</p>
           </div>
         </section>
       {% endblock %}
