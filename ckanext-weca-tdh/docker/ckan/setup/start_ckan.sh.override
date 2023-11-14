@@ -68,6 +68,7 @@ ckan config-tool $CKAN_INI "ckan.site_description = $CKAN_SITE_DESCRIPTION"
 
 # Set the Datapusher plugin config
 ckan config-tool $CKAN_INI "ckan.datapusher.url = $CKAN_DATAPUSHER_URL"
+ckan config-tool $CKAN_INI "ckan.datapusher.callback_url_base = $CKAN__DATAPUSHER__CALLBACK_URL_BASE"
 
 # Set the Datastore plugin config
 ckan config-tool $CKAN_INI "ckan.datastore.write_url = $CKAN_DATASTORE_WRITE_URL"
