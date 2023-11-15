@@ -234,3 +234,11 @@ For more information please see [ckanext-envvars](https://github.com/okfn/ckanex
 ## 12. CKAN_SITE_URL
 
 For convenience the CKAN_SITE_URL parameter should be set in the .env file. For development it can be set to http://localhost:5000 and non-development set to https://localhost:8443
+
+## Manual push to ACR
+
+```
+az acr login -n wecacontainerrgsb1uks
+docker tag docker-ckan wecacontainerrgsb1uks.azurecr.io/repo:tag
+docker push wecacontainerrgsb1uks.azurecr.io/repo:tag
+```
