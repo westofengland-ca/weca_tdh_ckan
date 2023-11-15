@@ -438,6 +438,20 @@ html {
   margin-left:33%;
 }
 
+/* Data Preview /
+//////////////*/
+
+iframe {
+  background: white;
+}
+
+#resize_wrapper {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
 /* Cookie Control /
 ////////////////*/
 

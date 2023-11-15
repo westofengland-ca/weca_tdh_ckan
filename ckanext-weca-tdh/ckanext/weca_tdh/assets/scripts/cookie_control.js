@@ -4,6 +4,10 @@ ckan.module('cookie_control', function (jQuery) {
 
       ckan_sandbox = this.sandbox;
 
+      if (this.options.analytics_enabled == 'True') {
+        function gtag(){dataLayer.push(arguments);}
+      }
+
       var config = {
           apiKey: this.options.api_key,
           product: this.options.license_type,
@@ -31,27 +35,28 @@ ckan.module('cookie_control', function (jQuery) {
             fontSize: "18px",  
             toggleText: "black",
             toggleBackground: "white",
-            toggleColor: "#354753"
+            toggleColor: "#354753",
+            removeIcon: true
           },
           accessibility: {
             highlightFocus: true,
             outline: true
           },
           necessaryCookies: ['ckan', 'fldt', 'AppServiceAuthSession'],
-          /*optionalCookies: [ // config for Google Analytics
+          optionalCookies: this.options.analytics_enabled == 'True' ? [
             {
                 name: 'analytics',
                 label: 'Analytical Cookies',
                 description: 'Analytical cookies help us to improve our website by collecting and reporting information on its usage.',
-                cookies: [],
+                cookies: ['_ga', '_ga*', '_gid', '_gat', '__utma', '__utmt', '__utmb', '__utmc', '__utmz', '__utmv'],
                 onAccept : function(){
-                  ckan_sandbox.publish('analytics_enabled', true);
+                  gtag('consent', 'update', {'analytics_storage': 'granted'});
                 },
                 onRevoke: function(){
-                  ckan_sandbox.publish('analytics_enabled', false);
+                  gtag('consent', 'update', {'analytics_storage': 'denied'});
                 }
             }
-          ],*/
+          ] : [],
       };
       CookieControl.load( config );
     }

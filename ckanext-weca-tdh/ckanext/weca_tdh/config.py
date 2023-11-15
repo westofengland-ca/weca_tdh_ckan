@@ -37,6 +37,7 @@ FF_AUTH_EXTERNAL_ONLY = config['feature_flag.auth.external_only']
 FF_AUTH_USER_GROUP_ONLY = config['feature_flag.auth.user_group_only']
 FF_AD_UPDATE_USER = config['feature_flag.ad.update_user']
 FF_AD_SYSADMIN = config['feature_flag.ad.sysadmin']
+FF_GA_ENABLED = config['feature_flag.ga.enabled']
 
 # URL filter
 EXLUDED_SUBPATHS = ('/assets/', '/api/', '/base/', '/scripts/', '/webassets/')
@@ -44,3 +45,6 @@ EXLUDED_SUBPATHS = ('/assets/', '/api/', '/base/', '/scripts/', '/webassets/')
 # Cookie Control config
 CCC_API_KEY = config['ccc.api_key']
 CCC_LICENSE = 'PRO'
+
+# Google Analytics config
+GA_ID = config['ga.id']
