@@ -8,14 +8,11 @@
 
 {% block primary %}
   <article class="module govuk-body" role="main">
-      {% block about %}
-        {% if g.site_about %}
-          {{ h.render_markdown(g.site_about) }}
-        {% else %}
-          <h1 class="page-heading">{{ _('About Transport Data Hub') }}</h1>
-          {% snippet 'home/snippets/about_text.html' %}
-        {% endif %}
-      {% endblock %}
+    {% block about %}
+      <h1 class="page-heading">{{ _('Support') }}</h1>
+      {% set contact_email = config.get('tdh.contact_email') or _('ftz@westofengland-ca.gov.uk') %}
+      {{ h.snippet('home/snippets/about_text.html', contact_email=contact_email) }}
+    {% endblock %}
   </article>
 {% endblock %}
 

@@ -116,7 +116,11 @@ ckan config-tool $CKAN_INI "ccc.api_key = $CCC_API_KEY"
 ckan config-tool $CKAN_INI "ga.id = $GA_ID" 
 
 # Set TDH contact email
-ckan config-tool $CKAN_INI "tdh.contact_email = $TDH_CONTACT_EMAIL" 
+ckan config-tool $CKAN_INI "tdh.contact_email = $TDH_CONTACT_EMAIL"
+
+# Set partner connect file config
+ckan config-tool $CKAN_INI "tdh.connect.address_host = $TDH_CONNECT_ADDRESS_HOST"
+ckan config-tool $CKAN_INI "tdh.connect.address_path = $TDH_CONNECT_ADDRESS_PATH"
 
 # Update test-core.ini DB, SOLR & Redis settings
 echo "Loading test settings into test-core.ini"

@@ -79,7 +79,9 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
             ('/user/logged_out_redirect', 'logout', logout_aad_redirect),
             ('/contact', 'contact', RouteController.render_contact_page),
             ('/policy', 'policy', RouteController.render_policy_page),
-            ('/license', 'license', RouteController.render_license_page)
+            ('/license', 'license', RouteController.render_license_page),
+            ('/tdh_partner_connect', 'tdh_partner_connect', RouteController.render_tdh_partner_connect_page),
+            ('/tdh_partner_connect_file', 'tdh_partner_connect_file', RouteController.download_tdh_partner_connect_file)
         ]
         for rule in rules:
             staticbp.add_url_rule(*rule)
