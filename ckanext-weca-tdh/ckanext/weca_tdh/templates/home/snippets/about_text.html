@@ -1,7 +1,17 @@
-{% trans %}
-<p>One of the key published goals of the Future Transport Zone initiative is to "Enable better public transport planning by using data to improve decision-making".</p>
-<p>TDH aims to deliver a region-wide data platform to improve transport planning and operation, improve collaboration between Unitary Authorities (UAs) in the region, and support innovation.</p>
+<div>
+  <h2>{{ _('About Transport Data Hub') }}</h2>
+  <p>One of the key published goals of the Future Transport Zone initiative is to "Enable better public transport planning by using data to improve decision-making".</p>
+  <p>TDH aims to deliver a region-wide data platform to improve transport planning and operation, improve collaboration between Unitary Authorities (UAs) in the region, and support innovation.</p>
 
-<p>WECA: <a href="https://www.westofengland-ca.gov.uk/">https://www.westofengland-ca.gov.uk/</a><br />
-FTZ: <a href="https://www.westofengland-ca.gov.uk/what-we-do/transport/future-transport-zone">https://www.westofengland-ca.gov.uk/what-we-do/transport/future-transport-zone</a></p>
-{% endtrans %}
+  <p>WECA: <a href="https://www.westofengland-ca.gov.uk/">https://www.westofengland-ca.gov.uk/</a><br />
+  FTZ: <a href="https://www.westofengland-ca.gov.uk/what-we-do/transport/future-transport-zone">https://www.westofengland-ca.gov.uk/what-we-do/transport/future-transport-zone</a></p>
+
+  <h2>Connect to the TDH</h2>
+  <p><a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}">{{ _('Learn how to connect to the TDH using Power BI.') }}</a></p>
+
+  <h2>Cookie Policy</h2>
+  <P>{{ _('For information regarding cookies and how we use them, see our ') }}<a href="/policy">{{ _('Cookie Policy page') }}</a>.</P>
+
+  <h2>Contact information</h2>
+  <p>{{ _('Get in touch about the Transport Data Hub by emailing') }} <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.</p>
+</div>
