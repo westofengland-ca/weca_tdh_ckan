@@ -50,5 +50,5 @@ CCC_LICENSE = 'PRO'
 GA_ID = config['ga.id']
 
 # TDH partner connect file config
-TDH_CONNECT_ADDRESS_HOST = config.get('tdh_connect.address_host', "")
-TDH_CONNECT_ADDRESS_PATH = config.get('tdh_connect.address_path', "")
+TDH_CONNECT_ADDRESS_HOST = config.get('tdh.connect.address_host', "")
+TDH_CONNECT_ADDRESS_PATH = config.get('tdh.connect.address_path', "")
