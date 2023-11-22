@@ -57,7 +57,7 @@ class ADAuth():
                     claims_map[C.CKAN_ROLE_SYSADMIN] = True
 
         if C.FF_AUTH_USER_GROUP_ONLY == 'True' and not in_user_group:
-            raise Exception("account not in user group.")
+            raise Exception("account not in authorised user group.")
 
         return claims_map
 
