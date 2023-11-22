@@ -2,7 +2,7 @@ from ckan.common import CKANConfig, session
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.helpers as h
-from flask import Blueprint, request
+from flask import Blueprint, request, flash
 from inspect import getmembers, isfunction
 from ckanext.weca_tdh.lib import helpers
 import ckanext.weca_tdh.config as C
@@ -45,16 +45,22 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         Called on each request to identify a user.
         """
         if not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):
-            if C.FF_AUTH_RESTRICTED_ACCESS == 'True' or C.AD_SESSION_COOKIE in request.cookies:
+            if C.FF_AUTH_RESTRICTED_ACCESS == 'True':
                 if session.get('user'):
                     User.login(session.get('user'))
-                else:
+
+                elif C.AD_SESSION_COOKIE in request.cookies:
                     try:
                         ADAuth.authorise()
                         User.login(session.get('user'))
                     except Exception as e:
-                        log.error(e)
-                        return toolkit.abort(403, e)
+                        flash(e, category='alert-danger')
+                        return toolkit.render('/user/login.html')
+
+                elif not '/user/login' in request.path:
+                    flash(C.AUTH_ALERT_MESSAGE, category='alert-info')
+                    return toolkit.render('/user/login.html')
+
 
     def login(self):
         pass

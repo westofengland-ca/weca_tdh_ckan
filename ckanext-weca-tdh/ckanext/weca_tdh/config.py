@@ -12,7 +12,7 @@ CKAN_ROLE_SYSADMIN = "sysadmin"
 
 # CKAN routes
 CKAN_ROUTE_AD_LOGIN = "/.auth/login/aad?post_login_redirect_url=/auth/aad"
-CKAN_ROUTE_AD_LOGOUT = "/.auth/logout?post_logout_redirect_uri=/user/logged_out_redirect"
+CKAN_ROUTE_AD_LOGOUT = "/.auth/logout?post_logout_redirect_uri=/user/login"
 
 # AD Auth
 AD_USER_ID = "X-Ms-Client-Principal-Id"
@@ -41,6 +41,9 @@ FF_GA_ENABLED = config['feature_flag.ga.enabled']
 
 # URL filter
 EXLUDED_SUBPATHS = ('/assets/', '/api/', '/base/', '/scripts/', '/webassets/')
+
+# Flash messages
+AUTH_ALERT_MESSAGE = "You must be logged in to access this page."
 
 # Cookie Control config
 CCC_API_KEY = config['ccc.api_key']

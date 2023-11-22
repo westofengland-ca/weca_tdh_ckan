@@ -24,7 +24,7 @@ class ADAuth():
     def get_user_claims():
         try:
             token = ADAuth.decode_token(request.headers.get(C.AD_ID_TOKEN)) # decode base64 access token
-        except Exception as e:
+        except Exception:
             raise Exception(f"invalid AD access token.")
 
         user_info = json.loads(token)
