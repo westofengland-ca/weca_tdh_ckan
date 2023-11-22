@@ -1,41 +1,41 @@
 {% import 'macros/form.html' as form %}
 {% from "components/button/macro.html" import govukButton %}
 
-<div class="auth-providers">
-  <div class="ms-signin">
-    <p class="govuk-body">Click here to sign in using West Of England Combined Authority Active Directory/Microsoft Entra ID:</p>
-      {{ govukButton({
-        'text': "Sign in",
-        'href': "/.auth/login/aad?post_login_redirect_url=/dashboard/datasets"
-      }) }}
-    </a>
-  </div>
-</div>
-
-{% if external_only == 'False' %}
-    {% set username_error = true if error_summary %}
-    {% set password_error = true if error_summary %}
-
-    <div class="def-signin">
-      <p class="govuk-body">Or log in using CKAN credentials:</p>
-      <form action="{{ action }}" method="post">
-        {{ h.csrf_input() }}
-        {{ form.errors(errors=error_summary) }}
-
-        {{ form.input('login', label=_("Username or Email"), id='field-login', value="", error=username_error, classes=["control-medium"]) }}
-
-        {{ form.input('password', label=_("Password"), id='field-password', type="password", value="", error=password_error, classes=["control-medium"]) }}
-
-        {{ form.checkbox('remember', label=_("Remember me"), id='field-remember', checked=true, value="63072000") }}
-
-        <div class="form-actions">
-          {% block login_button %}
-            {{ govukButton({
-              'text': "Sign in",
-              'type': "submit"
-            }) }}
-          {% endblock %}
-        </div>
-      </form>
+{% if external_only == 'True' %}
+  <div class="auth-providers">
+    <div class="ms-signin">
+      <p class="govuk-body">Click here to sign in using West Of England Combined Authority Active Directory/Microsoft Entra ID:</p>
+        {{ govukButton({
+          'text': "Sign in",
+          'href': "/.auth/login/aad?post_login_redirect_url=/dashboard/datasets"
+        }) }}
+      </a>
     </div>
+  </div>
+{% else %}
+  {% set username_error = true if error_summary %}
+  {% set password_error = true if error_summary %}
+
+  <div class="def-signin">
+    <p class="govuk-body">Or log in using CKAN credentials:</p>
+    <form action="{{ action }}" method="post">
+      {{ h.csrf_input() }}
+      {{ form.errors(errors=error_summary) }}
+
+      {{ form.input('login', label=_("Username or Email"), id='field-login', value="", error=username_error, classes=["control-medium"]) }}
+
+      {{ form.input('password', label=_("Password"), id='field-password', type="password", value="", error=password_error, classes=["control-medium"]) }}
+
+      {{ form.checkbox('remember', label=_("Remember me"), id='field-remember', checked=true, value="63072000") }}
+
+      <div class="form-actions">
+        {% block login_button %}
+          {{ govukButton({
+            'text': "Sign in",
+            'type': "submit"
+          }) }}
+        {% endblock %}
+      </div>
+    </form>
+  </div>
 {% endif %}
