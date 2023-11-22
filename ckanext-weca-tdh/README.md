@@ -84,3 +84,29 @@ Tests are run automatically on commit or PR via GitHub Actions.
 To run the tests locally:
 
     pytest --ckan-ini=test.ini
+
+## CKAN commands
+
+### Promote user to sysadmin
+To manually promote a user to a sysadmin, connect to the running CKAN instance using the Container App console and run commands:
+
+ 	ckan user list
+  
+  Returns a list of all users. Copy the username of the desired user.
+  
+	ckan sysadmin user add <username>
+ 
+ Promotes user to a CKAN sysadmin.
+
+ 	ckan sysadmin list
+  
+  Returns a list of all sysadmins.
+
+  	ckan sysadmin remove <username>
+   
+   Revokes a users sysadmin role.
+
+  ### Rebuild Solr search index
+  To manually rebuild the Solr search index, run command:
+
+  	ckan search-index rebuild
