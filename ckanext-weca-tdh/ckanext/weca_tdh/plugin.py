@@ -58,7 +58,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
                         return toolkit.render('/user/login.html')
 
                 elif not '/user/login' in request.path:
-                    flash(C.AUTH_ALERT_MESSAGE, category='alert-info')
+                    flash(C.ALERT_MESSAGE_AUTH, category='alert-info')
                     return toolkit.render('/user/login.html')
 
 

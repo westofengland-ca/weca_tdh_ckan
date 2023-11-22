@@ -43,7 +43,10 @@ FF_GA_ENABLED = config['feature_flag.ga.enabled']
 EXLUDED_SUBPATHS = ('/assets/', '/api/', '/base/', '/scripts/', '/webassets/')
 
 # Flash messages
-AUTH_ALERT_MESSAGE = "You must be logged in to access this page."
+ALERT_MESSAGE_AUTH = "You must be logged in to access this page."
+
+contact_email = config.get('tdh.contact_email') or 'ftz@westofengland-ca.gov.uk'
+ALERT_MESSAGE_SUPPORT = f"Contact support by emailing <a href='mailto:{contact_email}'>{contact_email}</a>"
 
 # Cookie Control config
 CCC_API_KEY = config['ccc.api_key']

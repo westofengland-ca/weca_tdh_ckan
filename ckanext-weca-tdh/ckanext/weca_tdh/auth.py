@@ -19,7 +19,7 @@ class ADAuth():
                 User.create_session(user)
 
         except Exception as e:
-            raise Exception(f"Authorisation failed: {e}")
+            raise Exception(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.")
 
     def get_user_claims():
         try:
