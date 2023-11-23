@@ -1,25 +1,30 @@
-import base64
-import json
-import logging
-from ckanext.weca_tdh.user import User
+import ckan.model as model
+import ckan.plugins.toolkit as toolkit
+from flask import Blueprint, flash, request
 import ckanext.weca_tdh.config as C
-from flask import request
+from ckanext.weca_tdh.user import User
+import base64, json, logging
 
 log = logging.getLogger(__name__)
+adauthbp = Blueprint('adauth', __name__)
 
-class ADAuth():
+class ADAuth():  
+    def _login_to_ckan(user):
+        userobj = model.User.get(user)
+        toolkit.login_user(userobj, force=True)
+
     def authorise():
         try:
             claims_map = ADAuth.get_user_claims()
             if claims_map:
-                # get or create user obj
                 user = User.get_or_create_ad_user(claims_map)
 
-                # create user session
-                User.create_session(user)
+            ADAuth._login_to_ckan(user)
+            return toolkit.redirect_to('dashboard.datasets')
 
         except Exception as e:
-            raise Exception(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.")
+            flash(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
+            return toolkit.redirect_to('user.login')
 
     def get_user_claims():
         try:
@@ -63,3 +68,5 @@ class ADAuth():
 
     def decode_token(token):
         return base64.b64decode(token + '==').decode('utf-8')
+    
+adauthbp.add_url_rule('/user/adlogin', view_func=ADAuth.authorise)

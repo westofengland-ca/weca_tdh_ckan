@@ -1,21 +1,12 @@
-import logging
-import uuid
-import random
-import string
-from ckan.common import session
 from ckan import model
 from ckan.logic import NotFound
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
+import logging, random, string, uuid
 
 log = logging.getLogger(__name__)
 
 class User(object):
-
-    def login(username: str):
-        userobj = model.User.get(username)
-        toolkit.login_user(userobj)
-
     def get_or_create_ad_user(claims: dict):
         try:
             ad_id = claims[C.CKAN_USER_ID]
@@ -69,10 +60,6 @@ class User(object):
         except KeyError as e:
             log.error(f"failed to authenticate user {claims.get(C.CKAN_USER_ID, '')}. The claims received from Azure AD are missing the {e} claim.")
             raise Exception(f"{e} is missing from account details")
-
-    def create_session(username: str):
-        session['user'] = username
-        session.save()
 
     def generate_username(fullname: str):
         '''
