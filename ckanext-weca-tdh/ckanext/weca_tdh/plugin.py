@@ -1,20 +1,17 @@
-from ckan.common import CKANConfig, session
+from ckan.common import CKANConfig
+import ckan.lib.helpers as h
+from ckan.model.user import AnonymousUser
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
-import ckan.lib.helpers as h
-from flask import Blueprint, request
+from flask import Blueprint, flash, request
 from inspect import getmembers, isfunction
-from ckanext.weca_tdh.lib import helpers
+from ckanext.weca_tdh.auth import adauthbp
 import ckanext.weca_tdh.config as C
-from ckanext.weca_tdh.auth import ADAuth
 from ckanext.weca_tdh.controller import RouteController
-from ckanext.weca_tdh.user import User
+from ckanext.weca_tdh.lib import helpers
 import logging
 
 log = logging.getLogger(__name__)
-
-def logout_aad_redirect():
-    return h.redirect_to('/')
 
 class WecaTdhPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer, inherit=True)
@@ -44,17 +41,10 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         """
         Called on each request to identify a user.
         """
-        if not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):
-            if C.FF_AUTH_RESTRICTED_ACCESS == 'True' or C.AD_SESSION_COOKIE in request.cookies:
-                if session.get('user'):
-                    User.login(session.get('user'))
-                else:
-                    try:
-                        ADAuth.authorise()
-                        User.login(session.get('user'))
-                    except Exception as e:
-                        log.error(e)
-                        return toolkit.abort(403, e)
+        if C.FF_AUTH_RESTRICTED_ACCESS == 'True' and not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):         
+            if isinstance(toolkit.current_user, AnonymousUser): # check for an unauthorised user
+                flash(C.ALERT_MESSAGE_AUTH, category='alert-info')
+                return toolkit.render('/user/login.html') # redirect to login page with flash message
 
     def login(self):
         pass
@@ -63,7 +53,6 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         """
         Called on logout.
         """
-        session.clear()
         toolkit.logout_user()
 
         # if user logged in using AD, log out of AD
@@ -76,7 +65,6 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         '''       
         staticbp = Blueprint(self.name, self.__module__, template_folder='templates')
         rules = [
-            ('/user/logged_out_redirect', 'logout', logout_aad_redirect),
             ('/contact', 'contact', RouteController.render_contact_page),
             ('/policy', 'policy', RouteController.render_policy_page),
             ('/license', 'license', RouteController.render_license_page),
@@ -86,4 +74,4 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
         for rule in rules:
             staticbp.add_url_rule(*rule)
 
-        return staticbp
+        return [staticbp, adauthbp]
