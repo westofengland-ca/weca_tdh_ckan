@@ -38,7 +38,7 @@ steps:
     repository: $(NAMESPACE)/$(CKAN_IMAGE_NAME)
     command: 'save'
     arguments: '-o $(Build.ArtifactStagingDirectory)/$(NAMESPACE)/$(CKAN_IMAGE_NAME).image.tar $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)'
-
+  
 - task: AzureContainerApps@1
   displayName: Update revision
   inputs:
@@ -46,6 +46,15 @@ steps:
     containerAppName: $(CONTAINER_APP_NAME)
     resourceGroup: $(CONTAINER_APP_RESOURCE_GROUP)
     imageToDeploy: $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
+
+- task: AzureCLI@2
+  displayName: Update ckan build version tag
+  inputs:
+    azureSubscription: $(ARM_SERVICE_CONNECTION)
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+     az containerapp update --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --name $(CONTAINER_APP_NAME) --set-env-vars ''TDH_BUILD_VERSION=ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
     
 - task: AzureCLI@2
   displayName: Update index rebuild job
