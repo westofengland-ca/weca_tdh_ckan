@@ -94,7 +94,8 @@ class User(object):
             username = f"{ckname}{n}-{ckdomain}"
             if User._validate_username(username):
                 return username
-            
+
+        # would only occur if CKAN enforce new constaints
         raise Exception("invalid username constraints")
 
     def _validate_username(username):

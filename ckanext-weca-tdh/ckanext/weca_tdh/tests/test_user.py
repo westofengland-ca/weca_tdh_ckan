@@ -2,15 +2,14 @@
 Tests for user.py
 """
 
-import pytest
-import unittest
-from unittest.mock import MagicMock, patch
-from ckanext.weca_tdh.user import User
 from ckan.logic import NotFound
+from ckanext.weca_tdh.user import User
+from unittest.mock import MagicMock, patch
+import pytest, unittest
 
 user_data = {
     'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000',
-    'name': 'muser10789', 
+    'name': 'mock_user-test', 
     'fullname': 'Mock User'
 }
 
@@ -34,7 +33,7 @@ class ADUser(unittest.TestCase):
             # Prepare the claims data
             claims_map = {
                 'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
-                'email': 'mockuser@email.com',
+                'email': 'mockuser@test.com',
                 'fullname': 'Mock User',
                 'sysadmin': False
             }
@@ -48,7 +47,7 @@ class ADUser(unittest.TestCase):
             mock_user_update.assert_not_called()
 
             # Assert a user was created
-            assert username is not None
+            assert username == 'mock_user-test'
 
     @pytest.mark.ckan_config("feature_flag.ad.update_user", 'True')
     def test_get_or_create_ad_user_existing_user(self):
@@ -62,12 +61,12 @@ class ADUser(unittest.TestCase):
             # Prepare the claims data
             claims_map = {
                 'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
-                'email': 'mockuser@email.com',
+                'email': 'mockuser@test.com',
                 'fullname': 'Mock User',
                 'sysadmin': False
             }
 
-            username = User.get_or_create_ad_user(claims_map)
+            User.get_or_create_ad_user(claims_map)
 
             # Assert that 'user_show' was called once with user id
             mock_user_show.assert_called_once_with(data_dict={'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000'})
@@ -77,8 +76,6 @@ class ADUser(unittest.TestCase):
 
             # Assert that 'user_create' was not called
             mock_user_create.assert_not_called()
-
-            assert username == 'muser10789'
 
     @pytest.mark.ckan_config("feature_flag.ad.update_user", 'True')
     def test_get_or_create_ad_user_existing_user_update(self):
@@ -93,24 +90,22 @@ class ADUser(unittest.TestCase):
             # Prepare the claims data
             claims_map = {
                 'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
-                'email': 'mockuser@email.com',
+                'email': 'mockuser@test.com',
                 'fullname': 'Updated User',
                 'sysadmin': False
             }
 
-            username = User.get_or_create_ad_user(claims_map)
+            User.get_or_create_ad_user(claims_map)
 
             # Assert that 'user_show' was called once with user id
             mock_user_show.assert_called_once_with(data_dict={'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000'})
 
             # Assert that 'user_update' was called once with updated user data
-            mock_user_update.assert_called_once_with(context={'ignore_auth': True}, data_dict={'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000', 'name': 'muser10789',
-                                                                                                'fullname': 'Updated User', 'email': 'mockuser@email.com'})
+            mock_user_update.assert_called_once_with(context={'ignore_auth': True}, data_dict={'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000', 'name': 'mock_user-test',
+                                                                                                'fullname': 'Updated User', 'email': 'mockuser@test.com'})
 
             # Assert that 'user_create' was not called
             mock_user_create.assert_not_called()
-
-            assert username == 'muser10789'
     
     @pytest.mark.ckan_config("feature_flag.ad.update_user", 'True')
     def test_get_or_create_ad_user_missing_claims(self):
@@ -124,7 +119,7 @@ class ADUser(unittest.TestCase):
             # missing id
             with pytest.raises(Exception):
                 User.get_or_create_ad_user({
-                    'email': 'mockuser@email.com',
+                    'email': 'mockuser@test.com',
                     'fullname': 'Updated User 2',
                     'sysadmin': False
                   })
@@ -141,7 +136,7 @@ class ADUser(unittest.TestCase):
             with pytest.raises(Exception):
                 User.get_or_create_ad_user({
                       'id': '5f43883e-63a8-4dc6-a070-b27681a5d000',
-                      'email': 'mockuser@email.com',
+                      'email': 'mockuser@test.com',
                       'sysadmin': False
                     })
 
@@ -150,7 +145,25 @@ class ADUser(unittest.TestCase):
             mock_user_create.assert_not_called()
 
     def test_generate_username(self):
-      # Test the username generation function
-      fullname = 'Mock User'
-      username = User.generate_username(fullname)
-      assert len(username) == len(fullname.split()[0][0]) + len(fullname.split()[1]) + 5
+        fullname = "Mock User"
+        email = "mockemail@mockdomain.com"
+
+        validation_results = [True, False, True, False, False, True]
+
+        with patch.object(User, '_validate_username', side_effect = validation_results):
+            # test fullname + domain
+            username = User._generate_username(fullname, email)
+            assert username == "mock_user-mockdomain"
+
+            # test email username + domain
+            username = User._generate_username(fullname, email)
+            assert username == "mockemail-mockdomain"
+
+            # test fullname + counter + domain
+            username = User._generate_username(fullname, email)
+            assert username == "mock_user2-mockdomain"
+
+        # test username generation failure
+        with patch.object(User, '_validate_username', return_value = False):
+            with pytest.raises(Exception, match="invalid username constraints"):
+                username = User._generate_username(fullname, email)
