@@ -113,7 +113,10 @@ ckan config-tool $CKAN_INI "ccc.api_key = $CCC_API_KEY"
 ckan config-tool $CKAN_INI "ga.id = $GA_ID" 
 
 # Set TDH contact email
-ckan config-tool $CKAN_INI "tdh.contact_email = $TDH_CONTACT_EMAIL" 
+ckan config-tool $CKAN_INI "tdh.contact_email = $TDH_CONTACT_EMAIL"
+
+# Set current build version
+ckan config-tool $CKAN_INI "tdh.build_version = $TDH_BUILD_VERSION"
 
 # Set partner connect file config
 ckan config-tool $CKAN_INI "tdh.connect.address_host = $TDH_CONNECT_ADDRESS_HOST"
