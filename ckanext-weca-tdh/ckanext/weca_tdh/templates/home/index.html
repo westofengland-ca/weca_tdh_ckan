@@ -4,6 +4,12 @@
 {% block toolbar %}{% endblock %}
 {% block primary_class %}landing-page{% endblock %}
 
+{% block form_wrapper %}
+  <form action="/dataset" method="get">
+    {{ super() }}
+  </form>
+{% endblock %}
+
 {% block primary_content %}
   {% block landing_page_about %} 
     <div class="gem-c-title govuk-!-margin-bottom-4">

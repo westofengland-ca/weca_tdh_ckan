@@ -7437,6 +7437,7 @@ main {
 .search-wrapper {
   position: relative;
   width: 100%;
+  padding-right: 0px;
 }
 
 input.search-input {
