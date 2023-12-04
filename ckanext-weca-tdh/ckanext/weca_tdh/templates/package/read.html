@@ -39,7 +39,7 @@
 
             {% block metadata_list %}
               <dl class="metadata">
-                <dt>Published by:</dt>
+                <dt>{{ _('Published by:') }}</dt>
                 <dd property="dc:creator">{{ pkg.organization.title }}</dd>
                 <dt>{{ _('Last updated:') }}</dt>
                 <dd property="dc:date">{{ h.filter_datetime(pkg.metadata_modified, 'short') }}</dd>
@@ -49,6 +49,8 @@
                 <dd property="dc:rights">
                   {% snippet "package/snippets/package_license.html", pkg_dict=pkg %}
                 </dd>
+                <dt>{{ _('Data Lake:') }}</dt>
+                <dd>{{ _('Available') if pkg.datalake_active else _('Not available') }}</dd>
               </dl>
               {% block package_summary %}
                 <h3 class="heading-small">{{ _('Summary') }}</h3>
@@ -98,11 +100,12 @@
     {% endblock %}
 
     {% block connect %}
-      {% if c.userobj %}
+      {% if pkg.datalake_active %}
         <section class="connect">
           <div class="package-content">
             <h2 class="heading-medium">{{ _('Connect') }}</h2>
-            <p><a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub using Power BI.') }}</a></p>
+            <p>{{ _('This dataset is available to query using Power BI.') }}</p>
+            <p><a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub.') }}</a></p>
           </div>
         </section>
       {% endif %}
