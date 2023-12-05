@@ -1,5 +1,6 @@
 describe('Landing page', () => {
   before(() => {
+    cy.deleteAllData()
     cy.createTestData()
   })
 
@@ -19,7 +20,7 @@ describe('Landing page', () => {
   it('search for datasets', () => {
     const searchQuery = "Bus"
 
-    cy.get('[data-cy="search-input"]').should('have.attr', 'placeholder', 'Search Transport Data Hub')
+    cy.get('[data-cy="search-input"]').should('have.attr', 'placeholder', 'Search Transport Data Hub...')
     cy.get('[data-cy="search-input"]').type(searchQuery)
     cy.get('[data-cy="search-input"]').should("have.value", searchQuery)
 

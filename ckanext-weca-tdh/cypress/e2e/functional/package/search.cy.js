@@ -1,5 +1,6 @@
 describe("Dataset search page", () => {
   before(() => {
+    cy.deleteAllData()
     cy.createTestData()
   })
 
@@ -31,7 +32,7 @@ describe("Dataset search page", () => {
   it("filter datasets using keywords", () => {
     const searchQuery = "Bus"
 
-    cy.get('[data-cy="search-input"]').should('have.attr', 'placeholder', 'Search Transport Data Hub')
+    cy.get('[data-cy="search-input"]').should('have.attr', 'placeholder', 'Search Transport Data Hub...')
     cy.get('[data-cy="search-input"]').type(searchQuery)
     cy.get('[data-cy="search-input"]').should("have.value", searchQuery)
 
