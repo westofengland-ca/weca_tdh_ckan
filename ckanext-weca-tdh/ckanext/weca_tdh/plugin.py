@@ -3,21 +3,24 @@ import ckan.lib.helpers as h
 from ckan.model.user import AnonymousUser
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+from ckan.types import Context, Schema
 from flask import Blueprint, flash, request
 from inspect import getmembers, isfunction
 from ckanext.weca_tdh.auth import adauthbp
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.lib import helpers
+from typing import Any
 import logging
 
 log = logging.getLogger(__name__)
 
-class WecaTdhPlugin(plugins.SingletonPlugin):
-    plugins.implements(plugins.IConfigurer, inherit=True)
-    plugins.implements(plugins.ITemplateHelpers)
-    plugins.implements(plugins.IBlueprint, inherit=True)
+class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IAuthenticator, inherit=True)
+    plugins.implements(plugins.IBlueprint, inherit=True)
+    plugins.implements(plugins.IConfigurer, inherit=True)
+    plugins.implements(plugins.IDatasetForm)
+    plugins.implements(plugins.ITemplateHelpers)
 
     # IConfigurer
     def update_config(self, config: CKANConfig):
@@ -75,3 +78,45 @@ class WecaTdhPlugin(plugins.SingletonPlugin):
             staticbp.add_url_rule(*rule)
 
         return [staticbp, adauthbp]
+
+    ''' 
+    Modify dataset metadata fields
+    '''  
+    def _modify_package_schema(self, schema: Schema) -> Schema:
+        # modify package schema with custom field
+        schema.update({
+            'datalake_active': [toolkit.get_validator('ignore_missing'),
+                                toolkit.get_validator('boolean_validator'),
+                                toolkit.get_converter('convert_to_extras')]
+        })
+        return schema
+
+    def create_package_schema(self) -> Schema:
+        # get default package schema
+        schema: Schema = super(WecaTdhPlugin, self).create_package_schema()
+        return self._modify_package_schema(schema)
+
+    def update_package_schema(self) -> Schema:
+        schema: Schema = super(WecaTdhPlugin, self).update_package_schema()
+        return self._modify_package_schema(schema)
+
+    def show_package_schema(self) -> Schema:
+        schema: Schema = super(WecaTdhPlugin, self).show_package_schema()
+        schema.update({
+            'datalake_active': [toolkit.get_converter('convert_from_extras'),
+                                toolkit.get_validator('ignore_missing'),
+                                toolkit.get_validator('boolean_validator')]
+        })
+        return schema
+    
+    def setup_template_variables(self, context: Context, data_dict: dict[str, Any]) -> Any:
+        return super(WecaTdhPlugin, self).setup_template_variables(context, data_dict)
+    
+    def package_form(self) -> Any:
+        return super(WecaTdhPlugin, self).package_form()
+    
+    def is_fallback(self):
+        return True
+
+    def package_types(self) -> list[str]:
+        return []

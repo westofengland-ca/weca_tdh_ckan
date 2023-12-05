@@ -7685,13 +7685,13 @@ p.gem-c-lead-paragraph {
   display: inline-block;
   margin-bottom: 5px;
   vertical-align: text-top;
+  min-width: fit-content;
 }
 
 .metadata-box dt {
-  width: 30%;
+  width: 25%;
   font-weight: bold;
   white-space: nowrap;
-  margin-right: 5px;
 }
 
 .metadata-box dd {
@@ -7782,6 +7782,12 @@ iframe {
 
 .ccc-intro a, .ccc-info a {
   text-decoration: underline !important;
+}
+
+/* Forms /
+///////*/
+.form-actions .control-required-message {
+  float: right;
 }
 
 /* temp flask debug overflow fix */

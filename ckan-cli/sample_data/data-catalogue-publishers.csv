@@ -1,22 +1,22 @@
 GUID,Slug,Title,Description
-9b851c1f-7b88-4aac-bb8d-64817516a130,bnes_council,Bath & North East Somerset Council,Brief description of Publisher.
-42f47835-29a4-4465-9ffd-957f60403f8a,bristol_city_council,Bristol City Council,Brief description of Publisher.
-dc6cc828-ca83-4507-b289-887ecd7e43ed,british_geological_survey,British Geological Survey,Brief description of Publisher.
-5f6180e2-e071-4445-83aa-3830ff6fcb35,dpt_for_energy_security_net_zero,Department for Energy Security and Net Zero,Brief description of Publisher.
-a422fe6d-36f2-4d5f-8f98-59b14c70013a,dpt_for_transport,Department for Transport (DfT),Brief description of Publisher.
-d15d9058-063d-48cf-8682-1d73a515f1e7,environment_agency,Environment Agency,Brief description of Publisher.
-0e523272-fb6b-4faa-9e97-d4733f04a2c2,gov_uk,Gov.UK,Brief description of Publisher.
-40185f6a-dabf-4fb1-a8f9-66ae3c6ae871,ministry_of_housing_comm_local_gov,"Ministry of Housing, Communities & Local Government",Brief description of Publisher.
-63610b97-1255-49b2-b445-08a303c8481e,national_highways,National Highways,Brief description of Publisher.
-37fa0158-abaf-43e1-8d09-64ae38c8ae99,national_health_service,NHS,Brief description of Publisher.
-31b3d451-98c4-42b9-9e53-162b9b873717,north_somerset_council,North Somerset Council,Brief description of Publisher.
-2cde9b5d-dc01-4a1f-8f9a-43ea797dc2d6,ofcom,Ofcom,Brief description of Publisher.
-1ef83f83-cb32-48fd-878e-da18e33874b0,office_for_low_emission_vehicles,Office for Low Emission Vehicles,Brief description of Publisher.
-c8057dc9-737b-48e6-862b-020cebca1ddc,office_for_national_statistics,Office for National Statistics (ONS),Brief description of Publisher.
-be80e492-2e52-45fe-be9e-34b0864e2f45,office_of_rail_and_road,Office of Rail and Road (ORR),Brief description of Publisher.
-fb2e7fe2-0a74-4f33-be2d-259ae2e0d87e,ordnance_survey,Ordnance Survey (OS),Brief description of Publisher.
-0769d96b-d737-48f3-8562-b3232f867990,south_gloucestershire_council,South Gloucestershire Council,Brief description of Publisher.
-398c9379-b615-46a6-933d-1b58ee3dffeb,sports_england,Sports England,Brief description of Publisher.
-42250ace-1a77-445e-91be-dba4698d28bb,sustrans,Sustrans,Brief description of Publisher.
-3ed32c52-8f45-4f44-86a9-91a21c20cf5b,traveline,Traveline,Brief description of Publisher.
-6e53aa68-fa65-48e8-bbc9-23b4da3976e6,travelwest,Travelwest,Brief description of Publisher.
+9b851c1f-7b88-4aac-bb8d-64817516a130,bnes_council,Bath & North East Somerset Council,"Local authority providing governmental services including planning, social services, and environmental management."
+42f47835-29a4-4465-9ffd-957f60403f8a,bristol_city_council,Bristol City Council,"Local authority providing governmental services including planning, social services, and environmental management."
+dc6cc828-ca83-4507-b289-887ecd7e43ed,british_geological_survey,British Geological Survey,"A scientific research centre focused on understanding the Earth's geology, including surveying and monitoring the UK's land and marine environments."
+5f6180e2-e071-4445-83aa-3830ff6fcb35,dpt_for_energy_security_net_zero,Department for Energy Security and Net Zero,A UK government department responsible for ensuring the nation's energy security and leading efforts to achieve net zero carbon emissions.
+a422fe6d-36f2-4d5f-8f98-59b14c70013a,dpt_for_transport,Department for Transport (DfT),"The UK government department responsible for the English transport network and a limited number of transport matters in Scotland, Wales, and Northern Ireland that have not been devolved."
+d15d9058-063d-48cf-8682-1d73a515f1e7,environment_agency,Environment Agency,"An executive non-departmental public body of the UK government, responsible for protecting and enhancing the environment in England."
+0e523272-fb6b-4faa-9e97-d4733f04a2c2,gov_uk,Gov.UK,"The UK government's digital service platform, providing information and services for citizens, such as tax filing, driving licenses, and public service information."
+40185f6a-dabf-4fb1-a8f9-66ae3c6ae871,ministry_of_housing_comm_local_gov,"Ministry of Housing, Communities & Local Government","A UK government department responsible for local government, housing, urban regeneration, planning, and fire and rescue services."
+63610b97-1255-49b2-b445-08a303c8481e,national_highways,National Highways,"Highways England is a government-owned company charged with operating, maintaining and improving motorways and major A roads in England."
+37fa0158-abaf-43e1-8d09-64ae38c8ae99,national_health_service,NHS,"The publicly funded healthcare system of the United Kingdom, providing a wide range of health services to residents."
+31b3d451-98c4-42b9-9e53-162b9b873717,north_somerset_council,North Somerset Council,"Local authority providing governmental services including planning, social services, and environmental management."
+2cde9b5d-dc01-4a1f-8f9a-43ea797dc2d6,ofcom,Ofcom,"The UK government-approved regulatory authority for broadcasting, telecommunications, and postal industries in the UK."
+1ef83f83-cb32-48fd-878e-da18e33874b0,office_for_low_emission_vehicles,Office for Low Emission Vehicles,The Office for Low Emission Vehicles (OLEV) is a team working across government to support the early market for ultra-low emission vehicles (ULEV).
+c8057dc9-737b-48e6-862b-020cebca1ddc,office_for_national_statistics,Office for National Statistics (ONS),The UK's largest independent producer of official statistics and the recognized national statistical institute.
+be80e492-2e52-45fe-be9e-34b0864e2f45,office_of_rail_and_road,Office of Rail and Road (ORR),"The Office of Rail and Road is a non-ministerial government department responsible for the economic and safety regulation of Britain's railways, and the economic monitoring of National Highways."
+fb2e7fe2-0a74-4f33-be2d-259ae2e0d87e,ordnance_survey,Ordnance Survey (OS),"The national mapping agency for Great Britain, known for its detailed maps of the country’s terrain."
+0769d96b-d737-48f3-8562-b3232f867990,south_gloucestershire_council,South Gloucestershire Council,"Local authority providing governmental services including planning, social services, and environmental management."
+398c9379-b615-46a6-933d-1b58ee3dffeb,sports_england,Sports England,"A non-departmental public body under the Department for Digital, Culture, Media and Sport, tasked with growing and developing grassroots sport in England."
+42250ace-1a77-445e-91be-dba4698d28bb,sustrans,Sustrans,"A UK charity promoting sustainable transport, focusing on cycling, walking, and public transport solutions."
+3ed32c52-8f45-4f44-86a9-91a21c20cf5b,traveline,Traveline,"A partnership of transport companies, local authorities, and passenger groups providing information about all public transport services in the UK."
+6e53aa68-fa65-48e8-bbc9-23b4da3976e6,travelwest,Travelwest,A collaboration between local councils in the West of England to promote sustainable travel options in the region.
