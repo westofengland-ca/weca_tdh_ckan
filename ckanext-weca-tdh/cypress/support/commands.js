@@ -116,8 +116,6 @@ Cypress.Commands.add('deleteAllData', () => {
   })
 })
 
-
-
 Cypress.Commands.add('createTestData', () => {
   const apiKey = Cypress.env('API_KEY')
   const url = Cypress.config().baseUrl
@@ -170,8 +168,6 @@ Cypress.Commands.add('createTestData', () => {
     })
   })
 })
-
-
 
 Cypress.Commands.add('deleteTestData', () => {
   const apiKey = Cypress.env('API_KEY')
@@ -230,4 +226,18 @@ Cypress.Commands.add('deleteTestData', () => {
       })
     })
   })
+})
+
+Cypress.Commands.add('getPublisherDatasets', (publisher) => {
+    cy.fixture('datasets.json').then((datasets) => {
+      // get datasets that belong to the publisher
+      cy.wrap(datasets.filter(x => x.owner_org == publisher.name)).as('datasets')
+    })
+})
+
+Cypress.Commands.add('getTopicDatasets', (topic) => {
+    cy.fixture('datasets.json').then((datasets) => {
+      // get datasets that belong to the topic
+      cy.wrap(datasets.filter(x => x.groups.some(group => group.name == topic.name))).as('datasets')
+    })
 })
