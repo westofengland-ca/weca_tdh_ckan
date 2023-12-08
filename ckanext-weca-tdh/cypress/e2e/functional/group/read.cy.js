@@ -35,7 +35,7 @@ describe('Topic page', () => {
       cy.get('[data-cy="search-sort"]').select("Name Ascending", {force: true})
       cy.get('[data-cy="dataset-title"]').first().should("contain.text", datasets[0].title)
 
-      // name ascending
+      // last modified
       cy.get('[data-cy="search-sort"]').select("Last Modified")
       cy.get('[data-cy="dataset-title"]').first().should("contain.text", datasets[0].title)
     })

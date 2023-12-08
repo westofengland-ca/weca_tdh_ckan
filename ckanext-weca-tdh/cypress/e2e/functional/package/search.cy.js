@@ -13,20 +13,26 @@ describe("Dataset search page", () => {
   })
 
   it("sort search results", () => {
-    // relevancy
-    cy.get('[data-cy="dataset-title"]').first().should("contain", "Bus network usage")
+    cy.fixture('datasets.json').then((datasets) => {
+      // relevancy
+      cy.get('[data-cy="search-sort"]').select("Relevance")
+      cy.get('[data-cy="dataset-title"]').first().should("contain.text", datasets[datasets.length-1].title)
 
-    // name descending
-    cy.get('[data-cy="search-sort"]').select(2)
-    cy.get('[data-cy="dataset-title"]').first().should("contain", "Train stop locations")
+      // sort the datasets alphabetically
+      datasets = datasets.sort((a, b) => a.title.localeCompare(b.title))
 
-    // name ascending
-    cy.get('[data-cy="search-sort"]').select(1)
-    cy.get('[data-cy="dataset-title"]').first().should("contain", "Bus network usage")
+      // name descending
+      cy.get('[data-cy="search-sort"]').select("Name Descending")
+      cy.get('[data-cy="dataset-title"]').first().should("contain.text", datasets[datasets.length-1].title)
 
-    // last modified
-    cy.get('[data-cy="search-sort"]').select(3)
-    cy.get('[data-cy="dataset-title"]').first().should("contain", "Bus network usage")
+      // name ascending
+      cy.get('[data-cy="search-sort"]').select("Name Ascending", {force: true})
+      cy.get('[data-cy="dataset-title"]').first().should("contain.text", datasets[0].title)
+
+      // last modified
+      cy.get('[data-cy="search-sort"]').select("Last Modified")
+      cy.get('[data-cy="dataset-title"]').first().should("contain.text", datasets[0].title)
+    })
   })
 
   it("filter datasets using keywords", () => {
