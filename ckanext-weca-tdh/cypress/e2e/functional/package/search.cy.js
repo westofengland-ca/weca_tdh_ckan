@@ -14,19 +14,19 @@ describe("Dataset search page", () => {
 
   it("sort search results", () => {
     // relevancy
-    cy.get('.dataset-heading').first().should("contain", "Bus network usage")
+    cy.get('[data-cy="dataset-title"]').first().should("contain", "Bus network usage")
 
     // name descending
     cy.get('[data-cy="search-sort"]').select(2)
-    cy.get('.dataset-heading').first().should("contain", "Train stop locations")
+    cy.get('[data-cy="dataset-title"]').first().should("contain", "Train stop locations")
 
     // name ascending
     cy.get('[data-cy="search-sort"]').select(1)
-    cy.get('.dataset-heading').first().should("contain", "Bus network usage")
+    cy.get('[data-cy="dataset-title"]').first().should("contain", "Bus network usage")
 
     // last modified
     cy.get('[data-cy="search-sort"]').select(3)
-    cy.get('.dataset-heading').first().should("contain", "Bus network usage")
+    cy.get('[data-cy="dataset-title"]').first().should("contain", "Bus network usage")
   })
 
   it("filter datasets using keywords", () => {
@@ -39,7 +39,7 @@ describe("Dataset search page", () => {
     cy.get('[data-cy="search-button"]').click()
 
     cy.get('[data-cy="results-summary"]').should("contain", searchQuery)
-    cy.get('.dataset-heading').first().should("contain", searchQuery)
+    cy.get('[data-cy="dataset-title"]').first().should("contain", searchQuery)
   })
 
   it("filter datasets using search facets", () => {
@@ -48,7 +48,7 @@ describe("Dataset search page", () => {
     cy.get('[data-cy="filter-res_format"]').select("CSV")
     
     cy.get('[data-cy="filter-button"]').click()
-    cy.get('.dataset-heading').first().should("contain", "Train stop locations")
+    cy.get('[data-cy="dataset-title"]').first().should("contain", "Train stop locations")
 
     // clear filters
     cy.get('[data-cy="filter-remove"]').click()
