@@ -27,8 +27,8 @@ describe('Landing page', () => {
     cy.get('[data-cy="search-button"]').click()
     cy.url().should('eq', Cypress.config().baseUrl + 'dataset?q=' + searchQuery)
 
-    cy.get('[data-cy="results-summary"]').should("contain", searchQuery)
-    cy.get('.dataset-heading').should("contain", searchQuery)
+    cy.get('[data-cy="results-summary"]').should("contain.text", searchQuery)
+    cy.get('[data-cy="dataset-title"]').should("contain.text", searchQuery)
   })
 
   it('list most popular topics', () => {
