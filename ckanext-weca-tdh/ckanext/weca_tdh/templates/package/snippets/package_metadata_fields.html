@@ -7,7 +7,7 @@
       <div class="controls">
         <select class="form-control" id="field-dl" name="datalake_active">
           <option value="false" {% if data.get('datalake_active', False) == False %} selected="selected" {% endif %}>{{ _('False') }}</option>
-          <option value="true" {% if data.get('datalake_active', 'none') == True %} selected="selected" {% endif %}>{{ _('True') }}</option>
+          <option value="true" {% if data.get('datalake_active', False) == True %} selected="selected" {% endif %}>{{ _('True') }}</option>
         </select>
       </div>
     </div>

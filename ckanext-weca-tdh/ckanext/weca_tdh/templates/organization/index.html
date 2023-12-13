@@ -29,7 +29,7 @@
     </div>
   {% endblock %}
   {% block search_results_count %}
-    <span class="results_summary">
+    <span class="results_summary" data-cy="results-summary">
       <span class="govuk-body-m govuk-!-font-weight-bold">{% snippet 'snippets/search_result_text.html', query=q, sort_by_selected=sort_by_selected, count=page.item_count, type=group_type %}</span>
     </span>
   {% endblock %}

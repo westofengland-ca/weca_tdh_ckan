@@ -12,8 +12,8 @@
     {% for group in pkg_dict.groups %}
       {{ group_list.append(group.title) or "" }}
     {% endfor %}
-    <dd>{{ ', '.join(group_list) }}</dd>
+      {{ ', '.join(group_list) }}
   {% else %}
-    <dd>{{ _('No associated topics') }}</dd>
+      {{ _('No associated topics') }}
   {% endif %}
 {% endblock %}

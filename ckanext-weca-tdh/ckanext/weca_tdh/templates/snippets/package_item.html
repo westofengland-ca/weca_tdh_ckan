@@ -1,9 +1,17 @@
 {% ckan_extends %}
 
+{% block heading_title %}
+  <a href="{{ h.url_for('%s.read' % package.type, id=package.name) }}" title="{{ title }}" data-cy="dataset-title">
+    {{ title|truncate(80) }}
+  </a>
+{% endblock%}
+
 {% block notes %}
-  <div class="dataset-meta">
-    <p><b>Published by:</b> {{ package.organization.title }}</p>
-    <p><b>Last Updated:</b> {{ h.filter_datetime(package.metadata_modified, 'short') }}</p>
+  <div class="dataset-metadata">
+    <p data-cy="dataset-published"><b>Published by:</b> {{ package.organization.title }}</p>
+    <p data-cy="dataset-updated"><b>Last Updated:</b> {{ h.filter_datetime(package.metadata_modified, 'short') }}</p>
   </div>
-  {{ super() }}
+  <div data-cy="dataset-notes">
+    {{ super() }}
+  </div>
 {% endblock %}
