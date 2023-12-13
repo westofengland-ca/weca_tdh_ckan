@@ -1,7 +1,5 @@
 describe('Publisher page', () => {
 
-  let publisher;
-
   before(() => {
     cy.deleteAllData()
     cy.createTestData()
@@ -13,7 +11,7 @@ describe('Publisher page', () => {
 
   beforeEach(() => {
     cy.fixture('publishers.json').then((publishers) => {
-      publisher = publishers[1]
+      let publisher = publishers[1]
       cy.wrap(publisher).as('publisher')
       cy.getPublisherDatasets(publisher)
       cy.visit('/organization/' + publisher.name)
