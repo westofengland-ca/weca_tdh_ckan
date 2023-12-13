@@ -8,15 +8,15 @@
 
 {% block primary %}
   <article class="module govuk-body" role="main">
-      {% block connector %}
-        <h1 class="page-heading">{{ _('TDH Partner Connect file') }}</h1>
-        {% snippet 'snippets/tdh_connect_text.html' %}
+    {% block connector %}
+      <h1 class="page-heading">{{ _('TDH Partner Connect file') }}</h1>
+      {% snippet 'snippets/tdh_connect_text.html' %}
 
-        <h3>Download</h3>
-        <div id="download-link"> 
-          <a href="{{ h.url_for('weca_tdh.tdh_partner_connect_file') }}" download="tdh-partner-connect.pbids">{{ _('TDH Partner Connect file') }}</a>
-        </div>
-      {% endblock %}
+      <h3>Download</h3>
+      <div id="download-link"> 
+        <a href="{{ h.url_for('weca_tdh.tdh_partner_connect_file') }}" download="tdh-partner-connect.pbids">{{ _('TDH Partner Connect file') }}</a>
+      </div>
+    {% endblock %}
   </article>
 {% endblock %}
 

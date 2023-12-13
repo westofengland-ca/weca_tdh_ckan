@@ -22,10 +22,10 @@
   {% endfor %}
 
   {{ govukSelect({
-    'id': "sort",
+    'id': "search-sort",
     'name': "sort",
     'items': sort_items,
-    'attributes': {'onchange': "this.form.submit()", 'data-cy': 'search-sort'},
+    'attributes': {'onchange': "this.form.submit()", 'aria-labelledby': 'search-sort', 'data-cy': 'search-sort'},
     }) 
   }}
 {% endblock %}

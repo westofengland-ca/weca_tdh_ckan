@@ -15,13 +15,13 @@
 
   {% if config['feature_flag.ga.enabled'] == 'True' %}
     {% block google_analytics %}
-        {% asset 'weca_tdh/google_analytics-js' %}
-        {% set ga_config = h.get_google_analytics_config() %}
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_config.get('ga_id') }}"></script>
+      {% asset 'weca_tdh/google_analytics-js' %}
+      {% set ga_config = h.get_google_analytics_config() %}
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_config.get('ga_id') }}"></script>
 
-        <div class="js-hide" data-module="google_analytics"
-          data-module-ga_id="{{ ga_config.get('ga_id') }}">
-        </div>
+      <div class="js-hide" data-module="google_analytics"
+        data-module-ga_id="{{ ga_config.get('ga_id') }}">
+      </div>
     {% endblock %}
   {% endif %}
 
@@ -37,5 +37,4 @@
         data-module-analytics_enabled="{{ config['feature_flag.ga.enabled'] }}">
     </div>
   {% endblock %}
-
 {% endblock %}
