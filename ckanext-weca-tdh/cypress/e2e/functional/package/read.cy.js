@@ -45,13 +45,8 @@ describe('Product page', () => {
       cy.get('.package-manage').should("not.exist")
 
       // login
-      cy.visit('/user/login')
-      cy.get('input[id="field-login"]').type(Cypress.env('CKAN_USERNAME'))
-      cy.get('input[id="field-password"]').type(Cypress.env('CKAN_PASSWORD'))
-      cy.get('[data-cy="login-button"]').click()
+      cy.loginUser(`dataset/${dataset.name}`)
 
-      // when logged in
-      cy.visit('/dataset/' + dataset.name)
       cy.get('.package-manage').should("exist").click()
       cy.url().should('contain', Cypress.config().baseUrl + 'dataset/edit/' + dataset.name)
     })
@@ -59,11 +54,8 @@ describe('Product page', () => {
 
   it("explore data links", () => {
     cy.get('@dataset').then(dataset => {
-      cy.visit('/user/login')
-      cy.get('input[id="field-login"]').type(Cypress.env('CKAN_USERNAME'))
-      cy.get('input[id="field-password"]').type(Cypress.env('CKAN_PASSWORD'))
-      cy.get('[data-cy="login-button"]').click()
-      cy.visit('/dataset/' + dataset.name)
+      // login
+      cy.loginUser(`dataset/${dataset.name}`)
 
       cy.get('section').get('.data-links').should('exist')
       cy.get('[data-cy="data-table"]').find('td').eq(0).should('contain.text', dataset.resources[0].name)
@@ -75,15 +67,12 @@ describe('Product page', () => {
     cy.get('section').get('.contact').should('contain.text', 'ftz@westofengland-ca.gov.uk')
   })
 
-  it.only('view edit section', () => {
+  it('view edit section', () => {
     cy.get('@dataset').then(dataset => {
       cy.get('section').get('.edit').find('p').should('contain.text', 'You must have an account to suggest edits to this dataset')
 
-      cy.visit('/user/login')
-      cy.get('input[id="field-login"]').type(Cypress.env('CKAN_USERNAME'))
-      cy.get('input[id="field-password"]').type(Cypress.env('CKAN_PASSWORD'))
-      cy.get('[data-cy="login-button"]').click()
-      cy.visit('/dataset/' + dataset.name)
+      // login
+      cy.loginUser(`dataset/${dataset.name}`)
 
       cy.get('section').get('.edit').should('not.exist')
     })

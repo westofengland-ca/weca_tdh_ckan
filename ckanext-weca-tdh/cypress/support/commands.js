@@ -242,7 +242,6 @@ Cypress.Commands.add('getTopicDatasets', (topic) => {
     })
 })
 
-
 Cypress.Commands.add('getPackage', (dataset) => {
   const apiKey = Cypress.env('API_KEY')
   const url = Cypress.config().baseUrl
@@ -262,4 +261,14 @@ Cypress.Commands.add('getPackage', (dataset) => {
   }).then(response => {
       cy.wrap(response.body.result).as('dataset')
   })
+})
+
+Cypress.Commands.add('loginUser', (callback) => {
+  const url = Cypress.config().baseUrl
+
+  cy.visit(`${url}/user/login`)
+  cy.get('input[id="field-login"]').type(Cypress.env('CKAN_USERNAME'))
+  cy.get('input[id="field-password"]').type(Cypress.env('CKAN_PASSWORD'))
+  cy.get('[data-cy="login-button"]').click()
+  cy.visit(`${url}/${callback}`)
 })
