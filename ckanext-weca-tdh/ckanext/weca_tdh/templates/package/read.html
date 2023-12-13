@@ -26,7 +26,7 @@
             {% endblock %}
 
             {% block package_heading %}
-              <h1 class="metadata-heading">
+              <h1 class="metadata-heading" data-cy="package-title">
                 {{ h.dataset_display_name(pkg) }}
                 {% if pkg.state.startswith('draft') %}
                   [{{ _('Draft') }}]
@@ -40,21 +40,23 @@
             {% block metadata_list %}
               <dl class="metadata">
                 <dt>{{ _('Published by:') }}</dt>
-                <dd property="dc:creator">{{ pkg.organization.title }}</dd>
+                <dd property="dc:creator" data-cy="package-publisher">{{ pkg.organization.title }}</dd>
                 <dt>{{ _('Last updated:') }}</dt>
-                <dd property="dc:date">{{ h.filter_datetime(pkg.metadata_modified, 'short') }}</dd>
+                <dd property="dc:date" data-cy="package-updated">{{ h.filter_datetime(pkg.metadata_modified, 'short') }}</dd>
                 <dt>{{ _('Topics:') }}</dt>
+                <dd data-cy="package-topics">
                   {% snippet "package/snippets/package_topics.html", pkg_dict=pkg %}
+                </dd>
                 <dt>{{ _('Licence:') }}</dt>
-                <dd property="dc:rights">
+                <dd property="dc:rights" data-cy="package-license">
                   {% snippet "package/snippets/package_license.html", pkg_dict=pkg %}
                 </dd>
                 <dt>{{ _('Data Lake:') }}</dt>
-                <dd>{{ _('Available') if pkg.datalake_active else _('Not available') }}</dd>
+                <dd data-cy="package-datalake">{{ _('Available') if pkg.datalake_active else _('Not available') }}</dd>
               </dl>
               {% block package_summary %}
                 <h3 class="heading-small">{{ _('Summary') }}</h3>
-                <div class="notes embedded-content">
+                <div class="notes embedded-content" data-cy="package-notes">
                   {% if pkg.notes %}
                     {{ h.render_markdown(h.get_translated(pkg, 'notes')) }}
                   {% else %}
@@ -71,14 +73,14 @@
         <div class="column-one-third dataset-right">
           <div class="dataset-right-sidebar">
             <h3 class="heading-small">{{ _('More from this publisher') }}</h3>
-            <a class="govuk-link" href="/organization/{{ pkg.organization.name }}">{{ _('All datasets from') }} {{ pkg.organization.title }}</a>
+            <a class="govuk-link" href="/organization/{{ pkg.organization.name }}" data-cy="publisher-link">{{ _('All datasets from') }} {{ pkg.organization.title }}</a>
           </div>
           {% block package_manage %}
             {% if self.content_action() | trim %}
               <div class="content_action">
                 {% block content_action %}
                   {% if h.check_access('package_update', {'id':pkg.id }) %}
-                    {% link_for _('Manage this dataset'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-light', icon='wrench' %}
+                    {% link_for _('Manage this dataset'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-light package-manage', icon='wrench' %}
                   {% endif %}
                 {% endblock %}
               </div>

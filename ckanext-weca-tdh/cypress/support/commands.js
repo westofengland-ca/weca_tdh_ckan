@@ -241,3 +241,25 @@ Cypress.Commands.add('getTopicDatasets', (topic) => {
       cy.wrap(datasets.filter(x => x.groups.some(group => group.name == topic.name))).as('datasets')
     })
 })
+
+
+Cypress.Commands.add('getPackage', (dataset) => {
+  const apiKey = Cypress.env('API_KEY')
+  const url = Cypress.config().baseUrl
+
+  cy.request({
+    method: 'GET',
+    url: `${url}api/action/package_show`,
+    failOnStatusCode: false,
+    headers: {
+      'Authorization': apiKey,
+      'User-Agent': 'CKAN-CLI'
+    },
+    body: {
+      id: "bus_timetable"
+    }
+    
+  }).then(response => {
+      cy.wrap(response.body.result).as('dataset')
+  })
+})

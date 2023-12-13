@@ -32,7 +32,8 @@
         {% block login_button %}
           {{ govukButton({
             'text': "Sign in",
-            'type': "submit"
+            'type': "submit",
+            'attributes': {'data-cy': 'login-button'},
           }) }}
         {% endblock %}
       </div>
