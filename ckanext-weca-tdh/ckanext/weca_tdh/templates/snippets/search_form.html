@@ -15,7 +15,7 @@
     <label class="govuk-label sort-label" for="sort">{{ label }}</label>
   {% endif %}
   <div class="search-wrapper">
-    <input class="search-input" type="text" placeholder="{{ placeholder }}" name="q" value="{{ query }}" data-cy="search-input">           
-    <button class="search-submit" type="submit" data-cy="search-button"><i class="fa fa-search"></i></button>
+    <input class="search-input" type="text" placeholder="{{ placeholder }}" name="q" value="{{ query }}" aria-label="search-input" data-cy="search-input">           
+    <button class="search-submit" type="submit" title="search-button" data-cy="search-button"><i class="fa fa-search"></i></button>
   </div>
 {% endblock %}    

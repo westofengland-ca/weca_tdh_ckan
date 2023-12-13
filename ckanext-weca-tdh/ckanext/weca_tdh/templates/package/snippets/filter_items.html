@@ -11,23 +11,23 @@
 {% from "components/select/macro.html" import govukSelect %}
 
 {% block filter_items %}
-    {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format"} %}
-    {% set filter_items = [{'value': "", 'text': ""}] %}
+  {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format"} %}
+  {% set filter_items = [{'value': "", 'text': ""}] %}
 
-    {% set items = h.get_facet_items_dict(name, search_facets) %}
-    {% for item in items %}    
-        {% if ''.join(fields_grouped[name]) == item.name %}
-            {% set selected = true %}   
-        {% endif %}
-        {{ filter_items.append({'value': item.name, 'text': item.display_name, 'selected': selected}) or "" }}
-    {% endfor %}
+  {% set items = h.get_facet_items_dict(name, search_facets) %}
+  {% for item in items %}    
+    {% if ''.join(fields_grouped[name]) == item.name %}
+        {% set selected = true %}   
+    {% endif %}
+    {{ filter_items.append({'value': item.name, 'text': item.display_name, 'selected': selected}) or "" }}
+  {% endfor %}
 
-    <label class="govuk-label sort-label" for="sort">{{ filter_labels[name] }}</label>
-    {{ govukSelect({
-        'id': name,
-        'name': name,
-        'items': filter_items,
-        'attributes': {'data-cy': 'filter-' + name}
-        }) 
-    }}
+  <label class="govuk-label sort-label" for="sort">{{ filter_labels[name] }}</label>
+  {{ govukSelect({
+    'id': name,
+    'name': name,
+    'items': filter_items,
+    'attributes': {'aria-label': filter_labels[name], 'data-cy': 'filter-' + name}
+    }) 
+  }}
 {% endblock %}
