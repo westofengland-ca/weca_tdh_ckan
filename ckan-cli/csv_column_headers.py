@@ -15,6 +15,7 @@ DATASET_VOLUME = 'Volume'
 DATASET_CHANGE_FREQUENCY = 'Frequency of change'
 DATASET_DATA_OWNER = 'Data Owner'
 DATASET_DATA_AGREEMENTS = 'Data agreements'
+DATASET_LICENSE = 'License'
 DATASET_STATUS = 'Status'
 DATASET_CONTACT = 'Contact'
 
