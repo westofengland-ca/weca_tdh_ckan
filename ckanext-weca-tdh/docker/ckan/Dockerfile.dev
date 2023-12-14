@@ -2,6 +2,8 @@ FROM ckan/ckan-dev:2.10.1
 
 # Set up environment variables
 ENV APP_DIR=/srv/app
+ENV SRC_EXTENSIONS_DIR=/srv/app/src_extensions
+ENV WECA_TDH_DIR=${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh/ckanext/weca_tdh
 ENV TZ=UTC
 RUN echo ${TZ} > /etc/timezone
 
