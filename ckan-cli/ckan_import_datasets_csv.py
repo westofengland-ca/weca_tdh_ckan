@@ -51,6 +51,7 @@ try:
                 'title': row[csv_column_headers.DATASET_TITLE],
                 'owner_org': row[csv_column_headers.DATASET_PUBLISHER], # Publisher
                 'private': False if row[csv_column_headers.DATASET_VISIBILITY] else True,
+                'license_id': row[csv_column_headers.DATASET_LICENSE],
                 'notes': row[csv_column_headers.DATASET_DESC] or "No description provided",
                 'resources': [
                   {

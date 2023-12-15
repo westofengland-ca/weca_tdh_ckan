@@ -97,6 +97,9 @@ ckan config-tool $CKAN_INI ckan.auth.user_delete_groups=False
 # Set dataset level auth control
 ckan config-tool $CKAN_INI "ckan.auth.allow_dataset_collaborators = $CKAN_AUTH_ALLOW_DATASET_COLLABORATORS"
 
+# Set license group
+ckan config-tool $CKAN_INI licenses_group_url=file:///$WECA_TDH_DIR/config/licenses.json
+
 # Set the feature flag configs 
 ckan config-tool $CKAN_INI "feature_flag.auth.restricted_access = $FEATURE_FLAG_AUTH_RESTRICTED_ACCESS"
 ckan config-tool $CKAN_INI "feature_flag.auth.external_only = $FEATURE_FLAG_AUTH_EXTERNAL_ONLY"
