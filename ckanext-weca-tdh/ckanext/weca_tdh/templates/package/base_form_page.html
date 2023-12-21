@@ -12,3 +12,18 @@
     </div>
   </section>
 {% endblock %}
+
+{% block info_module %}
+  <section class="module module-narrow module-shallow">
+    <h2 class="module-heading"><i class="fa fa-info-circle"></i> {{ _('What are datasets?') }}</h2>
+    <div class="module-content">
+      <p>
+        {% trans %}
+        A Dataset is a collection of one or more data resources,
+        combined with a description and other defining metadata.
+        Datasets are what users see when searching for data.
+        {% endtrans %}
+      </p>
+    </div>
+  </section>
+{% endblock %}
