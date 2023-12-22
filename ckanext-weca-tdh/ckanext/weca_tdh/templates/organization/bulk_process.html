@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{% block secondary_content %}
+  {% snippet 'snippets/organization.html', organization=organization %}
+
+  {% set facet_titles = {'organization': "Publishers", 'groups': "Topics", 'res_format': "Formats", "license_id": "Licenses"} %}
+  <div class="filters">
+    {% for facet in facet_titles %}
+      {{ h.snippet('snippets/facet_list.html', title=facet_titles[facet], name=facet, extras={'id':group_dict.id}, search_facets=search_facets) }}
+    {% endfor %}
+  </div>
+{% endblock %}

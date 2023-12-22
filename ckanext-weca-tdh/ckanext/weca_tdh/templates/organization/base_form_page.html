@@ -1,0 +1,17 @@
+{% ckan_extends %}
+
+{% block primary_content %}
+  <article class="module">
+    {% block page_header %}
+      {{ super() }}
+    {% endblock %}
+    {% block primary_content_inner %}
+      <h1 class="{% block page_heading_class %}page-heading{% endblock %}">
+        {% block page_heading %}{{ _('Publisher Form') }}{% endblock %}
+      </h1>
+      {% block form %}
+        {{ form | safe }}
+      {% endblock %}
+    {% endblock %}
+  </article>
+{% endblock %}
