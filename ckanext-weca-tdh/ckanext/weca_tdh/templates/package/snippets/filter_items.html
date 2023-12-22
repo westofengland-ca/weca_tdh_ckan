@@ -1,7 +1,7 @@
 {#
   Populates dataset filter selector items
 
-  name - The field name identifying the facet field, eg. "tags"
+  name - The field name identifying the facet field, eg. "groups"
   search_facets - A dictionary with search facets
   fields_grouped - A list of fields
 
@@ -17,7 +17,7 @@
   {% set items = h.get_facet_items_dict(name, search_facets) %}
   {% for item in items %}    
     {% if ''.join(fields_grouped[name]) == item.name %}
-        {% set selected = true %}   
+      {% set selected = true %}   
     {% endif %}
     {{ filter_items.append({'value': item.name, 'text': item.display_name, 'selected': selected}) or "" }}
   {% endfor %}
@@ -26,7 +26,7 @@
   {{ govukSelect({
     'id': name,
     'name': name,
-    'items': filter_items,
+    'items': filter_items | sort(attribute='value'),
     'attributes': {'aria-label': filter_labels[name], 'data-cy': 'filter-' + name}
     }) 
   }}
