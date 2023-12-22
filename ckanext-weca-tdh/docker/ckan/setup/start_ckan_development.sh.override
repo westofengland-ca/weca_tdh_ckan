@@ -80,7 +80,7 @@ ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL" \
 # Set the beaker session config
 ckan config-tool $CKAN_INI beaker.session.cookie_expires=True
 ckan config-tool $CKAN_INI beaker.session.secure=False
-ckan config-tool $CKAN_INI beaker.session.timeout=3600
+ckan config-tool $CKAN_INI beaker.session.timeout=36000
 
 # Set the search result configs
 ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000

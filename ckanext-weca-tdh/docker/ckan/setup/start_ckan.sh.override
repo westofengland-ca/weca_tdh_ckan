@@ -77,7 +77,7 @@ ckan config-tool $CKAN_INI "ckan.datastore.read_url = $CKAN_DATASTORE_READ_URL"
 # Set the beaker session config
 ckan config-tool $CKAN_INI beaker.session.cookie_expires=True
 ckan config-tool $CKAN_INI beaker.session.secure=True
-ckan config-tool $CKAN_INI beaker.session.timeout=3600
+ckan config-tool $CKAN_INI beaker.session.timeout=36000
 
 # Set the search result configs
 ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000
