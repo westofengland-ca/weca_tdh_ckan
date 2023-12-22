@@ -5,13 +5,7 @@
     {{ _('What are Publishers?') }}
   </h2>
   <div class="module-content">
-    <p>
-      {% trans %}
-        Publishers are used to create, manage and publish collections
-        of datasets. Users can have different roles within a Publisher,
-        depending on their level of authorisation to create, edit and publish.
-      {% endtrans %}
-    </p>
+    {% snippet 'organization/snippets/organization_text.html' %}
   </div>
   {% endblock %}
 
