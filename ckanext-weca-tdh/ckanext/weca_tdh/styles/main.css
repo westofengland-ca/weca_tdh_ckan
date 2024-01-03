@@ -473,7 +473,6 @@ iframe {
     text-decoration: underline !important;
 }
 
-
 /* Forms /
 ///////*/
 
@@ -481,6 +480,9 @@ iframe {
     float: right;
 }
 
+.govuk-form-group {
+    margin-bottom: 20px;
+}
 
 /* temp flask debug overflow fix */
 #flDebug, #flDebug * {

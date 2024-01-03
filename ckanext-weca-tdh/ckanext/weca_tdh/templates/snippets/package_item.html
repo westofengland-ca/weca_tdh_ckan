@@ -1,5 +1,14 @@
 {% ckan_extends %}
 
+{% block heading_private %}
+  {% if package.private %}
+    <span class="dataset-private badge pull-right dataset-marking">
+      <i class="fa fa-lock"></i>
+      {{ _('Restricted') }}
+    </span>
+  {% endif %}
+{% endblock %}
+
 {% block heading_title %}
   <a href="{{ h.url_for('%s.read' % package.type, id=package.name) }}" title="{{ title }}" data-cy="dataset-title">
     {{ title|truncate(80) }}
@@ -8,8 +17,8 @@
 
 {% block notes %}
   <div class="dataset-metadata">
-    <p data-cy="dataset-published"><b>Published by:</b> {{ package.organization.title }}</p>
-    <p data-cy="dataset-updated"><b>Last Updated:</b> {{ h.filter_datetime(package.metadata_modified, 'short') }}</p>
+    <p data-cy="dataset-published"><b>{{ _('Published by:') }}</b> {{ package.organization.title }}</p>
+    <p data-cy="dataset-updated"><b>{{ _('Last Updated:') }}</b> {{ h.filter_datetime(package.metadata_modified, 'short') }}</p>
   </div>
   <div data-cy="dataset-notes">
     {{ super() }}
