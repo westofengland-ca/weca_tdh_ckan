@@ -25,6 +25,8 @@ services:
     volumes:
       - ckan_storage:/var/lib/ckan
       - ../:/srv/app/src_extensions/ckanext-weca-tdh
+    networks:
+      - ckan-network
 
   ckan-dev:
     container_name: ${CKAN_CONTAINER_NAME}
