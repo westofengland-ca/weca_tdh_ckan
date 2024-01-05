@@ -1,49 +1,45 @@
 #!/bin/sh
 
-# Install local extensions if not running in job mode
-if [ -z "${CKAN_JOB_MODE}" ]
-then
-    # Install any local extensions in the src_extensions volume
-    echo "Looking for local extensions to install..."
-    echo "Extension dir contents:"
-    ls -la $SRC_EXTENSIONS_DIR
-    for i in $SRC_EXTENSIONS_DIR/*
-    do
-        if [ -d $i ];
+# Install any local extensions in the src_extensions volume
+echo "Looking for local extensions to install..."
+echo "Extension dir contents:"
+ls -la $SRC_EXTENSIONS_DIR
+for i in $SRC_EXTENSIONS_DIR/*
+do
+    if [ -d $i ];
+    then
+
+        if [ -f $i/pip-requirements.txt ];
         then
-
-            if [ -f $i/pip-requirements.txt ];
-            then
-                pip install -r $i/pip-requirements.txt
-                echo "Found requirements file in $i"
-            fi
-            if [ -f $i/requirements.txt ];
-            then
-                pip install -r $i/requirements.txt
-                echo "Found requirements file in $i"
-            fi
-            if [ -f $i/dev-requirements.txt ];
-            then
-                pip install -r $i/dev-requirements.txt
-                echo "Found dev-requirements file in $i"
-            fi
-            if [ -f $i/setup.py ];
-            then
-                cd $i
-                python3 $i/setup.py develop
-                echo "Found setup.py file in $i"
-                cd $APP_DIR
-            fi
-
-            # Point `use` in test.ini to location of `test-core.ini`
-            if [ -f $i/test.ini ];
-            then
-                echo "Updating \`test.ini\` reference to \`test-core.ini\` for plugin $i"
-                ckan config-tool $i/test.ini "use = config:../../src/ckan/test-core.ini"
-            fi
+            pip install -r $i/pip-requirements.txt
+            echo "Found requirements file in $i"
         fi
-    done
-fi
+        if [ -f $i/requirements.txt ];
+        then
+            pip install -r $i/requirements.txt
+            echo "Found requirements file in $i"
+        fi
+        if [ -f $i/dev-requirements.txt ];
+        then
+            pip install -r $i/dev-requirements.txt
+            echo "Found dev-requirements file in $i"
+        fi
+        if [ -f $i/setup.py ];
+        then
+            cd $i
+            python3 $i/setup.py develop
+            echo "Found setup.py file in $i"
+            cd $APP_DIR
+        fi
+
+        # Point `use` in test.ini to location of `test-core.ini`
+        if [ -f $i/test.ini ];
+        then
+            echo "Updating \`test.ini\` reference to \`test-core.ini\` for plugin $i"
+            ckan config-tool $i/test.ini "use = config:../../src/ckan/test-core.ini"
+        fi
+    fi
+done
 
 # Set debug to true
 echo "Enabling debug mode"
@@ -80,7 +76,7 @@ ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL" \
 # Set the beaker session config
 ckan config-tool $CKAN_INI beaker.session.cookie_expires=True
 ckan config-tool $CKAN_INI beaker.session.secure=False
-ckan config-tool $CKAN_INI beaker.session.timeout=3600
+ckan config-tool $CKAN_INI beaker.session.timeout=36000
 
 # Set the search result configs
 ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000
