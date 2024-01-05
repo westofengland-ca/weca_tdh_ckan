@@ -1,7 +1,7 @@
 {% extends "page.html" %}
 {% from "components/button/macro.html" import govukButton %}
 
-{% block subtitle %}{{ _("Publishers") }}{% endblock %}
+{% block subtitle %}{{ _('Publishers') }}{% endblock %}
 {% block toolbar %}{% endblock %}
 
 {% block form_wrapper %}
@@ -11,11 +11,11 @@
 {% endblock %}
 
 {% block heading %}
-  <h1 class="page-heading-result govuk-heading-xl govuk-!-margin-bottom-6">Publishers</h1>
+  <h1 class="page-heading-result govuk-heading-xl govuk-!-margin-bottom-6">{{ _('Publishers') }}</h1>
 {% endblock %}
 
 {% block secondary_content %}
-  <h2 class="govuk-body-m govuk-!-font-weight-bold">Filter by</h2>
+  <h2 class="govuk-body-m govuk-!-font-weight-bold">{{ _('Filter by') }}</h2>
   {% block search_input %}
     {% snippet "snippets/search_form.html", label="Keywords", placeholder="Search publishers...", query=q %}  
   {% endblock %}    

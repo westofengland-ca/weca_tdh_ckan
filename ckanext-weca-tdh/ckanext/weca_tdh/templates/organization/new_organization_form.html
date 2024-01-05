@@ -1,0 +1,9 @@
+{% ckan_extends %}
+
+{% block save_text %}
+  {%- if action == "edit" -%}
+    {{ _('Update Publisher') }}
+  {%- else -%}
+    {{ _('Create Publisher') }}
+  {%- endif -%}
+{% endblock %}

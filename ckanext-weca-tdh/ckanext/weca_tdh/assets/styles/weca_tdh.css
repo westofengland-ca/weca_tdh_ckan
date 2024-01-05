@@ -7790,6 +7790,10 @@ iframe {
   float: right;
 }
 
+.govuk-form-group {
+  margin-bottom: 20px;
+}
+
 /* temp flask debug overflow fix */
 #flDebug, #flDebug * {
   overflow-y: auto;

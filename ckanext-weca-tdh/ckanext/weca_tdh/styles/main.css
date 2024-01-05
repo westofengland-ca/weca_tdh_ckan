@@ -414,6 +414,7 @@ p.gem-c-lead-paragraph {
 
 /* RESOURCE PAGE //
 ///////////////*/
+
 .resource-wrapper {
     padding: 0px;
 }
@@ -472,7 +473,6 @@ iframe {
     text-decoration: underline !important;
 }
 
-
 /* Forms /
 ///////*/
 
@@ -480,6 +480,9 @@ iframe {
     float: right;
 }
 
+.govuk-form-group {
+    margin-bottom: 20px;
+}
 
 /* temp flask debug overflow fix */
 #flDebug, #flDebug * {

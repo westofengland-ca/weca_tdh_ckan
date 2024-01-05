@@ -4,6 +4,6 @@ VERSION_NO = 1.0
 
 # Import/export filenames
 INFO_FILENAME = 'info.json'
-DATASETS_FILENAME = 'dataset.json'
+DATASETS_FILENAME = 'datasets.json'
 PUBLISHERS_FILENAME = 'publishers.json'
 TOPICS_FILENAME = 'topics.json'

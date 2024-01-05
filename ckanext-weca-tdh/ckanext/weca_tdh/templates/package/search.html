@@ -11,11 +11,11 @@
 {% endblock %}
 
 {% block heading %}
-  <h1 class="page-heading-result govuk-heading-xl govuk-!-margin-bottom-6 search-title">Search results</h1>
+  <h1 class="page-heading-result govuk-heading-xl govuk-!-margin-bottom-6 search-title">{{ _('Search results') }}</h1>
 {% endblock %}
 
 {% block secondary_content %}  
-  <h2 class="govuk-body-m govuk-!-font-weight-bold">Filter by</h2>
+  <h2 class="govuk-body-m govuk-!-font-weight-bold">{{ _('Filter by') }}</h2>
   {% block search_input %}
     {% snippet "snippets/search_form.html", label="Keywords", query=q %}  
   {% endblock %}
@@ -29,7 +29,7 @@
       'attributes': {'data-cy': 'filter-button'}
     }) }}
     <p class="govuk-body sort-label">
-      <a class="govuk-link" href="/dataset" data-cy="filter-remove">Remove filters</a>
+      <a class="govuk-link" href="/dataset" data-cy="filter-remove">{{ _('Remove filters') }}</a>
     </p>
   {% endblock %}
 {% endblock %}

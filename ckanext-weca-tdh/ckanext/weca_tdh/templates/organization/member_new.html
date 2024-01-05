@@ -1,0 +1,42 @@
+{% ckan_extends %}
+
+{% block subtitle %}{{ group_dict.display_name }} {{_(' - Publishers') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li>{% link_for _('Publishers'), named_route=group_type+'.index' %}</li>
+  {% block breadcrumb_content_inner %}
+    <li>{% link_for organization.display_name|truncate(35), named_route=group_type+'.read', id=organization.name, title=organization.display_name %}</li>
+    <li class="active">{% link_for _('Manage'), named_route=group_type+'.edit', id=organization.name %}</li>
+  {% endblock %}
+{% endblock %}
+
+{% block primary_content_inner %}
+  {% link_for _('Back to all members'), named_route=group_type+'.members', id=organization.name, class_='btn btn-default pull-right', icon='arrow-left' %}
+  <h1 class="page-heading govuk-!-margin-top-4">
+    {% block page_heading %}{{ super() }}{% endblock %}
+  </h1>
+  {% block form %}
+    {{ super () }}
+  {% endblock %}
+{% endblock %}
+
+{% block secondary_content %}
+  {% snippet 'snippets/organization.html', organization=organization %}
+
+  <div class="module module-narrow module-shallow">
+    <h2 class="module-heading">
+      <i class="fa fa-lg fa-info-circle"></i>
+      {{ _('What are roles?') }}
+    </h2>
+    <div class="module-content">
+      {% trans %}
+        <p><strong>Admin:</strong> Can add, edit, and delete datasets, as well as
+          manage Publisher members.</p>
+        <p><strong>Editor:</strong> Can add and edit datasets, but not manage
+          Publisher members.</p>
+        <p><strong>Member:</strong> Can view a Publisher's open and restricted
+          datasets.</p>
+      {% endtrans %}
+    </div>
+  </div>
+{% endblock %}
