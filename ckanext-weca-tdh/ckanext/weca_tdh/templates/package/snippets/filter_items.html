@@ -22,7 +22,7 @@
     {{ filter_items.append({'value': item.name, 'text': item.display_name, 'selected': selected}) or "" }}
   {% endfor %}
 
-  <label class="govuk-label sort-label" for="sort">{{ filter_labels[name] }}</label>
+  <label class="govuk-label sort-label" for="{{name}}">{{ filter_labels[name] }}</label>
   {{ govukSelect({
     'id': name,
     'name': name,
