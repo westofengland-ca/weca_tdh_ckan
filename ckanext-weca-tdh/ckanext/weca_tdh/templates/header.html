@@ -36,7 +36,7 @@
 {% endblock %}
 
 {% block header_site_navigation %}
-  <div class="navbar-title">{{ g.site_title }}</div>
+  <div class="navbar-title" role="heading">{{ g.site_title }}</div>
   {% block header_site_navigation_tabs %}
     {{ h.build_nav_main(
         ('dataset.search', _('Search')),
