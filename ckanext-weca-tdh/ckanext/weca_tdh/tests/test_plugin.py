@@ -3,7 +3,6 @@ Tests for plugin.py
 """
 
 import pytest
-import ckanext.weca_tdh.plugin as plugin
 import ckan.plugins as plugins
 
 @pytest.mark.ckan_config("ckan.plugins", "weca_tdh")
@@ -23,8 +22,8 @@ def test_policy_endpoint(app):
 
     assert response.status_code == 200
 
-def test_license_endpoint(app):
-    url = plugins.toolkit.url_for('weca_tdh.license')
+def test_accessibility_endpoint(app):
+    url = plugins.toolkit.url_for('weca_tdh.accessibility')
     response = app.get(url)
 
     assert response.status_code == 200

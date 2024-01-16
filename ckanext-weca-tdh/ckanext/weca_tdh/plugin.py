@@ -70,7 +70,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         rules = [
             ('/contact', 'contact', RouteController.render_contact_page),
             ('/policy', 'policy', RouteController.render_policy_page),
-            ('/license', 'license', RouteController.render_license_page),
+            ('/accessibility', 'accessibility', RouteController.render_accessibility_page),
             ('/tdh_partner_connect', 'tdh_partner_connect', RouteController.render_tdh_partner_connect_page),
             ('/tdh_partner_connect_file', 'tdh_partner_connect_file', RouteController.download_tdh_partner_connect_file)
         ]

@@ -1,6 +1,6 @@
 # ckanext-weca-tdh
 
-CKAN extension for the TDH data catalogue. Adds custom functionality and themeing to CKAN.
+CKAN extension for the TDH Data Catalogue. Adds custom functionality and themeing to CKAN.
 
 Uses the [GOV.UK Design System](https://github.com/alphagov/govuk-design-system) in combination with [GOV.UK frontend Jinja macros](https://github.com/LandRegistry/govuk-frontend-jinja) for templates and styling, and Azure Active Directory (AD) for authentication.
 

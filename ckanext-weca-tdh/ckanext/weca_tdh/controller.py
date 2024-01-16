@@ -9,8 +9,8 @@ class RouteController():
     def render_policy_page():
         return toolkit.render('policy.html')
     
-    def render_license_page():
-        return toolkit.render('license.html')
+    def render_accessibility_page():
+        return toolkit.render('accessibility.html')
     
     def render_tdh_partner_connect_page():
         return toolkit.render('tdh_partner_connect.html')

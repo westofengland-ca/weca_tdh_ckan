@@ -339,11 +339,11 @@ p.gem-c-lead-paragraph {
 }
 
 .dataset-private {
-    background-color: #9d9d1b;
+    background-color: #660000;
 }
 
 .dataset-public {
-    background-color: green;
+    background-color: #00703c;
 }
 
 .resource-private, .resource-public  {
@@ -351,11 +351,11 @@ p.gem-c-lead-paragraph {
 }
 
 .resource-private {
-    background-color: #9d9d1b;
+    background-color: #660000;
 }
 
 .resource-public {
-  background-color: green;
+  background-color: #00703c;
 }
 
 .metadata-box--in-dataset {

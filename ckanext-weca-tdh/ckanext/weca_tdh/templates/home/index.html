@@ -33,10 +33,10 @@
       {% set topics = h.get_featured_groups(12) %}
       {% for topic in topics %}
       <li>
-        <h3 class="govuk-heading-s topics_heading" data-cy="topic-heading">
+        <h2 class="govuk-heading-s topics_heading" data-cy="topic-heading">
           <a class="govuk-link" href="{{ h.url_for(topic.type ~ '.read', id=topic.name) }}" data-cy="topic-link">
             {{ topic.title }}<a>
-        </h3>
+        </h2>
         <p class="govuk-body" data-cy="topic-desc">{{ topic.description }}</p>
       </li>
       {% endfor %}

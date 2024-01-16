@@ -1,7 +1,7 @@
 # weca_tdh_ckan
 
 This repository contains content relating to the FTZ Transport Data Hub (TDH)
-data catalogue. The TDH data catalogue has been developed as an extension of
+Data Catalogue. The TDH Data Catalogue has been developed as an extension of
 CKAN, an open-source data management system.
 
 ## Contents

@@ -129,13 +129,13 @@
           <div class="package-content">
             <h2 class="heading-medium">{{ _('Edit this dataset') }}</h2>
             {% if not c.userobj %}
-              <p>{{ _('You must have an account to suggest edits to this dataset') }}</p>
+              <p>{{ _('You must have an account to suggest edits to this dataset.') }}</p>
               {{ govukButton({
                 'text': "Sign in",
                 'href': "/user/login"
               }) }}
             {% else %}
-              <p>{{ _('You must be an admin for this publisher to make edits to this dataset') }}</p>
+              <p>{{ _('You must be an admin for this publisher to make edits to this dataset.') }}</p>
             {% endif %}         
           </div>
         </section>
