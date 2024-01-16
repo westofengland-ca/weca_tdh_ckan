@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/RoweIT/weca-tdh-ckanext#readme",
   "dependencies": {
-    "govuk-frontend": "^4.5.0"
+    "govuk-frontend": "^4.7.0"
   },
   "devDependencies": {
     "cypress": "^13.1.0",
