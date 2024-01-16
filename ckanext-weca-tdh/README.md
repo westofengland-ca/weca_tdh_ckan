@@ -77,13 +77,27 @@ do:
     python setup.py develop
     pip install -r dev-requirements.txt
 
-
 ## Tests
-Tests are run automatically on commit or PR via GitHub Actions.
+The unit tests are run automatically on commit or PR via GitHub Actions.
 
-To run the tests locally:
+To run the unit tests locally, connect to a running CKAN instance and run command:
 
     pytest --ckan-ini=test.ini
+
+To run the Cypress e2e tests, go to the `ckanext-weca-tdh` directory and run command:
+
+    npm run cypress-open
+
+## Styles
+The styling is a combination of CKAN, GDS and TDH styles.
+
+To build the stylesheets, go to the `ckanext-weca-tdh` directory and run command:
+
+    npm run sass
+
+For live changes, use:
+
+    npm run sass-dev
 
 ## CKAN commands
 
