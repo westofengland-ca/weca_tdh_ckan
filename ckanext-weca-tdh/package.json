@@ -4,7 +4,7 @@
   "description": "[![Tests](https://github.com/RoweIT/ckanext-weca-tdh/workflows/Tests/badge.svg?branch=main)](https://github.com/RoweIT/ckanext-weca-tdh/actions)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Unit tests: `pytest --ckan-ini=test.ini`, e2e tests: `cypress open`\" && exit 1",
     "sass": "sass ckanext/weca_tdh/styles/weca_tdh.scss:ckanext/weca_tdh/assets/styles/weca_tdh.css",
     "sass-dev": "sass --watch ckanext/weca_tdh/styles/weca_tdh.scss:ckanext/weca_tdh/assets/styles/weca_tdh.css",
     "cypress-open": "cypress open"
