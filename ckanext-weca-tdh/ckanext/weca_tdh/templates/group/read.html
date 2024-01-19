@@ -51,7 +51,8 @@
 {% endblock %}
 
 {% block secondary_content %}
-  {% snippet "group/snippets/info.html", group=group_dict, show_nums=true %}
+  {# remove follow section #}
+  {% snippet "group/snippets/info.html", group=group_dict, show_nums=false %}
   {% set facet_titles = {'organization': "Publishers", 'groups': "Topics", 'res_format': "Formats", "license_id": "Licenses"} %}
   <div class="filters">
     <div>

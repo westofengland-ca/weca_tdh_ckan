@@ -10,3 +10,8 @@
 {% block primary_content_inner %}
   {{ super() }}
 {% endblock %}
+
+{% block secondary_content %}
+  {# remove follow section #}
+  {% snippet "group/snippets/info.html", group=group_dict, show_nums=false %}
+{% endblock %}
