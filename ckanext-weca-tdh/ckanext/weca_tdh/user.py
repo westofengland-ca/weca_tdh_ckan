@@ -49,7 +49,7 @@ class User(object):
 
                 # Add user to all publishers
                 for organization in model.Session.query(model.Group).all():
-                    membership = model.Member(group=organization, table_id=user.id, table_name='user',capacity='member')
+                    membership = model.Member(group=organization, table_id=new_user.id, table_name='user',capacity='member')
                     model.Session.add(membership)
 
                 # Commit the changes to the database
