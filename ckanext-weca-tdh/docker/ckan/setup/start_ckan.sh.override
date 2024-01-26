@@ -110,8 +110,9 @@ ckan config-tool $CKAN_INI "ccc.api_key = $CCC_API_KEY"
 # Set Google Analytics config
 ckan config-tool $CKAN_INI "ga.id = $GA_ID" 
 
-# Set TDH contact email
+# Set TDH contact email and phone number
 ckan config-tool $CKAN_INI "tdh.contact_email = $TDH_CONTACT_EMAIL"
+ckan config-tool $CKAN_INI "tdh.contact_phone_number = $TDH_CONTACT_PHONE_NUMBER"
 
 # Set current build version
 ckan config-tool $CKAN_INI "tdh.build_version = $TDH_BUILD_VERSION"
