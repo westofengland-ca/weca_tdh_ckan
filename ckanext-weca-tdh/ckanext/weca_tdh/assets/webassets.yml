@@ -1,14 +1,17 @@
 govuk-js:
+  filters: rjsmin
   output: weca_tdh/%(version)s_govuk.js
   contents:
     - scripts/govuk.js
 
 cookie_control-js:
+  filters: rjsmin
   output: weca_tdh/%(version)s_cookie_control.js
   contents:
     - scripts/cookie_control.js
 
 google_analytics-js:
+  filters: rjsmin
   output: weca_tdh/%(version)s_google_analytics.js
   contents:
     - scripts/google_analytics.js

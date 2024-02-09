@@ -162,6 +162,10 @@ then
     # Otherwise, rebuild the SOLR search index using the "only-missing" mode.
     if [ -z "${CKAN_JOB_MODE}" ]
     then
+        # rebuild search index on container startup
+        echo "Rebuilding solr search index."
+        ckan search-index rebuild
+
         # Start supervisord
         supervisord --configuration /etc/supervisord.conf &
         # Start uwsgi
