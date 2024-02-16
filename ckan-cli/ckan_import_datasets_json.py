@@ -2,7 +2,9 @@
 Imports CKAN datasets from a Zip file via the CKAN API.
 '''
 
-import requests
+from urllib.request import Request, urlopen
+from urllib.parse import quote
+from urllib.error import URLError, HTTPError
 import argparse
 import json
 import zipfile
@@ -29,30 +31,45 @@ def get_json_files_from_zip(zip_path):
 def import_datasets(datasets):
     count = 0
     for dataset in datasets:
+        # Use the json module to dump the dictionary to a string for posting. URL encode.
+        data_string = quote(json.dumps(dataset)).encode('utf-8')
+
         # CKAN package_create function creates a new dataset.
-        url = f'{args.ckan_url}/api/action/package_create'
+        request = Request(f'{args.ckan_url}/api/action/package_create')
 
-        payload = dataset
-        files={}
-        headers = {
-          'Authorization': args.api_key,
-        }
+        # Creating a dataset requires an authorization header.
+        # provide API key from your user account on the CKAN site that you're creating the dataset on.
+        request.add_header('Authorization', args.api_key)
 
+        # Make the HTTP request.
         try:
-            response = requests.request("POST", url, headers=headers, data=payload, files=files)
-            if response.status_code == 200:
-                count += 1
+            urlopen(request, data_string)
+        except HTTPError as err:
+            # check for data conflict
+            if err.code == 409:
+                print(f'import_datasets(): data conflict in {dataset.get("name")}, attempting update...')
+                update_dataset(dataset)
             else:
-                raise Exception(f'import_datasets(): failed to create dataset(s). {response.status_code}')
-
-        except requests.exceptions.HTTPError as err:
-            if response.status_code == 200:
-                raise Exception(f'import_datasets(): data conflict in row {dataset}')
-            raise Exception(f'import_datasets(): failed to import dataset. {err}')
-        except requests.exceptions.RequestException:
+                raise Exception(f'import_datasets(): failed to import dataset. {err}')
+        except URLError:
             raise Exception(f'import_datasets(): invalid URL')
-        
+
+        count += 1
     return count
+
+def update_dataset(dataset):
+    data_string = quote(json.dumps(dataset)).encode('utf-8')
+    request = Request(f'{args.ckan_url}/api/action/package_update')
+    request.add_header('Authorization', args.api_key)
+
+    # Make the HTTP request to update the dataset.
+    try:
+        urlopen(request, data_string)
+        print(f'update_dataset(): successfully updated dataset {dataset.get("name")}')
+    except HTTPError as err:
+        raise Exception(f'import_datasets(): failed to update dataset. {err}')
+    except URLError:
+        raise Exception(f'import_datasets(): invalid URL')
 
 try:
     json_files = get_json_files_from_zip(args.zipfile)
