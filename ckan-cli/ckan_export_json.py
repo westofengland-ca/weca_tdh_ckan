@@ -16,7 +16,7 @@ import tdh_package
 parser = argparse.ArgumentParser("ckan_export", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--ckan_url", dest="ckan_url", help="Target CKAN instance.", default="http://localhost:5000", type=str)
 parser.add_argument("--api_key", dest="api_key", help="CKAN API Key with necessary read permissions", type=str, required=True)
-parser.add_argument("--output_file", dest="output_file", help="Output path for zip file", default="ckan-export.zip", type=str)
+parser.add_argument("--output_file", dest="output_file", help="Output path for zip file", default="sample_data/ckan-export/ckan-export.zip", type=str)
 parser.add_argument("--limit", dest="limit", help="Maximum number of datasets to export", default=1000, type=int)
 args = parser.parse_args()
 
