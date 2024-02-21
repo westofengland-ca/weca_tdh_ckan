@@ -15,11 +15,6 @@
         {{ form.input('email', label=_('Email'), id='field-email', type='email', value=data.email, error=errors.email, placeholder=_('eg. joe@example.com'), classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'} if not is_sysadmin else {'class': 'form-control'}, is_required=true) }}
 
         {{ form.markdown('about', label=_('About'), id='field-about', value=data.about, error=errors.about, placeholder=_('A little information about yourself')) }}
-
-        {% set is_upload = data.image_url and not data.image_url.startswith('http') %}
-        {% set is_url = data.image_url and data.image_url.startswith('http') %}
-
-        {{ form.image_upload(data, errors, is_upload_enabled=h.uploads_enabled(), is_url=is_url, is_upload=is_upload, upload_label=_('Profile picture'), url_label=_('Profile picture URL') ) }}
       </fieldset>
     {% endblock %}
 
