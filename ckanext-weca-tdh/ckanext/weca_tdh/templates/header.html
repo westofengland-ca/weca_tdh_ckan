@@ -38,12 +38,20 @@
 {% block header_site_navigation %}
   <div class="navbar-title" role="heading" aria-level="1">{{ g.site_title }}</div>
   {% block header_site_navigation_tabs %}
-    {{ h.build_nav_main(
-        ('dataset.search', _('Search')),
-        ('organization.index', _('Publishers')),
-        ('group.index', _('Topics')),
-        ('home.about', _('Support')),
-    )}}
+    {% set org_type = h.default_group_type('organization') %}
+    {% set group_type = h.default_group_type('group') %}
+    <li>
+      <a href="/dataset">{{_('Search')}}</a>
+    </li>
+    <li>
+      <a href="/organization">{{_('Publishers')}}</a>
+    </li>
+    <li>
+      <a href="/group">{{_('Topics')}}</a>
+    </li>
+    <li>
+      <a href="/about">{{_('Support')}}</a>
+    </li>
   {% endblock %}
 {% endblock %}
 
