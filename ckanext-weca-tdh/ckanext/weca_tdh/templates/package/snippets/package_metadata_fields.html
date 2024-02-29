@@ -5,7 +5,7 @@
     <div class="form-group control-medium">
       <label for="field-dl" class="form-label">{{ _('Data Lake active') }}</label>
       <div class="controls">
-        <select class="form-control" id="field-dl" name="datalake_active">
+        <select id="field-dl" name="datalake_active" data-module="autocomplete">
           <option value="false" {% if data.get('datalake_active', False) == False %} selected="selected" {% endif %}>{{ _('False') }}</option>
           <option value="true" {% if data.get('datalake_active', False) == True %} selected="selected" {% endif %}>{{ _('True') }}</option>
         </select>

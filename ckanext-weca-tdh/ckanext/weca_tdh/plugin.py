@@ -89,6 +89,9 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_validator('boolean_validator'),
                                 toolkit.get_converter('convert_to_extras')]
         })
+        schema['resources'].update({
+                'resource_data_category' : [ toolkit.get_validator('ignore_missing') ]
+        })
         return schema
 
     def create_package_schema(self) -> Schema:
@@ -106,6 +109,9 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'datalake_active': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing'),
                                 toolkit.get_validator('boolean_validator')]
+        })
+        schema['resources'].update({
+                'resource_data_category' : [ toolkit.get_validator('ignore_missing') ]
         })
         return schema
     

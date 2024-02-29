@@ -4,7 +4,7 @@
   <div class="form-group control-medium">
     <label for="field-private" class="form-label">{{ _('Dataset visibility') }}</label>
     <div class="controls">
-      <select id="field-private" name="private" class="form-control">
+      <select id="field-private" name="private" data-module="autocomplete">
         {% for option in [('True', _('Private')), ('False', _('Public'))] %}
         <option value="{{ option[0] }}" {% if option[0] == data.private|trim %}selected="selected"{% endif %}>{{ option[1] }}</option>
         {% endfor %}
