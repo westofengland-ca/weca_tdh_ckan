@@ -29,26 +29,26 @@ def get_google_analytics_config():
 
     return google_analytics_config
 
-def get_resource_data_catagories():
+def get_resource_data_categories():
     data_categories = [{
         "id": 0,
         "name": "Low",
-        "class": "GREEN"
+        "class": "data-category-low"
       },
       {
         "id": 1,
         "name": "Business restricted",
-        "class": "BLUE"
+        "class": "data-category-br"
       },
       {
         "id": 2,
         "name": "Personal restricted",
-        "class": "ORANGE"
+        "class": "data-category-pr"
       },
       {
         "id": 3,
         "name": "Confidential",
-        "class": "RED"
+        "class": "data-category-con"
     }]
 
     return data_categories
