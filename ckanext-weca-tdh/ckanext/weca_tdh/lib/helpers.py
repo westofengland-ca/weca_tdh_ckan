@@ -32,7 +32,7 @@ def get_google_analytics_config():
 def get_resource_data_categories():
     data_categories = [{
         "id": 0,
-        "name": "Low",
+        "name": "Low sensitivity",
         "class": "data-category-low"
       },
       {
