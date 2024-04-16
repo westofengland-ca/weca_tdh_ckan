@@ -2,7 +2,7 @@ from ckan import model
 from ckan.logic import NotFound
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
-import logging, random, re, string, uuid
+import logging, re, uuid
 
 log = logging.getLogger(__name__)
 
@@ -46,11 +46,6 @@ class User(object):
                 
                 # Add the user to the database session
                 model.Session.add(new_user)
-
-                # Add user to all publishers
-                for organization in model.Session.query(model.Group).all():
-                    membership = model.Member(group=organization, table_id=new_user.id, table_name='user',capacity='member')
-                    model.Session.add(membership)
 
                 # Commit the changes to the database
                 model.Session.commit()

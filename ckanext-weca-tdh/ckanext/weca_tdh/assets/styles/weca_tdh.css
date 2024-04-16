@@ -7684,6 +7684,7 @@ p.gem-c-lead-paragraph {
 
 .btn-primary {
   background-color: #354753;
+  border-color: initial;
 }
 
 .govuk-button {
@@ -7807,16 +7808,24 @@ p.gem-c-lead-paragraph {
   background-color: #00703c;
 }
 
-.resource-private, .resource-public {
+.resource-data-category {
   text-transform: uppercase;
 }
 
-.resource-private {
-  background-color: #660000;
+.data-category-low {
+  background-color: #00703c;
 }
 
-.resource-public {
-  background-color: #00703c;
+.data-category-br {
+  background-color: #0c56ac;
+}
+
+.data-category-pr {
+  background-color: #b75c1f;
+}
+
+.data-category-con {
+  background-color: #660000;
 }
 
 .metadata-box--in-dataset {

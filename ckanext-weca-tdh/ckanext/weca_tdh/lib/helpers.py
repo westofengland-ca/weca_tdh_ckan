@@ -28,3 +28,27 @@ def get_google_analytics_config():
     google_analytics_config['ga_id'] = ga_id
 
     return google_analytics_config
+
+def get_resource_data_categories():
+    data_categories = [{
+        "id": 0,
+        "name": "Low sensitivity",
+        "class": "data-category-low"
+      },
+      {
+        "id": 1,
+        "name": "Business restricted",
+        "class": "data-category-br"
+      },
+      {
+        "id": 2,
+        "name": "Personal restricted",
+        "class": "data-category-pr"
+      },
+      {
+        "id": 3,
+        "name": "Confidential",
+        "class": "data-category-con"
+    }]
+
+    return data_categories
