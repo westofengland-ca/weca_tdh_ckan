@@ -28,8 +28,8 @@ AD_CLAIM_NAME = 'name'
 AD_CLAIM_GROUPS = "groups"
 
 # AD Groups
-AD_GROUP_CKAN_ID = config['ad.group.ckan_id']
-AD_GROUP_SYSADMIN_ID = config['ad.group.sysadmin_id']
+AD_GROUP_CKAN_ID = config.get('ad.group.ckan_id', "")
+AD_GROUP_SYSADMIN_ID = config.get('ad.group.sysadmin_id', "")
 
 # Feature flags
 FF_AUTH_RESTRICTED_ACCESS = config['feature_flag.auth.restricted_access']
