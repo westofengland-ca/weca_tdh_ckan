@@ -44,6 +44,8 @@ EXLUDED_SUBPATHS = ('/assets/', '/api/', '/base/', '/scripts/', '/user/adlogin',
 
 # Flash messages
 ALERT_MESSAGE_AUTH = "You must be logged in to access this page."
+UPLOAD_STATUS_SUCCESS = "File uploaded successfully."
+UPLOAD_STATUS_FAILED = "Failed to upload file."
 
 contact_email = config.get('tdh.contact_email') or 'ftz@westofengland-ca.gov.uk'
 ALERT_MESSAGE_SUPPORT = f"Contact support by emailing <a href='mailto:{contact_email}'>{contact_email}</a>"
@@ -58,3 +60,10 @@ GA_ID = config['ga.id']
 # TDH partner connect file config
 TDH_CONNECT_ADDRESS_HOST = config.get('tdh.connect.address_host', "")
 TDH_CONNECT_ADDRESS_PATH = config.get('tdh.connect.address_path', "")
+
+# TDH storage container config
+TDH_UPLOAD_STORAGE_ACCOUNT = config.get('tdh.upload.storage_account', "")
+TDH_UPLOAD_STORAGE_CONTAINER = config.get('tdh.upload.storage_container', "")
+TDH_UPLOAD_FILE_TYPES = ['.csv', '.json', '.txt', '.xlsx', '.xml']
+TDH_UPLOAD_FILE_SIZE = 16 * 1024 * 1024 # 16MB
+TDH_UPLOAD_HTTP_TRIGGER = config.get('tdh.upload.http_trigger', "")

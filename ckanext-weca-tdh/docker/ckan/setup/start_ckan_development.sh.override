@@ -125,6 +125,14 @@ ckan config-tool $CKAN_INI "tdh.build_version = $TDH_BUILD_VERSION"
 ckan config-tool $CKAN_INI "tdh.connect.address_host = $TDH_CONNECT_ADDRESS_HOST"
 ckan config-tool $CKAN_INI "tdh.connect.address_path = $TDH_CONNECT_ADDRESS_PATH"
 
+# Set upload blob storage container connection
+ckan config-tool $CKAN_INI "tdh.upload.storage_account = $TDH_UPLOAD_STORAGE_ACCOUNT"
+ckan config-tool $CKAN_INI "tdh.upload.storage_container = $TDH_UPLOAD_STORAGE_CONTAINER"
+
+# Set Logic App HTTP trigger url
+decoded_url=$(echo "$TDH_UPLOAD_HTTP_TRIGGER" | sed 's/%2F/\//g')
+ckan config-tool $CKAN_INI "tdh.upload.http_trigger = $decoded_url"
+
 # Update test-core.ini DB, SOLR & Redis settings
 echo "Loading test settings into test-core.ini"
 ckan config-tool $SRC_DIR/ckan/test-core.ini \
@@ -138,11 +146,15 @@ ckan config-tool $SRC_DIR/ckan/test-core.ini \
 ckan config-tool $CKAN_INI --section logger_ckan "level = WARNING"
 ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
 
+
+ckan config-tool $CKAN_INI expire_api_token.default_lifetime=30
+ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day in seconds
+
 # Run the prerun script to init CKAN and create the default admin user
 python3 prerun.py
 
 echo "Set up ckan.datapusher.api_token in the CKAN config file"
-ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add $CKAN_SYSADMIN_NAME datapusher | tail -n 1 | tr -d '\t')"
+ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add $CKAN_SYSADMIN_NAME datapusher expires_in=365 unit=86400 | tail -n 1 | tr -d '\t')"
 
 # Run any startup scripts provided by images extending this one
 if [[ -d "/docker-entrypoint.d" ]]

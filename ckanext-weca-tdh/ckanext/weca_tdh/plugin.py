@@ -4,9 +4,10 @@ from ckan.model.user import AnonymousUser
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.types import Context, Schema
-from flask import Blueprint, flash, request
+from flask import Blueprint, Flask, flash, request
 from inspect import getmembers, isfunction
 from ckanext.weca_tdh.auth import adauthbp
+from ckanext.weca_tdh.upload import uploadbp
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.lib import helpers
@@ -77,7 +78,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         for rule in rules:
             staticbp.add_url_rule(*rule)
 
-        return [staticbp, adauthbp]
+        return [staticbp, adauthbp, uploadbp]
 
     ''' 
     Modify dataset metadata fields
