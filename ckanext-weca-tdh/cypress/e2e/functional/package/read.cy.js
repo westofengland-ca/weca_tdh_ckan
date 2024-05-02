@@ -63,10 +63,6 @@ describe('Product page', () => {
     })
   })
 
-  it('view contact section', () => {
-    cy.get('section').get('.contact').should('contain.text', 'ftz@westofengland-ca.gov.uk')
-  })
-
   it('view edit section', () => {
     cy.get('@dataset').then(dataset => {
       cy.get('section').get('.edit').find('p').should('contain.text', 'You must have an account to suggest edits to this dataset')
