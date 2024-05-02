@@ -20,12 +20,11 @@ class ADAuth():
                 user = User.get_or_create_ad_user(claims_map)
 
             ADAuth._login_to_ckan(user)
-            callback_url = request.args.get('referrer', default='dashboard.datasets')
-            log.error(callback_url)
+            referer = request.args.get('referrer', default='dashboard.datasets')
 
-            if callback_url == 'user.login':
+            if referer == toolkit.url_for('user.login'):
                 return toolkit.redirect_to('dashboard.datasets')
-            return toolkit.redirect_to(callback_url)
+            return toolkit.redirect_to(referer)
 
         except Exception as e:
             flash(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
