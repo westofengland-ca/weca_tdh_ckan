@@ -8,6 +8,7 @@
     "resources": [
       {
         "name": "Timetable data",
+        "id": "bbb1bae6-4cb5-4642-bbc8-00e130d8dfb9",
         "path": "https://bustimetable.com/data",
         "format": "JSON",
         "description": "Latest bus timetable data"

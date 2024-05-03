@@ -4,7 +4,7 @@
 {% block subtitle %}{{ _('File upload') }} {{ g.template_title_delimiter }} {{ h.resource_display_name(res) }}{% endblock %}
 
 {% block primary_content_inner %}
-  <form action="{{ url_for('upload.blob', id=pkg.name, resource_id=resource.id) }}" method="post" enctype="multipart/form-data">
+  <form id="form-upload" action="{{ url_for('upload.blob', id=pkg.name, resource_id=resource.id) }}" method="post" enctype="multipart/form-data">
     {{ h.csrf_input() }}
 
     {{ form.input('file', label=upload_label or _('File'), id='field-resource-upload', type='file', classes=['control-full'], attrs={'class': 'form-control', 'required': 'true'}, is_required=true) }}
@@ -17,7 +17,7 @@
     {{ form.required_message() }}
 
     <div class="form-actions">
-      <button class="btn btn-primary" type="submit" name="upload">{{ _('Submit') }}</button>
+      <button id="submit-button" class="btn btn-primary" type="submit" name="upload">{{ _('Submit') }}</button>
     </div>
   </form>
 {% endblock %}
