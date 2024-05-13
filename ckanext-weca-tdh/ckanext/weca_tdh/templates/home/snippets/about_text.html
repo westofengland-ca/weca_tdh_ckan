@@ -2,7 +2,7 @@
   <h2>{{ _('Request access, raise an issue, or make a general request') }}</h2>
   <p class="govuk-body-m">{{ _('For all service requests for the TDH please use the Combined Authority IT Helpdesk. Submit a General Service Request found under User Applications and note in the description that the request is related to the Transport Data Hub.') }}</p>
   <p class="govuk-body-m">{{ _('The IT Helpdesk (ServiceNow) for the Combined Authority can be') }} <a href="https://agilisys.service-now.com/ag?id=login" title="Link to ServiceNow" target="_blank">{{ _('accessed here') }}</a>.</p>
-  <p class="govuk-body-m">{{ _('If you are unable to use the Combined Authority intranet to access the IT Helpdesk (ServiceNow) you can telephone it on') }} {{ contact_phone_number }}.</p>
+  <p class="govuk-body-m">{{ _('If you are unable to use the Combined Authority intranet to access the IT Helpdesk (ServiceNow), call') }} {{ contact_phone_number }} {{ _('and quote the Combined Authority and Transport Data Hub.') }}</p>
 
   <h2>{{ _('Connect to the TDH') }}</h2>
   <p class="govuk-body-m"><a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}" target="_blank">{{ _('Learn how to connect to the TDH using Power BI.') }}</a></p>
@@ -18,7 +18,7 @@
   <p class="govuk-body-m">{{ _('For information regarding accessibility and our commitment to developing an inclusive website, see our ') }}<a href="/accessibility" target="_blank">{{ _('Accessibility Statement') }}</a>.</p>
 
   <h2>{{ _('Cookie Policy') }}</h2>
-  <p class="govuk-body-m">{{ _('For information regarding cookies and how we use them, see our ') }}<a href="/policy" target="_blank">{{ _('Cookie Policy page') }}</a>.</p>
+  <p class="govuk-body-m">{{ _('For information regarding cookies and how we use them, see our ') }}<a href="/policy" target="_blank">{{ _('Cookie Policy') }}</a>.</p>
 
   <br><p class="govuk-body-xs"><i>{{ _('Build version:') }} {{ build_version }}</i></p>
 </div>
