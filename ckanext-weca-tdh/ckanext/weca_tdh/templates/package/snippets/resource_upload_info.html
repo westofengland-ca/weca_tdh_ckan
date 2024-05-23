@@ -1,0 +1,24 @@
+{#
+Displays a sidebar module with information for TDH file upload
+
+res    - The resource dict
+
+Example:
+
+  {% snippet "package/snippets/resource_upload_info.html", res=res %}
+
+#}
+<div class="module context-info">
+  <div class="module-content">
+    {% block page_title %}
+      <h1 class="heading">{{ h.resource_display_name(res) or res.id }}</h1>
+    {% endblock %}
+    {% block resource_info %}
+      <div class="nums">
+        <h2 class="heading-small">{{ _('TDH file upload') }}</h2>
+        <p>{{ _('Submit a file to be reviewed for ingestion into the TDH for this resource.') }}</p>
+        <p>{{ _('Please specify any additional identifying information useful for processing the file in the description.') }}</p>
+      </div>
+    {% endblock %}
+  </div>
+</div>
