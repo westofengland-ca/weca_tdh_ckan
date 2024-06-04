@@ -23,15 +23,17 @@
       {{ h.filter_datetime(res.created, 'short') }}
     </td>
     <td class="govuk-table__cell">
-      {% if res.resource_data_category %} 
-        {% for category in h.get_resource_data_categories() %}
+      {% set categories = h.get_resource_data_categories() %}
+      {% if not res.resource_data_category %}
+        {% for category in categories %}
           {% if category.id == res.resource_data_category | int %}
             <span class="badge resource-data-category {{ category.class }}">{{ category.name }} {% if category.desc %}<i class="fa fa-info-circle" 
               title="{{ category.desc }}"></i>{% endif %}</span>
           {% endif %}
         {% endfor %}
       {% else %}
-        <span class="badge resource-data-category data-category-open">{{ _('Open') }}</span>
+        <span class="badge resource-data-category {{ categories[0].class }}">{{ categories[0].name }} <i class="fa fa-info-circle" 
+          title="{{ categories[0].desc }}"></i></span>
       {% endif %}
     </td>
     <td class="govuk-table__cell">
