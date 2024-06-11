@@ -1,0 +1,27 @@
+{% extends "package/resource_edit_base.html" %}
+{% import 'macros/form.html' as form %}
+
+{% block subtitle %}{{ _('File upload') }} {{ g.template_title_delimiter }} {{ h.resource_display_name(res) }}{% endblock %}
+
+{% block primary_content_inner %}
+  <form id="form-upload" action="{{ url_for('upload.blob', id=pkg.name, resource_id=resource.id) }}" method="post" enctype="multipart/form-data">
+    {{ h.csrf_input() }}
+
+    {{ form.input('file', label=upload_label or _('File'), id='field-resource-upload', type='file', classes=['control-full'], attrs={'class': 'form-control', 'required': 'true'}, is_required=true) }}
+
+    {{ form.input('author', label=_('Author'), id='field-author', placeholder=_('Joe Bloggs'), type='text', classes=['control-medium'], attrs={'class': 'form-control', 'required': 'true'}, is_required=true) }}
+    {{ form.input('author_email', label=_('Author Email'), id='field-author-email', placeholder=_('joe@example.com'), type='text', classes=['control-medium'], attrs={'class': 'form-control', 'required': 'true'}, is_required=true) }}
+
+    {{ form.markdown('desc', id='field-description', label=_('Description'), placeholder=_('Some useful notes about the data')) }}
+
+    {{ form.required_message() }}
+
+    <div class="form-actions">
+      <button id="submit-button" class="btn btn-primary" type="submit" name="upload">{{ _('Submit') }}</button>
+    </div>
+  </form>
+{% endblock %}
+
+{% block secondary_content %}
+  {% snippet 'package/snippets/resource_upload_info.html', res=res %}
+{% endblock %}

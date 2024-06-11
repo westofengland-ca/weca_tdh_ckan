@@ -12,6 +12,9 @@ except ImportError:
 import time
 import re
 import json
+from azure.keyvault.secrets import SecretClient
+from azure.identity import DefaultAzureCredential
+from azure.core.exceptions import ResourceNotFoundError
 
 ckan_ini = os.environ.get("CKAN_INI", "/srv/app/ckan.ini")
 
@@ -156,6 +159,21 @@ def init_datastore_db():
         cursor.close()
         connection.close()
 
+def create_api_token(name):
+    keyVaultName = os.getenv('TDH_KEY_VAULT_NAME') or False
+
+    if keyVaultName:
+        print("[prerun] Creating databricks API Token...")
+        command = ["ckan", "-c", ckan_ini, "user", "token", "add", name, "databricks", "expires_in=365", "unit=86400"]
+        output = subprocess.check_output(command, universal_newlines=True).strip()
+        token = output.split(":")[1].strip()
+
+        print(f"[prerun] Adding API token to key vault {keyVaultName}")
+        KVUri = f"https://{keyVaultName}.vault.azure.net"
+
+        credential = DefaultAzureCredential()
+        secret_client = SecretClient(vault_url=KVUri, credential=credential)
+        secret_client.set_secret("ckan-administrator-token", token)
 
 def create_sysadmin():
 
@@ -171,6 +189,7 @@ def create_sysadmin():
         out = subprocess.check_output(command)
         if b"User:None" not in re.sub(b"\s", b"", out):
             print("[prerun] Sysadmin user exists, skipping creation")
+            create_api_token(name)
             return
 
         # Create user
@@ -193,6 +212,8 @@ def create_sysadmin():
 
         subprocess.call(command)
         print("[prerun] Made user {0} a sysadmin".format(name))
+
+        create_api_token(name)
 
         # cleanup permissions
         # We're running as root before pivoting to uwsgi and dropping privs
