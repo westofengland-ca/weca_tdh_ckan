@@ -351,15 +351,15 @@ p.gem-c-lead-paragraph {
     text-transform: uppercase;
 }
 
-.data-category-low {
+.data-category-open {
   background-color: #00703c;
 }
 
-.data-category-br {
+.data-category-cont {
   background-color: #0c56ac;
 }
 
-.data-category-pr {
+.data-category-contpi {
   background-color: #b75c1f;
 }
 

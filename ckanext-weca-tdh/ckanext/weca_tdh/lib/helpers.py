@@ -32,18 +32,21 @@ def get_google_analytics_config():
 def get_resource_data_categories():
     data_categories = [{
         "id": 0,
-        "name": "Low sensitivity",
-        "class": "data-category-low"
+        "name": "Open",
+        "desc": "Can be accessed by anyone.",
+        "class": "data-category-open"
       },
       {
         "id": 1,
-        "name": "Business restricted",
-        "class": "data-category-br"
+        "name": "Controlled",
+        "desc": "Can be accessed by defined teams or persons.",
+        "class": "data-category-cont"
       },
       {
         "id": 2,
-        "name": "Personal restricted",
-        "class": "data-category-pr"
+        "name": "Controlled (Personal Info)",
+        "desc": "Subject to GDPR; can only be accessed by relevant teams or persons.",
+        "class": "data-category-contpi"
       },
       {
         "id": 3,
