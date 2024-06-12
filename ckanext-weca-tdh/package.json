@@ -1,6 +1,6 @@
 {
   "name": "ckanext-weca-tdh",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "[![Tests](https://github.com/RoweIT/ckanext-weca-tdh/workflows/Tests/badge.svg?branch=main)](https://github.com/RoweIT/ckanext-weca-tdh/actions)",
   "main": "index.js",
   "scripts": {
