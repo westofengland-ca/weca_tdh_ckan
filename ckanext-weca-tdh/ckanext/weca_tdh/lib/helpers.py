@@ -1,7 +1,7 @@
 import ckanext.weca_tdh.config as C
 from datetime import datetime
 
-def filter_datetime(string, format='full'):   
+def filter_datetime(string, format='full') -> str:   
     try:
         dt = datetime.strptime(string, '%Y-%m-%dT%H:%M:%S.%f')   
     except (ValueError, TypeError):
@@ -10,7 +10,7 @@ def filter_datetime(string, format='full'):
         return dt.strftime('%d %b %Y')        
     return dt.strftime('%d %b %Y %H:%M:%S')
 
-def get_cookie_control_config():
+def get_cookie_control_config() -> dict:
     cookie_control_config = {}
 
     api_key = C.CCC_API_KEY
@@ -21,7 +21,7 @@ def get_cookie_control_config():
 
     return cookie_control_config
 
-def get_google_analytics_config():
+def get_google_analytics_config() -> dict:
     google_analytics_config = {}
 
     ga_id = C.GA_ID
@@ -29,7 +29,7 @@ def get_google_analytics_config():
 
     return google_analytics_config
 
-def get_resource_data_categories():
+def get_resource_data_categories() -> list:
     data_categories = [{
         "id": 0,
         "name": "Open",

@@ -18,8 +18,8 @@ class ADAuth():
             claims_map = ADAuth.get_user_claims()
             if claims_map:
                 user = User.get_or_create_ad_user(claims_map)
+                ADAuth._login_to_ckan(user)
 
-            ADAuth._login_to_ckan(user)
             referer = request.args.get('referrer', default='dashboard.datasets')
 
             if referer == toolkit.url_for('user.login'):
