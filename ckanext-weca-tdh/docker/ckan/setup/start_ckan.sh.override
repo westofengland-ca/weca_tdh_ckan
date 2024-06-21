@@ -86,6 +86,10 @@ ckan config-tool $CKAN_INI ckan.auth.create_dataset_if_not_in_organization=False
 ckan config-tool $CKAN_INI ckan.auth.user_delete_organizations=False
 ckan config-tool $CKAN_INI ckan.auth.user_delete_groups=False
 
+# Set default types
+ckan config-tool $CKAN_INI ckan.default.organization_type=publisher
+ckan config-tool $CKAN_INI ckan.default.group_type=topic
+
 # Set dataset level auth control
 ckan config-tool $CKAN_INI "ckan.auth.allow_dataset_collaborators = $CKAN_AUTH_ALLOW_DATASET_COLLABORATORS"
 
