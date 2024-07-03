@@ -22,6 +22,10 @@
     {{ filter_items.append({'value': item.name, 'text': item.display_name, 'selected': selected}) or "" }}
   {% endfor %}
 
+  {% if name == 'res_format' %}
+    {% set filter_items = h.sort_file_formats(filter_items) %}
+  {% endif %}
+
   <label class="govuk-label sort-label" for="{{name}}">{{ filter_labels[name] }}</label>
   {{ govukSelect({
     'id': name,

@@ -55,3 +55,28 @@ def get_resource_data_categories() -> list:
     }]
 
     return data_categories
+
+def sort_file_formats(filter_items: list) -> list:  
+    sorted_items = []
+
+    # Set to track seen values
+    seen_values = set()
+
+    for item in filter_items:
+        if ',' in item['value']:
+            # Split the comma-separated values
+            values = item['value'].split(', ')
+            for value in values:
+                if value not in seen_values:
+                    # Add the value to the seen set
+                    seen_values.add(value)
+                    # Create new entries for each unique value
+                    sorted_items.append({'value': value, 'text': value, 'selected': item.get('selected', 'Undefined')})
+        else:
+            if item['value'] not in seen_values:
+                # Add the value to the seen set
+                seen_values.add(item['value'])
+                # Keep the entry as is
+                sorted_items.append(item)
+    
+    return sorted_items
