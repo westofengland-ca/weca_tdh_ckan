@@ -71,7 +71,7 @@
     ["RAR", "RAR Compressed File", "application/rar", []],
     ["RDF", "RDF", "application/rdf+xml", ["rdf/xml"]],
     ["RSS", "RSS feed", "application/rss+xml", []],
-    ["SHP", "Shapefile", null, ["esri shapefile"]],
+    ["SHP", "Shapefile", null, ["esri shapefile", "shapefile"]],
     ["SPARQL", "SPARQL end-point", "application/sparql-results+xml", []],
     ["SVG", "SVG vector image", "image/svg+xml", ["svg"]],
     ["TAR", "TAR Compressed File", "application/x-tar", []],

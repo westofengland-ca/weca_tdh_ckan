@@ -138,8 +138,12 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                 # capture file format without quotes
                 pattern = r'res_format:"([^"]+)"'
 
-                # replace matched pattern with captured group, add wildcards
-                search_params[param] = re.sub(pattern, r'res_format:*\1*', value)
+                # replace matched pattern with captured group, escape whitespace, and add wildcards
+                search_params[param] = re.sub(
+                    pattern, 
+                    lambda match: 'res_format:*{}*'.format(match.group(1).replace(" ", r"\ ")), 
+                    value
+                )
             
         return search_params
 
