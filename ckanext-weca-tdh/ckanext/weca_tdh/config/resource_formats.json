@@ -57,6 +57,7 @@
     ["ODT", "OpenDocument Text", "application/vnd.oasis.opendocument.text", []],
     ["PDF", "PDF File", "application/pdf", []],
     ["Perl", "Perl Script", "text/x-perl", []],
+    ["Power BI", "Power BI Service", "application/pbix", ["power bi", "power bi service", "pbix"]],
     ["PNG", "PNG Image File", "image/png", []],
     ["POTM", "PowerPoint Open XML - Macro-Enabled Template", "application/vnd.ms-powerpoint.template.macroEnabled.12", []],
     ["POTX", "PowerPoint OOXML Presentation - Template", "application/vnd.openxmlformats-officedocument.presentationml.template", []],
