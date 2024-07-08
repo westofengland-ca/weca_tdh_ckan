@@ -12,7 +12,7 @@
 
 {% block search_form %}
   {% if label %}
-    <label class="govuk-label sort-label" for="keywords">{{ label }}</label>
+    <label class="govuk-label sort-label" for="keywords" title="Title, description, tags, topics, publishers, format, license...">{{ label }}</label>
   {% endif %}
   <div class="search-wrapper">
     <input class="search-input" id="keywords" type="text" placeholder="{{ placeholder }}" name="q" value="{{ query }}" aria-label="search-input" data-cy="search-input">           
