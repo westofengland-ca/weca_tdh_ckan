@@ -29,15 +29,15 @@ AD_CLAIM_GROUPS = "groups"
 
 # AD Groups
 AD_GROUP_CKAN_ID = config['ad.group.ckan_id']
-AD_GROUP_SYSADMIN_ID = config['ad.group.sysadmin_id']
+AD_GROUP_SYSADMIN_ID = config.get('ad.group.sysadmin_id', "")
 
 # Feature flags
 FF_AUTH_RESTRICTED_ACCESS = config['feature_flag.auth.restricted_access']
 FF_AUTH_EXTERNAL_ONLY = config['feature_flag.auth.external_only']
 FF_AUTH_USER_GROUP_ONLY = config['feature_flag.auth.user_group_only']
-FF_AD_UPDATE_USER = config['feature_flag.ad.update_user']
-FF_AD_SYSADMIN = config['feature_flag.ad.sysadmin']
-FF_GA_ENABLED = config['feature_flag.ga.enabled']
+FF_AD_UPDATE_USER = config.get('feature_flag.ad.update_user', "False")
+FF_AD_SYSADMIN = config.get('feature_flag.ad.sysadmin', "False")
+FF_GA_ENABLED = config.get('feature_flag.ga.enabled', "False")
 
 # URL filter
 EXLUDED_SUBPATHS = ('/about', '/accessibility', '/assets/', '/api/', '/base/', '/policy', '/scripts/', '/user/adlogin', '/user/login', '/webassets/')
@@ -55,7 +55,7 @@ CCC_API_KEY = config['ccc.api_key']
 CCC_LICENSE = 'PRO'
 
 # Google Analytics config
-GA_ID = config['ga.id']
+GA_ID = config.get('ga.id', "")
 
 # TDH partner connect file config
 TDH_CONNECT_ADDRESS_HOST = config.get('tdh.connect.address_host', "")

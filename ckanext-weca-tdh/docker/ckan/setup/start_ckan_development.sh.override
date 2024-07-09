@@ -90,11 +90,18 @@ ckan config-tool $CKAN_INI ckan.auth.create_dataset_if_not_in_organization=False
 ckan config-tool $CKAN_INI ckan.auth.user_delete_organizations=False
 ckan config-tool $CKAN_INI ckan.auth.user_delete_groups=False
 
+# Set default types
+ckan config-tool $CKAN_INI ckan.default.organization_type=publisher
+ckan config-tool $CKAN_INI ckan.default.group_type=topic
+
 # Set dataset level auth control
 ckan config-tool $CKAN_INI "ckan.auth.allow_dataset_collaborators = $CKAN_AUTH_ALLOW_DATASET_COLLABORATORS"
 
 # Set license group
 ckan config-tool $CKAN_INI licenses_group_url=file:///$WECA_TDH_DIR/config/licenses.json
+
+# Set resource formats
+ckan config-tool $CKAN_INI ckan.resource_formats=$WECA_TDH_DIR/config/resource_formats.json
 
 # Set the feature flag configs 
 ckan config-tool $CKAN_INI "feature_flag.auth.restricted_access = $FEATURE_FLAG_AUTH_RESTRICTED_ACCESS"

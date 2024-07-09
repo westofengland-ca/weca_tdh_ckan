@@ -12,7 +12,7 @@ import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.lib import helpers
 from typing import Any
-import logging
+import logging, re
 
 log = logging.getLogger(__name__)
 
@@ -22,6 +22,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer, inherit=True)
     plugins.implements(plugins.IDatasetForm)
     plugins.implements(plugins.ITemplateHelpers)
+    plugins.implements(plugins.IPackageController)
 
     # IConfigurer
     def update_config(self, config: CKANConfig):
@@ -127,3 +128,54 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def package_types(self) -> list[str]:
         return []
+    
+    '''
+    Override package search
+    '''
+    def before_dataset_search(self, search_params):
+        for (param, value) in search_params.items():
+            if param == 'fq' and 'res_format:"' in value:
+                # capture file format without quotes
+                pattern = r'res_format:"([^"]+)"'
+
+                # replace matched pattern with captured group, escape whitespace, and add wildcards
+                search_params[param] = re.sub(
+                    pattern, 
+                    lambda match: 'res_format:*{}*'.format(match.group(1).replace(" ", r"\ ")), 
+                    value
+                )
+            
+        return search_params
+
+    def after_dataset_search(self, search_results, search_params):
+        return search_results
+    
+    def before_dataset_index(self, pkg_dict):
+        return pkg_dict
+    
+    def before_dataset_view(self, pkg_dict):
+        return pkg_dict
+    
+    def read(self, entity):
+        return entity
+
+    def create(self, entity):
+        return entity
+
+    def edit(self, entity):
+        return entity
+
+    def delete(self, entity):
+        return entity
+    
+    def after_dataset_create(self, context, pkg_dict):
+        return pkg_dict
+
+    def after_dataset_update(self, context, pkg_dict):
+        return pkg_dict
+
+    def after_dataset_delete(self, context, pkg_dict):
+        return pkg_dict
+
+    def after_dataset_show(self, context, pkg_dict):
+        return pkg_dict
