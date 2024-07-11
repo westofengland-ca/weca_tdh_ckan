@@ -80,3 +80,25 @@ def sort_file_formats(filter_items: list) -> list:
                 sorted_items.append(item)
     
     return sorted_items
+
+def sort_custom_metadata(page_items: list, current_filter: str) -> list:  
+    sorted_items = [{'value': "", 'text': ""}]
+
+    # Set to track seen values
+    seen_values = set()
+    
+    for item in page_items:
+        for extra in item.get('extras'):
+            value = extra.get('value')
+            if extra.get('key') == 'parent_org' and value not in seen_values:
+                # Add the value to the seen set
+                seen_values.add(value)
+                 
+                # Create new entries for each unique value
+                sorted_items.append({
+                    'value': value, 
+                    'text': value,
+                    'selected': value == current_filter
+                })
+    
+    return sorted_items
