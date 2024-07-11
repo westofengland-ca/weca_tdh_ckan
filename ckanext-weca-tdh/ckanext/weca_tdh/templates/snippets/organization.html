@@ -15,3 +15,23 @@
     {% endblock %}
   </div>
 {% endblock %}
+
+{% block image %}
+  <div class="media-image-container">
+    <img src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" alt="{{ organization.name }}" class="media-image img-fluid" style="max-height: 160px;">
+  </div>
+  <p style="border-bottom: 1px solid #ccc; margin-top: 1rem;"></p>
+{% endblock %}
+
+{% block description %}
+  {% if organization.description %}
+    <p class="description">
+      {{ h.markdown_extract(organization.description, 250) }}
+    </p>
+    <p class="read-more">
+      {% link_for _('read more'), named_route=organization.type ~ '.about', id=organization.name %}
+    </p>
+  {% else %}
+    <p class="empty">{{ h.humanize_entity_type('organization', organization.type, 'no description') or _('There is no description for this Publisher') }}</p>
+  {% endif %}
+{% endblock %}
