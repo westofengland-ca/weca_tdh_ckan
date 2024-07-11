@@ -90,7 +90,7 @@ def sort_custom_metadata(page_items: list, current_filter: str) -> list:
     for item in page_items:
         for extra in item.get('extras'):
             value = extra.get('value')
-            if extra.get('key') == 'parent_org' and value not in seen_values:
+            if extra.get('key') == 'parent_org' and value and value not in seen_values:
                 # Add the value to the seen set
                 seen_values.add(value)
                  
