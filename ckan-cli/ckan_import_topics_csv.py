@@ -47,7 +47,8 @@ try:
                 'id': row[csv_column_headers.TOPIC_GUID],
                 'name': row[csv_column_headers.TOPIC_SLUG],
                 'title': row[csv_column_headers.TOPIC_TITLE],
-                'description': row[csv_column_headers.TOPIC_DESC]
+                'description': row[csv_column_headers.TOPIC_DESC],
+                'image_url': f"{args.ckan_url}/assets/images/topics/{row[csv_column_headers.TOPIC_LOGO]}"
             }
             import_topic(topic_dict)
             count += 1
