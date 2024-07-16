@@ -17,6 +17,8 @@ variables:
   value: westofengland-ca
 - name: project_name
   value: weca-tdh
+- name: build_tag_name
+  value: mca_tdh_ckan
 - group: Pipeline_vars
 steps:
 - task: Docker@2
@@ -54,7 +56,7 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-     az containerapp update --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --name $(CONTAINER_APP_NAME) --set-env-vars ''TDH_BUILD_VERSION=ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
+     az containerapp update --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --name $(CONTAINER_APP_NAME) --set-env-vars ''TDH_BUILD_VERSION=ado-$(build_tag_name)_dkr-$(buildDate).$(Build.BuildId)
     
 - task: AzureCLI@2
   displayName: Update index rebuild job
