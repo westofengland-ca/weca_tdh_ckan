@@ -1,5 +1,6 @@
 {% extends "page.html" %}
 {% from "components/button/macro.html" import govukButton %}
+{% from "components/select/macro.html" import govukSelect %}
 
 {% block subtitle %}{{ _('Publishers') }}{% endblock %}
 {% block toolbar %}{% endblock %}
@@ -18,7 +19,25 @@
   <h2 class="govuk-body-m govuk-!-font-weight-bold">{{ _('Filter by') }}</h2>
   {% block search_input %}
     {% snippet "snippets/search_form.html", label="Keywords", placeholder="Search publishers...", query=q %}  
-  {% endblock %}    
+  {% endblock %}
+
+  <label class="govuk-label sort-label" for="test">{{ _('Parent Organisation') }}</label>
+  {% set filter_items = h.sort_custom_metadata(page.items, request.args.get('parent_org', "")) %}
+  {{ govukSelect({
+    'id': "test-id",
+    'name': "parent_org",
+    'items': filter_items | sort(attribute='value')
+    }) 
+  }}
+
+  {{ govukButton({
+    'text': "Apply filters",
+    'attributes': {'data-cy': 'filter-button'}
+  }) }}
+  <p class="govuk-body sort-label">
+    <a class="govuk-link" href="/organization" data-cy="filter-remove">{{ _('Remove filters') }}</a>
+  </p>
+
   {% snippet "organization/snippets/organization_sidebar.html", group_type=group_type %} 
 {% endblock %}
 
@@ -36,9 +55,19 @@
 
   {% block organizations_list %}
     <div class="group-listclass">
-      {% if page.items or request.args %}
-        {% if page.items %}
+      {% if page.items %}
+        {% if not request.args.parent_org %}
           {% snippet "organization/snippets/organization_list.html", organizations=page.items %}
+        {% else %}
+          {% set filter_items = [] %}
+          {% for item in page.items %}
+            {% if item.extras %}
+              {% if item.extras[0].get('value') == request.args.parent_org %}
+                {{ filter_items.append(item) or "" }}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% snippet "organization/snippets/organization_list.html", organizations=filter_items, all_fields=False %}
         {% endif %}
       {% else %}
         <p class="empty">

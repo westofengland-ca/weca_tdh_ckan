@@ -47,7 +47,14 @@ try:
                 'id': row[csv_column_headers.PUBLISHER_GUID],
                 'name': row[csv_column_headers.PUBLISHER_SLUG],
                 'title': row[csv_column_headers.PUBLISHER_TITLE],
-                'description': row[csv_column_headers.PUBLISHER_DESC]
+                'description': row[csv_column_headers.PUBLISHER_DESC],
+                'image_url': f"{args.ckan_url}/assets/images/publishers/{row[csv_column_headers.PUBLISHER_LOGO]}",
+                'extras': [ # custom fields
+                  {
+                    'key': 'parent_org',
+                    'value': row[csv_column_headers.PUBLISHER_PARENT_ORG]
+                  }
+                ]
             }
             import_publisher(publisher_dict)
             count += 1

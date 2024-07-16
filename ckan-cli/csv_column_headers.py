@@ -24,9 +24,12 @@ PUBLISHER_GUID = 'GUID'
 PUBLISHER_SLUG = 'Slug'
 PUBLISHER_TITLE = 'Title'
 PUBLISHER_DESC = 'Description'
+PUBLISHER_LOGO = 'Logo'
+PUBLISHER_PARENT_ORG = 'Parent Organisation'
 
 # Topic column headers
 TOPIC_GUID = 'GUID'
 TOPIC_SLUG = 'Slug'
 TOPIC_TITLE = 'Title'
 TOPIC_DESC = 'Description'
+TOPIC_LOGO = 'Logo'

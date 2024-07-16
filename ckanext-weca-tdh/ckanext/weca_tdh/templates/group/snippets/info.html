@@ -1,0 +1,27 @@
+{% ckan_extends %}
+
+{% block info %}
+  <div class="module module-narrow module-shallow context-info">
+    {% block inner %}
+      {{ super() }}
+    {% endblock %}
+  </div>
+{% endblock %}
+
+{% block image %}
+  <div class="media-image-container">
+    <img src="{{ group.image_display_url or h.url_for_static('/base/images/placeholder-group.png') }}" alt="{{ group.name }}" class="media-image img-fluid" style="max-height: 160px;">
+  </div>
+  <p style="border-bottom: 1px solid #ccc; margin-top: 1rem;"></p>
+{% endblock %}
+
+{% block description %}
+    {% if group.description %}
+      <p class="description">
+        {{ h.markdown_extract(group.description, 250) }}
+      </p>
+      <p class="read-more">
+        {% link_for _('read more'), named_route='group.about', id=group.name %}
+      </p>
+    {% endif %}
+{% endblock %}
