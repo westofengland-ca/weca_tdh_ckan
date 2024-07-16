@@ -1,4 +1,12 @@
-{% ckan_extends %}
+{% extends "organization/snippets/organization_form.html" %}
+
+{% block dataset_fields %}
+  {% if action == "edit" %}{{ super() }}{% endif %}
+{% endblock %}
+
+{% block custom_fields %}
+  {{ super() }}
+{% endblock %}
 
 {% block save_text %}
   {%- if action == "edit" -%}
@@ -6,4 +14,8 @@
   {%- else -%}
     {{ _('Create Publisher') }}
   {%- endif -%}
+{% endblock %}
+
+{% block delete_button %}
+  {% if action == "edit" %}{{ super() }}{% endif %}
 {% endblock %}
