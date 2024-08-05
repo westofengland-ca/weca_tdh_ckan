@@ -6,7 +6,7 @@ Requires necessary publishers and topics to have been created.
 import argparse
 from urllib.request import Request, urlopen
 from urllib.parse import quote
-from urllib.error import URLError, HTTPError
+from urllib.error import HTTPError
 import csv
 import json
 import csv_column_headers
@@ -16,6 +16,7 @@ parser.add_argument("--filename", dest="filename", help="Input file path", type=
 parser.add_argument("--ckan_url", dest="ckan_url", help="Target CKAN instance.", default="http://localhost:5000", type=str)
 parser.add_argument("--api_key", dest="api_key", help="API Key with necessary write permissions", type=str, required=True)
 args = parser.parse_args()
+count = 0
 
 def seperate_resources(row):
     resources = []
@@ -34,6 +35,8 @@ def seperate_resources(row):
     return resources
 
 def import_dataset(dataset_dict):
+    global count
+    
     # Use the json module to dump the dictionary to a string for posting. URL encode.
     data_string = quote(json.dumps(dataset_dict)).encode('utf-8')
 
@@ -48,6 +51,7 @@ def import_dataset(dataset_dict):
     try:
         urlopen(request, data_string)
         print(f"Created dataset {row["Title"]}.")
+        count += 1
     except HTTPError as err:
         if err.code == 409:
             print(f"Dataset {row["Title"]} already exists. Skipping...")
@@ -55,11 +59,12 @@ def import_dataset(dataset_dict):
             raise Exception(f'import_dataset(): failed to import dataset. {err}')
     except:
         raise Exception(f'import_dataset(): {row["Title"]} failed')
+    
+    return count
 
 try:
     with open(args.filename, 'r') as csvfile:
         reader = csv.DictReader(csvfile)
-        count = 0
         print("Running...")
 
         for row in reader:  
@@ -76,7 +81,6 @@ try:
                 'datalake_active': row['Datalake'],
             }
             import_dataset(dataset_dict)
-            count += 1
 
     print(f'Imported {count} datasets.')
 

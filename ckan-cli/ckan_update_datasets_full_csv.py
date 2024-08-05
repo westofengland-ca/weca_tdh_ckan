@@ -1,5 +1,5 @@
 '''
-Imports a list of datasets from a CSV file via the CKAN API.
+Updates a list of datasets from a CSV file via the CKAN API.
 Requires necessary publishers and topics to have been created.
 '''
 
@@ -33,7 +33,7 @@ def seperate_resources(row):
     
     return resources
 
-def import_dataset(dataset_dict):
+def update_dataset(dataset_dict):
     # Use the json module to dump the dictionary to a string for posting. URL encode.
     data_string = quote(json.dumps(dataset_dict)).encode('utf-8')
 
@@ -47,14 +47,15 @@ def import_dataset(dataset_dict):
     # Make the HTTP request.
     try:
         urlopen(request, data_string)
+        print(f"Updating dataset {row['Title']}...")
     except HTTPError as err:
         if err.code == 409:
-            raise Exception(f'import_dataset(): data conflict in row {row}')
+            raise Exception(f'update_dataset(): data conflict in row {row}')
         elif err.code == 404:
-            raise Exception(f'import_dataset(): dataset {row["Title"]} does not exist')
-        raise Exception(f'import_dataset(): failed to import dataset. {err}')
+            raise Exception(f'update_dataset(): dataset {row["Title"]} does not exist')
+        raise Exception(f'update_dataset(): failed to update dataset. {err}')
     except URLError:
-        raise Exception(f'import_dataset(): invalid URL')
+        raise Exception(f'update_dataset(): invalid URL')
 
 try:
     with open(args.filename, 'r') as csvfile:
@@ -75,10 +76,10 @@ try:
                 'groups': [] if not row[csv_column_headers.DATASET_TOPICS] else list([{'name': topic.strip()} for topic in row[csv_column_headers.DATASET_TOPICS].split(';')]),
                 'datalake_active': row['Datalake'],
             }
-            import_dataset(dataset_dict)
+            update_dataset(dataset_dict)
             count += 1
 
-    print(f'Imported {count} datasets.')
+    print(f'Updated {count} datasets.')
 
 except Exception as err:
     print(err)
