@@ -28,7 +28,7 @@ def import_publisher(pub_dict):
 
     # Make the HTTP request.
     try:
-        urlopen(request, data_string)      
+        urlopen(request, data_string)
     except HTTPError as err:
         if err.code == 409:
             raise Exception(f'import_publisher(): data conflict in row {row}')
