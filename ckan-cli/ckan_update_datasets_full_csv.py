@@ -29,9 +29,18 @@ def seperate_resources(row):
     for i in range(0, len(name_list)):
       resources.append({'name': name_list[i], 'url': url_list[i], 
                          'format': format_list[i], 'description': desc_list[i],
-                         'resource_data_category': cat_list[i]})
+                         'resource_data_category': data_category_lookup(cat_list[i])})
     
     return resources
+
+def data_category_lookup(category):
+    data_categories = {
+        "Open": 0,
+        "Controlled": 1,
+        "Controlled (Personal Info)": 2,
+        "Confidential": 3
+    }
+    return data_categories.get(category)
 
 def update_dataset(dataset_dict):
     # Use the json module to dump the dictionary to a string for posting. URL encode.
