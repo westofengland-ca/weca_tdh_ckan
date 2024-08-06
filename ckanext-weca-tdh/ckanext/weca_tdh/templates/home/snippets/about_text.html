@@ -25,32 +25,41 @@
     All dataset resources are marked with one of the following data categories:") }}</p>
 
   <table class="govuk-table">
-      <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-              <th scope="col" class="govuk-table__header">{{ _('Data category') }}</th>
-              <th scope="col" class="govuk-table__header">{{ _('Description') }}</th>
-          </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-              <td class="govuk-table__cell">{{ _('Open') }}</td>
-              <td class="govuk-table__cell">{{ _("Data that can be freely shared with the public or other organisations. Does not contain personal data or require a Data Collaboration Agreement.") }}</td>
-          </tr>
-          <tr class="govuk-table__row">
-              <td class="govuk-table__cell">{{ _('Controlled') }}</td>
-              <td class="govuk-table__cell">{{ _("Data that is accessible only to privileged users who are either part of the data-owning organisation,
-                or an external organisation that has a Data Collaboration Agreement.") }}</td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{ _('Controlled (Personal Info)') }}</td>
-            <td class="govuk-table__cell">{{ _("Data that is subject to GDPR because it contains Personal Identifiable Information. 
-              Access to the data is limited to specific users, and can be shared with partner organisations subject to a Data Collaboration Agreement.") }}</td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{ _('Confidential') }}</td>
-            <td class="govuk-table__cell">{{ _("Highly sensitive data, typically because it contains Sensitive Personal Data (with reference to GDPR), with high impact potential on individuals.") }}</td>
-          </tr>
-      </tbody>
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">{{ _('Data category') }}</th>
+            <th scope="col" class="govuk-table__header">{{ _('Summary') }}</th>
+            <th scope="col" class="govuk-table__header">{{ _('Description') }}</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body govuk-body-s">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><span class="badge resource-data-category data-category-open">{{ _('Open') }}</span></td>
+            <td class="govuk-table__cell">{{ _('Can be accessed by anyone (with access to the TDH).') }}</td>
+            <td class="govuk-table__cell">{{ _("Data that is categorised as Open within the Transport Data Hub can be used in compliance with the terms of its licence. 
+              Care is taken to provide data that is both accurate and of high quality. However, individual checks should be made before relying on the data.") }}
+              <br><br>{{ _("For some datasets, in order to provide Open data, parts of the data have been removed or obfuscated. This is typically because the data contains information that could identify an individual or is commercially sensitive. 
+              This is done to comply with the ") }}<a href="https://www.gov.uk/make-a-freedom-of-information-request" title="Link to FOI act" target="_blank">{{ _('Freedom of Information Act') }}</a> {{ _('and') }} <a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/" title="Link to GDPR" target="_blank">{{ _('General Data Protection Regulation') }}</a>.</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><span class="badge resource-data-category data-category-cont">{{ _('Controlled') }}</span></td>
+            <td class="govuk-table__cell">{{ _("Can be accessed by defined teams or persons.") }}</td>
+            <td class="govuk-table__cell">{{ _("Data that is accessible only to privileged users who are either part of the data-owning organisation,
+              or an external organisation that has a Data Collaboration Agreement.") }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell"><span class="badge resource-data-category data-category-contpi">{{ _('Controlled (Personal Info)') }}</span></td>
+          <td class="govuk-table__cell">{{ _("Subject to GDPR; only accessible by specific teams or persons.") }}</td>
+          <td class="govuk-table__cell">{{ _("Data that is subject to GDPR because it contains Personal Identifiable Information. 
+            Access to the data is limited to specific users, and can be shared with partner organisations subject to a Data Collaboration Agreement.") }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell"><span class="badge resource-data-category data-category-con">{{ _('Confidential') }}</span></td>
+          <td class="govuk-table__cell">{{ _("The TDH does not store Confidential datasets.") }}</td>
+          <td class="govuk-table__cell">{{ _("Data in which disclosure would result in high impact to an individual or organisation. This includes Special Category data under GDPR due to the sensitivity of the data,
+             and the number of conditions required to be met before it can be stored or processed.") }}</td>
+        </tr>
+    </tbody>
   </table>
 
   <p class="govuk-body-xs"><i>{{ _('Build version:') }} {{ build_version }}</i></p>
