@@ -20,5 +20,38 @@
   <h2>{{ _('Cookie Policy') }}</h2>
   <p class="govuk-body-m">{{ _('For information regarding cookies and how we use them, see our ') }}<a href="/policy" target="_blank">{{ _('Cookie Policy') }}</a>.</p>
 
-  <br><p class="govuk-body-xs"><i>{{ _('Build version:') }} {{ build_version }}</i></p>
+  <h2>{{ _('Data Categories') }}</h2>
+  <p class="govuk-body-m">{{ _("Data categories are used to indicate a dataset's access classification, including the level of data sensitivity, breadth of access, and need for controls. 
+    All dataset resources are marked with one of the following data categories:") }}</p>
+
+  <table class="govuk-table">
+      <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">{{ _('Data category') }}</th>
+              <th scope="col" class="govuk-table__header">{{ _('Description') }}</th>
+          </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+              <td class="govuk-table__cell">{{ _('Open') }}</td>
+              <td class="govuk-table__cell">{{ _("Data that can be freely shared with the public or other organisations. Does not contain personal data or require a Data Collaboration Agreement.") }}</td>
+          </tr>
+          <tr class="govuk-table__row">
+              <td class="govuk-table__cell">{{ _('Controlled') }}</td>
+              <td class="govuk-table__cell">{{ _("Data that is accessible only to privileged users who are either part of the data-owning organisation,
+                or an external organisation that has a Data Collaboration Agreement.") }}</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ _('Controlled (Personal Info)') }}</td>
+            <td class="govuk-table__cell">{{ _("Data that is subject to GDPR because it contains Personal Identifiable Information. 
+              Access to the data is limited to specific users, and can be shared with partner organisations subject to a Data Collaboration Agreement.") }}</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ _('Confidential') }}</td>
+            <td class="govuk-table__cell">{{ _("Highly sensitive data, typically because it contains Sensitive Personal Data (with reference to GDPR), with high impact potential on individuals.") }}</td>
+          </tr>
+      </tbody>
+  </table>
+
+  <p class="govuk-body-xs"><i>{{ _('Build version:') }} {{ build_version }}</i></p>
 </div>
