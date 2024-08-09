@@ -33,7 +33,7 @@ def get_resource_data_categories() -> list:
     data_categories = [{
         "id": 0,
         "name": "Open",
-        "desc": "Can be accessed by anyone.",
+        "desc": "Can be accessed by anyone (with access to the TDH).",
         "class": "data-category-open"
       },
       {
@@ -45,7 +45,7 @@ def get_resource_data_categories() -> list:
       {
         "id": 2,
         "name": "Controlled (Personal Info)",
-        "desc": "Subject to GDPR; can only be accessed by relevant teams or persons.",
+        "desc": "Subject to GDPR; only accessible by relevant teams or persons.",
         "class": "data-category-contpi"
       },
       {
