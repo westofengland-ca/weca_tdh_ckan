@@ -1,6 +1,6 @@
 # Package info
 PACKAGE_NAME = 'WECA TDH CKAN import/export package'
-VERSION_NO = '1.1.1'
+VERSION_NO = '1.1.4'
 
 # Import/export filenames
 INFO_FILENAME = 'info.json'
