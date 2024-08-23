@@ -38,6 +38,8 @@
                 <dd property="dc:creator" data-cy="package-publisher">{{ pkg.organization.title }}</dd>
                 <dt>{{ _('Last updated:') }}</dt>
                 <dd property="dc:date" data-cy="package-updated">{{ h.filter_datetime(pkg.metadata_modified, 'short') }}</dd>
+                <dt>{{ _('Last reviewed:') }}</dt>
+                <dd property="dc:review" data-cy="package-reviewed">{{ h.filter_datetime(pkg.last_reviewed, 'short') or h.filter_datetime(pkg.metadata_modified, 'short') }}</dd>
                 <dt>{{ _('Topics:') }}</dt>
                 <dd data-cy="package-topics">
                   {% snippet "package/snippets/package_topics.html", pkg_dict=pkg %}
@@ -49,6 +51,8 @@
                 <dt>{{ _('TDH Data Lake:') }}</dt>
                 <dd data-cy="package-datalake">{{ _('Available ') if pkg.datalake_active else _('Not available ') }}<i class="fa fa-info-circle fa-xs" 
                   title="Indicates if the data for this dataset is available within the TDH Data Lake (accessible via PowerBI query or DataBricks)"></i></dd>
+                <dt>{{ _('Data quality:') }}</dt>
+                <dd property="dc:quality" data-cy="package-quality">{{ pkg.data_quality }}</dd>
               </dl>
               {% block package_summary %}
                 <h3 class="heading-small">{{ _('Summary') }}</h3>
