@@ -12,15 +12,6 @@
       </div>
     </div>
   {% endblock %}
-  {% block package_metadata_fields_last_reviewed %}
-    <div class="form-group control-medium">
-      <label for="field-lr" class="form-label">{{ _('Last Review Date') }}</label>
-      <div class="controls">
-        {% set value = data.get('last_reviewed', "01/01/24") %}
-        <input value="{{value}}" type="date" id="field-lr" name="last_reviewed" class="form-control">
-      </div>
-    </div>
-  {% endblock %}
   {% block package_metadata_fields_data_quality %}
     <div class="form-group control-medium">
       <label for="field-dq" class="form-label">{{ _('Data Quality') }}</label>
@@ -30,6 +21,15 @@
           <option {% if data.get('data_quality', "1") == "2 Star" %} selected="selected" {% endif %}>{{ _('2 Star') }}</option>
           <option {% if data.get('data_quality', "1") == "3 Star" %} selected="selected" {% endif %}>{{ _('3 Star') }}</option>
         </select>
+      </div>
+    </div>
+  {% endblock %}
+  {% block package_metadata_fields_last_reviewed %}
+    <div class="form-group control-medium">
+      <label for="field-lr" class="form-label">{{ _('Last Review Date') }}</label>
+      <div class="controls">
+        {% set value = data.get('last_reviewed', "01/01/24") %}
+        <input value="{{value}}" type="date" id="field-lr" name="last_reviewed" class="form-control">
       </div>
     </div>
   {% endblock %}
