@@ -17,9 +17,11 @@
       <label for="field-dq" class="form-label">{{ _('Data Quality') }}</label>
       <div class="controls">
         <select id="field-dq" name="data_quality" data-module="autocomplete">
-          <option {% if data.get('data_quality', "1 Star") == "1 Star" %} selected="selected" {% endif %}>{{ _('1 Star') }}</option>
-          <option {% if data.get('data_quality', "1") == "2 Star" %} selected="selected" {% endif %}>{{ _('2 Star') }}</option>
-          <option {% if data.get('data_quality', "1") == "3 Star" %} selected="selected" {% endif %}>{{ _('3 Star') }}</option>
+          <option value="0" {% if data.get('data_quality', "0") == "0" %} selected="selected" {% endif %}>{{ _('Unclassified') }}</option>
+          <option value="1" {% if data.get('data_quality', "0") == "1" %} selected="selected" {% endif %}>{{ _('Poor') }}</option>
+          <option value="2" {% if data.get('data_quality', "0") == "2" %} selected="selected" {% endif %}>{{ _('Moderate') }}</option>
+          <option value="3" {% if data.get('data_quality', "0") == "3" %} selected="selected" {% endif %}>{{ _('Good') }}</option>
+          <option value="4" {% if data.get('data_quality', "0") == "4" %} selected="selected" {% endif %}>{{ _('Excellent') }}</option>
         </select>
       </div>
     </div>
