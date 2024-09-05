@@ -8,7 +8,9 @@ variables:
 - name: buildDate
   value: $[format('{0:yyyyMMdd}', pipeline.startTime)]
 - name: ckantag
-  value: ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
+  value: mca_tdh_ckan
+- name: buildtag
+  value: ado-$(ckantag)_dkr-$(buildDate).$(Build.BuildId)
 - name: group_id
   value: 1
 - name: group_name
@@ -17,8 +19,6 @@ variables:
   value: westofengland-ca
 - name: project_name
   value: weca-tdh
-- name: build_tag_name
-  value: ado-mca_tdh_ckan_dkr-$(buildDate).$(Build.BuildId)
 - group: Pipeline_vars
 steps:
 - task: Docker@2
@@ -29,7 +29,7 @@ steps:
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
     buildContext: 'ckanext-weca-tdh'
-    tags: ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
+    tags: $(buildtag)
 
 - script: mkdir -p $(Build.ArtifactStagingDirectory)/$(NAMESPACE)
   displayName: 'Create Directory'
@@ -39,7 +39,7 @@ steps:
   inputs:
     repository: $(NAMESPACE)/$(CKAN_IMAGE_NAME)
     command: 'save'
-    arguments: '-o $(Build.ArtifactStagingDirectory)/$(NAMESPACE)/$(CKAN_IMAGE_NAME).image.tar $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)'
+    arguments: '-o $(Build.ArtifactStagingDirectory)/$(NAMESPACE)/$(CKAN_IMAGE_NAME).image.tar $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag)'
   
 - task: AzureContainerApps@1
   displayName: Update revision
@@ -47,7 +47,7 @@ steps:
     connectedServiceNameARM: $(ARM_SERVICE_CONNECTION)
     containerAppName: $(CONTAINER_APP_NAME)
     resourceGroup: $(CONTAINER_APP_RESOURCE_GROUP)
-    imageToDeploy: $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId)
+    imageToDeploy: $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag)
 
 - task: AzureCLI@2
   displayName: Update ckan build version tag
@@ -56,7 +56,7 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-     az containerapp update --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --name $(CONTAINER_APP_NAME) --set-env-vars ''TDH_BUILD_VERSION=$(build_tag_name)
+     az containerapp update --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --name $(CONTAINER_APP_NAME) --set-env-vars ''TDH_BUILD_VERSION=$(buildtag)
     
 - task: AzureCLI@2
   displayName: Update index rebuild job
@@ -65,7 +65,7 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-     az containerapp job update --name $(DEV_CKAN_INDEX_REBUILD_JOB_NAME) --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --image $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):ado-$(DEPLOY_PIPELINE_NAME)_dkr-$(buildDate).$(Build.BuildId) 
+     az containerapp job update --name $(DEV_CKAN_INDEX_REBUILD_JOB_NAME) --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --image $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag) 
 
 - task: PublishBuildArtifacts@1
   displayName: Publish artifacts
@@ -80,6 +80,6 @@ steps:
     
     $url = "https://dev.azure.com/$(organization_name)/$(project_name)/_apis/distributedtask/variablegroups/$(group_id)?api-version=5.0-preview.1"
     
-    $json = '{"type":"Vsts","name":"$(group_name)","variables":{"imagetag":{"isSecret":false,"value":"$(ckantag)"},"buildVersion":{"isSecret":false,"value":"$(build_tag_name)"}}}'    
+    $json = '{"type":"Vsts","name":"$(group_name)","variables":{"imagetag":{"isSecret":false,"value":"$(buildtag)"}}}'   
     $pipeline = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
   displayName: 'Run PowerShell Script'
