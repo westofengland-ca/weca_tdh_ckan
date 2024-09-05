@@ -1,13 +1,16 @@
 import ckanext.weca_tdh.config as C
 from datetime import datetime
 
-def filter_datetime(string, format='full') -> str:   
+def filter_datetime(string, format='full') -> str:
     try:
         dt = datetime.strptime(string, '%Y-%m-%dT%H:%M:%S.%f')   
     except (ValueError, TypeError):
-        return ""
+        try:
+            dt = datetime.strptime(string, '%Y-%m-%d')
+        except:
+            return ""
     if format == 'short':
-        return dt.strftime('%d %b %Y')        
+        return dt.strftime('%d %b %Y')       
     return dt.strftime('%d %b %Y %H:%M:%S')
 
 def get_cookie_control_config() -> dict:
@@ -55,6 +58,35 @@ def get_resource_data_categories() -> list:
     }]
 
     return data_categories
+
+def get_data_quality_markings() -> list:
+    data_quality_markings = [{
+        "id": 0,
+        "name": "Unclassified",
+        "score": "Unclassified",
+      },
+      {
+        "id": 1,
+        "name": "Poor",
+        "score": "<45",
+      },
+      {
+        "id": 2,
+        "name": "Moderate",
+        "score": "45-54",
+      },
+      {
+        "id": 3,
+        "name": "Good",
+        "score": "55-64",
+      },
+      {
+        "id": 4,
+        "name": "Excellent",
+        "score": "65-76",
+    }]
+
+    return data_quality_markings
 
 def sort_file_formats(filter_items: list) -> list:  
     sorted_items = []
