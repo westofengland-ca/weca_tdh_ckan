@@ -18,7 +18,7 @@ variables:
 - name: project_name
   value: weca-tdh
 - name: build_tag_name
-  value: mca_tdh_ckan
+  value: ado-mca_tdh_ckan_dkr-$(buildDate).$(Build.BuildId)
 - group: Pipeline_vars
 steps:
 - task: Docker@2
@@ -56,7 +56,7 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-     az containerapp update --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --name $(CONTAINER_APP_NAME) --set-env-vars ''TDH_BUILD_VERSION=ado-$(build_tag_name)_dkr-$(buildDate).$(Build.BuildId)
+     az containerapp update --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --name $(CONTAINER_APP_NAME) --set-env-vars ''TDH_BUILD_VERSION=$(build_tag_name)
     
 - task: AzureCLI@2
   displayName: Update index rebuild job
@@ -73,15 +73,13 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'ckan-build'
     publishLocation: 'Container'
-  # Updating image tag variable whcih is passed to the release pipeline
+  # Update image tag variable which is passed to the release pipeline
 - powershell: |
     # Base64-encodes the Personal Access Token (PAT) appropriately 
     $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f "", "$(PAT)")))
     
     $url = "https://dev.azure.com/$(organization_name)/$(project_name)/_apis/distributedtask/variablegroups/$(group_id)?api-version=5.0-preview.1"
     
-    $json = '{"type":"Vsts","name":"$(group_name)","variables":{"imagetag":{"isSecret":false,"value":"$(ckantag)"}}}'    
+    $json = '{"type":"Vsts","name":"$(group_name)","variables":{"imagetag":{"isSecret":false,"value":"$(ckantag)"},"buildVersion":{"isSecret":false,"value":"$(build_tag_name)"}}}'    
     $pipeline = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
   displayName: 'Run PowerShell Script'
-
-
