@@ -12,6 +12,29 @@
       </div>
     </div>
   {% endblock %}
+  {% block package_metadata_fields_data_quality %}
+    <div class="form-group control-medium">
+      <label for="field-dq" class="form-label">{{ _('Data Quality') }}</label>
+      <div class="controls">
+        <select id="field-dq" name="data_quality" data-module="autocomplete">
+          <option value="0" {% if data.get('data_quality', "0") == "0" %} selected="selected" {% endif %}>{{ _('Unclassified') }}</option>
+          <option value="1" {% if data.get('data_quality', "0") == "1" %} selected="selected" {% endif %}>{{ _('Poor') }}</option>
+          <option value="2" {% if data.get('data_quality', "0") == "2" %} selected="selected" {% endif %}>{{ _('Moderate') }}</option>
+          <option value="3" {% if data.get('data_quality', "0") == "3" %} selected="selected" {% endif %}>{{ _('Good') }}</option>
+          <option value="4" {% if data.get('data_quality', "0") == "4" %} selected="selected" {% endif %}>{{ _('Excellent') }}</option>
+        </select>
+      </div>
+    </div>
+  {% endblock %}
+  {% block package_metadata_fields_last_reviewed %}
+    <div class="form-group control-medium">
+      <label for="field-lr" class="form-label">{{ _('Last Review Date') }}</label>
+      <div class="controls">
+        {% set value = data.get('last_reviewed', "01/01/24") %}
+        <input value="{{value}}" type="date" id="field-lr" name="last_reviewed" class="form-control">
+      </div>
+    </div>
+  {% endblock %}
   {{ super() }}
 {% endblock %}
 

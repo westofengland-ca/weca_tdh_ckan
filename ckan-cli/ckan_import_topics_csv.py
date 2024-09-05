@@ -15,8 +15,11 @@ parser.add_argument("--filename", dest="filename", help="Input file path", type=
 parser.add_argument("--ckan_url", dest="ckan_url", help="Target CKAN instance.", default="http://localhost:5000", type=str)
 parser.add_argument("--api_key", dest="api_key", help="API Key with necessary write permissions", type=str, required=True)
 args = parser.parse_args()
+count = 0
 
 def import_topic(topic_dict):
+    global count
+    
     # Use the json module to dump the dictionary to a string for posting. URL encode.
     data_string = quote(json.dumps(topic_dict)).encode('utf-8')
 
@@ -29,17 +32,20 @@ def import_topic(topic_dict):
     # Make the HTTP request.
     try:
         urlopen(request, data_string)
+        print(f"Imported topic {row["Title"]}.")
+        count += 1
     except HTTPError as err:
         if err.code == 409:
-            raise Exception(f'import_topic(): data conflict in row {row}')
+            print(f"Topic {row["Title"]} already exists. Skipping...")
         raise Exception(f'import_topic(): failed to import topic. {err}')
     except URLError:
         raise Exception(f'import_topic(): invalid URL')
 
+    return count
+
 try:
     with open(args.filename, 'r') as csvfile:
         reader = csv.DictReader(csvfile)
-        count = 0
         print("Running...")
 
         for row in reader:
@@ -51,7 +57,6 @@ try:
                 'image_url': f"{args.ckan_url}/assets/images/topics/{row[csv_column_headers.TOPIC_LOGO]}"
             }
             import_topic(topic_dict)
-            count += 1
 
     print(f'Imported {count} Topics.')
 

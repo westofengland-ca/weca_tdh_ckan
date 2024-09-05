@@ -59,7 +59,7 @@ def import_dataset(dataset_dict):
     # Make the HTTP request.
     try:
         urlopen(request, data_string)
-        print(f"Created dataset {row["Title"]}.")
+        print(f"Imported dataset {row["Title"]}.")
         count += 1
     except HTTPError as err:
         if err.code == 409:
