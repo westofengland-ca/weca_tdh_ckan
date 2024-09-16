@@ -11,7 +11,8 @@
       {% block statement %}
         <h1 class="page-heading">{{ _('Accessibility Statement') }}</h1>
         {% set contact_email = config.get('tdh.contact_email') or _('ftz@westofengland-ca.gov.uk') %}
-        {% snippet 'snippets/accessibility_text.html', contact_email=contact_email %}
+        {% set contact_phone_number = config.get('tdh.contact_phone_number') or _('01275 88 4444') %}
+        {% snippet 'snippets/accessibility_text.html', contact_email=contact_email, contact_phone_number=contact_phone_number %}
       {% endblock %}
   </article>
 {% endblock %}
