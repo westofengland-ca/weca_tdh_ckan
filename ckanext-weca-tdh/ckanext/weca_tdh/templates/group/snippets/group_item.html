@@ -54,6 +54,6 @@ Example:
   {% endblock %}
 </li>
 {% endblock %}
-{% if position is divisibleby 3 %}
-  <li class="clearfix js-hide"></li>
+{% if position is divisibleby 3 or last %}
+  <li class="clearfix"></li>
 {% endif %}
