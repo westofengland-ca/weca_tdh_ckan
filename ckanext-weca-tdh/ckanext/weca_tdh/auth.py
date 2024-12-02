@@ -15,7 +15,7 @@ class ADAuth(object):
         try:
             claims_map = self.get_user_claims()
             if claims_map:
-                user = User.get_or_create_ad_user(claims_map)
+                user = User().get_or_create_ad_user(claims_map)
                 self.login_to_ckan(user)
 
             referer = request.args.get('referrer', default='dashboard.datasets')
@@ -79,4 +79,4 @@ class ADAuth(object):
         # decode base64 access token
         return base64.b64decode(token + '==').decode('utf-8')
     
-adauthbp.add_url_rule('/user/adlogin', view_func=ADAuth.authorise)
+adauthbp.add_url_rule('/user/adlogin', view_func=ADAuth().authorise)
