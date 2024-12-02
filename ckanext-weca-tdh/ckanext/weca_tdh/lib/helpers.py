@@ -1,16 +1,19 @@
 import ckanext.weca_tdh.config as C
 from datetime import datetime
 
-def filter_datetime(string, format='full') -> str:
+def filter_datetime(string: str, format: str = 'full') -> str:
     try:
         dt = datetime.strptime(string, '%Y-%m-%dT%H:%M:%S.%f')   
+
     except (ValueError, TypeError):
         try:
             dt = datetime.strptime(string, '%Y-%m-%d')
         except:
             return ""
+
     if format == 'short':
-        return dt.strftime('%d %b %Y')       
+        return dt.strftime('%d %b %Y')      
+ 
     return dt.strftime('%d %b %Y %H:%M:%S')
 
 def get_cookie_control_config() -> dict:

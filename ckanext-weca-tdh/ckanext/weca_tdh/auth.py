@@ -8,17 +8,15 @@ import base64, json, logging
 log = logging.getLogger(__name__)
 adauthbp = Blueprint('adauth', __name__)
 
-class ADAuth():  
-    def _login_to_ckan(user):
-        userobj = model.User.get(user)
-        toolkit.login_user(userobj, force=True)
 
-    def authorise():
+class ADAuth(object):
+    
+    def authorise(self) -> None:
         try:
-            claims_map = ADAuth.get_user_claims()
+            claims_map = self.get_user_claims()
             if claims_map:
                 user = User.get_or_create_ad_user(claims_map)
-                ADAuth._login_to_ckan(user)
+                self.login_to_ckan(user)
 
             referer = request.args.get('referrer', default='dashboard.datasets')
 
@@ -30,21 +28,22 @@ class ADAuth():
             flash(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
             return toolkit.redirect_to('user.login')
 
-    def get_user_claims():
+    def get_user_claims(self) -> list:
         try:
-            token = ADAuth.decode_token(request.headers.get(C.AD_ID_TOKEN)) # decode base64 access token
+            token = self.decode_token(request.headers.get(C.AD_ID_TOKEN))
         except Exception:
             raise Exception(f"invalid AD access token.")
 
         user_info = json.loads(token)
-        claims = user_info.get("claims", [])
+        claims = user_info.get("claims", {})
 
         if claims:
-            claims_map = ADAuth.map_user_claims(claims)
+            claims_map = self.map_user_claims(claims)
             claims_map[C.CKAN_USER_ID] = request.headers.get(C.AD_USER_ID)      
             return claims_map
 
-    def map_user_claims(claims):
+    @staticmethod
+    def map_user_claims(claims: dict) -> dict:
         claims_map = {}
         claim_url = C.AD_CLAIM_URL
         in_user_group = False
@@ -69,8 +68,15 @@ class ADAuth():
             raise Exception("account not in authorised user group.")
 
         return claims_map
+    
+    @staticmethod
+    def login_to_ckan(user) -> None:
+        userobj = model.User.get(user)
+        toolkit.login_user(userobj, force=True)
 
-    def decode_token(token):
+    @staticmethod
+    def decode_token(token: str) -> str:
+        # decode base64 access token
         return base64.b64decode(token + '==').decode('utf-8')
     
 adauthbp.add_url_rule('/user/adlogin', view_func=ADAuth.authorise)

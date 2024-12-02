@@ -2,20 +2,26 @@ import json
 import ckanext.weca_tdh.config as C
 import ckan.plugins.toolkit as toolkit
 
-class RouteController():
+class RouteController(object):
+  
+    @staticmethod
     def render_contact_page():
         return toolkit.render('contact.html')
     
+    @staticmethod
     def render_policy_page():
         return toolkit.render('policy.html')
     
+    @staticmethod
     def render_accessibility_page():
         return toolkit.render('accessibility.html')
     
+    @staticmethod
     def render_tdh_partner_connect_page():
         return toolkit.render('tdh_partner_connect.html')
 
-    def download_tdh_partner_connect_file():
+    @staticmethod
+    def download_tdh_partner_connect_file() -> str:
         # get config values
         host = C.TDH_CONNECT_ADDRESS_HOST
         path = C.TDH_CONNECT_ADDRESS_PATH
