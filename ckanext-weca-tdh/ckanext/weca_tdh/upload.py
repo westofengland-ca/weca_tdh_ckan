@@ -138,7 +138,7 @@ class BlobUploadView(MethodView):
                         zipf.write(f"{temp_dir}/info.json", arcname="info.json")
 
                     # upload zip file to blob storage
-                    BlobStorage.upload_blob(open(f"{temp_dir}/upload.zip", "rb"), upload_info['path'])
+                    BlobStorage().upload_blob(open(f"{temp_dir}/upload.zip", "rb"), upload_info['path'])
                     Upload.call_http_trigger(upload_info)
                     flash(C.UPLOAD_STATUS_SUCCESS, category='alert-success')
 
