@@ -48,7 +48,8 @@ UPLOAD_STATUS_SUCCESS = "File uploaded successfully."
 UPLOAD_STATUS_FAILED = "Failed to upload file."
 
 contact_email = config.get('tdh.contact_email') or 'ftz@westofengland-ca.gov.uk'
-ALERT_MESSAGE_SUPPORT = f"Contact support by emailing <a href='mailto:{contact_email}'>{contact_email}</a>"
+ALERT_MESSAGE_SUPPORT_EMAIL = f"Contact support by emailing <a href='mailto:{contact_email}'>{contact_email}</a>"
+ALERT_MESSAGE_SUPPORT = f"See the <a href='/about' target='_blank'><u>Support Page</u></a> for assistance raising a new issue on ServiceNow, quoting this error message"
 
 # Cookie Control config
 CCC_API_KEY = config['ccc.api_key']
