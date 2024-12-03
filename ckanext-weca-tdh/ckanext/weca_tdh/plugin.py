@@ -93,6 +93,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'last_reviewed': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
             'data_quality': [toolkit.get_validator('ignore_missing'),
+                                toolkit.get_converter('convert_to_extras')],
+            'data_quality_score': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')]
         })
         schema['resources'].update({
@@ -118,6 +120,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'last_reviewed': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')],
             'data_quality': [toolkit.get_converter('convert_from_extras'),
+                                toolkit.get_validator('ignore_missing')],
+            'data_quality_score': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')]
         })
         schema['resources'].update({

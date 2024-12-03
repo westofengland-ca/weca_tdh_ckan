@@ -14,7 +14,7 @@
   {% endblock %}
   {% block package_metadata_fields_data_quality %}
     <div class="form-group control-medium">
-      <label for="field-dq" class="form-label">{{ _('Data Quality') }}</label>
+      <label for="field-dq" class="form-label">{{ _('Data Quality Category') }}</label>
       <div class="controls">
         <select id="field-dq" name="data_quality" data-module="autocomplete">
           <option value="0" {% if data.get('data_quality', "0") == "0" %} selected="selected" {% endif %}>{{ _('Unclassified') }}</option>
@@ -23,6 +23,15 @@
           <option value="3" {% if data.get('data_quality', "0") == "3" %} selected="selected" {% endif %}>{{ _('Good') }}</option>
           <option value="4" {% if data.get('data_quality', "0") == "4" %} selected="selected" {% endif %}>{{ _('Excellent') }}</option>
         </select>
+      </div>
+    </div>
+  {% endblock %}
+  {% block package_metadata_fields_data_quality_score %}
+    <div class="form-group control-medium">
+      <label for="field-dqs" class="form-label">{{ _('Data Quality Score') }}</label>
+      <div class="controls">
+        {% set value = data.get('data_quality_score') %}
+        <input value="{{value}}" type="number" placeholder="0 - 100" id="field-dqs" name="data_quality_score" class="form-control" min="0" max="100" onkeyup="if(value<0) value=0; if(value>100) value=100;">
       </div>
     </div>
   {% endblock %}
