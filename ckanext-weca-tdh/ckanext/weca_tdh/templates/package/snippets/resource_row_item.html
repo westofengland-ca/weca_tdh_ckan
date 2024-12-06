@@ -23,7 +23,7 @@
       {{ h.filter_datetime(res.created, 'short') }}
     </td>
     <td class="govuk-table__cell">
-      <a href="/about#dc_table">
+      <a href="/about#data-catagories">
         {% set categories = h.get_resource_data_categories() %}
         {% if res.resource_data_category %}
           {% for category in categories %}

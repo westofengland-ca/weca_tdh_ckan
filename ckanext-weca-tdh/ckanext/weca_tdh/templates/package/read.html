@@ -55,7 +55,7 @@
                 </dd>
                 <dt>{{ _('Data quality:') }}</dt>
                 <dd property="dc:quality" data-cy="package-quality">
-                  <a href="/about#dq_table">
+                  <a href="/about#data-quality">
                     {% set data_quality_markings = h.get_data_quality_markings() %}
                     {% if pkg.data_quality %}
                       {% set data_quality = data_quality_markings[pkg.data_quality | int] %}
