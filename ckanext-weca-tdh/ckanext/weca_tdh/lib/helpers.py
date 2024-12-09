@@ -1,5 +1,7 @@
 import ckanext.weca_tdh.config as C
+import ckan.plugins.toolkit as toolkit
 from datetime import datetime
+import json
 
 def filter_datetime(string, format='full') -> str:
     try:
@@ -134,3 +136,10 @@ def sort_custom_metadata(page_items: list, current_filter: str) -> list:
                 })
     
     return sorted_items
+
+def update_package_metadata(pkg_dict: dict, key: str, value: any) -> dict:  
+    pkg_dict[key] = value
+    return toolkit.get_action('package_update')(context = {'ignore_auth': True}, data_dict = pkg_dict)
+
+def serialize_obj_metadata(value: any) -> str:
+    return json.dumps(dict(value))
