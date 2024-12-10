@@ -1,7 +1,9 @@
 import ckanext.weca_tdh.config as C
 import ckan.plugins.toolkit as toolkit
 from datetime import datetime
-import json
+import json, logging
+
+log = logging.getLogger(__name__)
 
 def filter_datetime(string, format='full') -> str:
     try:
@@ -142,6 +144,14 @@ def update_package_metadata(pkg_dict: dict, key: str, value: any) -> dict:
     return toolkit.get_action('package_update')(context = {'ignore_auth': True}, data_dict = pkg_dict)
 
 def transform_collaborators(collaborators: tuple) -> str:
-    collabs_dict = [{'id': user[0], 'role': user[1]} for user in collaborators]
-    
-    return json.dumps(collabs_dict)
+    ids_list = [user[0] for user in collaborators]
+    names_list = []
+
+    for ckan_id in ids_list:
+        try:
+            user = toolkit.get_action('user_show')(data_dict={C.CKAN_USER_ID: ckan_id})
+            names_list.append(user[C.CKAN_USER_FULLNAME])
+        except Exception as e:
+            log.error(f"Failed to fetch user with ID {ckan_id}: {e}")
+
+    return json.dumps(names_list)
