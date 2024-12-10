@@ -141,5 +141,7 @@ def update_package_metadata(pkg_dict: dict, key: str, value: any) -> dict:
     pkg_dict[key] = value
     return toolkit.get_action('package_update')(context = {'ignore_auth': True}, data_dict = pkg_dict)
 
-def serialize_obj_metadata(value: any) -> str:
-    return json.dumps(dict(value))
+def transform_collaborators(collaborators: tuple) -> str:
+    collabs_dict = [{'id': user[0], 'role': user[1]} for user in collaborators]
+    
+    return json.dumps(collabs_dict)
