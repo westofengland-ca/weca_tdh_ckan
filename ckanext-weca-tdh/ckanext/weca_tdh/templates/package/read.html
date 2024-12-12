@@ -5,6 +5,9 @@
 {% set can_edit = h.check_access('package_update', {'id':pkg.id }) %}
 {% block primary_class %}package-read{% endblock %}
 
+{% set collaborators = h.get_collaborators(pkg_dict.id) %}
+{% set pkg_dict = h.update_package_metadata(pkg_dict, key='data_stewards', value=h.transform_collaborators(collaborators)) %}
+
 {% block primary_content %}
   <div class="row">
     <section class="meta-data">
@@ -55,17 +58,25 @@
                 </dd>
                 <dt>{{ _('Data quality:') }}</dt>
                 <dd property="dc:quality" data-cy="package-quality">
-                  {% set data_quality_markings = h.get_data_quality_markings() %}
-                  {% if pkg.data_quality %}
-                    {% set data_quality = data_quality_markings[pkg.data_quality | int] %}                 
-                    {% for i in range(1, data_quality_markings | length - 1) %}
-                      {% if data_quality.id > i %}
-                        <i class="fa-solid fa-star" style="color: goldenrod" title="{{ data_quality.name }}"></i>
-                      {% elif data_quality.id != 0 %}
-                        <i class="fa-regular fa-star" style="color: goldenrod" title="{{ data_quality.name }}"></i>
+                  <a href="/about#data-quality">
+                    {% set data_quality_markings = h.get_data_quality_markings() %}
+                    {% if pkg.data_quality %}
+                      {% set data_quality = data_quality_markings[pkg.data_quality | int] %}
+                      {% if data_quality.id == 0 %}
+                        {{ data_quality.name }}
+                      {% else %}           
+                        {% for i in range(1, data_quality_markings | length - 1) %}
+                          {% if data_quality.id > i %}
+                            <i class="fa-solid fa-star" style="color: goldenrod" title="{{ data_quality.name }}"></i>
+                          {% elif data_quality.id != 0 %}
+                            <i class="fa-regular fa-star" style="color: goldenrod" title="{{ data_quality.name }}"></i>
+                          {% endif %}
+                        {% endfor %}
                       {% endif %}
-                    {% endfor %}
-                  {% endif %}
+                    {% else %}
+                      {{ _('Unclassified') }}
+                    {% endif %}
+                  </a>
                 </dd>
               </dl>
               {% block package_summary %}
