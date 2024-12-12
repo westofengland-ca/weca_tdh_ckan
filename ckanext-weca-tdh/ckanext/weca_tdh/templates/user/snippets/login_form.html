@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="login-support">
-    <p class="govuk-body-s">{{ _('For login issues and general support, visit the ') }} <a href="/about">{{ _('support page') }}</a>.</p>
+    <p class="govuk-body-s">{{ _('For login issues and general support, visit the ') }} <a href="{{ h.url_for('home.about') }}">{{ _('support page') }}</a>.</p>
   </div>
 {% else %}
   {% set username_error = true if error_summary %}

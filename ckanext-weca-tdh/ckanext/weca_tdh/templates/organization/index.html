@@ -35,7 +35,7 @@
     'attributes': {'data-cy': 'filter-button'}
   }) }}
   <p class="govuk-body sort-label">
-    <a class="govuk-link" href="/organization" data-cy="filter-remove">{{ _('Remove filters') }}</a>
+    <a class="govuk-link" href="{{ h.url_for('organization.index') }}" data-cy="filter-remove">{{ _('Remove filters') }}</a>
   </p>
 
   {% snippet "organization/snippets/organization_sidebar.html", group_type=group_type %} 
