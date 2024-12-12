@@ -38,19 +38,20 @@
 {% block header_site_navigation %}
   <div class="navbar-title" role="heading" aria-level="1">{{ g.site_title }}</div>
   {% block header_site_navigation_tabs %}
+    {% set package_type = h.default_package_type() %}
     {% set org_type = h.default_group_type('organization') %}
     {% set group_type = h.default_group_type('group') %}
     <li>
-      <a href="/dataset">{{_('Search')}}</a>
+      {% link_for _('Search'), named_route=package_type ~ '.search' %}
     </li>
     <li>
-      <a href="/organization">{{_('Publishers')}}</a>
+      {% link_for _('Publishers'), named_route=org_type ~ '.index' %}
     </li>
     <li>
-      <a href="/group">{{_('Topics')}}</a>
+      {% link_for _('Topics'), named_route=group_type ~ '.index' %}
     </li>
     <li>
-      <a href="/about">{{_('Support')}}</a>
+      {% link_for _('Support'), named_route='home.about' %}
     </li>
   {% endblock %}
 {% endblock %}
