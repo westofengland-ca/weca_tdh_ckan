@@ -10,6 +10,7 @@
   <article class="module govuk-body" role="main">
     {% block policy %}
       <h1 class="page-heading">{{ _('Cookie Policy') }}</h1>
+      <p>{{ h.connect_to_databricks() }}</p>
       {% snippet 'snippets/policy_text.html' %}
     {% endblock %}
   </article>

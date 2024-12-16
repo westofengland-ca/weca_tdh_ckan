@@ -157,28 +157,10 @@ def transform_collaborators(collaborators: tuple) -> str:
     return json.dumps(names_list)
 
 def connect_to_databricks():
-    from azure.identity import DefaultAzureCredential
+    from azure.identity import InteractiveBrowserCredential
     from databricks.sdk import WorkspaceClient
     
-    credential = DefaultAzureCredential()
-    scope = "https://management.azure.com/.default"
-    token = credential.get_token(scope)
-
-    try:
-        w = WorkspaceClient(
-            host=C.TDH_CONNECT_ADDRESS_HOST,
-            token=token
-        )
-    except:
-        print("error")
-    
-    return token
-
-def connect_to_databricks2():
-    from azure.identity import DefaultAzureCredential
-    from databricks.sdk import WorkspaceClient
-    
-    credential = DefaultAzureCredential()
+    credential = InteractiveBrowserCredential()
     scope = "2ff814a6-3304-4ab8-85cb-cd0e6f879c1d"
     token = credential.get_token(scope)
 
@@ -192,12 +174,30 @@ def connect_to_databricks2():
     
     return token
 
+def connect_to_databricks2():
+    from azure.identity import AzureCliCredential
+    from databricks.sdk import WorkspaceClient
+    
+    credential = AzureCliCredential()
+    scope = "2ff814a6-3304-4ab8-85cb-cd0e6f879c1d"
+    token = credential.get_token(scope)
+
+    try:
+        w = WorkspaceClient(
+            host=C.TDH_CONNECT_ADDRESS_HOST,
+            token=token
+        )
+    except:
+        print("error")
+    
+    return (credential,token)
+
 def connect_to_databricks_and_get_schema(id, catalog_name, schema_name, table_name):
     from azure.identity import DefaultAzureCredential
     from databricks.sdk import WorkspaceClient
     
     credential = DefaultAzureCredential()
-    scope = "https://management.azure.com/.default"
+    scope = "2ff814a6-3304-4ab8-85cb-cd0e6f879c1d"
     token = credential.get_token(scope)
 
     w = WorkspaceClient(
