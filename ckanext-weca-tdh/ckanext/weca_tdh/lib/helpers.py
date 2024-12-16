@@ -164,12 +164,33 @@ def connect_to_databricks():
     scope = "https://management.azure.com/.default"
     token = credential.get_token(scope)
 
-    w = WorkspaceClient(
-        host=C.TDH_CONNECT_ADDRESS_HOST,
-        token=token
-    )
+    try:
+        w = WorkspaceClient(
+            host=C.TDH_CONNECT_ADDRESS_HOST,
+            token=token
+        )
+    except:
+        print("error")
     
-    return w.clusters.list()
+    return token
+
+def connect_to_databricks2():
+    from azure.identity import DefaultAzureCredential
+    from databricks.sdk import WorkspaceClient
+    
+    credential = DefaultAzureCredential()
+    scope = "2ff814a6-3304-4ab8-85cb-cd0e6f879c1d"
+    token = credential.get_token(scope)
+
+    try:
+        w = WorkspaceClient(
+            host=C.TDH_CONNECT_ADDRESS_HOST,
+            token=token
+        )
+    except:
+        print("error")
+    
+    return token
 
 def connect_to_databricks_and_get_schema(id, catalog_name, schema_name, table_name):
     from azure.identity import DefaultAzureCredential
@@ -201,9 +222,6 @@ def connect_to_databricks_and_get_schema(id, catalog_name, schema_name, table_na
     schema = [{"name": row[0], "type": row[1], "comment": row[2]} for row in output]
 
     return schema
-
-    # Example usage
-
 
 def query_databricks_sql():
     path: str = C.TDH_CONNECT_ADDRESS_PATH
