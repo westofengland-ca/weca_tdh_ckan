@@ -155,3 +155,12 @@ def transform_collaborators(collaborators: tuple) -> str:
             log.error(f"Failed to fetch user with ID {ckan_id}: {e}")
 
     return json.dumps(names_list)
+
+def connect_to_databricks():
+    from databricks.sdk import WorkspaceClient
+
+    w = WorkspaceClient(
+        host=C.TDH_CONNECT_ADDRESS_HOST
+    )
+
+    return w.clusters.list()
