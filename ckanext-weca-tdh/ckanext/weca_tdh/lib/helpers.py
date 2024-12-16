@@ -157,5 +157,21 @@ def transform_collaborators(collaborators: tuple) -> str:
     return json.dumps(names_list)
 
 def connect_to_databricks():
-    from flask import request
-    return request.headers
+    from azure.identity import DefaultAzureCredential
+    from databricks.sdk import WorkspaceClient
+    
+    # Create the credential instance
+    credential = DefaultAzureCredential()
+
+    # Databricks resource scope
+    databricks_scope = "https://management.azure.com/.default"
+
+    # Get the access token
+    token = credential.get_token(databricks_scope)
+
+    w = WorkspaceClient(
+        host=C.TDH_CONNECT_ADDRESS_HOST,
+        token=token
+    )
+    
+    return w.clusters.list()
