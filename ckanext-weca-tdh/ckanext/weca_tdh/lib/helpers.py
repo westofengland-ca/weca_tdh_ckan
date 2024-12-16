@@ -216,3 +216,4 @@ def query_databricks_sql():
         return json.dumps(table_schema, indent=2)
     except Exception as e:
         print(f"Error: {e}")
+        return e
