@@ -160,14 +160,9 @@ def connect_to_databricks():
     from azure.identity import DefaultAzureCredential
     from databricks.sdk import WorkspaceClient
     
-    # Create the credential instance
     credential = DefaultAzureCredential()
-
-    # Databricks resource scope
-    databricks_scope = "https://management.azure.com/.default"
-
-    # Get the access token
-    token = credential.get_token(databricks_scope)
+    scope = "https://management.azure.com/.default"
+    token = credential.get_token(scope)
 
     w = WorkspaceClient(
         host=C.TDH_CONNECT_ADDRESS_HOST,
@@ -175,3 +170,49 @@ def connect_to_databricks():
     )
     
     return w.clusters.list()
+
+def connect_to_databricks_and_get_schema(id, catalog_name, schema_name, table_name):
+    from azure.identity import DefaultAzureCredential
+    from databricks.sdk import WorkspaceClient
+    
+    credential = DefaultAzureCredential()
+    scope = "https://management.azure.com/.default"
+    token = credential.get_token(scope)
+
+    w = WorkspaceClient(
+        host=C.TDH_CONNECT_ADDRESS_HOST,
+        token=token
+    )
+
+    # Define a SQL query to describe the table schema
+    sql_query = f"DESCRIBE {catalog_name}.{schema_name}.{table_name}"
+
+    # Run the query using the SQL Warehouse API
+    result = w.statement_execution.execute_statement(
+        statement=sql_query,
+        warehouse_id=id  # Replace with your SQL Warehouse ID
+    )
+
+    # Wait for the query to complete and fetch the results
+    #result.wait()
+    output = result.result.data_array
+
+    # Format the result as a list of column definitions
+    schema = [{"name": row[0], "type": row[1], "comment": row[2]} for row in output]
+
+    return schema
+
+    # Example usage
+
+
+def query_databricks_sql():
+    path: str = C.TDH_CONNECT_ADDRESS_PATH
+    id = path.split('/')[-1]
+    catalog = "bronze_development"
+    schema = "mca"
+    table = "user_list"
+    try:
+        table_schema = connect_to_databricks_and_get_schema(id, catalog, schema, table)
+        return json.dumps(table_schema, indent=2)
+    except Exception as e:
+        print(f"Error: {e}")
