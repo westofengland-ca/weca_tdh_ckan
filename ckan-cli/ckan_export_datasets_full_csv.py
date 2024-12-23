@@ -52,7 +52,7 @@ def join_resources(resources):
     url_list = '; '.join([resource['url'] for resource in resources])
     format_list = '; '.join([resource['format'] for resource in resources])
     desc_list = '; '.join([resource['description'] for resource in resources])
-    cat_list = '; '.join([data_category_lookup(resource['resource_data_category']) for resource in resources])
+    cat_list = '; '.join([data_category_lookup(int(resource['resource_data_category'])) for resource in resources])
     
     resource_list = {'name': name_list, 'url': url_list, 
                         'format': format_list, 'description': desc_list,
@@ -91,7 +91,7 @@ def parse_datasets(datasets: dict):
                     'Resource format': resources.get('format'),
                     'Resource data category': resources.get('resource_data_category'),
                     'Data Owner': "",
-                    'Data Steward': dataset['data_stewards'],
+                    'Data Steward': "",
                     'Date added': ""
                 }
 
