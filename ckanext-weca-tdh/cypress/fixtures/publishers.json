@@ -2,16 +2,34 @@
   {
     "name": "gloucester",
     "title": "Gloucester",
-    "description": "Gloucester area"
+    "description": "Gloucester area",
+    "extras": [
+      {
+        "key": "parent_org",
+        "value": "Gloucester Council"
+      }
+    ]
   },
   {
     "name": "plymouth_council",
     "title": "Plymouth Council",
-    "description": "Plymouth Council area"
+    "description": "Plymouth Council area",
+    "extras": [
+      {
+        "key": "parent_org",
+        "value": "Plymouth Council"
+      }
+    ]
   },
   {
     "name": "bristol_city_council",
     "title": "Bristol City Council",
-    "description": "Bristol City Council & sorrounding areas"
+    "description": "Bristol City Council & sorrounding areas",
+    "extras": [
+      {
+        "key": "parent_org",
+        "value": "Bristol City Council"
+      }
+    ]
   }
 ]

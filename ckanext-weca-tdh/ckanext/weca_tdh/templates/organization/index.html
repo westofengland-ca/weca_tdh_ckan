@@ -21,12 +21,13 @@
     {% snippet "snippets/search_form.html", label="Keywords", placeholder="Search publishers...", query=q %}  
   {% endblock %}
 
-  <label class="govuk-label sort-label" for="test">{{ _('Parent Organisation') }}</label>
+  <label class="govuk-label sort-label" for="parent_org">{{ _('Parent Organisation') }}</label>
   {% set filter_items = h.sort_custom_metadata(page.items, request.args.get('parent_org', "")) %}
   {{ govukSelect({
-    'id': "test-id",
+    'id': "parent_org",
     'name': "parent_org",
-    'items': filter_items | sort(attribute='value')
+    'items': filter_items | sort(attribute='value'),
+    'attributes': {'data-cy': 'filter-parent_org'}
     }) 
   }}
 

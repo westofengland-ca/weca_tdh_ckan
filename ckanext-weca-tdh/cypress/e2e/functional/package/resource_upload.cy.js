@@ -41,11 +41,11 @@ describe('Upload file page', () => {
 
       cy.get('#field-author').then($el => $el[0].checkValidity()).should('be.false')
       cy.get('#field-author').invoke('prop', 'validationMessage')
-        .should('equal', 'Please fill out this field.')
+        .should('equal', 'Please fill in this field.')
 
       cy.get('#field-author-email').then($el => $el[0].checkValidity()).should('be.false')
       cy.get('#field-author-email').invoke('prop', 'validationMessage')
-        .should('equal', 'Please fill out this field.')
+        .should('equal', 'Please fill in this field.')
 
       cy.get('#submit-button').click()
     }).then(() => {
