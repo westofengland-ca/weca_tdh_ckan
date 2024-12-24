@@ -11,12 +11,13 @@ adauthbp = Blueprint('adauth', __name__)
 
 class ADAuth(object):
     
-    def authorise(self) -> None:
+    @classmethod
+    def authorise(cls) -> None:
         try:
-            claims_map = self.get_user_claims()
+            claims_map = cls.get_user_claims()
             if claims_map:
-                user = User().get_or_create_ad_user(claims_map)
-                self.login_to_ckan(user)
+                username = User.get_or_create_ad_user(claims_map)
+                cls.login_to_ckan(username)
 
             referer = request.args.get('referrer', default='dashboard.datasets')
 
@@ -28,9 +29,10 @@ class ADAuth(object):
             flash(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
             return toolkit.redirect_to('user.login')
 
-    def get_user_claims(self) -> list:
+    @classmethod
+    def get_user_claims(cls) -> list:
         try:
-            token = self.decode_token(request.headers.get(C.AD_ID_TOKEN))
+            token = cls.decode_token(request.headers.get(C.AD_ID_TOKEN))
         except Exception:
             raise Exception(f"invalid AD access token.")
 
@@ -38,7 +40,7 @@ class ADAuth(object):
         claims = user_info.get("claims", {})
 
         if claims:
-            claims_map = self.map_user_claims(claims)
+            claims_map = cls.map_user_claims(claims)
             claims_map[C.CKAN_USER_ID] = request.headers.get(C.AD_USER_ID)      
             return claims_map
 
@@ -70,8 +72,8 @@ class ADAuth(object):
         return claims_map
     
     @staticmethod
-    def login_to_ckan(user) -> None:
-        userobj = model.User.get(user)
+    def login_to_ckan(username: str) -> None:
+        userobj = model.User.get(username)
         toolkit.login_user(userobj, force=True)
 
     @staticmethod

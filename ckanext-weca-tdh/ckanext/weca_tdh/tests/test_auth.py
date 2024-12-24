@@ -10,8 +10,10 @@ import ckanext.weca_tdh.tests.config as test_config
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.auth import ADAuth
 
+
 class Auth(unittest.TestCase):
-    def test_map_user_claims(self):
+
+    def test_map_user_claims(self) -> None:
         # Test mapping of claims to ckan user obj
         user_map = {
             'id': '5f43883e-63a8-4dc6-a070-b27681a5d057',
@@ -53,7 +55,7 @@ class Auth(unittest.TestCase):
         claims_map[C.CKAN_USER_ID] = test_config.TEST_AD_PRINCIPAL_ID
         assert claims_map != user_map
 
-    def test_decode_token(self):
+    def test_decode_token(self) -> None:
         # Test decoding base64 id token
 
         # valid token

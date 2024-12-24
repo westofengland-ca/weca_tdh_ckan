@@ -2,6 +2,7 @@ import json
 import ckanext.weca_tdh.config as C
 import ckan.plugins.toolkit as toolkit
 
+
 class RouteController(object):
   
     @staticmethod

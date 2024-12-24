@@ -7,23 +7,26 @@ from ckanext.weca_tdh.user import User
 from unittest.mock import MagicMock, patch
 import pytest, unittest
 
+
 user_data = {
     'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000',
     'name': 'mock_user-test', 
     'fullname': 'Mock User'
 }
 
-def setup_mock_user_show(data_dict):
+def setup_mock_user_show(data_dict) -> dict:
     # Helper function to set up the mock for user_show action
     return user_data
 
-def setup_mock_user_update(context, data_dict):
+def setup_mock_user_update(context, data_dict) -> dict:
     # Helper function to set up the mock for user_update action
     user_data['fullname'] = 'Updated User'
     return user_data
 
+
 class ADUser(unittest.TestCase):
-    def test_get_or_create_ad_user_new_user(self):
+
+    def test_get_or_create_ad_user_new_user(self) -> None:
         # Test the scenario where the user does not exist and should be created
         # Set up the mocks
         mock_user_show = MagicMock(side_effect=NotFound)
@@ -50,7 +53,7 @@ class ADUser(unittest.TestCase):
             assert username == 'mock_user-test'
 
     @pytest.mark.ckan_config("feature_flag.ad.update_user", 'True')
-    def test_get_or_create_ad_user_existing_user(self):
+    def test_get_or_create_ad_user_existing_user(self) -> None:
         # Test the scenario where the user does exist and should not be updated
         # Set up the mocks
         mock_user_show = MagicMock(side_effect=setup_mock_user_show)
@@ -78,7 +81,7 @@ class ADUser(unittest.TestCase):
             mock_user_create.assert_not_called()
 
     @pytest.mark.ckan_config("feature_flag.ad.update_user", 'True')
-    def test_get_or_create_ad_user_existing_user_update(self):
+    def test_get_or_create_ad_user_existing_user_update(self) -> None:
         # Test the scenario where the user does exist and should be updated
         # Set up the mocks
         mock_user_show = MagicMock(side_effect=setup_mock_user_show)
@@ -108,7 +111,7 @@ class ADUser(unittest.TestCase):
             mock_user_create.assert_not_called()
     
     @pytest.mark.ckan_config("feature_flag.ad.update_user", 'True')
-    def test_get_or_create_ad_user_missing_claims(self):
+    def test_get_or_create_ad_user_missing_claims(self) -> None:
         # Test the scenario where mandatory user claims are missing
         # Set up the mocks
         mock_user_show = MagicMock(side_effect=setup_mock_user_show)
@@ -144,7 +147,7 @@ class ADUser(unittest.TestCase):
             mock_user_update.assert_not_called()
             mock_user_create.assert_not_called()
 
-    def test_generate_username(self):
+    def test_generate_username(self) -> None:
         fullname = "Mock User"
         email = "mockemail@mockdomain.com"
 
