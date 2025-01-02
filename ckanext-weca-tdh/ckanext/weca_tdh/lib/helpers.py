@@ -15,7 +15,7 @@ def filter_datetime(string: str, format: str = 'full') -> str:
     except (ValueError, TypeError):
         try:
             dt = datetime.strptime(string, '%Y-%m-%d')
-        except:
+        except Exception:
             return ""
 
     if format == 'short':
