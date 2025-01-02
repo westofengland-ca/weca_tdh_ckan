@@ -1,22 +1,25 @@
 import json
-import ckanext.weca_tdh.config as C
+
 import ckan.plugins.toolkit as toolkit
+
+import ckanext.weca_tdh.config as C
 
 
 class RouteController(object):
-  
+    """Manage custom page routing"""
+
     @staticmethod
     def render_contact_page():
         return toolkit.render('contact.html')
-    
+
     @staticmethod
     def render_policy_page():
         return toolkit.render('policy.html')
-    
+
     @staticmethod
     def render_accessibility_page():
         return toolkit.render('accessibility.html')
-    
+
     @staticmethod
     def render_tdh_partner_connect_page():
         return toolkit.render('tdh_partner_connect.html')
@@ -29,25 +32,19 @@ class RouteController(object):
 
         # create partner connect file
         file = {
-          "version": "0.1",
-          "connections": [
-            {
-              "details": {
-                "protocol": "databricks-sql",
-                "address": {
-                  "host": host,
-                  "path": path
-                },
-                "authentication": None,
-                "query": None
-              },
-              "options": {
-                "Catalog": "",
-                "Database": ""
-              },
-              "mode": "DirectQuery"
-            }
-          ]
+            "version": "0.1",
+            "connections": [
+                {
+                    "details": {
+                        "protocol": "databricks-sql",
+                        "address": {"host": host, "path": path},
+                        "authentication": None,
+                        "query": None,
+                    },
+                    "options": {"Catalog": "", "Database": ""},
+                    "mode": "DirectQuery",
+                }
+            ],
         }
 
         return json.dumps(file)

@@ -1,8 +1,10 @@
 """
 Tests for controller.py
 """
-import json, pytest
+
+import json
 from unittest.mock import patch
+
 from ckanext.weca_tdh.controller import RouteController
 
 mock_host = "mock.host"

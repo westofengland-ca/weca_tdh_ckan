@@ -1,24 +1,26 @@
-from ckan.common import CKANConfig
+import logging
+import re
+from inspect import getmembers, isfunction
+from typing import Any
+
 import ckan.lib.helpers as h
-from ckan.model.user import AnonymousUser
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+from ckan.common import CKANConfig
+from ckan.model.user import AnonymousUser
 from ckan.types import Context, Schema
-from flask import Blueprint, Flask, flash, request
-from inspect import getmembers, isfunction
-from ckanext.weca_tdh.auth import adauthbp
-from ckanext.weca_tdh.upload import uploadbp
+from flask import Blueprint, flash, request
+
 import ckanext.weca_tdh.config as C
+from ckanext.weca_tdh.auth import adauthbp
 from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.lib import helpers
-from typing import Any
-import logging, re
+from ckanext.weca_tdh.upload import uploadbp
 
 log = logging.getLogger(__name__)
 
 
 class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
-
     plugins.implements(plugins.IAuthenticator, inherit=True)
     plugins.implements(plugins.IBlueprint, inherit=True)
     plugins.implements(plugins.IConfigurer, inherit=True)

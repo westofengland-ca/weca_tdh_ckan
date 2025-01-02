@@ -1,8 +1,12 @@
+import logging
+import re
+import uuid
+
+import ckan.plugins.toolkit as toolkit
 from ckan import model
 from ckan.logic import NotFound
-import ckan.plugins.toolkit as toolkit
+
 import ckanext.weca_tdh.config as C
-import logging, re, uuid
 
 log = logging.getLogger(__name__)
 
@@ -86,7 +90,7 @@ class User(object):
             return username
         
         # try email + domain
-        username = f"{ckemail}-{ckdomain}"       
+        username = f"{ckemail}-{ckdomain}"
         if cls._validate_username(username):
             return username
 
