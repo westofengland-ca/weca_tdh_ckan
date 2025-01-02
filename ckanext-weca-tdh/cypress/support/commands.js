@@ -4,20 +4,44 @@
 //
 
 Cypress.Commands.add('deleteAllData', () => {
-  const apiKey = Cypress.env('API_KEY')
-  const url = Cypress.config().baseUrl
+  const apiKey = Cypress.env('API_KEY');
+  const url = Cypress.config().baseUrl;
+  const user_id = Cypress.env('CKAN_USERNAME');
 
   cy.request({
     method: 'GET',
     url: `${url}api/action/package_list`,
     headers: {
       'Authorization': apiKey,
-      'User-Agent': 'CKAN-CLI'
+      'User-Agent': 'CKAN-CLI',
     },
-  }).then(response => {
-    if (response.status == 200) {
+  }).then((response) => {
+    if (response.status === 200) {
       const datasets = response.body.result;
       datasets.forEach((dataset_name) => {
+        // Attempt to delete package collaborator
+        cy.request({
+          method: 'POST',
+          url: `${url}api/action/package_collaborator_delete`,
+          failOnStatusCode: false,
+          headers: {
+            'Authorization': apiKey,
+            'Content-Type': 'application/json',
+            'User-Agent': 'CKAN-CLI',
+          },
+          body: {
+            id: dataset_name,
+            user_id: user_id,
+          },
+        }).then((collaboratorResponse) => {
+          if (collaboratorResponse.status === 200) {
+            cy.log(`Collaborator for dataset ${dataset_name} deleted successfully.`);
+          } else {
+            cy.log(`Collaborator for dataset ${dataset_name} not found or deletion failed.`);
+          }
+        });
+
+        // Attempt to purge dataset
         cy.request({
           method: 'POST',
           url: `${url}api/action/dataset_purge`,
@@ -25,21 +49,21 @@ Cypress.Commands.add('deleteAllData', () => {
           headers: {
             'Authorization': apiKey,
             'Content-Type': 'application/json',
-            'User-Agent': 'CKAN-CLI'
+            'User-Agent': 'CKAN-CLI',
           },
           body: {
-            id: dataset_name
-          }
-        }).then(deleteResponse => {
+            id: dataset_name,
+          },
+        }).then((deleteResponse) => {
           if (deleteResponse.status === 200) {
-            cy.log(`Dataset ${dataset_name} purged successfully.`)
+            cy.log(`Dataset ${dataset_name} purged successfully.`);
           } else {
-            cy.log(`Failed to purge dataset ${dataset_name}.`)
+            cy.log(`Failed to purge dataset ${dataset_name}.`);
           }
-        })
-      })
+        });
+      });
     } else {
-        cy.log('Failed to fetch datasets.');
+      cy.log('Failed to fetch datasets.');
     }
   })
 

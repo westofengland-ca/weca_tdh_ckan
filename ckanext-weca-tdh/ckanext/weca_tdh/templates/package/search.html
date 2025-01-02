@@ -29,7 +29,7 @@
       'attributes': {'data-cy': 'filter-button'}
     }) }}
     <p class="govuk-body sort-label">
-      <a class="govuk-link" href="/dataset" data-cy="filter-remove">{{ _('Remove filters') }}</a>
+      <a class="govuk-link" href="{{ h.url_for('dataset.search') }}" data-cy="filter-remove">{{ _('Remove filters') }}</a>
     </p>
   {% endblock %}
 {% endblock %}
