@@ -1,44 +1,79 @@
-import json, logging, os, requests, tempfile, zipfile
+import json
+import logging
+import os
+import tempfile
+import zipfile
 from datetime import datetime
+from pathlib import Path
 from typing import Any
+
+import ckan.plugins.toolkit as toolkit
+import requests
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
-import ckan.plugins.toolkit as toolkit
 from flask import Blueprint, flash, request
 from flask.views import MethodView
+
 import ckanext.weca_tdh.config as C
-from pathlib import Path
 
 log = logging.getLogger(__name__)
-uploadbp = Blueprint('upload', __name__)
+uploadbp = Blueprint("upload", __name__)
 
 
-class Upload(object):
+def call_http_trigger(body: dict) -> None:
+    url = C.TDH_UPLOAD_HTTP_TRIGGER
+    response = requests.post(url, json=body)
 
-    def verify_file(filename: str, file_size: int) -> None:
-        # get file extension
-        _, ext = os.path.splitext(filename)
+    if not response.ok:
+        raise Exception(f"HTTP trigger status code {response.status_code}")
 
-        if ext not in C.TDH_UPLOAD_FILE_TYPES:
-            raise Exception("Unsupported file type.")
 
-        if file_size > C.TDH_UPLOAD_FILE_SIZE:
-            raise Exception("File size too large.")
-        
-    @staticmethod
-    def generate_signiture_file(file_path: str, body: dict) -> None:
-        with open(file_path, 'w') as file:
-            json.dump(body, file)
+def create_signiture_body(id, resource_id, data_dict, timestamp) -> dict:
+    body = {
+        "upload_date": timestamp,
+        "author": request.form["author"],
+        "author_email": request.form["author_email"],
+        "description": request.form["desc"],
+        "resource_id": resource_id,
+        "resource_name": data_dict["resource"]["name"],
+        "dataset_id": data_dict["resource"]["package_id"],
+        "dataset_name": id,
+        "dataset_title": data_dict["pkg_dict"]["title"],
+        "publisher_id": data_dict["pkg_dict"]["organization"]["id"],
+        "publisher_name": data_dict["pkg_dict"]["organization"]["name"],
+        "publisher_title": data_dict["pkg_dict"]["organization"]["title"],
+    }
 
-    @staticmethod
-    def call_http_trigger(body: dict) -> None:
-        url = C.TDH_UPLOAD_HTTP_TRIGGER
-        response = requests.post(url, json=body)
+    return body
 
-        if not response.ok:
-            raise Exception(f"HTTP trigger status code {response.status_code}")
 
-class BlobStorage():
+def generate_signiture_file(file_path: str, body: dict) -> None:
+    with open(file_path, "w") as file:
+        json.dump(body, file)
+
+
+def get_request_file() -> tuple[any, str, int]:
+    upload_file = request.files["file"]
+    upload_file.seek(0, os.SEEK_END)
+    filename = upload_file.filename
+    filesize = upload_file.tell()
+
+    return upload_file, filename, filesize
+
+
+def verify_file(filename: str, file_size: int) -> None:
+    # get file extension
+    _, ext = os.path.splitext(filename)
+
+    if ext not in C.TDH_UPLOAD_FILE_TYPES:
+        raise Exception("Unsupported file type.")
+
+    if file_size > C.TDH_UPLOAD_FILE_SIZE:
+        raise Exception("File size too large.")
+
+
+class BlobStorage:
+    """Manage Azure Blob Storage client"""
 
     @staticmethod
     def get_blob_service_client():
@@ -53,8 +88,10 @@ class BlobStorage():
         blob_client = self.get_blob_service_client().get_blob_client(container=C.TDH_UPLOAD_STORAGE_CONTAINER, blob=filename)
         blob_client.upload_blob(file)
 
+
 class BlobUploadView(MethodView):
-    
+    """Upload new blob to Azure Blob Storage"""
+
     def _prepare(self, id: str, resource_id: str) -> dict[str, Any]:
         # check user is authorised to upload
         user = toolkit.current_user.name
@@ -86,20 +123,15 @@ class BlobUploadView(MethodView):
         return toolkit.render('package/resource_upload.html', data_dict)
 
     def post(self, id: str, resource_id: str):
-        data_dict = self._prepare(id, resource_id)  
+        data_dict = self._prepare(id, resource_id)
 
         # create a temp directory
         with tempfile.TemporaryDirectory() as tmp:
-            temp_dir = Path(tmp)  
+            temp_dir = Path(tmp)
 
-            try: 
-                upload_file = request.files['file']
-                upload_file.seek(0, os.SEEK_END)
-                filename = upload_file.filename
-                filesize = upload_file.tell()
-
-                # check file type and size
-                Upload.verify_file(filename, filesize)
+            try:
+                upload_file, filename, filesize = get_request_file()
+                verify_file(filename, filesize)
 
                 # save uploaded file to temp directory
                 upload_file.seek(0, os.SEEK_SET)
@@ -107,47 +139,38 @@ class BlobUploadView(MethodView):
                 upload_file.close()
 
                 timestamp = datetime.now().strftime("%d-%m-%Y_%H:%M:%S")
-
-                # get upload info
-                upload_info = {
-                    'upload_date': timestamp,
-                    'author': request.form['author'],
-                    'author_email': request.form['author_email'],
-                    'description': request.form['desc'],
-                    'resource_id': resource_id,
-                    'resource_name': data_dict['resource']['name'],
-                    'dataset_id': data_dict['resource']['package_id'],
-                    'dataset_name': id,
-                    'dataset_title': data_dict['pkg_dict']['title'],
-                    'publisher_id': data_dict['pkg_dict']['organization']['id'],
-                    'publisher_name': data_dict['pkg_dict']['organization']['name'],
-                    'publisher_title': data_dict['pkg_dict']['organization']['title']
-                }
+                upload_body = create_signiture_body(id, resource_id, data_dict, timestamp)
 
                 # set blob directory path
-                blobdir = f"Publisher/{upload_info['publisher_title']}/{upload_info['dataset_title']}/{upload_info['resource_name']}"
-                upload_info['path'] = f"{blobdir}/{timestamp}.zip"
+                blobdir = f"Publisher/{upload_body['publisher_title']}/{upload_body['dataset_title']}/{upload_body['resource_name']}"
+                upload_body["path"] = f"{blobdir}/{timestamp}.zip"
 
                 # generate signiture file
-                Upload.generate_signiture_file(f"{temp_dir}/info.json", upload_info)
+                generate_signiture_file(f"{temp_dir}/info.json", upload_body)
 
                 try:
                     # zip uploaded file and signiture file
-                    with zipfile.ZipFile(f"{temp_dir}/upload.zip", 'w') as zipf:
+                    with zipfile.ZipFile(f"{temp_dir}/upload.zip", "w") as zipf:
                         zipf.write(f"{temp_dir}/{filename}", arcname=filename)
                         zipf.write(f"{temp_dir}/info.json", arcname="info.json")
 
                     # upload zip file to blob storage
-                    BlobStorage().upload_blob(open(f"{temp_dir}/upload.zip", "rb"), upload_info['path'])
-                    Upload.call_http_trigger(upload_info)
-                    flash(C.UPLOAD_STATUS_SUCCESS, category='alert-success')
+                    BlobStorage().upload_blob(
+                        open(f"{temp_dir}/upload.zip", "rb"), upload_body["path"]
+                    )
+                    call_http_trigger(upload_body)
+                    flash(C.UPLOAD_STATUS_SUCCESS, category="alert-success")
 
                 except Exception as e:
-                    flash(f'{C.UPLOAD_STATUS_FAILED}: {e}', category='alert-danger')
+                    flash(f"{C.UPLOAD_STATUS_FAILED}: {e}", category="alert-danger")
 
             except Exception as e:
-                flash(f'{C.UPLOAD_STATUS_FAILED}: {e}', category='alert-danger')
+                flash(f"{C.UPLOAD_STATUS_FAILED}: {e}", category="alert-danger")
 
-        return toolkit.redirect_to('upload.blob', id=id, resource_id=resource_id)
+        return toolkit.redirect_to("upload.blob", id=id, resource_id=resource_id)
 
-uploadbp.add_url_rule('/dataset/<id>/upload_form/<resource_id>', view_func=BlobUploadView.as_view(str('blob')))
+
+uploadbp.add_url_rule(
+    "/dataset/<id>/upload_form/<resource_id>",
+    view_func=BlobUploadView.as_view(str("blob")),
+)
