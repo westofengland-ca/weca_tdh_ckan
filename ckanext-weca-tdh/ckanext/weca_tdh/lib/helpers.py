@@ -1,9 +1,12 @@
-import ckanext.weca_tdh.config as C
-import ckan.plugins.toolkit as toolkit
+import json
+import logging
 from datetime import datetime
-import json, logging
+
+import ckan.plugins.toolkit as toolkit
+import ckanext.weca_tdh.config as C
 
 log = logging.getLogger(__name__)
+
 
 def filter_datetime(string: str, format: str = 'full') -> str:
     try:
