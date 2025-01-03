@@ -1,46 +1,5 @@
 #!/bin/sh
 
-# Install any local extensions in the src_extensions volume
-echo "Looking for local extensions to install..."
-echo "Extension dir contents:"
-ls -la $SRC_EXTENSIONS_DIR
-for i in $SRC_EXTENSIONS_DIR/*
-do
-    if [ -d $i ];
-    then
-
-        if [ -f $i/pip-requirements.txt ];
-        then
-            pip install -r $i/pip-requirements.txt
-            echo "Found requirements file in $i"
-        fi
-        if [ -f $i/requirements.txt ];
-        then
-            pip install -r $i/requirements.txt
-            echo "Found requirements file in $i"
-        fi
-        if [ -f $i/dev-requirements.txt ];
-        then
-            pip install -r $i/dev-requirements.txt
-            echo "Found dev-requirements file in $i"
-        fi
-        if [ -f $i/setup.py ];
-        then
-            cd $i
-            python3 $i/setup.py develop
-            echo "Found setup.py file in $i"
-            cd $APP_DIR
-        fi
-
-        # Point `use` in test.ini to location of `test-core.ini`
-        if [ -f $i/test.ini ];
-        then
-            echo "Updating \`test.ini\` reference to \`test-core.ini\` for plugin $i"
-            ckan config-tool $i/test.ini "use = config:../../src/ckan/test-core.ini"
-        fi
-    fi
-done
-
 # Set debug to true
 echo "Enabling debug mode"
 ckan config-tool $CKAN_INI -s DEFAULT "debug = true"
@@ -50,10 +9,10 @@ ckan config-tool $CKAN_INI ckan.datapusher.api_token=xxx
 
 # Set up the Secret key used by Beaker and Flask
 # This can be overriden using a CKAN___BEAKER__SESSION__SECRET env var
-if grep -E "beaker.session.secret ?= ?$" ckan.ini
+if grep -E "SECRET_KEY ?= ?$" ckan.ini
 then
-    echo "Setting beaker.session.secret in ini file"
-    ckan config-tool $CKAN_INI "beaker.session.secret=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
+    echo "Setting SECRET_KEY in ini file"
+    ckan config-tool $CKAN_INI "SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
     ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
     JWT_SECRET=$(python3 -c 'import secrets; print("string:" + secrets.token_urlsafe())')
     ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=${JWT_SECRET}"
@@ -73,10 +32,8 @@ ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL" \
     "ckan.site_title = $CKAN_SITE_TITLE" \
     "ckan.site_description = $CKAN_SITE_DESCRIPTION"
 
-# Set the beaker session config
-ckan config-tool $CKAN_INI beaker.session.cookie_expires=True
-ckan config-tool $CKAN_INI beaker.session.secure=False
-ckan config-tool $CKAN_INI beaker.session.timeout=36000
+# Set the session config
+ckan config-tool $CKAN_INI SESSION_PERMANENT=False
 
 # Set the search result configs
 ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000
@@ -160,28 +117,26 @@ python3 prerun.py
 echo "Set up ckan.datapusher.api_token in the CKAN config file"
 ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add $CKAN_SYSADMIN_NAME datapusher expires_in=365 unit=86400 | tail -n 1 | tr -d '\t')"
 
-# Run any startup scripts provided by images extending this one
-if [[ -d "/docker-entrypoint.d" ]]
-then
-    for f in /docker-entrypoint.d/*; do
-        case "$f" in
-            *.sh)     echo "$0: Running init file $f"; . "$f" ;;
-            *.py)     echo "$0: Running init file $f"; python3 "$f"; echo ;;
-            *)        echo "$0: Ignoring $f (not an sh or py file)" ;;
-        esac
-        echo
-    done
+CKAN_RUN="/usr/local/bin/ckan -c $CKAN_INI run -H 0.0.0.0"
+CKAN_OPTIONS=""
+if [ "$USE_DEBUGPY_FOR_DEV" = true ] ; then
+    CKAN_RUN="/usr/local/bin/python -m debugpy --listen 0.0.0.0:5678 $CKAN_RUN"
+    CKAN_OPTIONS="$CKAN_OPTIONS --disable-reloader"
+fi
+
+if [ "$USE_HTTPS_FOR_DEV" = true ] ; then
+    CKAN_OPTIONS="$CKAN_OPTIONS -C unsafe.cert -K unsafe.key"
 fi
 
 # If the CKAN_JOB_MODE environment variable isn't set, run the HTTP server.
 # Otherwise, rebuild the SOLR search index using the "only-missing" mode.
 if [ -z "${CKAN_JOB_MODE}" ]
 then
-    # Start supervisord
-    supervisord --configuration /etc/supervisord.conf &
-
-    # Start the development server with automatic reload
-    su ckan -c "/usr/bin/ckan -c $CKAN_INI run -H 0.0.0.0"
+    while true; do
+        $CKAN_RUN $CKAN_OPTIONS
+        echo Exit with status $?. Restarting.
+        sleep 2
+    done
 else
     echo "Running in job mode."
     if [ ${CKAN_INDEX_REBUILD_TYPE} == 'rebuild' ]
