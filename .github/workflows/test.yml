@@ -39,13 +39,13 @@ jobs:
         working-directory: ckanext-weca-tdh
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install requirements
       # Install any extra requirements your extension has here (dev requirements, other extensions etc)
       run: |
-        pip install -r requirements.txt
-        pip install -r dev-requirements.txt
-        pip install -e .
+        pip install --user -r requirements.txt
+        pip install --user -r dev-requirements.txt
+        pip install --user -e .
     - name: Setup extension
       # Extra initialization steps
       run: |
