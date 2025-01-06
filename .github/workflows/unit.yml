@@ -25,7 +25,7 @@ jobs:
       - name: Start services with docker-compose
         working-directory: ckanext-weca-tdh/docker
         run: |
-          docker compose -f docker-compose.dev.yml up -d --build
+          docker compose -f docker-compose.dev.yml up -d
           docker compose -f docker-compose.dev.yml ps
 
       - name: Wait for services to be ready
@@ -38,9 +38,9 @@ jobs:
       - name: Install requirements
         working-directory: ckanext-weca-tdh
         run: |
-          pip install --user -r requirements.txt
-          pip install --user -r dev-requirements.txt
-          pip install --user -e .
+          pip install -r requirements.txt
+          pip install -r dev-requirements.txt
+          pip install -e .
       - name: Setup extension
         # Extra initialization steps
         run: |

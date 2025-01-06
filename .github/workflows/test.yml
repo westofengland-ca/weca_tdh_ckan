@@ -20,9 +20,9 @@ jobs:
       postgres:
         image: ckan/ckan-postgres-dev:2.11
         env:
-          POSTGRES_USER: ckan
-          POSTGRES_PASSWORD: ckan
-          POSTGRES_DB: ckan_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       redis:
           image: redis:3
