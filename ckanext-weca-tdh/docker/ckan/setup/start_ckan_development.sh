@@ -107,9 +107,9 @@ ckan config-tool $SRC_DIR/ckan/test-core.ini \
 ckan config-tool $CKAN_INI --section logger_ckan "level = WARNING"
 ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
 
-
+# Configure token expiry
 ckan config-tool $CKAN_INI expire_api_token.default_lifetime=30
-ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day in seconds
+ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day
 
 # Run the prerun script to init CKAN and create the default admin user
 python3 prerun.py

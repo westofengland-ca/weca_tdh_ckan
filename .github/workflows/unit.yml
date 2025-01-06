@@ -1,0 +1,57 @@
+name: Run CKAN Unit Tests
+
+on: 
+  push:
+    paths:
+      - 'ckanext-weca-tdh/**'
+  pull_request:
+    paths:
+      - 'ckanext-weca-tdh/**'
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Start services with docker-compose
+        working-directory: ckanext-weca-tdh/docker
+        run: |
+          docker-compose -f docker-compose.dev.yml up -d
+          docker-compose -f docker-compose.dev.yml ps
+
+      - name: Wait for services to be ready
+        working-directory: ckanext-weca-tdh/docker
+        run: |
+          while ! docker-compose -f docker-compose.dev.yml exec postgres pg_isready -U ckan; do sleep 5; done
+          while ! curl -f http://localhost:8983/solr; do sleep 5; done
+
+      # Install any extra requirements your extension has here (dev requirements, other extensions etc)
+      - name: Install requirements
+        working-directory: ckanext-weca-tdh
+        run: |
+          pip install --user -r requirements.txt
+          pip install --user -r dev-requirements.txt
+          pip install --user -e .
+      - name: Setup extension
+        # Extra initialization steps
+        run: |
+          # Replace default path to CKAN core config file with the one on the container
+          sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
+  
+          ckan -c test.ini db init
+      - name: Run tests
+        run: pytest --ckan-ini=test.ini --cov=ckanext.weca_tdh --disable-warnings ckanext/weca_tdh
+
+      - name: Cleanup
+        if: always()
+        working-directory: ckanext-weca-tdh/docker
+        run: docker-compose -f docker-compose.dev.yml down
