@@ -1,11 +1,37 @@
 {% ckan_extends %}
 
-{% block subtitle %}{{ group_dict.display_name }} {{_(' - Topics') }}{% endblock %}
+{% block subtitle %}{{ _('Members') }} {{ g.template_title_delimiter }} {{ group_dict.display_name }} {{ g.template_title_delimiter }} {{ h.humanize_entity_type('group', group_type, 'page title') or _('Groups') }}{% endblock %}
 
 {% block breadcrumb_content %}
   <li>{% link_for _('Topics'), named_route=group_type+'.index' %}</li>
-  {% block breadcrumb_content_inner %}
-    <li>{% link_for group.display_name|truncate(35), named_route=group_type+'.read', id=group.name, title=group.display_name %}</li>
-    <li class="active">{% link_for _('Manage'), named_route=group_type+'.edit', id=group.name %}</li>
-  {% endblock %}
+  <li class="active">{% link_for group_dict.display_name|truncate(35), named_route=group_type+'.read', id=group_dict.name, title=group_dict.display_name %}</li>
+{% endblock %}
+
+{% block page_primary_action %}{% endblock %}
+
+{% block primary_content_inner %}
+  <h3 class="page-heading">{{ _('{0} member(s)'.format(members|length)) }}</h3>
+  <table class="table table-header table-hover table-bordered" id="member-table">
+    <thead>
+      <tr>
+        <th>{{ _('User') }}</th>
+        <th>{{ _('Role') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user_id, user, role in members %}
+      <tr>
+        <td class="media">
+          {{ h.linked_user(user_id, maxlength=20) }}
+        </td>
+        <td>{{ role }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block secondary_content %}
+  {# remove follow section #}
+  {% snippet "group/snippets/info.html", group=group_dict, show_nums=true %}
 {% endblock %}

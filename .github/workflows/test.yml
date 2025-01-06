@@ -23,7 +23,7 @@ jobs:
           POSTGRES_USER: ckan
           POSTGRES_PASSWORD: ckan
           POSTGRES_DB: ckan_test
-        options: --health-cmd pg_isready -U ckan --health-interval 10s --health-timeout 5s --health-retries 5
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       redis:
           image: redis:3
 
@@ -39,7 +39,7 @@ jobs:
         working-directory: ckanext-weca-tdh
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
     - name: Install requirements
       # Install any extra requirements your extension has here (dev requirements, other extensions etc)
       run: |

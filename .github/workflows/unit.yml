@@ -25,13 +25,13 @@ jobs:
       - name: Start services with docker-compose
         working-directory: ckanext-weca-tdh/docker
         run: |
-          docker-compose -f docker-compose.dev.yml up -d
-          docker-compose -f docker-compose.dev.yml ps
+          docker compose -f docker-compose.dev.yml up -d --build
+          docker compose -f docker-compose.dev.yml ps
 
       - name: Wait for services to be ready
         working-directory: ckanext-weca-tdh/docker
         run: |
-          while ! docker-compose -f docker-compose.dev.yml exec postgres pg_isready -U ckan; do sleep 5; done
+          while ! docker compose -f docker-compose.dev.yml exec postgres pg_isready; do sleep 5; done
           while ! curl -f http://localhost:8983/solr; do sleep 5; done
 
       # Install any extra requirements your extension has here (dev requirements, other extensions etc)
@@ -54,4 +54,4 @@ jobs:
       - name: Cleanup
         if: always()
         working-directory: ckanext-weca-tdh/docker
-        run: docker-compose -f docker-compose.dev.yml down
+        run: docker compose -f docker-compose.dev.yml down
