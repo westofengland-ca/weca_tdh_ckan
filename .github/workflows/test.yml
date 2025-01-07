@@ -7,17 +7,22 @@ on:
     pull_request:
       paths:
         - 'ckanext-weca-tdh/**'
+env:
+  CKAN_BASE_VERSION: '2.11'
+  CKAN_VERSION: '2.11.1'
+  TDH_VERSION: '1.1.6'
 jobs:
   test:
-    name: CKAN 2.11
+    name: Test CKAN $CKAN_VERSION-$TDH_VERSION
     runs-on: ubuntu-latest
     container:
-      image: ckan/ckan-dev:2.11
+      image: ckan/ckan-dev:$CKAN_VERSION
+      options: --user ckan
     services:
       solr:
-        image: ckan/ckan-solr:2.11-solr9
+        image: ckan/ckan-solr:$CKAN_BASE_VERSION-solr9
       postgres:
-        image: ckan/ckan-postgres-dev:2.11
+        image: ckan/ckan-postgres-dev:$CKAN_BASE_VERSION
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
