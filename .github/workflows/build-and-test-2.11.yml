@@ -1,0 +1,19 @@
+name: Build and test CKAN 2.11 images
+
+on: 
+  push:
+    paths:
+      - 'ckanext-weca-tdh/**'
+      - '.github/**'
+  pull_request:
+    paths:
+      - 'ckanext-weca-tdh/**'
+
+jobs:
+  call-reusable-workflow:
+    uses: ./.github/workflows/reusable-build-and-test.yml
+    with:
+      ckan-base-version: "2.11"
+      ckan-version: "2.11.1"
+      tdh-version: "1.1.6"
+      docker-file: "Dockerfile"
