@@ -13,16 +13,16 @@ env:
   TDH_VERSION: '1.1.6'
 jobs:
   test:
-    name: Test CKAN $CKAN_VERSION-$TDH_VERSION
+    name: Test CKAN ${{ env.CKAN_VERSION }}-${{ env.TDH_VERSION }}
     runs-on: ubuntu-latest
     container:
-      image: ckan/ckan-dev:$CKAN_VERSION
+      image: ckan/ckan-dev:${{ env.CKAN_VERSION }}
       options: --user ckan
     services:
       solr:
-        image: ckan/ckan-solr:$CKAN_BASE_VERSION-solr9
+        image: ckan/ckan-solr:${{ env.CKAN_BASE_VERSION }}-solr9
       postgres:
-        image: ckan/ckan-postgres-dev:$CKAN_BASE_VERSION
+        image: ckan/ckan-postgres-dev:${{ env.CKAN_BASE_VERSION }}
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
