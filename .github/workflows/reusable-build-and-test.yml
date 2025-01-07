@@ -12,10 +12,6 @@ on:
       tdh-version:
         required: true
         type: string
-      docker-file:
-        required: false
-        default: 'Dockerfile'
-        type: string
 jobs:
   test:
     name: Test CKAN ${{ inputs.ckan-version }}-${{ inputs.tdh-version }}
