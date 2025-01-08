@@ -28,7 +28,7 @@
         (_('Popular'), 'views_recent desc') if g.tracking_enabled else (False, False) ]
       %}
       <div class="sort"> 
-        {{ h.snippet('snippets/search_sort.html', sort_options=sorting, sorting_selected=sort_by_selected) }}
+        {% snippet 'snippets/search_sort.html', sort_options=sorting, sorting_selected=sort_by_selected %}
       </div>
     {% endblock %}
 
@@ -40,7 +40,7 @@
 
     {% block packages_list %}
       {% if page.items %}
-        {{ h.snippet('snippets/package_list.html', packages=page.items, list_class='dataset-listclass govuk-body-s', item_class='dataset-itemclass') }}
+        {% snippet 'snippets/package_list.html', packages=page.items, list_class='dataset-listclass govuk-body-s', item_class='dataset-itemclass' %}
       {% endif %}
     {% endblock %}
 
@@ -52,12 +52,12 @@
 
 {% block secondary_content %}
   {# remove follow section #}
-  {% snippet "group/snippets/info.html", group=group_dict, show_nums=true %}
+  {% snippet 'group/snippets/info.html', group=group_dict, show_nums=true %}
   {% set facet_titles = {'organization': "Publishers", 'groups': "Topics", 'res_format': "Formats", "license_id": "Licenses"} %}
   <div class="filters">
     <div>
       {% for facet in facet_titles %}
-        {{ h.snippet('snippets/facet_list.html', title=facet_titles[facet], name=facet, extras={'id':group_dict.id}, search_facets=search_facets )}}
+        {% snippet 'snippets/facet_list.html', title=facet_titles[facet], name=facet, extras={'id':group_dict.id}, search_facets=search_facets %}
       {% endfor %}
     </div>
     <a class="close no-text hide-filters"><i class="fa fa-times-circle"></i><span class="text">close</span></a>
