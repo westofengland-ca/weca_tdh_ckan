@@ -1,0 +1,18 @@
+{% ckan_extends %}
+
+{% block primary_content_inner %}
+  <h2 class="hide-heading">{{ _('Publishers') }}</h2>
+  {% if orgs_available %}
+    <div class="wide">
+      {% snippet "organization/snippets/organization_list.html", organizations=orgs_available, show_capacity=True %}
+    </div>
+  {% else %}
+    <p class="empty">
+      {% if is_myself %}
+        {{ h.humanize_entity_type('organization', org_type, 'you not member') or _('You are not a member of any publishers.') }}
+      {% else %}
+        {{ h.humanize_entity_type('organization', org_type, 'user not member') or _('User isn\'t a member of any publishers.') }}
+      {% endif %}
+    </p>
+  {% endif %}
+{% endblock %}
