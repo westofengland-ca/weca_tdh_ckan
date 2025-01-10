@@ -14,6 +14,10 @@ COPY --chown=ckan-sys:ckan-sys docker/ckan/setup/prerun.py ${APP_DIR}
 # Mount TDH extension
 COPY --chown=ckan:ckan-sys ./ ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh
 
+USER root
+RUN mkdir /srv/app/.local && chown ckan /srv/app/.local
+USER ckan
+
 # Install TDH extension
 RUN echo "pip install ckanext-weca-tdh..." && \
   pip3 install -r ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh/requirements.txt && \
