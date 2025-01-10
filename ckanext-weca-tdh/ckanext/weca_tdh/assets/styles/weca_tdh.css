@@ -7939,6 +7939,10 @@ p.gem-c-lead-paragraph {
   padding: 0px;
 }
 
+.resource-upload-field .btn-remove-url {
+  margin-top: 13px;
+}
+
 /* GLOBAL /
 ////////*/
 html {
@@ -7999,6 +8003,10 @@ iframe {
 .form-actions .action-info.small {
   font-size: 11px;
   line-height: 1.2;
+}
+
+.form-actions .btn {
+  margin-bottom: 15px;
 }
 
 .govuk-form-group {
