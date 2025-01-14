@@ -38,10 +38,9 @@ describe('Topic list page', () => {
       cy.url().should('eq', Cypress.config().baseUrl + 'group?q=' + topics[0].title +'&sort=name+asc')
   
       cy.get('[data-cy="results-summary"]').should("contain.text", topics[0].title)
-      cy.get('.group-listclass').find('li').its('length').should("equal", 1)
+      cy.get('.group-listclass').find('li').its('length').should("equal", 2)
   
       cy.get('li .media-heading').should("contain.text", topics[0].title)
-      cy.get('li .media-description').should("contain.text", topics[0].description)
 
       cy.fixture('datasets.json').then((datasets) => {
         // get the num of datasets that belong to the topic

@@ -10,6 +10,7 @@ from urllib.error import URLError, HTTPError
 import csv
 import json
 import csv_column_headers
+import traceback
 
 parser = argparse.ArgumentParser("create_datasets", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--filename", dest="filename", help="Input file path", type=str, required=True)
@@ -94,5 +95,5 @@ try:
 
     print(f'Updated {count} datasets.')
 
-except Exception as err:
-    print(err)
+except Exception:
+    print(traceback.format_exc())

@@ -1,24 +1,27 @@
+import base64
+import json
+import logging
+
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 from flask import Blueprint, flash, request
+
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.user import User
-import base64, json, logging
 
 log = logging.getLogger(__name__)
 adauthbp = Blueprint('adauth', __name__)
 
-class ADAuth():  
-    def _login_to_ckan(user):
-        userobj = model.User.get(user)
-        toolkit.login_user(userobj, force=True)
 
-    def authorise():
+class ADAuth(object):
+    
+    @classmethod
+    def authorise(cls) -> None:
         try:
-            claims_map = ADAuth.get_user_claims()
+            claims_map = cls.get_user_claims()
             if claims_map:
-                user = User.get_or_create_ad_user(claims_map)
-                ADAuth._login_to_ckan(user)
+                username = User.get_or_create_ad_user(claims_map)
+                cls.login_to_ckan(username)
 
             referer = request.args.get('referrer', default='dashboard.datasets')
 
@@ -30,21 +33,23 @@ class ADAuth():
             flash(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
             return toolkit.redirect_to('user.login')
 
-    def get_user_claims():
+    @classmethod
+    def get_user_claims(cls) -> list:
         try:
-            token = ADAuth.decode_token(request.headers.get(C.AD_ID_TOKEN)) # decode base64 access token
+            token = cls.decode_token(request.headers.get(C.AD_ID_TOKEN))
         except Exception:
-            raise Exception(f"invalid AD access token.")
+            raise Exception('invalid AD access token.')
 
         user_info = json.loads(token)
-        claims = user_info.get("claims", [])
+        claims = user_info.get('claims', {})
 
         if claims:
-            claims_map = ADAuth.map_user_claims(claims)
+            claims_map = cls.map_user_claims(claims)
             claims_map[C.CKAN_USER_ID] = request.headers.get(C.AD_USER_ID)      
             return claims_map
 
-    def map_user_claims(claims):
+    @staticmethod
+    def map_user_claims(claims: dict) -> dict:
         claims_map = {}
         claim_url = C.AD_CLAIM_URL
         in_user_group = False
@@ -66,11 +71,18 @@ class ADAuth():
                     claims_map[C.CKAN_ROLE_SYSADMIN] = True
 
         if C.FF_AUTH_USER_GROUP_ONLY == 'True' and not in_user_group:
-            raise Exception("account not in authorised user group.")
+            raise Exception('account not in authorised user group.')
 
         return claims_map
+    
+    @staticmethod
+    def login_to_ckan(username: str) -> None:
+        userobj = model.User.get(username)
+        toolkit.login_user(userobj, force=True)
 
-    def decode_token(token):
+    @staticmethod
+    def decode_token(token: str) -> str:
+        # decode base64 access token
         return base64.b64decode(token + '==').decode('utf-8')
     
-adauthbp.add_url_rule('/user/adlogin', view_func=ADAuth.authorise)
+adauthbp.add_url_rule('/user/adlogin', view_func=ADAuth().authorise)

@@ -1,20 +1,24 @@
-from ckan.common import CKANConfig
+import logging
+import re
+from inspect import getmembers, isfunction
+from typing import Any
+
 import ckan.lib.helpers as h
-from ckan.model.user import AnonymousUser
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+from ckan.common import CKANConfig
+from ckan.model.user import AnonymousUser
 from ckan.types import Context, Schema
-from flask import Blueprint, Flask, flash, request
-from inspect import getmembers, isfunction
-from ckanext.weca_tdh.auth import adauthbp
-from ckanext.weca_tdh.upload import uploadbp
+from flask import Blueprint, flash, request
+
 import ckanext.weca_tdh.config as C
+from ckanext.weca_tdh.auth import adauthbp
 from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.lib import helpers
-from typing import Any
-import logging, re
+from ckanext.weca_tdh.upload import uploadbp
 
 log = logging.getLogger(__name__)
+
 
 class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IAuthenticator, inherit=True)
@@ -30,7 +34,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         toolkit.add_public_directory(config, "public")
         toolkit.add_resource("assets", "weca_tdh")
 
-    def get_helpers(self):       
+    def get_helpers(self) -> dict:       
         '''
         Returns a dict of extra weca-tdh specific helper functions to be used in a template
         '''
@@ -42,7 +46,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         return helper_dict
 
-    def identify(self):
+    def identify(self) -> None:
         """
         Called on each request to identify a user.
         """
@@ -51,10 +55,10 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                 flash(C.ALERT_MESSAGE_AUTH, category='alert-info')
                 return toolkit.render('/user/login.html') # redirect to login page with flash message
 
-    def login(self):
+    def login(self) -> None:
         pass
     
-    def logout(self):
+    def logout(self) -> None:
         """
         Called on logout.
         """
@@ -64,7 +68,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         if C.AD_SESSION_COOKIE in request.cookies:
             return h.redirect_to(C.CKAN_ROUTE_AD_LOGOUT)
 
-    def get_blueprint(self):      
+    def get_blueprint(self) -> list:      
         '''
         Creates a flask blueprint with specified url rules to allow static page routing
         '''       
@@ -87,12 +91,16 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     def _modify_package_schema(self, schema: Schema) -> Schema:
         # modify package schema with custom field
         schema.update({
+            'data_quality': [toolkit.get_validator('ignore_missing'),
+                                toolkit.get_converter('convert_to_extras')],
+            'data_quality_score': [toolkit.get_validator('ignore_missing'),
+                                toolkit.get_converter('convert_to_extras')],
+            'data_stewards': [toolkit.get_validator('ignore_missing'),
+                                toolkit.get_converter('convert_to_extras')],
             'datalake_active': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_validator('boolean_validator'),
                                 toolkit.get_converter('convert_to_extras')],
             'last_reviewed': [toolkit.get_validator('ignore_missing'),
-                                toolkit.get_converter('convert_to_extras')],
-            'data_quality': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')]
         })
         schema['resources'].update({
@@ -112,12 +120,16 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     def show_package_schema(self) -> Schema:
         schema: Schema = super(WecaTdhPlugin, self).show_package_schema()
         schema.update({
+            'data_quality': [toolkit.get_converter('convert_from_extras'),
+                                toolkit.get_validator('ignore_missing')],
+            'data_quality_score': [toolkit.get_converter('convert_from_extras'),
+                                toolkit.get_validator('ignore_missing')],
+            'data_stewards': [toolkit.get_converter('convert_from_extras'), 
+                             toolkit.get_converter('convert_to_json_if_string')],
             'datalake_active': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing'),
                                 toolkit.get_validator('boolean_validator')],
             'last_reviewed': [toolkit.get_converter('convert_from_extras'),
-                                toolkit.get_validator('ignore_missing')],
-            'data_quality': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')]
         })
         schema['resources'].update({
@@ -140,7 +152,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     '''
     Override package search
     '''
-    def before_dataset_search(self, search_params):
+    def before_dataset_search(self, search_params: dict) -> dict:
         for (param, value) in search_params.items():
             if param == 'fq' and 'res_format:"' in value:
                 # capture file format without quotes
