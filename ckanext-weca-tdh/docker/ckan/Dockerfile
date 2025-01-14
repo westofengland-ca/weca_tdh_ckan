@@ -16,6 +16,8 @@ COPY --chown=ckan:ckan-sys ./ ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh
 
 USER root
 RUN mkdir /srv/app/.local && chown ckan /srv/app/.local
+# Create the storage directory if it doesn't exist and set ownership
+RUN mkdir -p /var/lib/ckan/storage && chown -R ckan:ckan-sys /var/lib/ckan/storage
 RUN chmod +x ${APP_DIR}/start_ckan.sh
 USER ckan
 
