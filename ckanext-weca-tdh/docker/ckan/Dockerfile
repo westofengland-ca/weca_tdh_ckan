@@ -7,7 +7,6 @@ ENV WECA_TDH_DIR=${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh/ckanext/weca_tdh
 
 # Override the default start_ckan script
 COPY --chown=ckan-sys:ckan-sys docker/ckan/setup/start_ckan.sh ${APP_DIR}
-RUN chmod +x ${APP_DIR}/start_ckan.sh
 
 # Override the default prerun script
 COPY --chown=ckan-sys:ckan-sys docker/ckan/setup/prerun.py ${APP_DIR}
@@ -17,6 +16,7 @@ COPY --chown=ckan:ckan-sys ./ ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh
 
 USER root
 RUN mkdir /srv/app/.local && chown ckan /srv/app/.local
+RUN chmod +x ${APP_DIR}/start_ckan.sh
 USER ckan
 
 # Install TDH extension
