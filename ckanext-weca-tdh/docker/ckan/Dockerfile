@@ -1,4 +1,4 @@
-FROM ckan/ckan-base:2.11.1
+FROM ckan/ckan-base:2.11.1-py3.10
 
 # Set up environment variables
 ENV APP_DIR=/srv/app
@@ -16,19 +16,10 @@ COPY --chown=ckan:ckan-sys ./ ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh
 
 USER root
 
-RUN chown -R ckan:ckan-sys ${APP_DIR} \
-    && chown -R ckan:ckan-sys ${SRC_EXTENSIONS_DIR} \
-    && chmod -R 755 ${APP_DIR}
-
-# Ensure `uwsgi` plugins are available
-RUN mkdir -p /usr/local/lib/uwsgi && \
-    ln -s /usr/lib/uwsgi/plugins /usr/local/lib/uwsgi
-
-RUN mkdir /srv/app/.local && chown ckan:ckan-sys /srv/app/.local
-
-# Create the storage directory if it doesn't exist and set ownership
-RUN mkdir -p /var/lib/ckan/storage && chown -R ckan:ckan-sys /var/lib/ckan/storage
+RUN mkdir -p /srv/app/.local && chown ckan:ckan-sys /srv/app/.local
 RUN chmod +x ${APP_DIR}/start_ckan.sh
+
+USER ckan
 
 # Install TDH extension
 RUN echo "pip install ckanext-weca-tdh..." && \
