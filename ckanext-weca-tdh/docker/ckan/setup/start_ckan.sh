@@ -43,7 +43,7 @@ ckan config-tool $CKAN_INI SESSION_COOKIE_SECURE=True
 ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000
 ckan config-tool $CKAN_INI search.facets.limit=1000
 ckan config-tool $CKAN_INI search.facets.default=1000
-ckan config-tool $CKAN_INI ckan.datasets_per_page=30
+ckan config-tool $CKAN_INI ckan.datasets_per_page=40
 
 # Set the default user permissions
 ckan config-tool $CKAN_INI ckan.auth.user_create_groups=False
