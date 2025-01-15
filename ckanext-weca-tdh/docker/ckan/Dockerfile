@@ -29,7 +29,6 @@ RUN mkdir /srv/app/.local && chown ckan:ckan-sys /srv/app/.local
 # Create the storage directory if it doesn't exist and set ownership
 RUN mkdir -p /var/lib/ckan/storage && chown -R ckan:ckan-sys /var/lib/ckan/storage
 RUN chmod +x ${APP_DIR}/start_ckan.sh
-USER ckan
 
 # Install TDH extension
 RUN echo "pip install ckanext-weca-tdh..." && \
