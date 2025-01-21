@@ -42,16 +42,16 @@
     {% set org_type = h.default_group_type('organization') %}
     {% set group_type = h.default_group_type('group') %}
     <li>
-      {% link_for _('Search'), named_route='dataset.search' %}
+      <a href="/dataset">{{_('Search')}}</a>
     </li>
     <li>
-      {% link_for _('Publishers'), named_route='organization.index' %}
+      <a href="/organization">{{_('Publishers')}}</a>
     </li>
     <li>
-      {% link_for _('Topics'), named_route='group.index' %}
+      <a href="/group">{{_('Topics')}}</a>
     </li>
     <li>
-      {% link_for _('Support'), named_route='home.about' %}
+      <a href="/about">{{_('Support')}}</a>
     </li>
   {% endblock %}
 {% endblock %}
