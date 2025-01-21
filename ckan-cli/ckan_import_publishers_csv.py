@@ -39,8 +39,8 @@ def import_publisher(pub_dict):
             print(f"Publisher {row["Title"]} already exists. Skipping...")
         else:
             raise Exception(f'import_publisher(): failed to import publisher. {err}')
-    except:
-        raise Exception(f'import_publisher(): {row["Title"]} failed')
+    except Exception as err:
+        raise Exception(f'import_publisher(): {row["Title"]} failed. {err}')
 
     return count
 

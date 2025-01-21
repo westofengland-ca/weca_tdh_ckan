@@ -67,8 +67,8 @@ def import_dataset(dataset_dict):
             print(f"Dataset {row["Title"]} already exists. Skipping...")
         else:
             raise Exception(f'import_dataset(): failed to import dataset. {err}')
-    except:
-        raise Exception(f'import_dataset(): {row["Title"]} failed')
+    except Exception as err:
+        raise Exception(f'import_dataset(): {row["Title"]} failed. {err}')
     
     return count
 
