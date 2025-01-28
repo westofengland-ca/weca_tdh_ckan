@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
 {% block basic_fields_url %}
-{{ super() }}
+  {{ super() }}
   <div class="form-group control-medium">
     <label for="field-data_category" class="form-label">{{ _('Data category') }}</label>
     <div class="controls">
@@ -9,6 +9,15 @@
         {% for option in h.get_resource_data_categories() %}
           <option value="{{ option.id }}" {% if option.id == data.get('resource_data_category', "0") | int %}selected="selected"{% endif %}>{{ option.name }}</option>
         {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="form-group control-medium">
+    <label for="field-tdh_availability" class="form-label">{{ _('TDH Availability') }}</label>
+    <div class="controls">
+      <select id="field-tdh_availability" name="resource_tdh_availability" data-module="autocomplete" multiple>
+        <option value="Databricks" {% if "Databricks" in data.get('resource_tdh_availability', []) %}selected="selected"{% endif %}>{{ _('Databricks') }}</option>
+        <option value="Datalake" {% if "Datalake" in data.get('resource_tdh_availability', []) %}selected="selected"{% endif %}>{{ _('Datalake') }}</option>
       </select>
     </div>
   </div>

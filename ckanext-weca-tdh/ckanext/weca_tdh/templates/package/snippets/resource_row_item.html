@@ -39,6 +39,13 @@
       </a>
     </td>
     <td class="govuk-table__cell">
+      {% if res.resource_tdh_availability %}
+        {{ ", ".join(res.resource_tdh_availability) }} 
+      {% else %}
+        {{ _('Unavailable') }}
+      {% endif %}
+    </td>
+    <td class="govuk-table__cell">
       {% block resource_item_explore %}
         {% if not url_is_edit %}
         <div class="dropdown btn-group">
