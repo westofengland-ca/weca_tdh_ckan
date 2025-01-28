@@ -2,11 +2,8 @@
 {% from "components/breadcrumbs/macro.html" import govukBreadcrumbs %}
 {% from "components/button/macro.html" import govukButton %}
 
-{% set can_edit = h.check_access('package_update', {'id':pkg.id }) %}
+{% set can_edit = h.check_access('package_update', {'id': pkg_dict.id}) %}
 {% block primary_class %}package-read{% endblock %}
-
-{% set collaborators = h.get_collaborators(pkg_dict.id) %}
-{% set pkg_dict = h.update_package_metadata(pkg_dict, key='data_stewards', value=h.transform_collaborators(collaborators)) %}
 
 {% block primary_content %}
   <div class="row">

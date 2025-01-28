@@ -37,9 +37,10 @@ def import_topic(topic_dict):
     except HTTPError as err:
         if err.code == 409:
             print(f"Topic {row["Title"]} already exists. Skipping...")
-        raise Exception(f'import_topic(): failed to import topic. {err}')
+        else:
+            raise Exception(f'import_topic(): failed to import topic. {err}')
     except URLError:
-        raise Exception(f'import_topic(): invalid URL')
+        raise Exception('import_topic(): invalid URL')
 
     return count
 

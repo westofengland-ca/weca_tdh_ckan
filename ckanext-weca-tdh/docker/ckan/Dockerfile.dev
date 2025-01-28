@@ -1,36 +1,27 @@
-FROM ckan/ckan-dev:2.10.4
+FROM ckan/ckan-dev:2.11.1-py3.10
 
 # Set up environment variables
 ENV APP_DIR=/srv/app
 ENV SRC_EXTENSIONS_DIR=/srv/app/src_extensions
 ENV WECA_TDH_DIR=${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh/ckanext/weca_tdh
-ENV TZ=UTC
-RUN echo ${TZ} > /etc/timezone
-
-# Make sure both files are not exactly the same
-RUN if ! [ /usr/share/zoneinfo/${TZ} -ef /etc/localtime ]; then \
-        cp /usr/share/zoneinfo/${TZ} /etc/localtime ;\
-    fi ;
 
 # Override the default start_ckan script
-COPY docker/ckan/setup/start_ckan_development.sh.override ${APP_DIR}/start_ckan_development.sh
-RUN chmod +x ${APP_DIR}/start_ckan_development.sh
+COPY --chown=ckan-sys:ckan-sys docker/ckan/setup/start_ckan_development.sh ${APP_DIR}
 
 # Override the default prerun script
-COPY docker/ckan/setup/prerun.py.override ${APP_DIR}/prerun.py
+COPY --chown=ckan-sys:ckan-sys docker/ckan/setup/prerun.py ${APP_DIR}
 
-### Install TDH extension ###
-COPY ./ ${APP_DIR}/src_extensions/ckanext-weca-tdh
+# Mount TDH extension
+COPY --chown=ckan:ckan-sys ./ ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh
+
+USER root
+
+RUN mkdir -p /srv/app/.local && chown ckan:ckan-sys /srv/app/.local
+RUN chmod +x ${APP_DIR}/start_ckan_development.sh
+
+USER ckan
+
+# Install TDH extension
 RUN echo "pip install ckanext-weca-tdh..." && \
-  pip3 install -r ${APP_DIR}/src_extensions/ckanext-weca-tdh/requirements.txt && \
-  pip3 install -e ${APP_DIR}/src_extensions/ckanext-weca-tdh/
-
-COPY docker/ckan/patches ${APP_DIR}/patches
-
-RUN for d in $APP_DIR/patches/*; do \
-        if [ -d $d ]; then \
-            for f in `ls $d/*.patch | sort -g`; do \
-                cd $SRC_DIR/`basename "$d"` && echo "$0: Applying patch $f to $SRC_DIR/`basename $d`"; patch -p1 < "$f" ; \
-            done ; \
-        fi ; \
-    done
+  pip3 install -r ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh/requirements.txt && \
+  pip3 install -e ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh/

@@ -13,6 +13,6 @@
 
 {% block secondary_content %}
   {# remove follow section #}
-  {% snippet 'snippets/organization.html', organization=group_dict, show_nums=false, group_type=group_type %}
+  {% snippet 'organization/snippets/info.html', organization=group_dict, show_nums=true, group_type=group_type %}
   {% block organization_facets %}{% endblock %}
 {% endblock %}

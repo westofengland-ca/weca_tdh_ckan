@@ -16,7 +16,7 @@
       <h1 class="gem-c-title__text govuk-heading-l" data-cy="landing-heading">{{ g.site_description }}</h1>
     </div>
     <p class="gem-c-lead-paragraph govuk-body" data-cy="landing-desc">
-      {{ h.snippet('snippets/landing_description.html') }}
+      {% snippet 'snippets/landing_description.html' %}
     </p>
   {% endblock %}
 

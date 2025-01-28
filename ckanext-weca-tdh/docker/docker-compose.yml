@@ -1,12 +1,11 @@
-version: "3"
-
 volumes:
   ckan_storage:
   pg_data:
   solr_data:
+  pip_cache:
+  site_packages:
 
 services:
-
   ckan-job:
     container_name: ckan-job
     build:
@@ -55,6 +54,8 @@ services:
       - "0.0.0.0:${CKAN_PORT_HOST}:${CKAN_PORT}" 
     volumes:
       - ckan_storage:/var/lib/ckan
+      - pip_cache:/root/.cache/pip
+      - site_packages:/usr/lib/python3.10/site-packages
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000"]
