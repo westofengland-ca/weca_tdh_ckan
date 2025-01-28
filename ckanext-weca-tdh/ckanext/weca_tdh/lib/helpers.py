@@ -160,4 +160,8 @@ def transform_collaborators(collaborators: tuple) -> str:
         except Exception as e:
             log.error(f"Failed to fetch user with ID {ckan_id}: {e}")
 
-    return json.dumps(names_list)
+    if names_list:
+        return json.dumps(names_list)
+    else:
+        names_list.append('Unassigned')
+        return json.dumps(names_list)

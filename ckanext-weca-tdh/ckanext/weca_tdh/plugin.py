@@ -124,7 +124,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_validator('ignore_missing')],
             'data_quality_score': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')],
-            'data_stewards': [toolkit.get_converter('convert_from_extras'), 
+            'data_stewards': [toolkit.get_converter('convert_from_extras'),
+                              toolkit.get_validator('ignore_missing'),
                              toolkit.get_converter('convert_to_json_if_string')],
             'datalake_active': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing'),
@@ -133,7 +134,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_validator('ignore_missing')]
         })
         schema['resources'].update({
-                'resource_data_category' : [ toolkit.get_validator('ignore_missing') ]
+                'resource_data_category' : [toolkit.get_validator('ignore_missing')]
         })
         return schema
     
