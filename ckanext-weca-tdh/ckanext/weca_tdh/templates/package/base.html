@@ -1,5 +1,10 @@
 {% ckan_extends %}
 
+{% if pkg_dict %}
+  {% set collaborators = h.get_collaborators(pkg_dict.id) %}
+  {% set pkg_dict = h.update_package_metadata(pkg_dict, key='data_stewards', value=h.transform_collaborators(collaborators)) %}
+{% endif %}
+
 {% block breadcrumb_content %}
   {% if pkg %}
     {% set dataset = h.dataset_display_name(pkg) %}
