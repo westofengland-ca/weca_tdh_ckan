@@ -40,9 +40,9 @@
     </td>
     <td class="govuk-table__cell">
       {% if res.resource_tdh_availability %}
-        {{ ", ".join(res.resource_tdh_availability) }} 
+        {{ res.resource_tdh_availability }} 
       {% else %}
-        {{ _('Unavailable') }}
+        {{ _('N/A') }}
       {% endif %}
     </td>
     <td class="govuk-table__cell">
