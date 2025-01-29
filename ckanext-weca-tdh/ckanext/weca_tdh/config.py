@@ -73,5 +73,5 @@ TDH_UPLOAD_FILE_SIZE = 16 * 1024 * 1024 # 16MB
 TDH_UPLOAD_HTTP_TRIGGER = config.get('tdh.upload.http_trigger', "")
 
 # Databricks Workspace config
-DB_APP_CLIENT_ID = config.get('db.app.client_id', "")
-DB_APP_REDIRECT_URL = config.get('db.app.redirect_url', "")
+DB_APP_CLIENT_ID = config['db.app.client_id']
+DB_APP_REDIRECT_URL = config['db.app.redirect_url']

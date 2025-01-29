@@ -28,10 +28,69 @@
               <i class="fa fa-external-link"></i> {{ _('Go to resource') }}
             {% else %}
               <i class="fa fa-arrow-circle-down"></i> {{ _('Download') }}
-              {% if download_url.append(1) %}{% endif %}
-            {% endif %}  
+              {% if download_url.append(1) %}{% endif %}    
+            {% endif %} 
           </a>
+        {% elif "File Download" in res.resource_tdh_availability %}
+          {% if not session.get('access_token')%}
+            <a class="btn btn-primary resource-url-analytics" href="{{ h.build_databricks_auth_url(res.id, request.path) }}">
+              <i class="fa fa-arrow-circle-down"></i> {{ _('TDH Connect') }}
+            </a>
+          {% else %}
+          {% set resource_id = res.id %}
+            <a class="btn btn-primary resource-url-analytics" onclick="return start_download('{{ res.id }}');">
+              <i class="fa fa-arrow-circle-down"></i> {{ _('TDH Download') }}
+              <div id="spinner" class="download-spinner"></div>
+            </a>
+          {% endif %}
         {% endif %}
+        <script>
+          function start_download(resource_id) {
+            $("#spinner").css("display", "inline-block");
+
+            $.ajax({
+              url: "/databricks/download/start",
+              method: "POST",
+              data: JSON.stringify({ resource_id: resource_id }),
+              contentType: "application/json",
+              success: function (response) {
+                const taskId = response.task_id;
+                const downloadUrl = response.download_url;
+                // Poll for task completion
+                pollTaskStatus(taskId, downloadUrl);
+              },
+              error: function (err) {
+                $("#spinner").css("display", "none");
+                window.location.reload();
+              }
+            });
+          };
+          function pollTaskStatus(taskId, downloadUrl) {
+            $.ajax({
+              url: "/databricks/download/status",
+              method: "POST",
+              data: JSON.stringify({ task_id: taskId }),
+              contentType: "application/json",
+              success: function (response) {
+                const status = response.status;
+                if (status === "completed") {
+                  $("#spinner").css("display", "none");
+                  window.location.href = downloadUrl;
+                } else if (status === "error") {
+                  $("#spinner").css("display", "none");
+                  window.location.reload();
+                } else {
+                  // Continue polling if the task is still in progress
+                  setTimeout(() => pollTaskStatus(taskId, downloadUrl), 2000);
+                }
+              },
+              error: function (err) {
+                $("#spinner").css("display", "none");
+                window.location.reload();
+              }
+            });
+          }
+        </script>
         {% block download_resource_button %}
           {% if res.datastore_active %}
             <button class="btn btn-primary dropdown-toggle" role="button" id="dropdownDownloadFormat" data-bs-toggle="dropdown" aria-expanded="false" aria-label="list of downloadable formats">         
@@ -63,4 +122,27 @@
   {% if res.datastore_active %}
     <li>{% snippet 'package/snippets/data_api_button.html', resource=res %}</li>
   {% endif %}
+{% endblock %}
+
+{% block resource_content %}
+  {{ super() }}
+  {% block tdh_availability %}
+    {% if "Power BI" in res.resource_tdh_availability %}
+      <div>
+        <h2 class="heading-small">{{ _('TDH Partner Connect') }}</h2>
+        <p>{{ _('This dataset is available to query using Power BI.') }}
+        <a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub.') }}</a></p>
+      </div>
+    {% elif "File Download" in res.resource_tdh_availability %}
+      <div>
+        <h2 class="heading-small">{{ _('TDH File Download') }}</h2>
+        <p>{{ _('This dataset is available to download from the TDH.') }}
+        {% if not session.get('access_token')%}
+          {{ _('To download, click the TDH Connect button to start a new download session.') }}</p>
+        {% else %}
+          {{ _('To download, click the TDH Download button.') }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endblock %}
 {% endblock %}

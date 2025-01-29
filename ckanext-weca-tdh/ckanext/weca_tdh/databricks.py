@@ -4,14 +4,12 @@ import json
 import logging
 import os
 import threading
-import time
 import uuid
 
 import ckan.plugins.toolkit as toolkit
 import requests
 from flask import (
     Blueprint,
-    after_this_request,
     flash,
     jsonify,
     request,
@@ -57,13 +55,18 @@ def download_file_from_url(task_id, file_url, output_path, access_token):
 
         task_statuses[task_id] = {"status": "completed", "message": "Download completed.", "file_path": output_path}
     except requests.exceptions.HTTPError as e:
-        message = "Unauthorised access. Contact the Data Owner." if e.response.status_code == 403 else str(e)
-        task_statuses[task_id] = {"status": "error", "message": f"Download failed: {message}"}
-    except requests.exceptions.ConnectionError:
-        task_statuses[task_id] = {"status": "error", "message": "Invalid URL. Contact the Data Owner."}
+        status_code = getattr(e.response, "status_code", None)
+        message = {
+            400: "invalid request",
+            401: "unauthorized access",
+            403: "unauthorized access",
+            404: "file not available",
+        }.get(status_code, str(e)) 
+        
+        task_statuses[task_id] = {"status": "error", "message": f"Download failed: {message}. Contact the Data Owner for suport."}
     except Exception as e:
         task_statuses[task_id] = {"status": "error", "message": f"Download failed: {e}"}
-    
+
 
 @databricksbp.route('/databricks/download/status', methods=['POST'])
 def get_task_status():
@@ -88,30 +91,26 @@ def get_task_status():
 def download_file(task_id):
     if task_id not in task_statuses:
         flash("Failed to download file: Task ID not found.", category='alert-danger')
-        return jsonify({"status": "error", "message": "Task ID not found."}), 404
+        return toolkit.redirect_to(request.referrer or "/")
 
     task_info = task_statuses[task_id]
-    if task_info["status"] != "completed":
-        return jsonify({"status": task_info["status"], "message": task_info.get("message", "Task not ready.")})
-
     file_path = task_info["file_path"]
+
     if not os.path.exists(file_path):
         flash("Failed to download file: file not found.", category='alert-danger')
-        return jsonify({"status": "error", "message": "File not found on server."}), 404
+        return toolkit.redirect_to(request.referrer or "/")
 
     filename = os.path.basename(file_path)
     
-    # Remove temporary file
-    @after_this_request
-    def cleanup(response):
+    try:
+        return send_file(file_path, as_attachment=True, download_name=filename)
+    finally:
         try:
+            # Remove temporary file
             os.remove(file_path)
             del task_statuses[task_id]
         except Exception as e:
             log.error(f"Error deleting file {file_path}: {e}")
-        return response
-    
-    return send_file(file_path, as_attachment=True, download_name=filename)
 
 
 class DatabricksWorkspace(object):
@@ -121,6 +120,8 @@ class DatabricksWorkspace(object):
         
     def authorise(self):
         try:
+            referrer = session.get('referrer', '/')
+            
             # Get workspace authorisation code for user
             auth_code = self.get_workspace_auth_code()
             
@@ -132,11 +133,11 @@ class DatabricksWorkspace(object):
             session['access_token'] = access_token
             
             # Redirect back to resource page
-            referrer = session.get('referrer')
             return toolkit.redirect_to(referrer)
 
         except Exception as e:
-            flash(f"Databricks authorisation failed: {e}", category='alert-danger')
+            flash(f"Download authorisation failed: {e}. Contact the Data Owner for support.", category='alert-danger')
+            return toolkit.redirect_to(referrer)
 
     @staticmethod
     def get_workspace_auth_code() -> str:  
@@ -164,27 +165,34 @@ class DatabricksWorkspace(object):
             response = requests.post(base_url, data=data)
             response_dict = response.json()
             return response_dict.get("access_token")
-        except Exception as e:
-            raise Exception(f'failed to get Workspace access token. {e}')
+        except Exception:
+            raise Exception('invalid access token')
         
     def start_download(self):
         try:
             data = request.get_json()
+
             resource_id = data.get("resource_id")
+            if not resource_id:
+                raise Exception("missing resource ID")
+            
             catalog = self.get_catalog_files_local(resource_id)
+            if not catalog:
+                raise Exception("unable to retrieve file catalog")
+            
             file_name = catalog.get('file_name')
-            
-            file_url = f"https://{self.host}/api/2.0/fs/files/Volumes/ \
-                        {catalog.get('catalog_name')}/{catalog.get('schema_name')}/ \
-                        {catalog.get('volume_name')}/{file_name}"
-            
+            file_url = (
+                f"https://{self.host}/api/2.0/fs/files/Volumes/"
+                f"{catalog.get('catalog_name')}/"
+                f"{catalog.get('schema_name')}/"
+                f"{catalog.get('volume_name')}/"
+                f"{file_name}"
+            )
+
             output_path = os.path.join(download_directory, file_name)
             access_token = self.get_workspace_access_token()
 
-            if not file_url:
-                return jsonify({"status": "error", "message": "file_url is required."}), 400
-
-            task_id = str(int(time.time()))  # Generate unique task ID
+            task_id = str(uuid.uuid4()) # Generate unique task ID
             thread = threading.Thread(target=download_file_from_url, args=(task_id, file_url, output_path, access_token))
             thread.daemon = True
             thread.start()
@@ -192,7 +200,9 @@ class DatabricksWorkspace(object):
             download_url = f"/databricks/download/{task_id}"
             return jsonify({"task_id": task_id, "download_url": download_url, "message": "Download started."})
         except Exception as e:
-            flash(f"Download failed: {e}.", category='alert-danger')
+            error_message = f"Download failed to start: {e}. Contact the Data Owner for support."
+            flash(error_message, category='alert-danger')
+            return jsonify({"status": "error", "message": error_message}), 500
             
     @staticmethod
     def get_catalog_files(resource_id):
