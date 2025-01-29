@@ -123,7 +123,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_validator('ignore_missing')],
             'data_quality_score': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')],
-            'data_stewards': [toolkit.get_converter('convert_from_extras'), 
+            'data_stewards': [toolkit.get_converter('convert_from_extras'),
+                              toolkit.get_validator('ignore_missing'),
                              toolkit.get_converter('convert_to_json_if_string')],
             'last_reviewed': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')]

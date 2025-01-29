@@ -161,6 +161,12 @@ def transform_collaborators(collaborators: tuple) -> str:
             names_list.append(user[C.CKAN_USER_FULLNAME])
         except Exception as e:
             log.error(f"Failed to fetch user with ID {ckan_id}: {e}")
+
+    if names_list:
+        return json.dumps(names_list)
+    else:
+        names_list.append('Unassigned')
+        return json.dumps(names_list)
     return json.dumps(names_list)
 
 def build_databricks_auth_url(resource_id: str, referrer: str) -> str:
