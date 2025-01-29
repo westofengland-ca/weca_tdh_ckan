@@ -49,10 +49,6 @@
                 <dd property="dc:rights" data-cy="package-license">
                   {% snippet "package/snippets/package_license.html", pkg_dict=pkg %}
                 </dd>
-                <dt>{{ _('TDH Data Lake:') }}</dt>
-                <dd data-cy="package-datalake">{{ _('Available ') if pkg.datalake_active else _('Not available ') }}<i class="fa fa-info-circle fa-xs" 
-                  title="Indicates if the data for this dataset is available within the TDH Data Lake (accessible via PowerBI query or DataBricks)"></i>
-                </dd>
                 <dt>{{ _('Data quality:') }}</dt>
                 <dd property="dc:quality" data-cy="package-quality">
                   <a href="{{ h.url_for('home.about') ~ '#data-quality'}}">
@@ -118,18 +114,6 @@
         <section class="data-links">
           <div class="package-content">
             {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources, can_edit=can_edit %}
-          </div>
-        </section>
-      {% endif %}
-    {% endblock %}
-
-    {% block connect %}
-      {% if pkg.datalake_active %}
-        <section class="connect">
-          <div class="package-content">
-            <h2 class="heading-medium">{{ _('Connect') }}</h2>
-            <p>{{ _('This dataset is available to query using Power BI.') }}</p>
-            <p><a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub.') }}</a></p>
           </div>
         </section>
       {% endif %}
