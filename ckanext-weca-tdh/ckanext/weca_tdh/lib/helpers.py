@@ -167,7 +167,6 @@ def transform_collaborators(collaborators: tuple) -> str:
     else:
         names_list.append('Unassigned')
         return json.dumps(names_list)
-    return json.dumps(names_list)
 
 def build_databricks_auth_url(resource_id: str, referrer: str) -> str:
     client_id = C.DB_APP_CLIENT_ID
