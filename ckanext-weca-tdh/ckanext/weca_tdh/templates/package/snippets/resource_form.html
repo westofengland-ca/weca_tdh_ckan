@@ -16,6 +16,7 @@
     <label for="field-tdh_availability" class="form-label">{{ _('TDH Availability') }}</label>
     <div class="controls">
       <select id="field-tdh_availability" name="resource_tdh_availability" data-module="autocomplete">
+        <option value="N/A" {% if "N/A" in data.get('resource_tdh_availability', []) %}selected="selected"{% endif %}>{{ _('N/A') }}</option>
         <option value="File Download" {% if "File Download" in data.get('resource_tdh_availability', []) %}selected="selected"{% endif %}>{{ _('File Download') }}</option>
         <option value="Power BI" {% if "Power BI" in data.get('resource_tdh_availability', []) %}selected="selected"{% endif %}>{{ _('Power BI') }}</option>
       </select>
