@@ -1,0 +1,18 @@
+{% ckan_extends %}
+
+{% block primary_content_inner %}
+  <h2 class="hide-heading">{{ _('Topics') }}</h2>
+  {% if groups_available %}
+    <div class="wide">
+      {% snippet "group/snippets/group_list.html", groups=groups_available, show_capacity=True %}
+    </div>
+  {% else %}
+    <p class="empty">
+      {% if is_myself %}
+        {{ h.humanize_entity_type('group', group_type, 'you not member') or _('You are not a member of any topics.') }}
+      {% else %}
+        {{ h.humanize_entity_type('group', group_type, 'user not member') or _('User isn\'t a member of any topics.') }}
+      {% endif %}
+    </p>
+  {% endif %}
+{% endblock %}

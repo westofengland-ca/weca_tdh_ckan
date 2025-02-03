@@ -1,0 +1,18 @@
+{% ckan_extends %}
+
+{% block user_nums %}
+    <div class="nums">
+    <dl>
+        <dt>{{ h.humanize_entity_type('package', dataset_type, 'facet label') or _('Datasets') }}</dt>
+        <dd>{{ h.SI_number_span(user.number_created_packages) }}</dd>
+    </dl>
+    <dl>
+        <dt>{{ _('Publishers') }}</dt>
+        <dd>{{ orgs_available | count }}</dd>
+    </dl>
+    <dl>
+        <dt>{{ _('Topics') }}</dt>
+        <dd>{{ groups_available | count }}</dd>
+    </dl>
+    </div>
+{% endblock %}

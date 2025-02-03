@@ -22,7 +22,7 @@
   {% block search_filters %}
     {% set facetLabels = ["organization", "groups", "res_format"] %}
     {% for facet in facetLabels %}
-      {{ h.snippet('package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped) }}
+      {% snippet 'package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped %}
     {% endfor %}
     {{ govukButton({
       'text': "Apply filters",
@@ -45,7 +45,7 @@
           (_('Popular'), 'views_recent desc') if g.tracking_enabled else (False, False) ]
         %}
         <div class="sort"> 
-          {{ h.snippet('snippets/search_sort.html', sort_options=sorting, sorting_selected=sort_by_selected) }}
+          {% snippet 'snippets/search_sort.html', sort_options=sorting, sorting_selected=sort_by_selected %}
         </div>
       {% endblock %}
 
@@ -56,7 +56,7 @@
       {% endblock %}
 
       {% block package_search_results_list %}
-        {{ h.snippet('snippets/package_list.html', packages=page.items, list_class='dataset-listclass govuk-body-s', item_class='dataset-itemclass') }}
+        {% snippet 'snippets/package_list.html', packages=page.items, list_class='dataset-listclass govuk-body-s', item_class='dataset-itemclass' %}
       {% endblock %}
 
       {% block page_pagination %}

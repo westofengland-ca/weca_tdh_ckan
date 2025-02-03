@@ -1,11 +1,3 @@
-{#
-  Embeds a Publisher within the sidebar of a page.
-
-  organization    - The organization dict.
-
-  Example: {% snippet 'snippets/organization, organization=c.group_dict %}
-#}
-
 {% ckan_extends %}
 
 {% block info %}
@@ -35,3 +27,18 @@
     <p class="empty">{{ h.humanize_entity_type('organization', organization.type, 'no description') or _('There is no description for this Publisher') }}</p>
   {% endif %}
 {% endblock %}
+
+{% block nums %}
+    <div class="nums">
+    <dl>
+        <dt>{{ h.humanize_entity_type('package', dataset_type, 'facet label') or _('Datasets') }}</dt>
+        <dd>{{ h.SI_number_span(organization.package_count) }}</dd>
+    </dl>
+    <dl>
+        <dt>{{ _('Members') }}</dt>
+        <dd>{{ h.member_count(organization.id) }}</dd>
+    </dl>
+    </div>
+{% endblock %}
+
+{% block follow %}{% endblock %}

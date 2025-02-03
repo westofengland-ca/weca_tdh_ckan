@@ -25,7 +25,7 @@
 {% block primary_content %}            
   {% block search_sort %}
     <div class="sort"> 
-      {{ h.snippet('snippets/search_sort.html', sorting_selected=sort_by_selected) }}
+      {% snippet 'snippets/search_sort.html', sorting_selected=sort_by_selected %}
     </div>
   {% endblock %}
   {% block search_results_count %}
