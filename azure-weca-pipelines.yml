@@ -4,6 +4,7 @@ trigger: none
   #     - main
 pool:
   name: Azure Pipelines
+
 variables:
 - name: buildDate
   value: $[format('{0:yyyyMMdd}', pipeline.startTime)]
@@ -20,6 +21,7 @@ variables:
 - name: project_name
   value: weca-tdh
 - group: Pipeline_vars
+
 steps:
 - task: Docker@2
   displayName: Build and push
@@ -30,6 +32,7 @@ steps:
     Dockerfile: '**/Dockerfile'
     buildContext: 'ckanext-weca-tdh'
     tags: $(buildtag)
+    arguments: --no-cache
 
 - script: mkdir -p $(Build.ArtifactStagingDirectory)/$(NAMESPACE)
   displayName: 'Create Directory'

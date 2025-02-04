@@ -1,48 +1,14 @@
 #!/bin/sh
 
-# Install any local extensions in the src_extensions volume
-echo "Looking for local extensions to install..."
-echo "Extension dir contents:"
-ls -la $SRC_EXTENSIONS_DIR
-for i in $SRC_EXTENSIONS_DIR/*
-do
-    if [ -d $i ];
-    then
-
-        if [ -f $i/pip-requirements.txt ];
-        then
-            pip install -r $i/pip-requirements.txt
-            echo "Found requirements file in $i"
-        fi
-        if [ -f $i/requirements.txt ];
-        then
-            pip install -r $i/requirements.txt
-            echo "Found requirements file in $i"
-        fi
-        if [ -f $i/dev-requirements.txt ];
-        then
-            pip install -r $i/dev-requirements.txt
-            echo "Found dev-requirements file in $i"
-        fi
-        if [ -f $i/setup.py ];
-        then
-            cd $i
-            python3 $i/setup.py develop
-            echo "Found setup.py file in $i"
-            cd $APP_DIR
-        fi
-    fi
-done
-
 # Add ckan.datapusher.api_token to the CKAN config file (updated with corrected value later)
 ckan config-tool $CKAN_INI ckan.datapusher.api_token=xxx
 
 # Set up the Secret key used by Beaker and Flask
 # This can be overriden using a CKAN___BEAKER__SESSION__SECRET env var
-if grep -E "beaker.session.secret ?= ?$" ckan.ini
+if grep -qE "SECRET_KEY ?= ?$" ckan.ini
 then
-    echo "Setting beaker.session.secret in ini file"
-    ckan config-tool $CKAN_INI "beaker.session.secret=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
+    echo "Setting SECRET_KEY in ini file"
+    ckan config-tool $CKAN_INI "SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
     ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
     JWT_SECRET=$(python3 -c 'import secrets; print("string:" + secrets.token_urlsafe())')
     ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=${JWT_SECRET}"
@@ -69,16 +35,15 @@ ckan config-tool $CKAN_INI "ckan.datapusher.callback_url_base = $CKAN__DATAPUSHE
 ckan config-tool $CKAN_INI "ckan.datastore.write_url = $CKAN_DATASTORE_WRITE_URL"
 ckan config-tool $CKAN_INI "ckan.datastore.read_url = $CKAN_DATASTORE_READ_URL"
 
-# Set the beaker session config
-ckan config-tool $CKAN_INI beaker.session.cookie_expires=True
-ckan config-tool $CKAN_INI beaker.session.secure=True
-ckan config-tool $CKAN_INI beaker.session.timeout=36000
+# Set the session config
+ckan config-tool $CKAN_INI SESSION_PERMANENT=False
+ckan config-tool $CKAN_INI SESSION_COOKIE_SECURE=True
 
 # Set the search result configs
 ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000
 ckan config-tool $CKAN_INI search.facets.limit=1000
 ckan config-tool $CKAN_INI search.facets.default=1000
-ckan config-tool $CKAN_INI ckan.datasets_per_page=30
+ckan config-tool $CKAN_INI ckan.datasets_per_page=40
 
 # Set the default user permissions
 ckan config-tool $CKAN_INI ckan.auth.user_create_groups=False
@@ -137,8 +102,9 @@ ckan config-tool $CKAN_INI "tdh.upload.http_trigger = $decoded_url"
 ckan config-tool $CKAN_INI --section logger_ckan "level = WARNING"
 ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
 
+# Configure token expiry
 ckan config-tool $CKAN_INI expire_api_token.default_lifetime=30
-ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day in seconds
+ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day
 
 # Run the prerun script to init CKAN and create the default admin user
 python3 prerun.py
@@ -146,26 +112,11 @@ python3 prerun.py
 echo "Set up ckan.datapusher.api_token in the CKAN config file"
 ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add $CKAN_SYSADMIN_NAME datapusher expires_in=365 unit=86400 | tail -n 1 | tr -d '\t')"
 
-# Run any startup scripts provided by images extending this one
-if [[ -d "/docker-entrypoint.d" ]]
-then
-    for f in /docker-entrypoint.d/*; do
-        case "$f" in
-            *.sh)     echo "$0: Running init file $f"; . "$f" ;;
-            *.py)     echo "$0: Running init file $f"; python3 "$f"; echo ;;
-            *)        echo "$0: Ignoring $f (not an sh or py file)" ;;
-        esac
-        echo
-    done
-fi
-
 # Set the common uwsgi options
-UWSGI_OPTS="--plugins http,python \
-            --socket /tmp/uwsgi.sock \
+UWSGI_OPTS="--socket /tmp/uwsgi.sock \
             --wsgi-file /srv/app/wsgi.py \
             --module wsgi:application \
-            --uid 92 --gid 92 \
-            --http 0.0.0.0:5000 \
+            --http [::]:5000 \
             --master --enable-threads \
             --lazy-apps \
             -p 2 -L -b 32768 --vacuum \
@@ -181,8 +132,6 @@ then
         echo "Rebuilding solr search index."
         ckan search-index rebuild
 
-        # Start supervisord
-        supervisord --configuration /etc/supervisord.conf &
         # Start uwsgi
         uwsgi $UWSGI_OPTS
     else
