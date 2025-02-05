@@ -1,8 +1,8 @@
 from ckan.common import config
-from flask import request
 
 # Global
 CKAN_SITE_ID = config['ckan.site_id']
+CKAN_SITE_URL= config['ckan.site_url']
 
 # CKAN user
 CKAN_USER_ID = "id"
@@ -75,4 +75,4 @@ TDH_UPLOAD_HTTP_TRIGGER = config.get('tdh.upload.http_trigger', "")
 
 # Databricks Workspace config
 TDH_DB_APP_CLIENT_ID = config.get('tdh.db_app.client_id', "")
-TDH_DB_APP_REDIRECT_URL = f"{request.url_root}databricks/auth"
+TDH_DB_APP_REDIRECT_URL = f"{CKAN_SITE_URL}/databricks/auth"
