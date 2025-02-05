@@ -149,8 +149,8 @@ class DatabricksWorkspace(object):
 
     def generate_workspace_access_token(self, code_verifier: str, auth_code: str) -> str:
         base_url = f"https://{self.host}/oidc/v1/token"
-        client_id = C.DB_APP_CLIENT_ID
-        redirect_url = C.DB_APP_REDIRECT_URL
+        client_id = C.TDH_DB_APP_CLIENT_ID
+        redirect_url = C.TDH_DB_APP_REDIRECT_URL
 
         data = {
             "client_id": client_id,

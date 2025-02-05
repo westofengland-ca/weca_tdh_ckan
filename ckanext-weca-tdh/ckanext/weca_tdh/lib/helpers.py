@@ -169,8 +169,8 @@ def transform_collaborators(collaborators: tuple) -> str:
         return json.dumps(names_list)
 
 def build_databricks_auth_url(resource_id: str, referrer: str) -> str:
-    client_id = C.DB_APP_CLIENT_ID
-    redirect_url = C.DB_APP_REDIRECT_URL
+    client_id = C.TDH_DB_APP_CLIENT_ID
+    redirect_url = C.TDH_DB_APP_REDIRECT_URL
     
     code_verifier, code_challenge = oauth_code_verify_and_challenge()
     session['code_verifier'] = code_verifier
