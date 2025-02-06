@@ -76,3 +76,6 @@ TDH_UPLOAD_HTTP_TRIGGER = config.get('tdh.upload.http_trigger', "")
 # Databricks Workspace config
 TDH_DB_APP_CLIENT_ID = config.get('tdh.db_app.client_id', "")
 TDH_DB_APP_REDIRECT_URL = f"{CKAN_SITE_URL}/databricks/auth"
+
+# Redis config
+REDIS_URL = config.get('ckan.redis.url', "")
