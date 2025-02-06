@@ -21,6 +21,9 @@ ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL"
 # Set the SOLR URL
 ckan config-tool $CKAN_INI "solr_url = $CKAN_SOLR_URL"
 
+# Set the Redis URL
+ckan config-tool $CKAN_INI "ckan.redis.url = $CKAN_REDIS_URL"
+
 # Set the ckan site settings
 ckan config-tool $CKAN_INI "ckan.site_id = $CKAN_SITE_ID"
 ckan config-tool $CKAN_INI "ckan.site_url = $CKAN_SITE_URL"
