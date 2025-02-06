@@ -1,9 +1,6 @@
-import logging
 from urllib.parse import urlparse
 
 import redis
-
-log = logging.getLogger(__name__)
 
 
 def get_redis_client(redis_url: str):

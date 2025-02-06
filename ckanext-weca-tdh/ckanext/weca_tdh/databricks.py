@@ -1,13 +1,11 @@
 import base64
 import hashlib
-import json
 import logging
 import os
 import threading
 import uuid
 
 import ckan.plugins.toolkit as toolkit
-import redis
 import requests
 from flask import (
     Blueprint,
