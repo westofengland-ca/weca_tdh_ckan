@@ -17,14 +17,14 @@ from flask import (
 )
 
 import ckanext.weca_tdh.config as C
-from ckanext.weca_tdh.redis_config import get_redis_client
+from ckanext.weca_tdh.redis_config import RedisConfig
 from ckanext.weca_tdh.upload import BlobStorage
 
 log = logging.getLogger(__name__)
 databricksbp = Blueprint('databricks', __name__)
 
 # Redis config
-redis_client = get_redis_client(C.REDIS_URL)
+redis_client = RedisConfig(C.REDIS_URL)
 
 download_directory = "/tmp"
 
@@ -43,7 +43,7 @@ def oauth_code_verify_and_challenge() -> tuple[str, str]:
 
 def download_file_from_url(task_id, file_url, output_path, access_token):
     try:
-        redis_client.hset(f"task:{task_id}", mapping={"status": "in_progress", "message": "Download started."})
+        redis_client.set_download_status(task_id, status="in_progress", message="Download started.")
         headers = {
             'Authorization': f'Bearer {access_token}'
         }
@@ -55,7 +55,7 @@ def download_file_from_url(task_id, file_url, output_path, access_token):
                     if chunk:
                         file.write(chunk)
 
-        redis_client.hset(f"task:{task_id}", mapping={"status": "completed", "message": "Download completed.", "file_path": output_path})
+        redis_client.set_download_status(task_id, status="completed", message="Download completed.", file_path=output_path)
     except requests.exceptions.HTTPError as e:
         status_code = getattr(e.response, "status_code", None)
         message = {
@@ -65,9 +65,9 @@ def download_file_from_url(task_id, file_url, output_path, access_token):
             404: "file not available",
         }.get(status_code, str(e)) 
         
-        redis_client.hset(f"task:{task_id}", mapping={"status": "error", "message": f"Download failed: {message}. Contact the Data Owner for support."})
+        redis_client.set_download_status(task_id, status="error", message=f"Download failed: {message}. Contact the Data Owner for support.")
     except Exception as e:
-        redis_client.hset(f"task:{task_id}", mapping={"status": "error", "message": f"Download failed: {e}"})
+        redis_client.set_download_status(task_id, status="error", message=f"Download failed: {e}.")
 
 
 @databricksbp.route('/databricks/download/status', methods=['POST'])
@@ -79,7 +79,7 @@ def get_task_status():
         flash("Failed to get download status: Task ID is required.", category='alert-danger')
         return jsonify({"status": "error", "message": "task_id is required."}), 400
     
-    task_info = redis_client.hgetall(f"task:{task_id}")
+    task_info = redis_client.get_download_status(task_id)
     
     if task_info:
         if task_info["status"] == "error":
@@ -92,7 +92,7 @@ def get_task_status():
 
 @databricksbp.route('/databricks/download/<task_id>', methods=['GET'])
 def download_file(task_id):
-    task_info = redis_client.hgetall(f"task:{task_id}")
+    task_info = redis_client.get_download_status(task_id)
     
     if not task_info:
         flash("Failed to download file: Task ID not found.", category='alert-danger')
@@ -112,7 +112,7 @@ def download_file(task_id):
         try:
             # Remove temporary file
             os.remove(file_path)
-            redis_client.delete(f"task:{task_id}")  # Remove task data from Redis
+            redis_client.delete_download_task(task_id)
         except Exception as e:
             log.error(f"Error deleting file {file_path}: {e}")
 
@@ -197,7 +197,7 @@ class DatabricksWorkspace(object):
             access_token = self.get_workspace_access_token()
 
             task_id = str(uuid.uuid4()) # Generate unique task ID
-            redis_client.hset(f"task:{task_id}", mapping={"status": "pending", "message": "Task started"})
+            redis_client.set_download_status(task_id, status="pending", message="Task started.")
              
             thread = threading.Thread(target=download_file_from_url, args=(task_id, file_url, output_path, access_token))
             thread.daemon = True
