@@ -37,7 +37,7 @@ class RedisConfig:
         )
 
     def set_download_status(self, task_id: str, status: str, message: str, file_path=None):
-        self.client.hset(f"task:{task_id}", mapping={"status": str(status), "message": str(message), "file_path": str(file_path)})
+        self.client.hset(f"task:{task_id}", mapping={"status": status, "message": message, "file_path": str(file_path)})
 
     def get_download_status(self, task_id: str):
         return self.client.hgetall(f"task:{task_id}")
