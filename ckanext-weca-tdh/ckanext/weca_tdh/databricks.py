@@ -83,7 +83,8 @@ def get_task_status():
     
     if task_info:
         if task_info["status"] == "error":
-            flash(task_info["message"], category='alert-danger') 
+            redis_client.delete_download_task(task_id)
+            flash(task_info["message"], category='alert-danger')
         return jsonify(task_info)
     else:
         flash("Failed to get download status: Task ID not found.", category='alert-danger')
@@ -101,6 +102,7 @@ def download_file(task_id):
     file_path = task_info["file_path"]
 
     if not os.path.exists(file_path):
+        redis_client.delete_download_task(task_id)
         flash("Failed to download file: file not found.", category='alert-danger')
         return toolkit.redirect_to(request.referrer or "/")
 
@@ -110,9 +112,8 @@ def download_file(task_id):
         return send_file(file_path, as_attachment=True, download_name=filename)
     finally:
         try:
-            # Remove temporary file
-            os.remove(file_path)
             redis_client.delete_download_task(task_id)
+            os.remove(file_path) # Remove temporary file
         except Exception as e:
             log.error(f"Error deleting file {file_path}: {e}")
 
