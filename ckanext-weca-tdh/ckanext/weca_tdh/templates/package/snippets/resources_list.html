@@ -8,16 +8,16 @@
 #}
 
 {% block resource_list %}
-  <h2 class="heading-medium">{{ _('Data Links') }}</h2>
+  <h2 class="heading-medium">{{ _('Dataset Resources') }}</h2>
   {% if pkg.resources %}
     <table class="govuk-table govuk-!-margin-bottom-4" data-cy="data-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">{{ _('Link to the data') }}</th>
+          <th scope="col" class="govuk-table__header">{{ _('Resource') }}</th>
           <th scope="col" class="govuk-table__header">{{ _('Format') }}</th>
-          <th scope="col" class="govuk-table__header">{{ _('File added') }}</th>
-          <th scope="col" class="govuk-table__header">{{ _('Data category') }}</th>
-          <th scope="col" class="govuk-table__header">{{ _('TDH Availability') }}</th>
+          <th scope="col" class="govuk-table__header">{{ _('Date Added') }}</th>
+          <th scope="col" class="govuk-table__header">{{ _('Data Category') }}</th>
+          <th scope="col" class="govuk-table__header">{{ _('Data Access') }}</th>
           <th scope="col" class="govuk-table__header">{{ _('Action') }}</th>
         </tr>
       </thead>

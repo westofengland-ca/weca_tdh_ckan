@@ -3,7 +3,7 @@
 {% block basic_fields_url %}
   {{ super() }}
   <div class="form-group control-medium">
-    <label for="field-data_category" class="form-label">{{ _('Data category') }}</label>
+    <label for="field-data_category" class="form-label">{{ _('Data Category') }}</label>
     <div class="controls">
       <select id="field-data_category" name="resource_data_category" data-module="autocomplete">
         {% for option in h.get_resource_data_categories() %}
@@ -13,12 +13,13 @@
     </div>
   </div>
   <div class="form-group control-medium">
-    <label for="field-tdh_availability" class="form-label">{{ _('TDH Availability') }}</label>
+    <label for="field-data_access" class="form-label">{{ _('Data Access') }}</label>
     <div class="controls">
-      <select id="field-tdh_availability" name="resource_tdh_availability" data-module="autocomplete">
-        <option value="N/A" {% if "N/A" in data.get('resource_tdh_availability', []) %}selected="selected"{% endif %}>{{ _('N/A') }}</option>
-        <option value="File Download" {% if "File Download" in data.get('resource_tdh_availability', []) %}selected="selected"{% endif %}>{{ _('File Download') }}</option>
-        <option value="Power BI" {% if "Power BI" in data.get('resource_tdh_availability', []) %}selected="selected"{% endif %}>{{ _('Power BI') }}</option>
+      <select id="field-data_access" name="resource_data_access" data-module="autocomplete">
+        <option value="File Download" {% if "File Download" in data.get('resource_data_access', []) %}selected="selected"{% endif %}>{{ _('File Download (Databricks)') }}</option>
+        <option value="Link" {% if "Link" in data.get('resource_data_access', []) or data.get("url", False) and h.is_url(data.get("url", False)) %}selected="selected"{% endif %}>{{ _('Link') }}</option>
+        <option value="Power BI" {% if "Power BI" in data.get('resource_data_access', []) %}selected="selected"{% endif %}>{{ _('Power BI') }}</option>
+        <option value="Preview" {% if "Preview" in data.get('resource_data_access', []) or data.get('has_views', False) %}selected="selected"{% endif %}>{{ _('Preview') }}</option>
       </select>
     </div>
   </div>

@@ -102,8 +102,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_converter('convert_to_extras')]
         })
         schema['resources'].update({
-                'resource_data_category': [toolkit.get_validator('ignore_missing')],
-                'resource_tdh_availability': [toolkit.get_validator('ignore_missing')]
+                'resource_data_access': [toolkit.get_validator('ignore_missing')],
+                'resource_data_category': [toolkit.get_validator('ignore_missing')]
         })
         return schema
 
@@ -130,8 +130,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_validator('ignore_missing')]
         })
         schema['resources'].update({
-                'resource_data_category': [toolkit.get_validator('ignore_missing')],
-                'resource_tdh_availability': [toolkit.get_validator('ignore_missing')]
+                'resource_data_access': [toolkit.get_validator('ignore_missing')],
+                'resource_data_category': [toolkit.get_validator('ignore_missing')]
         })
         return schema
     

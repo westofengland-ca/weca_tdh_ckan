@@ -34,12 +34,12 @@
 
             {% block metadata_list %}
               <dl class="metadata">
-                <dt>{{ _('Published by:') }}</dt>
+                <dt>{{ _('Published By:') }}</dt>
                 <dd property="dc:creator" data-cy="package-publisher">{{ pkg.organization.title }}</dd>
-                <dt>{{ _('Last updated:') }}</dt>
+                <dt>{{ _('Last Updated:') }}</dt>
                 {% set last_updated = h.filter_datetime(pkg.metadata_modified, 'short') %}
                 <dd property="dc:date" data-cy="package-updated">{{ last_updated }}</dd>
-                <dt>{{ _('Last reviewed:') }}</dt>
+                <dt>{{ _('Last Reviewed:') }}</dt>
                 <dd property="dc:review" data-cy="package-reviewed">{{ h.filter_datetime(pkg.last_reviewed, 'short') or last_updated }}</dd>
                 <dt>{{ _('Topics:') }}</dt>
                 <dd data-cy="package-topics">
@@ -49,7 +49,7 @@
                 <dd property="dc:rights" data-cy="package-license">
                   {% snippet "package/snippets/package_license.html", pkg_dict=pkg %}
                 </dd>
-                <dt>{{ _('Data quality:') }}</dt>
+                <dt>{{ _('Data Quality:') }}</dt>
                 <dd property="dc:quality" data-cy="package-quality">
                   <a href="{{ h.url_for('home.about') ~ '#data-quality'}}">
                     {% set data_quality_markings = h.get_data_quality_markings() %}
@@ -73,7 +73,7 @@
                 </dd>
               </dl>
               {% block package_summary %}
-                <h3 class="heading-small">{{ _('Summary') }}</h3>
+                <h3 class="heading-small" style="font-size:19px">{{ _('Summary') }}</h3>
                 <div class="notes embedded-content" data-cy="package-notes">
                   {% if pkg.notes %}
                     {{ h.render_markdown(h.get_translated(pkg, 'notes')) }}

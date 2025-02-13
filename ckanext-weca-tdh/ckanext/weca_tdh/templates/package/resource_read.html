@@ -39,7 +39,7 @@
           {% else %}
           {% set resource_id = res.id %}
             <a class="btn btn-primary resource-url-analytics" onclick="return start_download('{{ res.id }}');">
-              <i class="fa fa-arrow-circle-down"></i> {{ _('TDH Download') }}
+              <i class="fa fa-arrow-circle-down"></i> {{ _('File Download') }}
               <div id="spinner" class="download-spinner"></div>
             </a>
           {% endif %}
@@ -126,21 +126,21 @@
 
 {% block resource_content %}
   {{ super() }}
-  {% block tdh_availability %}
-    {% if "Power BI" in res.resource_tdh_availability %}
+  {% block data_access %}
+    {% if "Power BI" in res.resource_data_access %}
       <div>
         <h2 class="heading-small">{{ _('TDH Partner Connect') }}</h2>
         <p>{{ _('This dataset is available to query using Power BI.') }}
         <a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub.') }}</a></p>
       </div>
-    {% elif "File Download" in res.resource_tdh_availability %}
+    {% elif "File Download" in res.resource_data_access %}
       <div>
         <h2 class="heading-small">{{ _('TDH File Download') }}</h2>
         <p>{{ _('This dataset is available to download from the TDH.') }}
         {% if not session.get('access_token')%}
           {{ _('To download, click the TDH Connect button to start a new download session.') }}</p>
         {% else %}
-          {{ _('To download, click the TDH Download button.') }}</p>
+          {{ _('To download, click the FIle Download button.') }}</p>
         {% endif %}
       </div>
     {% endif %}

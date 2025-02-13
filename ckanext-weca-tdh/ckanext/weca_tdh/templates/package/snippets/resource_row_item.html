@@ -17,7 +17,7 @@
       <a class="govuk-link" href="{{ url }}">{{ h.resource_display_name(res) | truncate(50) }}</a>
     </td>
     <td class="govuk-table__cell">
-      {{ res.format or 'data' }}
+      {{ res.format or 'Data' }}
     </td>
     <td class="govuk-table__cell">
       {{ h.filter_datetime(res.created, 'short') }}
@@ -39,10 +39,16 @@
       </a>
     </td>
     <td class="govuk-table__cell">
-      {% if res.resource_tdh_availability %}
-        {{ res.resource_tdh_availability }} 
+      {% if res.resource_data_access %}
+        {{ res.resource_data_access }} 
       {% else %}
-        {{ _('N/A') }}
+        {% if res.url and h.is_url(res.url) %}
+          {{ _('Link') }}
+        {% elif res.has_views %}
+          {{ _('Preview') }}
+        {% else %}
+          {{ _('N/A') }}
+        {% endif %}
       {% endif %}
     </td>
     <td class="govuk-table__cell">
