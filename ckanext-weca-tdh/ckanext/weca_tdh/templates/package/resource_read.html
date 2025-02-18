@@ -31,7 +31,7 @@
               {% if download_url.append(1) %}{% endif %}    
             {% endif %} 
           </a>
-        {% elif "File Download" in res.resource_tdh_availability %}
+        {% elif "File Download" in res.resource_data_access %}
           {% if not session.get('access_token')%}
             <a class="btn btn-primary resource-url-analytics" href="{{ h.build_databricks_auth_url(res.id, request.path) }}">
               <i class="fa fa-arrow-circle-down"></i> {{ _('TDH Connect') }}
@@ -135,12 +135,12 @@
       </div>
     {% elif "File Download" in res.resource_data_access %}
       <div>
-        <h2 class="heading-small">{{ _('TDH File Download') }}</h2>
+        <h2 class="heading-small">{{ _('File Download') }}</h2>
         <p>{{ _('This dataset is available to download from the TDH.') }}
         {% if not session.get('access_token')%}
           {{ _('To download, click the TDH Connect button to start a new download session.') }}</p>
         {% else %}
-          {{ _('To download, click the FIle Download button.') }}</p>
+          {{ _('To download, click the File Download button.') }}</p>
         {% endif %}
       </div>
     {% endif %}
