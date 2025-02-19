@@ -9,6 +9,10 @@ class RouteController(object):
     """Manage custom page routing"""
 
     @staticmethod
+    def render_accessibility_page():
+        return toolkit.render('accessibility.html')
+    
+    @staticmethod
     def render_contact_page():
         return toolkit.render('contact.html')
 
@@ -17,8 +21,8 @@ class RouteController(object):
         return toolkit.render('policy.html')
 
     @staticmethod
-    def render_accessibility_page():
-        return toolkit.render('accessibility.html')
+    def render_support_page():
+        return toolkit.render('/support/support.html')
 
     @staticmethod
     def render_tdh_partner_connect_page():
