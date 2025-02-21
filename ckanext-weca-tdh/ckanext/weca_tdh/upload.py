@@ -83,10 +83,16 @@ class BlobStorage:
         # Create the BlobServiceClient object
         return BlobServiceClient(account_url, credential=default_credential)
 
-    def upload_blob(self, file, filename: str) -> None:
+    def upload_blob(self, file, blob_name: str) -> None:
         # Create a blob client and upload new blob
-        blob_client = self.get_blob_service_client().get_blob_client(container=C.TDH_UPLOAD_STORAGE_CONTAINER, blob=filename)
+        blob_client = self.get_blob_service_client().get_blob_client(container=C.TDH_UPLOAD_STORAGE_CONTAINER, blob=blob_name)
         blob_client.upload_blob(file)
+        
+    def download_blob_as_json(self, blob_name: str) -> Any:
+        blob_client = self.get_blob_service_client().get_blob_client(container=C.TDH_UPLOAD_STORAGE_CONTAINER, blob=blob_name)
+        blob_data = blob_client.download_blob().content_as_text()
+        
+        return json.loads(blob_data)
 
 
 class BlobUploadView(MethodView):

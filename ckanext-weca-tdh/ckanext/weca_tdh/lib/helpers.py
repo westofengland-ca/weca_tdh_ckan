@@ -4,6 +4,8 @@ from datetime import datetime
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
+from ckanext.weca_tdh.databricks import oauth_code_verify_and_challenge
+from flask import session
 
 log = logging.getLogger(__name__)
 
@@ -165,3 +167,22 @@ def transform_collaborators(collaborators: tuple) -> str:
     else:
         names_list.append('Unassigned')
         return json.dumps(names_list)
+
+def build_databricks_auth_url(resource_id: str, referrer: str) -> str:
+    client_id = C.TDH_DB_APP_CLIENT_ID
+    redirect_url = C.TDH_DB_APP_REDIRECT_URL
+    
+    code_verifier, code_challenge = oauth_code_verify_and_challenge()
+    session['code_verifier'] = code_verifier
+    session['referrer'] = referrer
+    
+    url = f"https://{C.TDH_CONNECT_ADDRESS_HOST}/oidc/v1/authorize" + \
+        f"?client_id={client_id}" + \
+        f"&redirect_uri={redirect_url}" + \
+        "&response_type=code" + \
+        f"&state={resource_id}" + \
+        f"&code_challenge={code_challenge}" + \
+        "&code_challenge_method=S256" + \
+        "&scope=all-apis+offline_access"
+        
+    return url

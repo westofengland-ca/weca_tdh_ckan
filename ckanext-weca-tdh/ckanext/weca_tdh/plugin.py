@@ -14,6 +14,7 @@ from flask import Blueprint, flash, request
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.auth import adauthbp
 from ckanext.weca_tdh.controller import RouteController
+from ckanext.weca_tdh.databricks import databricksbp
 from ckanext.weca_tdh.lib import helpers
 from ckanext.weca_tdh.upload import uploadbp
 
@@ -83,7 +84,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         for rule in rules:
             staticbp.add_url_rule(*rule)
 
-        return [staticbp, adauthbp, uploadbp]
+        return [staticbp, adauthbp, uploadbp, databricksbp]
 
     ''' 
     Modify dataset metadata fields
@@ -97,14 +98,12 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_converter('convert_to_extras')],
             'data_stewards': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
-            'datalake_active': [toolkit.get_validator('ignore_missing'),
-                                toolkit.get_validator('boolean_validator'),
-                                toolkit.get_converter('convert_to_extras')],
             'last_reviewed': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')]
         })
         schema['resources'].update({
-                'resource_data_category' : [ toolkit.get_validator('ignore_missing') ]
+                'resource_data_access': [toolkit.get_validator('ignore_missing')],
+                'resource_data_category': [toolkit.get_validator('ignore_missing')]
         })
         return schema
 
@@ -127,14 +126,12 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'data_stewards': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing'),
                              toolkit.get_converter('convert_to_json_if_string')],
-            'datalake_active': [toolkit.get_converter('convert_from_extras'),
-                                toolkit.get_validator('ignore_missing'),
-                                toolkit.get_validator('boolean_validator')],
             'last_reviewed': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')]
         })
         schema['resources'].update({
-                'resource_data_category' : [toolkit.get_validator('ignore_missing')]
+                'resource_data_access': [toolkit.get_validator('ignore_missing')],
+                'resource_data_category': [toolkit.get_validator('ignore_missing')]
         })
         return schema
     

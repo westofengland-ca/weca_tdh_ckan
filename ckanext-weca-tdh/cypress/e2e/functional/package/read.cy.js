@@ -26,8 +26,6 @@ describe('Product page', () => {
 
       cy.get('[data-cy="package-license"]').should("contain.text", dataset.license_title || 'License not specified')
 
-      cy.get('[data-cy="package-datalake"]').should("contain.text", dataset.datalake_active ? 'Available' : 'Not available')
-
       cy.get('[data-cy="package-notes"]').should("contain.text", dataset.notes)
     })
   })
