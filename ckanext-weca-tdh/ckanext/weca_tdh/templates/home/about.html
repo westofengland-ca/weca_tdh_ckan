@@ -1,18 +1,57 @@
 {% extends "page.html" %}
+{% from "components/button/macro.html" import govukButton %}
 
-{% block subtitle %}{{ _('Support') }}{% endblock %}
+{% block subtitle %}{{ _('About') }}{% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Support'), named_route='home.about' %}</li>
+  <li class="active">{% link_for _('About'), named_route='home.about' %}</li>
 {% endblock %}
 
 {% block primary %}
   <article class="module govuk-body" role="main">
-    {% block about %}
-      <h1 class="page-heading">{{ _('Support') }}</h1>
-      {% set contact_phone_number = config.get('tdh.contact_phone_number') or _('01275 88 4444') %}
-      {% set build_version = config.get('tdh.build_version') or _('local') %}
-      {% snippet 'home/snippets/about_text.html', contact_phone_number=contact_phone_number, build_version=build_version %}
+    {% block about_header %}
+      <div class="about-header">
+        <img src="/assets/images/about/keyboard.png" alt="Transport Data Hub Background">
+        <div class="about-overlay">
+            {% trans %}
+              <h1 class="about-header govuk-heading-l">TRANSPORT DATA HUB: <b>DATA CATALOGUE</b></h1>
+              <p>The first comprehensive regional transport database in the West of England.</p>
+            {% endtrans %}
+        </div>
+        <div class="about-overlay-action">
+          <p><b>{{ _('Got an idea?') }}</b></p>
+          {{ govukButton({
+            'text': "Submit a new User Story",
+            'href': "/support",
+            'classes': 'action-button-us',
+            'attributes': {'data-cy': 'submit-us-button'}
+          }) }}
+          {% trans %}
+            <p style="font-size: 16px;">Having issues? Visit our <a style="color: white; text-decoration: underline;" href="/support">support page</a></p>
+          {% endtrans %}
+        </div>
+      </div>
+    {% endblock %}
+    {% block about_content %}
+      <div class="about-content">
+        <h2>{{ _('What is the Transport Data Hub?') }}</h2>
+        {% trans %}
+          <p>
+            The Transport Data Hub (TDH) is a digital platform for searching, sharing, and analysing transport data. It ingests big datasets, supports automation and API integrations, and enables analysis and reporting through Power BI. TDH aims to optimise transport operations and services, helping users make better decisions, evaluate interventions, and plan initiatives. This supports the West of England Mayor's goal to improve public transport.
+          </p>
+        {% endtrans %}
+        <div class="about-datahub">
+          <img src="/assets/images/about/datahub.png" alt="Transport Data Hub component summary">
+        </div>
+        <div class="about-benefits">
+          {% trans %}
+            <div class="benefit-box tdh-pink"><b>Instant Access: </b><br>Find all transport data in one easy-to-use platform.</div>
+            <div class="benefit-box tdh-yellow"><b>Smarter Decisions:</b><br>Use data-driven insights to improve transport systems.</div>
+            <div class="benefit-box tdh-green"><b>Drive Innovation:</b><br>Create and test new transport solutions with real data.</div>
+            <div class="benefit-box tdh-blue"><b>Collaboration:</b><br>Seamlessly share data across teams for greater impact.</div>
+          {% endtrans %}
+        </div>
+      </div>
     {% endblock %}
   </article>
 {% endblock %}
