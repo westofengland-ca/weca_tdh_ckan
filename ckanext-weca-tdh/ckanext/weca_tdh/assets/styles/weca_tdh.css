@@ -7627,7 +7627,7 @@ main {
   font-size: 19px !important;
 }
 
-.about-content {
+.about-tdh-content {
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -7680,7 +7680,7 @@ main {
 }
 
 @media (max-width: 768px) {
-  .about-content {
+  .about-tdh-content {
     flex-direction: column;
   }
   .about-datahub, .about-benefits {

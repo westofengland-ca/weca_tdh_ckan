@@ -14,7 +14,7 @@
         <img src="/assets/images/about/keyboard.png" alt="Transport Data Hub Background">
         <div class="about-overlay">
             {% trans %}
-              <h1 class="about-header govuk-heading-l">TRANSPORT DATA HUB: <b>DATA CATALOGUE</b></h1>
+              <h1 class="about-header govuk-heading-l">TRANSPORT DATA HUB:<b> DATA CATALOGUE</b></h1>
               <p>The first comprehensive regional transport database in the West of England.</p>
             {% endtrans %}
         </div>
@@ -32,8 +32,8 @@
         </div>
       </div>
     {% endblock %}
-    {% block about_content %}
-      <div class="about-content">
+    {% block about_tdh_content %}
+      <div class="about-tdh-content">
         <h2>{{ _('What is the Transport Data Hub?') }}</h2>
         {% trans %}
           <p>
@@ -51,6 +51,20 @@
             <div class="benefit-box tdh-blue"><b>Collaboration:</b><br>Seamlessly share data across teams for greater impact.</div>
           {% endtrans %}
         </div>
+      </div>
+    {% endblock %}
+    {% block about_dc_content %}
+      <div class="about-dc-content">
+        <h2>{{ _('TDH Data Catalogue') }}</h2>
+        {% trans %}
+          <p>The <b>Data Catalogue</b> is your go-to searchable source for finding MCA and 3rd party transport data, such as bus timetable data, traffic data and road network information.</p>
+        {% endtrans %}
+
+        <h3>{{ _('Who can use the TDH Data Catalogue?') }}</h3>
+        {% trans %}
+          <p>The TDH Data Catalogue is available to all <b>West of England Combined Authority employees</b>.</p>
+          <p>Some datasets require further permissions to be granted, more information can be found on the <a href="/support">support page</a>.</p>
+        {% endtrans %}
       </div>
     {% endblock %}
   </article>
