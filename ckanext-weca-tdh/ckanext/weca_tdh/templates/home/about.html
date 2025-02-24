@@ -13,10 +13,8 @@
       <div class="about-header">
         <img src="/assets/images/about/keyboard.png" alt="Transport Data Hub Background">
         <div class="about-overlay">
-            {% trans %}
-              <h1 class="about-header govuk-heading-l">TRANSPORT DATA HUB:<b> DATA CATALOGUE</b></h1>
-              <p>The first comprehensive regional transport database in the West of England.</p>
-            {% endtrans %}
+            <h1 class="about-header govuk-heading-l">{{ _('TRANSPORT DATA HUB:<b> DATA CATALOGUE') }}</b></h1>
+            <p>{{ _('The first comprehensive regional transport data hub in the West of England.') }}</p>
         </div>
         <div class="about-overlay-action">
           <p><b>{{ _('Got an idea?') }}</b></p>
@@ -26,45 +24,69 @@
             'classes': 'action-button-us',
             'attributes': {'data-cy': 'submit-us-button'}
           }) }}
-          {% trans %}
-            <p style="font-size: 16px;">Having issues? Visit our <a style="color: white; text-decoration: underline;" href="/support">support page</a></p>
-          {% endtrans %}
+          <p style="font-size: 16px;">{{ _('Having issues? Visit our') }} <a style="color: white; text-decoration: underline;" href="/support">{{ _('support page') }}</a></p>
         </div>
       </div>
     {% endblock %}
     {% block about_tdh_content %}
       <div class="about-tdh-content">
         <h2>{{ _('What is the Transport Data Hub?') }}</h2>
-        {% trans %}
-          <p>
-            The Transport Data Hub (TDH) is a digital platform for searching, sharing, and analysing transport data. It ingests big datasets, supports automation and API integrations, and enables analysis and reporting through Power BI. TDH aims to optimise transport operations and services, helping users make better decisions, evaluate interventions, and plan initiatives. This supports the West of England Mayor's goal to improve public transport.
-          </p>
-        {% endtrans %}
+        <p>
+          {{ _('The Transport Data Hub (TDH) is a digital platform for searching, sharing, and analysing transport data. 
+          It ingests big datasets, supports automation and API integrations, and enables analysis and reporting through Power BI. 
+          TDH aims to optimise transport operations and services, helping users make better decisions, evaluate interventions, and plan initiatives. 
+          This supports the West of England Mayor\'s goal to improve public transport.') }}
+        </p>
         <div class="about-datahub">
           <img src="/assets/images/about/datahub.png" alt="Transport Data Hub component summary">
         </div>
         <div class="about-benefits">
-          {% trans %}
-            <div class="benefit-box tdh-pink"><b>Instant Access: </b><br>Find all transport data in one easy-to-use platform.</div>
-            <div class="benefit-box tdh-yellow"><b>Smarter Decisions:</b><br>Use data-driven insights to improve transport systems.</div>
-            <div class="benefit-box tdh-green"><b>Drive Innovation:</b><br>Create and test new transport solutions with real data.</div>
-            <div class="benefit-box tdh-blue"><b>Collaboration:</b><br>Seamlessly share data across teams for greater impact.</div>
-          {% endtrans %}
+          <div class="benefit-box tdh-pink"><b>{{ _('Instant Access:') }}</b><br>
+            {{ _('Find all transport data in one easy-to-use platform.') }}</div>
+          <div class="benefit-box tdh-yellow"><b>{{ _('Smarter Decisions:') }}</b><br>
+            {{ _('Use data-driven insights to improve transport systems.') }}</div>
+          <div class="benefit-box tdh-green"><b>{{ _('Drive Innovation:') }}</b><br>
+            {{ _('Create and test new transport solutions with real data.') }}</div>
+          <div class="benefit-box tdh-blue"><b>{{ _('Collaboration:') }}</b><br>
+            {{ _('Seamlessly share data across teams for greater impact.') }}</div>
         </div>
       </div>
     {% endblock %}
     {% block about_dc_content %}
       <div class="about-dc-content">
         <h2>{{ _('TDH Data Catalogue') }}</h2>
-        {% trans %}
-          <p>The <b>Data Catalogue</b> is your go-to searchable source for finding MCA and 3rd party transport data, such as bus timetable data, traffic data and road network information.</p>
-        {% endtrans %}
+        <p>{{ _('The Data Catalogue is your go-to searchable source for finding MCA and 3rd party transport data, such as bus timetable data, traffic data and road network information.') }}</p>
+        <div class="about-features">
+          <div class="about-feature">
+            <img src="/assets/images/about/folder.png" alt="Transport Data Hub feature icon">
+            <p><b>{{ _('Search and locate transport data')}}</b><br>
+              {{ _('such as bus timetable data, traffic data and road network information.') }}</p>
+          </div>
+          <div class="about-feature">
+            <img src="/assets/images/topics/statistics.png" alt="Transport Data Hub feature icon">
+            <p><b>{{ _('Generate data insight') }}</b><br>
+              {{ _('with Power BI dashboards directly in the platform, or via the Partner Connect file.') }}</p>
+          </div>
+        </div>
 
         <h3>{{ _('Who can use the TDH Data Catalogue?') }}</h3>
-        {% trans %}
-          <p>The TDH Data Catalogue is available to all <b>West of England Combined Authority employees</b>.</p>
-          <p>Some datasets require further permissions to be granted, more information can be found on the <a href="/support">support page</a>.</p>
-        {% endtrans %}
+        <p>{{ _('The TDH Data Catalogue is available to all West of England Combined Authority employees.') }}</p>
+        <p>{{ _('Some datasets require further permissions to be granted, more information can be found on the') }} <a href="/support">{{ _('support page') }}</a>.</p>
+        <p>{{ _('The TDH aims to provide benefit to a wide range of people. The main focus is on providing value to staff and projects within the MCA, 
+          however it also aims to provide value to the wider transport community, including:') }}</p>
+        <ul>
+          <li>{{ _('Unitary Authorities (UA)') }}</li>
+          <li>{{ _('Service providers & third party suppliers') }}</li>
+          <li>{{ _('Universities') }}</li>
+          <li>{{ _('General public') }}</li>
+        </ul>
+        <p style="font-size: 16px;"><i>{{ _('Access for wider communities will be considered on a case-by-case basis.') }}</i></p>
+        <p>{{ _('The MCA will act as a catalyst and leader in data collaboration and sharing to benefit the transport community and the communities it serves.') }}</p>
+
+        <h3>{{ _('How will you incorporate my data needs into the TDH?') }}</h3>
+        <p>{{ _('To ensure the TDH brings the most benefits to the users, its specific functionality will be tailored to the particular user needs. 
+          These needs are captured in the form of \'User Stories\': what data related task you want the TDH to be able to do and what would be the outcome of it.') }}</p>
+        <img src="/assets/images/about/feedback.png" alt="Feedback summary image">
       </div>
     {% endblock %}
   </article>

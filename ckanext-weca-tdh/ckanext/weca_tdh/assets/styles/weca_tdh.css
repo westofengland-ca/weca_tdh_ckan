@@ -7627,18 +7627,9 @@ main {
   font-size: 19px !important;
 }
 
-.about-tdh-content {
-  padding: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
 .about-datahub {
   flex: 1;
   max-width: 54%;
-  padding: 10px;
   text-align: center;
 }
 
@@ -7687,6 +7678,35 @@ main {
     max-width: 100%;
   }
 }
+.about-tdh-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+}
+
+.about-features {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.about-feature {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.about-feature img {
+  width: auto;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
 /* SEARCH PAGE //
 ///////////////*/
 .search-wrapper {
