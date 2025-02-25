@@ -7557,6 +7557,40 @@ main {
   margin-top: 20px;
 }
 
+.landing-header {
+  margin-bottom: 10px;
+}
+
+.landing-access {
+  display: flex;
+  position: relative;
+  height: auto;
+}
+
+.landing-access p {
+  height: fit-content;
+  margin-bottom: 0px;
+}
+
+.landing-access-content {
+  width: 65%;
+}
+
+.landing-overlay-action {
+  display: grid;
+  position: relative;
+  background: #354753;
+  color: white;
+  padding: 20px;
+  border-radius: 2px;
+  max-width: 35%;
+  height: fit-content;
+}
+
+.landing-overlay-action p {
+  text-align: center;
+}
+
 .search-main {
   width: 66%;
 }
@@ -7746,6 +7780,12 @@ button.search-submit {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+a.search-advanced {
+  position: absolute;
+  margin: 9px 0 0 20px;
+  white-space: nowrap;
 }
 
 i.fa.fa-search {

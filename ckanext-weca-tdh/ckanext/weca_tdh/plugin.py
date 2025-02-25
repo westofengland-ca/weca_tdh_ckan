@@ -51,7 +51,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         """
         Called on each request to identify a user.
         """
-        if C.FF_AUTH_RESTRICTED_ACCESS == 'True' and not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):         
+        if C.FF_AUTH_RESTRICTED_ACCESS == 'True' and request.path != '/' and not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):
             if isinstance(toolkit.current_user, AnonymousUser): # check for an unauthorised user
                 flash(C.ALERT_MESSAGE_AUTH, category='alert-info')
                 return toolkit.render('/user/login.html') # redirect to login page with flash message

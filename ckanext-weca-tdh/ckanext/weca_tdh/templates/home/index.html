@@ -3,6 +3,8 @@
 {% else %}
   {% extends "page.html" %}
 
+  {% from "components/button/macro.html" import govukButton %}
+
   {% block subtitle %}{{ _("Welcome") }}{% endblock %}
   {% block toolbar %}{% endblock %}
   {% block primary_class %}landing-page{% endblock %}
@@ -15,18 +17,33 @@
 
   {% block primary_content %}
       {% block landing_page_about %} 
-        <div class="gem-c-title govuk-!-margin-bottom-4">
-          <h1 class="gem-c-title__text govuk-heading-l" data-cy="landing-heading">{{ g.site_description }}</h1>
-        </div>
-        <p class="gem-c-lead-paragraph govuk-body" data-cy="landing-desc">
-          {% snippet 'snippets/landing_description.html' %}
+        <h1 class="landing-header" data-cy="landing-heading">{{ _('Welcome to the TDH Data Catalogue') }}</h1>
+        <p data-cy="landing-desc">
+          {% snippet 'home/snippets/landing_description.html' %}
         </p>
+        <div class="landing-access">
+          <div class="landing-access-content">
+            <h2>{{ _('Want to access data in the TDH?') }}</h2>
+            <p>{{ _('You can also connect directly from your desktop using Power BI via our Partner Connect File.') }}</p>
+          </div>
+          <div class="landing-overlay-action">
+            <p><b>{{ _('Access data in the TDH') }}</b></p>
+            {{ govukButton({
+            'text': "Connect with Power BI",
+            'href': "/tdh_partner_connect",
+            'classes': 'action-button',
+            'attributes': {'data-cy': 'connect-button'}
+            }) }}
+            <p style="font-size: 16px;">{{ _('Visit the') }} <a style="color: white; text-decoration: underline;" href="/support">{{ _('support page') }}</a> {{ _('for more details') }}</p>
+          </div>
+        </div>
       {% endblock %}
 
       {% block landing_page_search %}
+        <span class="govuk-body-s govuk-!-font-weight-bold">{{ g.datasets | length }} {{ _('datasets found') }}</span>
         <div class="row search-main">
           {% block search_input %}
-            {% snippet "snippets/search_form.html", query=q %}  
+            {% snippet "snippets/search_form.html", query=q, advanced=True %}
           {% endblock %}
         </div>
       {% endblock %}
