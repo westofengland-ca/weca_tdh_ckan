@@ -34,12 +34,12 @@
         {% elif "File Download" in res.resource_data_access %}
           {% if not session.get('access_token')%}
             <a class="btn btn-primary resource-url-analytics" href="{{ h.build_databricks_auth_url(res.id, request.path) }}">
-              <i class="fa fa-arrow-circle-down"></i> {{ _('TDH Connect') }}
+              <i class="fa fa-arrow-circle-down"></i> {{ _('Connect to TDH') }}
             </a>
           {% else %}
           {% set resource_id = res.id %}
             <a class="btn btn-primary resource-url-analytics" onclick="return start_download('{{ res.id }}');">
-              <i class="fa fa-arrow-circle-down"></i> {{ _('File Download') }}
+              <i class="fa fa-arrow-circle-down"></i> {{ _('Download File') }}
               <div id="spinner" class="download-spinner"></div>
             </a>
           {% endif %}
@@ -125,24 +125,65 @@
 {% endblock %}
 
 {% block resource_content %}
-  {{ super() }}
+  <h1 class="page-heading" title="{{ h.resource_display_name(res) }}">{{ h.resource_display_name(res) | truncate(50) }}</h1>
+  {% block url %}
+    {% if res.url and h.is_url(res.url) %}
+      <p class="text-muted ellipsis">{{ _('URL:') }} <a class="resource-url-analytics" href="{{ res.url }}" title="{{ res.url }}">{{ res.url }}</a></p>
+    {% elif res.url %}
+      <p class="text-muted break-word">{{ _('URL:') }} {{ res.url }}</p>
+    {% endif %}
+  {% endblock %}
+  {% block description %}
+    <div class="prose notes" property="rdfs:label">
+      {% if res.description %}
+        {{ h.render_markdown(res.description) }}
+      {% endif %}
+    </div>
+  {% endblock %}
   {% block data_access %}
-    {% if "Power BI" in res.resource_data_access %}
+    <h3>{{ _('Data Access') }}</h3>
+    {% if "External Link" in res.resource_data_access %}
       <div>
-        <h2 class="heading-small">{{ _('TDH Partner Connect') }}</h2>
-        <p>{{ _('This dataset is available to query using Power BI.') }}
-        <a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub.') }}</a></p>
+        <h2 class="heading-small">{{ _('External Link') }}</h2>
+        <p>{{ _('This resource is available through an external link. Click the Go to resource button or visit the URL above.') }}
       </div>
     {% elif "File Download" in res.resource_data_access %}
       <div>
         <h2 class="heading-small">{{ _('File Download') }}</h2>
-        <p>{{ _('This dataset is available to download from the TDH.') }}
+        <p>{{ _('This resource is available to download from the TDH.') }}
         {% if not session.get('access_token')%}
-          {{ _('To download, click the TDH Connect button to start a new download session.') }}</p>
+          {{ _('To download, click the Connect to TDH button to start a new download session.') }}</p>
         {% else %}
-          {{ _('To download, click the File Download button.') }}</p>
+          {{ _('To download, click the Download File button.') }}</p>
         {% endif %}
       </div>
+    {% elif "Power BI Report" in res.resource_data_access %}
+      <div>
+        <h2 class="heading-small">{{ _('Power BI Report') }}</h2>
+        <p>{{ _('This resource has an associated Power BI Report. Click the Go to resource button or visit the URL above.') }}
+      </div>
+    {% elif "TDH Query" in res.resource_data_access %}
+      <div>
+        <h2 class="heading-small">{{ _('TDH Query') }}</h2>
+        <p>{{ _('This resource is available to query using Power BI.') }}
+        <a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub.') }}</a></p>
+      </div>
+    {% elif "Preview" in res.resource_data_access %}
+      <div>
+        <h2 class="heading-small">{{ _('Preview') }}</h2>
+        <p>{{ _('This resource is available to preview via the sample data below.') }}
+      </div>
+    {% else %}
+      <div>
+        <p>{{ _('A data access type has not yet been assigned to this resource.') }}
+      </div>
     {% endif %}
+    <p style="font-size: 16px;">{{ _('To learn more about data access types, see our') }} <a href="{{ h.url_for('home.about') ~ '#data-access' }}" target="_blank">{{ _('support page') }}</a>.</p>
   {% endblock %}
+{% endblock %}
+
+{% block data_preview %}
+  {% if resource_views %}
+    {{ super () }}
+  {% endif %}
 {% endblock %}

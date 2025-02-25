@@ -20,6 +20,41 @@
   <h2>{{ _('Cookie Policy') }}</h2>
   <p class="govuk-body-m">{{ _('For information regarding cookies and how we use them, see our ') }}<a href="{{ h.url_for('weca_tdh.policy') }}" target="_blank">{{ _('Cookie Policy') }}</a>.</p>
 
+  <h2 id="data-access">{{ _('Data Access') }}</h2>
+  <p class="govuk-body-m">{{ _("Data access types are used to indicate a method for accessing a dataset resource. All datasets are marked with one of the following data access types:") }}</p>
+
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">{{ _('Access type') }}</th>
+        <th scope="col" class="govuk-table__header">{{ _('Description') }}</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body govuk-body-s">
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{ _('External Link') }}</td>
+        <td class="govuk-table__cell">{{ _('A URL to a dataset (signposted).') }}</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{ _('File Download') }}</td>
+        <td class="govuk-table__cell">{{ _('Available to download directly from the Data Catalogue.') }}</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{ _('Power BI Report') }}</td>
+        <td class="govuk-table__cell">{{ _("A link to an associated Power BI Report.") }}</td>
+      </tr>       
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{ _('Preview') }}</td>
+        <td class="govuk-table__cell">{{ _('Sample data or data with a preview table.') }}</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{ _('TDH Query') }}</td>
+        <td class="govuk-table__cell">{{ _('Available to query directly from a desktop via Power BI, using the') }} 
+          <a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}" target="_blank">{{ _('TDH Partner Connect File.') }}</a></td>
+      </tr>
+    </tbody>
+  </table>
+
   <h2 id="data-catagories">{{ _('Data Categories') }}</h2>
   <p class="govuk-body-m">{{ _("Data categories are used to indicate a dataset's access classification, including the level of data sensitivity, breadth of access, and need for controls. 
     All dataset resources are marked with one of the following data categories:") }}</p>
@@ -63,7 +98,7 @@
   </table>
 
   <h2 id="data-quality">{{ _('Data Quality') }}</h2>
-  <p class="govuk-body-m">{{ _("Data quality cateogries are used to indicate a dataset's quality. Data quality refers to the 'usefulness' of data and its ability to be easily understood, processed and analysed by users. 
+  <p class="govuk-body-m">{{ _("Data quality categories are used to indicate a dataset's quality. Data quality refers to the 'usefulness' of data and its ability to be easily understood, processed and analysed by users. 
       Data quality is a key component of data governance and helps ensure that data is fit for purpose. All datasets are marked with one of the following data quality categories:") }}</p>
 
   <table class="govuk-table">
