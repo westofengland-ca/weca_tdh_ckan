@@ -1,5 +1,4 @@
 {% extends "page.html" %}
-{% from "components/button/macro.html" import govukButton %}
 
 {% block subtitle %}{{ _('About') }}{% endblock %}
 
@@ -13,19 +12,10 @@
       <div class="about-header">
         <img src="/assets/images/about/keyboard.png" alt="Transport Data Hub Background">
         <div class="about-overlay">
-            <h1 class="about-header govuk-heading-l">{{ _('TRANSPORT DATA HUB:<b> DATA CATALOGUE') }}</b></h1>
-            <p>{{ _('The first comprehensive regional transport data hub in the West of England.') }}</p>
+          <h1 class="about-header govuk-heading-l">{{ _('TRANSPORT DATA HUB:<b> DATA CATALOGUE') }}</b></h1>
+          <p>{{ _('The first comprehensive regional transport data hub in the West of England.') }}</p>
         </div>
-        <div class="about-overlay-action">
-          <p><b>{{ _('Got an idea?') }}</b></p>
-          {{ govukButton({
-            'text': "Submit a new User Story",
-            'href': "/support",
-            'classes': 'action-button-us',
-            'attributes': {'data-cy': 'submit-us-button'}
-          }) }}
-          <p style="font-size: 16px;">{{ _('Having issues? Visit our') }} <a style="color: white; text-decoration: underline;" href="/support">{{ _('support page') }}</a></p>
-        </div>
+        {% snippet 'home/snippets/about_action.html', userobj=c.userobj %}
       </div>
     {% endblock %}
     {% block about_tdh_content %}

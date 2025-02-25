@@ -1,0 +1,28 @@
+{% from "components/button/macro.html" import govukButton %}
+
+<div class="about-overlay-action">
+    {% if userobj %}
+        <p><b>{{ _('Got an idea?') }}</b></p>
+        {{ govukButton({
+        'text': "Submit a new User Story",
+        'href': "/support",
+        'classes': 'action-button',
+        'attributes': {'data-cy': 'submit-us-button'}
+        }) }}
+    {% else %}
+        <p><b>{{ _('Get Started') }}</b></p>
+        {{ govukButton({
+        'text': "Sign in",
+        'href': "/user/login",
+        'classes': 'action-button',
+        'attributes': {'data-cy': 'login-button'}
+        }) }}
+        {{ govukButton({
+        'text': "Request account",
+        'href': "/google-doc",
+        'classes': 'action-button govuk-button--secondary',
+        'attributes': {'data-cy': 'request-button'}
+        }) }}
+    {% endif %}
+    <p style="font-size: 16px;">{{ _('Having issues? Visit our') }} <a style="color: white; text-decoration: underline;" href="/support">{{ _('support page') }}</a></p>
+</div>
