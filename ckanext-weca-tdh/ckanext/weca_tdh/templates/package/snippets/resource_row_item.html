@@ -43,7 +43,7 @@
         {{ res.resource_data_access }} 
       {% else %}
         {% if res.url and h.is_url(res.url) %}
-          {{ _('Link') }}
+          {{ _('External Link') }}
         {% elif res.has_views %}
           {{ _('Preview') }}
         {% else %}
