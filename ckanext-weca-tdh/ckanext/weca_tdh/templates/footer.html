@@ -4,8 +4,8 @@
   <ul class="list-unstyled">
     {% block footer_links %}
         <li><a href="{{ h.url_for('home.about') }}">{{ _('About {0}').format(g.site_title) }}</a></li>
-        <li><a href="{{ h.url_for('weca_tdh.accessibility') }}">{{ _('Accessibility') }}</a></li>
-        <li><a href="{{ h.url_for('weca_tdh.policy') }}">{{ _('Cookie Policy') }}</a></li>
+        <li><a href="{{ h.url_for('weca_tdh.support_pages', path='accessibility') }}">{{ _('Accessibility') }}</a></li>
+        <li><a href="{{ h.url_for('weca_tdh.support_pages', path='policy') }}">{{ _('Cookie Policy') }}</a></li>
         <li><a href="javascript:CookieControl.open()">{{ _('Cookie Settings') }}</a></li>
         <li><a href="{{ h.url_for('weca_tdh.support') }}">{{ _('Support') }}</a></li>
         <li><a href="https://www.westofengland-ca.gov.uk/" target="_blank">{{ _('West Of England Combined Authority Website') }}</a></li>

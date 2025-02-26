@@ -3,7 +3,9 @@
 {% block subtitle %}{{ _('Cookie Policy') }}{% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Cookie Policy'), named_route='weca_tdh.policy' %}</li>
+  <li class="active">
+    <a href="{{ h.url_for('weca_tdh.support_pages', path='policy') }}">{{ _('Cookie Policy') }}</a>
+  </li>
 {% endblock %}
 
 {% block primary %}

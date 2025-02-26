@@ -75,10 +75,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''       
         staticbp = Blueprint(self.name, self.__module__, template_folder='templates')
         rules = [
-            ('/accessibility', 'accessibility', RouteController.render_accessibility_page),
-            ('/contact', 'contact', RouteController.render_contact_page),
-            ('/policy', 'policy', RouteController.render_policy_page),
             ('/support', 'support', RouteController.render_support_page),
+            ('/support/<path:path>', 'support_pages', RouteController.render_support_pages),
             ('/tdh_partner_connect', 'tdh_partner_connect', RouteController.render_tdh_partner_connect_page),
             ('/tdh_partner_connect_file', 'tdh_partner_connect_file', RouteController.download_tdh_partner_connect_file)
         ]

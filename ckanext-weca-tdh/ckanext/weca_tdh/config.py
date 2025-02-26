@@ -44,7 +44,7 @@ FF_AD_SYSADMIN = config.get('feature_flag.ad.sysadmin', "False")
 FF_GA_ENABLED = config.get('feature_flag.ga.enabled', "False")
 
 # URL filter
-EXLUDED_SUBPATHS = ('/about', '/accessibility', '/assets/', '/api/', '/base/', '/policy', '/scripts/', '/support', '/user/adlogin', '/user/login', '/webassets/')
+EXLUDED_SUBPATHS = ('/about', '/assets/', '/api/', '/base/', '/scripts/', '/support', '/user/adlogin', '/user/login', '/webassets/')
 
 # Flash messages
 ALERT_MESSAGE_AUTH = "You must be logged in to access this page."

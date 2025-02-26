@@ -15,10 +15,10 @@
     {{ _('FTZ:') }} <a href="https://www.westofengland-ca.gov.uk/what-we-do/transport/future-transport-zone" target="_blank">https://www.westofengland-ca.gov.uk/what-we-do/transport/future-transport-zone</a></p>
 
   <h2>{{ _('Accessibility') }}</h2>
-  <p class="govuk-body-m">{{ _('For information regarding accessibility and our commitment to developing an inclusive website, see our ') }}<a href="{{ h.url_for('weca_tdh.accessibility') }}" target="_blank">{{ _('Accessibility Statement') }}</a>.</p>
+  <p class="govuk-body-m">{{ _('For information regarding accessibility and our commitment to developing an inclusive website, see our ') }}<a href="{{  h.url_for('weca_tdh.support_pages', path='accessibility') }}" target="_blank">{{ _('Accessibility Statement') }}</a>.</p>
 
   <h2>{{ _('Cookie Policy') }}</h2>
-  <p class="govuk-body-m">{{ _('For information regarding cookies and how we use them, see our ') }}<a href="{{ h.url_for('weca_tdh.policy') }}" target="_blank">{{ _('Cookie Policy') }}</a>.</p>
+  <p class="govuk-body-m">{{ _('For information regarding cookies and how we use them, see our ') }}<a href="{{ h.url_for('weca_tdh.support_pages', path='policy') }}" target="_blank">{{ _('Cookie Policy') }}</a>.</p>
 
   <h2 id="data-catagories">{{ _('Data Categories') }}</h2>
   <p class="govuk-body-m">{{ _("Data categories are used to indicate a dataset's access classification, including the level of data sensitivity, breadth of access, and need for controls. 

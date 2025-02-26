@@ -1,15 +1,17 @@
 {% extends "page.html" %}
 
-{% block subtitle %}{{ _('Accessibility') }}{% endblock %}
+{% block subtitle %}{{ _('FAQ') }}{% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Accessibility'), named_route='weca_tdh.accessibility' %}</li>
+  <li class="active">
+    <a href="{{ h.url_for('weca_tdh.support_pages', path='faq') }}">{{ _('FAQ') }}</a>
+  </li>
 {% endblock %}
 
 {% block primary %}
   <article class="module govuk-body" role="main">
       {% block statement %}
-        <h1 class="page-heading">{{ _('Accessibility Statement') }}</h1>
+        <h1 class="page-heading">{{ _('Frequently asked questions') }}</h1>
         {% set contact_email = config.get('tdh.contact_email') or _('ftz@westofengland-ca.gov.uk') %}
         {% set contact_phone_number = config.get('tdh.contact_phone_number') or _('01275 88 4444') %}
         {% snippet 'snippets/accessibility_text.html', contact_email=contact_email, contact_phone_number=contact_phone_number %}
