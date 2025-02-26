@@ -25,6 +25,15 @@
           <div class="landing-access-content">
             <h2>{{ _('Want to access data in the TDH?') }}</h2>
             <p>{{ _('You can also connect directly from your desktop using Power BI via our Partner Connect File.') }}</p>
+            {% block landing_page_search %}
+              <span class="govuk-body-s govuk-!-font-weight-bold results">{{ g.datasets | length }} {{ _('datasets found') }}</span>
+              <div class="row search-main landing-search">
+                {% block search_input %}
+                  {% snippet "snippets/search_form.html", query=q %}
+                {% endblock %}
+              </div>
+              <a class="search-advanced" href="/dataset">{{ _('Advanced search') }}</a>
+            {% endblock %}
           </div>
           <div class="landing-overlay-action">
             <p><b>{{ _('Access data in the TDH') }}</b></p>
@@ -39,28 +48,22 @@
         </div>
       {% endblock %}
 
-      {% block landing_page_search %}
-        <span class="govuk-body-s govuk-!-font-weight-bold">{{ g.datasets | length }} {{ _('datasets found') }}</span>
-        <div class="row search-main">
-          {% block search_input %}
-            {% snippet "snippets/search_form.html", query=q, advanced=True %}
-          {% endblock %}
+      {% block landing_page_topics %}
+        <h3>{{ _('Topics') }}</h3>
+        <div class="landing-explore">
+          <p>{{ _('Topics are used to create and manage collections of datasets.') }}</p>
+          <img src="/assets/images/about/topics.png" alt="Popular publisher cards">
+          <a class="landing-more" href="/group">{{ _('More Topics') }}</a>
         </div>
       {% endblock %}
 
-      {% block landing_page_topic_list %}
-        <ul class="govuk-list topics_list" data-cy="topic-list">
-          {% set topics = h.get_featured_groups(12) %}
-          {% for topic in topics %}
-          <li>
-            <h2 class="govuk-heading-s topics_heading" data-cy="topic-heading">
-              <a class="govuk-link" href="{{ h.url_for(topic.type ~ '.read', id=topic.name) }}" data-cy="topic-link">
-                {{ topic.title }}<a>
-            </h2>
-            <p class="govuk-body" data-cy="topic-desc">{{ topic.description }}</p>
-          </li>
-          {% endfor %}
-        </ul>
-      {% endblock %}
+      {% block landing_page_publishers %}
+        <h3>{{ _('Publishers') }}</h3>
+        <div class="landing-explore">
+          <p>{{ _('Publishers are used to create, manage and publish collections of datasets.') }}</p>
+          <img src="/assets/images/about/pub.png" alt="Popular topic cards">
+          <a class="landing-more" href="/organization">{{ _('More Publishers') }}</a>
+        </div>
+    {% endblock %}
   {% endblock %}
 {% endif %}

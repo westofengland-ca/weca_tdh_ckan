@@ -7565,6 +7565,7 @@ main {
   display: flex;
   position: relative;
   height: auto;
+  margin-bottom: 20px;
 }
 
 .landing-access p {
@@ -7576,6 +7577,10 @@ main {
   width: 65%;
 }
 
+.landing-access-content p {
+  margin-bottom: 1rem;
+}
+
 .landing-overlay-action {
   display: grid;
   position: relative;
@@ -7585,14 +7590,32 @@ main {
   border-radius: 2px;
   max-width: 35%;
   height: fit-content;
+  margin-top: 30px;
 }
 
 .landing-overlay-action p {
   text-align: center;
 }
 
+.landing-search .search-wrapper .search-input {
+  margin-bottom: 0;
+}
+
 .search-main {
-  width: 66%;
+  width: 95%;
+}
+
+.landing-explore {
+  margin-bottom: 40px;
+}
+
+.landing-explore img {
+  width: 100%;
+}
+
+.landing-more {
+  white-space: nowrap;
+  float: right;
 }
 
 /* search data box position */
@@ -7783,9 +7806,9 @@ button.search-submit {
 }
 
 a.search-advanced {
-  position: absolute;
-  margin: 9px 0 0 20px;
+  margin: 10px 7% 0 0;
   white-space: nowrap;
+  float: right;
 }
 
 i.fa.fa-search {
