@@ -4,6 +4,9 @@
 
 {% block breadcrumb_content %}
   <li class="active">
+    <a href="{{ h.url_for('weca_tdh.support') }}">{{ _('Support') }}</a>
+  </li>
+  <li class="active">
     <a href="{{ h.url_for('weca_tdh.support_pages', path='policy') }}">{{ _('Cookie Policy') }}</a>
   </li>
 {% endblock %}
@@ -12,7 +15,7 @@
   <article class="module govuk-body" role="main">
     {% block policy %}
       <h1 class="page-heading">{{ _('Cookie Policy') }}</h1>
-      {% snippet 'snippets/policy_text.html' %}
+      {% snippet 'support/snippets/policy_text.html' %}
     {% endblock %}
   </article>
 {% endblock %}
