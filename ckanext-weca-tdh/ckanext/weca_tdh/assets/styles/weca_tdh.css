@@ -7521,6 +7521,10 @@
   font-family: "GDS Transport", arial, sans-serif;
 }
 
+.nav-item-active {
+  text-decoration: underline !important;
+}
+
 /* FOOTER //
 ///////////*/
 .site-footer {
