@@ -21,6 +21,9 @@ ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL"
 # Set the SOLR URL
 ckan config-tool $CKAN_INI "solr_url = $CKAN_SOLR_URL"
 
+# Set the Redis URL
+ckan config-tool $CKAN_INI "ckan.redis.url = $CKAN_REDIS_URL"
+
 # Set the ckan site settings
 ckan config-tool $CKAN_INI "ckan.site_id = $CKAN_SITE_ID"
 ckan config-tool $CKAN_INI "ckan.site_url = $CKAN_SITE_URL"
@@ -89,6 +92,9 @@ ckan config-tool $CKAN_INI "tdh.build_version = $TDH_BUILD_VERSION"
 # Set partner connect file config
 ckan config-tool $CKAN_INI "tdh.connect.address_host = $TDH_CONNECT_ADDRESS_HOST"
 ckan config-tool $CKAN_INI "tdh.connect.address_path = $TDH_CONNECT_ADDRESS_PATH"
+
+# Set Databricks app connection config
+ckan config-tool $CKAN_INI "tdh.db_app.client_id = $TDH_DB_APP_CLIENT_ID"
 
 # Set upload blob storage container connection
 ckan config-tool $CKAN_INI "tdh.upload.storage_account = $TDH_UPLOAD_STORAGE_ACCOUNT"

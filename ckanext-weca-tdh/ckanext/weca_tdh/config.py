@@ -1,5 +1,9 @@
 from ckan.common import config
 
+# Global
+CKAN_SITE_ID = config['ckan.site_id']
+CKAN_SITE_URL= config['ckan.site_url']
+
 # CKAN user
 CKAN_USER_ID = "id"
 CKAN_USER_NAME = "name"
@@ -68,3 +72,10 @@ TDH_UPLOAD_STORAGE_CONTAINER = config.get('tdh.upload.storage_container', "")
 TDH_UPLOAD_FILE_TYPES = ['.csv', '.json', '.txt', '.xlsx', '.xml']
 TDH_UPLOAD_FILE_SIZE = 16 * 1024 * 1024 # 16MB
 TDH_UPLOAD_HTTP_TRIGGER = config.get('tdh.upload.http_trigger', "")
+
+# Databricks Workspace config
+TDH_DB_APP_CLIENT_ID = config.get('tdh.db_app.client_id', "")
+TDH_DB_APP_REDIRECT_URL = f"{CKAN_SITE_URL}/databricks/auth"
+
+# Redis config
+REDIS_URL = config.get('ckan.redis.url', "")

@@ -17,7 +17,7 @@
       <a class="govuk-link" href="{{ url }}">{{ h.resource_display_name(res) | truncate(50) }}</a>
     </td>
     <td class="govuk-table__cell">
-      {{ res.format or 'data' }}
+      {{ res.format or 'Data' }}
     </td>
     <td class="govuk-table__cell">
       {{ h.filter_datetime(res.created, 'short') }}
@@ -37,6 +37,19 @@
             title="{{ categories[0].desc }}"></i></span>
         {% endif %}
       </a>
+    </td>
+    <td class="govuk-table__cell">
+      {% if res.resource_data_access %}
+        {{ res.resource_data_access }} 
+      {% else %}
+        {% if res.url and h.is_url(res.url) %}
+          {{ _('External Link') }}
+        {% elif res.has_views %}
+          {{ _('Preview') }}
+        {% else %}
+          {{ _('N/A') }}
+        {% endif %}
+      {% endif %}
     </td>
     <td class="govuk-table__cell">
       {% block resource_item_explore %}

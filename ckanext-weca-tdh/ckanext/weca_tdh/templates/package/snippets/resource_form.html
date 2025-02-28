@@ -1,14 +1,26 @@
 {% ckan_extends %}
 
 {% block basic_fields_url %}
-{{ super() }}
+  {{ super() }}
   <div class="form-group control-medium">
-    <label for="field-data_category" class="form-label">{{ _('Data category') }}</label>
+    <label for="field-data_category" class="form-label">{{ _('Data Category') }}</label>
     <div class="controls">
       <select id="field-data_category" name="resource_data_category" data-module="autocomplete">
         {% for option in h.get_resource_data_categories() %}
           <option value="{{ option.id }}" {% if option.id == data.get('resource_data_category', "0") | int %}selected="selected"{% endif %}>{{ option.name }}</option>
         {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="form-group control-medium">
+    <label for="field-data_access" class="form-label">{{ _('Data Access') }}</label>
+    <div class="controls">
+      <select id="field-data_access" name="resource_data_access" data-module="autocomplete">
+        <option value="External Link" {% if "External Link" in data.get('resource_data_access', []) or data.get("url", False) and h.is_url(data.get("url", False)) %}selected="selected"{% endif %}>{{ _('External Link') }}</option>
+        <option value="File Download" {% if "File Download" in data.get('resource_data_access', []) %}selected="selected"{% endif %}>{{ _('File Download (Databricks)') }}</option>
+        <option value="Power BI Report" {% if "Power BI Report" in data.get('resource_data_access', []) %}selected="selected"{% endif %}>{{ _('Power BI Report') }}</option>
+        <option value="Preview" {% if "Preview" in data.get('resource_data_access', []) or data.get('has_views', False) %}selected="selected"{% endif %}>{{ _('Preview') }}</option>
+        <option value="TDH Query" {% if "TDH Query" in data.get('resource_data_access', []) %}selected="selected"{% endif %}>{{ _('TDH Query') }}</option>
       </select>
     </div>
   </div>
