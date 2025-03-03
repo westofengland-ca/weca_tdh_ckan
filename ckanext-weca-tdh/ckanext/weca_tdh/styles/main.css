@@ -227,10 +227,7 @@ main {
     font-size: 19px !important;
 }
 .action-button-request {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 19px !important;
-    background-color: #354753;
+    margin-left: 10px;
 }
 
 .about-datahub {

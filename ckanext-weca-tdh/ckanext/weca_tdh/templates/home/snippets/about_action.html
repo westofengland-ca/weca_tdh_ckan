@@ -13,14 +13,14 @@
         <p><b>{{ _('Get Started') }}</b></p>
         {{ govukButton({
         'text': "Log in",
-        'href': "/user/login",
+        'href': "/.auth/login/aad?post_login_redirect_url=/user/adlogin?referrer=" + request.path,
         'classes': 'action-button',
         'attributes': {'data-cy': 'login-button'}
         }) }}
         {{ govukButton({
         'text': "Request account",
         'href': "/google-doc",
-        'classes': 'action-button govuk-button--secondary',
+        'classes': 'action-button action-button-request govuk-button--secondary',
         'attributes': {'data-cy': 'request-button'}
         }) }}
     {% endif %}
