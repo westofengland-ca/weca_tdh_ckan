@@ -3,10 +3,10 @@
 
 {% if external_only == 'True' %}
   <div class="auth-providers">
-    <div class="ms-signin">
-      <p class="govuk-body">{{ _('Click here to sign in using West Of England Combined Authority Active Directory/Microsoft Entra ID:') }}</p>
+    <div class="ms-login">
+      <p class="govuk-body">{{ _('Click here to log in using West Of England Combined Authority Active Directory/Microsoft Entra ID:') }}</p>
         {{ govukButton({
-          'text': "Sign in",
+          'text': "Log in",
           'href': "/.auth/login/aad?post_login_redirect_url=/user/adlogin?referrer=" + request.path
         }) }}
       </a>
@@ -19,7 +19,7 @@
   {% set username_error = true if error_summary %}
   {% set password_error = true if error_summary %}
 
-  <div class="def-signin">
+  <div class="def-login">
     <p class="govuk-body">{{ _('Or log in using CKAN credentials:') }}</p>
     <form action="{{ action }}" method="post">
       {{ h.csrf_input() }}
@@ -34,7 +34,7 @@
       <div class="form-actions">
         {% block login_button %}
           {{ govukButton({
-            'text': "Sign in",
+            'text': "Log in",
             'type': "submit",
             'attributes': {'data-cy': 'login-button'},
           }) }}
