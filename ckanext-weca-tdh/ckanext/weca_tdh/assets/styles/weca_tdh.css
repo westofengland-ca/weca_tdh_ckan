@@ -7565,36 +7565,38 @@ main {
   margin-bottom: 10px;
 }
 
-.landing-access {
-  display: flex;
-  position: relative;
-  height: auto;
-  margin-bottom: 20px;
-}
-
 .landing-access p {
   height: fit-content;
   margin-bottom: 0px;
 }
 
-.landing-access-content {
-  width: 65%;
+.landing-access-search {
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-.landing-access-content p {
+.landing-access-search p {
   margin-bottom: 1rem;
+}
+
+.landing-access-connect {
+  display: flex;
+  width: 100%;
+}
+
+.access-connect-content {
+  flex: 1;
+  min-width: 50%;
 }
 
 .landing-overlay-action {
   display: grid;
-  position: relative;
   background: #354753;
   color: white;
   padding: 20px;
   border-radius: 2px;
-  max-width: 35%;
+  width: 30%;
   height: fit-content;
-  margin-top: 30px;
 }
 
 .landing-overlay-action p {
@@ -7606,7 +7608,7 @@ main {
 }
 
 .search-main {
-  width: 95%;
+  width: 85%;
 }
 
 .landing-explore {
@@ -7693,7 +7695,6 @@ main {
 }
 
 .about-datahub {
-  flex: 1;
   max-width: 54%;
   text-align: center;
 }
@@ -7703,7 +7704,6 @@ main {
 }
 
 .about-benefits {
-  flex: 1;
   max-width: 46%;
   display: flex;
   flex-wrap: wrap;
@@ -7807,9 +7807,9 @@ button.search-submit {
 }
 
 a.search-advanced {
-  margin: 10px 7% 0 0;
+  position: absolute;
+  margin: 10px 7% 0 10px;
   white-space: nowrap;
-  float: right;
 }
 
 i.fa.fa-search {

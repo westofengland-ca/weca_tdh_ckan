@@ -19,31 +19,41 @@
       {% block landing_page_about %} 
         <h1 class="landing-header" data-cy="landing-heading">{{ _('Welcome to the TDH Data Catalogue') }}</h1>
         <p data-cy="landing-desc">
-          {% snippet 'home/snippets/landing_description.html' %}
+          {{ _('The TDH Data Catalogue is a centralised inventory of data assets developed by the West Of England Combined Authority as part of the wider Future Transport Zone initiative.') }}
         </p>
         <div class="landing-access">
-          <div class="landing-access-content">
+          <div class="landing-access-search">
             <h2>{{ _('Want to access data in the TDH?') }}</h2>
-            <p>{{ _('You can also connect directly from your desktop using Power BI via our Partner Connect File.') }}</p>
+            <p>{{ _('The Data Catalogue is the front door for accessing data in the TDH. 
+              Here, you can search and find data resources you require, and either directly download or access them via a link. 
+              These access methods are typically used for external open datasets or carefully curated dashboards for reporting insights in Power BI.
+              Start by searching for datasets using keywords like title, description, topics, or publishers in the search box below.') }}
+            </p>
             {% block landing_page_search %}
               <span class="govuk-body-s govuk-!-font-weight-bold results">{{ g.datasets | length }} {{ _('datasets found') }}</span>
               <div class="row search-main landing-search">
                 {% block search_input %}
-                  {% snippet "snippets/search_form.html", query=q %}
+                  {% snippet "snippets/search_form.html", query=q, advanced=true %}
                 {% endblock %}
               </div>
-              <a class="search-advanced" href="/dataset">{{ _('Advanced search') }}</a>
             {% endblock %}
           </div>
-          <div class="landing-overlay-action">
-            <p><b>{{ _('Access data in the TDH') }}</b></p>
-            {{ govukButton({
-            'text': "Connect with Power BI",
-            'href': "/tdh_partner_connect",
-            'classes': 'action-button',
-            'attributes': {'data-cy': 'connect-button'}
-            }) }}
-            <p style="font-size: 16px;">{{ _('Visit the') }} <a style="color: white; text-decoration: underline;" href="/support">{{ _('support page') }}</a> {{ _('for more details') }}</p>
+          <div class="landing-access-connect">
+            <div class="access-connect-content">
+              <p>{{ _('For further bespoke analysis that requires direct querying of data in the TDH, you can connect from your desktop using Power BI via our Partner Connect File. 
+                To download the partner connect file and start accessing the TDH directly, click “Connect with Power BI”.') }}
+              </p>
+            </div>
+            <div class="landing-overlay-action">
+              <p><b>{{ _('Query data in the TDH') }}</b></p>
+              {{ govukButton({
+              'text': "Connect with Power BI",
+              'href': "/tdh_partner_connect_file",
+              'classes': 'action-button',
+              'attributes': {'download': 'tdh-partner-connect.pbids', 'data-cy': 'connect-button'}
+              }) }}
+              <p style="font-size: 16px;">{{ _('Click') }} <a style="color: white; text-decoration: underline;" href="/tdh_partner_connect">{{ _('here') }}</a> {{ _('for more details') }}</p>
+            </div>
           </div>
         </div>
       {% endblock %}
