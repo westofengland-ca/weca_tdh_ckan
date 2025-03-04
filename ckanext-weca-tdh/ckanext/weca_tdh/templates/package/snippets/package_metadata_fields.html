@@ -1,17 +1,6 @@
 {% ckan_extends %}
 
 {% block package_metadata_fields %}
-  {% block package_metadata_fields_datalake %}
-    <div class="form-group control-medium">
-      <label for="field-dl" class="form-label">{{ _('Data Lake active') }}</label>
-      <div class="controls">
-        <select id="field-dl" name="datalake_active" data-module="autocomplete">
-          <option value="false" {% if data.get('datalake_active', False) == False %} selected="selected" {% endif %}>{{ _('False') }}</option>
-          <option value="true" {% if data.get('datalake_active', False) == True %} selected="selected" {% endif %}>{{ _('True') }}</option>
-        </select>
-      </div>
-    </div>
-  {% endblock %}
   {% block package_metadata_fields_data_quality %}
     <div class="form-group control-medium">
       <label for="field-dq" class="form-label">{{ _('Data Quality Category') }}</label>

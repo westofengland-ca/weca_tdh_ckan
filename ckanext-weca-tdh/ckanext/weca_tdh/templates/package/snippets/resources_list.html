@@ -8,15 +8,20 @@
 #}
 
 {% block resource_list %}
-  <h2 class="heading-medium">{{ _('Data Links') }}</h2>
+  <h2 class="heading-medium">{{ _('Dataset Resources') }}</h2>
   {% if pkg.resources %}
     <table class="govuk-table govuk-!-margin-bottom-4" data-cy="data-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">{{ _('Link to the data') }}</th>
+          <th scope="col" class="govuk-table__header">{{ _('Resource') }}</th>
           <th scope="col" class="govuk-table__header">{{ _('Format') }}</th>
-          <th scope="col" class="govuk-table__header">{{ _('File added') }}</th>
-          <th scope="col" class="govuk-table__header">{{ _('Data category') }}</th>
+          <th scope="col" class="govuk-table__header">{{ _('Date Added') }}</th>
+          <th scope="col" class="govuk-table__header">{{ _('Data Category') }}</th>
+          <th scope="col" class="govuk-table__header">{{ _('Data Access') }} 
+            <a href="{{ h.url_for('home.about') ~ '#data-access'}}">
+              <i class="fa fa-info-circle info-icon" title="Indicates the method for accessing data."></i>
+            </a>
+          </th>
           <th scope="col" class="govuk-table__header">{{ _('Action') }}</th>
         </tr>
       </thead>
