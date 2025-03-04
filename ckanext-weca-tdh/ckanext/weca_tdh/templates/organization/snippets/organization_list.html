@@ -2,6 +2,8 @@
 Display a grid of organization items.
 
 organizations - A list of organizations.
+list_class - A CSS list class
+item_class - A CSS item class
 
 Example:
 
@@ -9,10 +11,10 @@ Example:
 
 #}
 {% block organization_list %}
-<ul class="media-grid-tdh" data-module="media-grid-tdh">
+<ul class="media-grid-tdh {{list_class}}" data-module="media-grid-tdh">
   {% block organization_list_inner %}
   {% for organization in organizations %}
-    {% snippet "organization/snippets/organization_item.html", organization=organization, position=loop.index, last=loop.last, show_capacity=show_capacity %}
+    {% snippet "organization/snippets/organization_item.html", organization=organization, item_class=item_class, position=loop.index, last=loop.last, show_capacity=show_capacity %}
   {% endfor %}
    {% endblock %}
 </ul>

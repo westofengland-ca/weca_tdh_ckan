@@ -2,6 +2,8 @@
 Display a grid of group items.
 
 groups - A list of groups.
+list_class - A CSS list class
+item_class - A CSS item class
 
 Example:
 
@@ -9,10 +11,10 @@ Example:
 
 #}
 {% block group_list %}
-<ul class="media-grid-tdh" data-module="media-grid-tdh">
+<ul class="media-grid-tdh {{list_class}}" data-module="media-grid-tdh">
 	{% block group_list_inner %}
   {% for group in groups %}
-    {% snippet "group/snippets/group_item.html", group=group, position=loop.index, last=loop.last, show_capacity=show_capacity %}
+    {% snippet "group/snippets/group_item.html", group=group, item_class=item_class, position=loop.index, last=loop.last, show_capacity=show_capacity %}
   {% endfor %}
   {% endblock %}
 </ul>

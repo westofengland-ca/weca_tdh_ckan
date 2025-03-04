@@ -7615,13 +7615,18 @@ main {
   margin-bottom: 40px;
 }
 
-.landing-explore img {
-  width: 100%;
+.landing-media-grid {
+  display: flex;
+}
+
+.landing-media-item {
+  margin: 0 0.5% 1% 0.5% !important;
 }
 
 .landing-more {
   white-space: nowrap;
   float: right;
+  margin: 10px 1% 0 0;
 }
 
 /* search data box position */
