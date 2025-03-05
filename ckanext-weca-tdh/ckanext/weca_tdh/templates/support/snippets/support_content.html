@@ -1,27 +1,21 @@
 <div>
-  <h2>{{ _('Request access, raise an issue, or make a general request') }}</h2>
-  <p class="govuk-body-m">{{ _('For all service requests for the TDH please use the Combined Authority IT Helpdesk. Submit a General Service Request found under User Applications and note in the description that the request is related to the Transport Data Hub.') }}</p>
-  <p class="govuk-body-m">{{ _('The IT Helpdesk (ServiceNow) for the Combined Authority can be') }} <a href="https://agilisys.service-now.com/ag?id=login" title="Link to ServiceNow" target="_blank">{{ _('accessed here') }}</a>.</p>
-  <p class="govuk-body-m">{{ _('If you are unable to use the Combined Authority intranet to access the IT Helpdesk (ServiceNow), call') }} {{ contact_phone_number }} {{ _('and quote the Combined Authority and Transport Data Hub.') }}</p>
+  <h2>{{ _('Access the data - Connect to the TDH') }}</h2>
+  <p class="govuk-body-m">{{ _('Want to query data in the TDH for your own analysis?') }} <a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}" target="_blank">{{ _('Learn how to connect to the TDH using Power BI.') }}</a></p>
 
-  <h2>{{ _('Connect to the TDH') }}</h2>
-  <p class="govuk-body-m"><a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}" target="_blank">{{ _('Learn how to connect to the TDH using Power BI.') }}</a></p>
+  <h2>{{ _('Frequently Asked Questions') }}</h2>
+  <p class="govuk-body-m">{{ _('Have an issue? See our') }} <a href="{{  h.url_for('weca_tdh.support_pages', path='faq') }}" target="_blank">{{ _('FAQ page') }}</a> {{ _('for answers to popular questions.') }}</p>
 
-  <h2>{{ _('About Transport Data Hub') }}</h2>
-  <p class="govuk-body-m">{{ _('One of the key published goals of the Future Transport Zone initiative is to "Enable better public transport planning by using data to improve decision-making".') }}</p>
-  <p class="govuk-body-m">{{ _('TDH aims to deliver a region-wide data platform to improve transport planning and operation, improve collaboration between Unitary Authorities (UAs) in the region, and support innovation.') }}</p>
+  <h2>{{ _('Request access') }}</h2>
+  <p>{{ _('Please submit an access request form for either a new account or access to restricted data.') }}</p>
+  <ul>
+    <li><p><a href="https://forms.office.com/e/GnirTe2sLs" target="_blank">{{ _('Request an account') }}</a> {{ _('- apply for a new user account.') }}</p></li>
+    <li><p><a href="https://forms.office.com/e/2qBSFay0aP" target="_blank">{{ _('Request dataset access') }}</a> {{ _('- gain access to resticted data.') }}</p></li>
+  </ul>
 
-  <p class="govuk-body-m">{{ _('West of England Combined Authority:') }} <a href="https://www.westofengland-ca.gov.uk/" target="_blank">https://www.westofengland-ca.gov.uk</a><br/>
-    {{ _('FTZ:') }} <a href="https://www.westofengland-ca.gov.uk/what-we-do/transport/future-transport-zone" target="_blank">https://www.westofengland-ca.gov.uk/what-we-do/transport/future-transport-zone</a></p>
-
-  <h3>{{ _('Frequently Asked Questions') }}</h3>
-  <p class="govuk-body-m">{{ _('See our') }} <a href="{{  h.url_for('weca_tdh.support_pages', path='faq') }}" target="_blank">{{ _('FAQ page') }}</a> {{ _('for answers to popular questions.') }}</p>
-
-  <h2>{{ _('Accessibility') }}</h2>
-  <p class="govuk-body-m">{{ _('For information regarding accessibility and our commitment to developing an inclusive website, see our ') }}<a href="{{  h.url_for('weca_tdh.support_pages', path='accessibility') }}" target="_blank">{{ _('Accessibility Statement') }}</a>.</p>
-
-  <h2>{{ _('Cookie Policy') }}</h2>
-  <p class="govuk-body-m">{{ _('For information regarding cookies and how we use them, see our ') }}<a href="{{ h.url_for('weca_tdh.support_pages', path='policy') }}" target="_blank">{{ _('Cookie Policy') }}</a>.</p>
+  <h2>{{ _('Got another issue?') }}</h2>
+  <p class="govuk-body-m"><a href="https://live.hornbill.com/nsc/internal/home/" title="Link to Hornbill" target="_blank">{{ _('Raise a ticket') }}</a> 
+  {{ _('using the Combined Authority IT Helpdesk (Hornbill). Submit a General Service Request found under Applications & Software and reference the Transport Data Hub in the request.') }}</p>
+  <p class="govuk-body-m">{{ _('If you are unable to use the Combined Authority intranet to access the IT Helpdesk, call') }} {{ contact_phone_number }} {{ _('and quote the Combined Authority and Transport Data Hub.') }}</p>
 
   <h2 id="data-access">{{ _('Data Access') }}</h2>
   <p class="govuk-body-m">{{ _("Data access types are used to indicate a method for accessing a dataset resource. All datasets are marked with one of the following data access types:") }}</p>
@@ -44,7 +38,7 @@
       </tr>
       <tr class="govuk-table__row">
         <td class="govuk-table__cell">{{ _('Power BI Report') }}</td>
-        <td class="govuk-table__cell">{{ _("A link to an associated Power BI Report.") }}</td>
+        <td class="govuk-table__cell">{{ _('A link to an associated Power BI Report.') }}</td>
       </tr>       
       <tr class="govuk-table__row">
         <td class="govuk-table__cell">{{ _('Preview') }}</td>
@@ -156,6 +150,12 @@
       </tr>
     </tbody>
   </table>
+ 
+  <h2>{{ _('Accessibility') }}</h2>
+  <p class="govuk-body-m">{{ _('For information regarding accessibility and our commitment to developing an inclusive website, see our ') }}<a href="{{  h.url_for('weca_tdh.support_pages', path='accessibility') }}" target="_blank">{{ _('Accessibility Statement') }}</a>.</p>
+
+  <h2>{{ _('Cookie Policy') }}</h2>
+  <p class="govuk-body-m">{{ _('For information regarding cookies and how we use them, see our ') }}<a href="{{ h.url_for('weca_tdh.support_pages', path='policy') }}" target="_blank">{{ _('Cookie Policy') }}</a>.</p>
 
   <p class="govuk-body-xs"><i>{{ _('Build version:') }} {{ build_version }}</i></p>
 </div>
