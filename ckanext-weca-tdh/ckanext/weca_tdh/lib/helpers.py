@@ -167,6 +167,15 @@ def transform_collaborators(collaborators: tuple) -> str:
     else:
         names_list.append('Unassigned')
         return json.dumps(names_list)
+    
+def transform_data_owners(data_owners: dict) -> str:
+    names_list = [user[C.CKAN_USER_FULLNAME] for user in data_owners]
+
+    if names_list:
+        return json.dumps(names_list)
+    else:
+        names_list.append('Unassigned')
+        return json.dumps(names_list)
 
 def build_databricks_auth_url(resource_id: str, referrer: str) -> str:
     client_id = C.TDH_DB_APP_CLIENT_ID
