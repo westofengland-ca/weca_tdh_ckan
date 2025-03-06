@@ -6,24 +6,22 @@ import ckanext.weca_tdh.config as C
 
 
 class RouteController(object):
-    """Manage custom page routing"""
-
+    """Manage static page routing"""
+    
     @staticmethod
-    def render_contact_page():
-        return toolkit.render('contact.html')
-
+    def render_support_page():
+        return toolkit.render('/support/support.html')
+    
     @staticmethod
-    def render_policy_page():
-        return toolkit.render('policy.html')
-
-    @staticmethod
-    def render_accessibility_page():
-        return toolkit.render('accessibility.html')
-
+    def render_support_pages(path=None):
+        if not path:
+            return toolkit.render('/support/support.html')
+        return toolkit.render(f'/support/{path}.html')
+    
     @staticmethod
     def render_tdh_partner_connect_page():
         return toolkit.render('tdh_partner_connect.html')
-
+    
     @staticmethod
     def download_tdh_partner_connect_file() -> str:
         # get config values

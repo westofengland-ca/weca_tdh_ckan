@@ -51,7 +51,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         """
         Called on each request to identify a user.
         """
-        if C.FF_AUTH_RESTRICTED_ACCESS == 'True' and not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):         
+        if C.FF_AUTH_RESTRICTED_ACCESS == 'True' and request.path != '/' and not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):
             if isinstance(toolkit.current_user, AnonymousUser): # check for an unauthorised user
                 flash(C.ALERT_MESSAGE_AUTH, category='alert-info')
                 return toolkit.render('/user/login.html') # redirect to login page with flash message
@@ -75,9 +75,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''       
         staticbp = Blueprint(self.name, self.__module__, template_folder='templates')
         rules = [
-            ('/contact', 'contact', RouteController.render_contact_page),
-            ('/policy', 'policy', RouteController.render_policy_page),
-            ('/accessibility', 'accessibility', RouteController.render_accessibility_page),
+            ('/support', 'support', RouteController.render_support_page),
+            ('/support/<path:path>', 'support_pages', RouteController.render_support_pages),
             ('/tdh_partner_connect', 'tdh_partner_connect', RouteController.render_tdh_partner_connect_page),
             ('/tdh_partner_connect_file', 'tdh_partner_connect_file', RouteController.download_tdh_partner_connect_file)
         ]

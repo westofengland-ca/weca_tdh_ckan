@@ -1,0 +1,20 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _('Support') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('Support'), named_route='weca_tdh.support' %}</li>
+{% endblock %}
+
+{% block primary %}
+  <article class="module govuk-body" role="main">
+    {% block about %}
+      <h1 class="page-heading">{{ _('Support') }}</h1>
+      {% set contact_phone_number = config.get('tdh.contact_phone_number') or _('01275 88 4444') %}
+      {% set build_version = config.get('tdh.build_version') or _('local') %}
+      {% snippet 'support/snippets/support_content.html', contact_phone_number=contact_phone_number, build_version=build_version %}
+    {% endblock %}
+  </article>
+{% endblock %}
+
+{% block secondary %}{% endblock %}

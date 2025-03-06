@@ -51,7 +51,7 @@
                 </dd>
                 <dt>{{ _('Data Quality:') }}</dt>
                 <dd property="dc:quality" data-cy="package-quality">
-                  <a href="{{ h.url_for('home.about') ~ '#data-quality'}}">
+                  <a href="{{ h.url_for('weca_tdh.support') ~ '#data-quality'}}">
                     {% set data_quality_markings = h.get_data_quality_markings() %}
                     {% if pkg.data_quality %}
                       {% set data_quality = data_quality_markings[pkg.data_quality | int] %}
@@ -127,7 +127,7 @@
             {% if not c.userobj %}
               <p>{{ _('You must have an account to suggest edits to this dataset.') }}</p>
               {{ govukButton({
-                'text': "Sign in",
+                'text': "Log in",
                 'href': "/user/login"
               }) }}
             {% else %}

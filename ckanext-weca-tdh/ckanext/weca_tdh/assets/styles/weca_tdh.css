@@ -7486,7 +7486,7 @@
 .masthead .navbar .navbar-title {
   font-size: 1.4rem;
   color: white;
-  margin-right: 135px;
+  margin-right: 75px;
 }
 
 /* nav pill list */
@@ -7519,6 +7519,10 @@
 .navbar {
   padding: 0px;
   font-family: "GDS Transport", arial, sans-serif;
+}
+
+.nav-item-active {
+  text-decoration: underline !important;
 }
 
 /* FOOTER //
@@ -7557,8 +7561,72 @@ main {
   margin-top: 20px;
 }
 
+.landing-header {
+  margin-bottom: 10px;
+}
+
+.landing-access p {
+  height: fit-content;
+  margin-bottom: 0px;
+}
+
+.landing-access-search {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.landing-access-search p {
+  margin-bottom: 1rem;
+}
+
+.landing-access-connect {
+  display: flex;
+  width: 100%;
+}
+
+.access-connect-content {
+  flex: 1;
+  min-width: 50%;
+}
+
+.landing-overlay-action {
+  display: grid;
+  background: #354753;
+  color: white;
+  padding: 20px;
+  border-radius: 2px;
+  width: 30%;
+  height: fit-content;
+}
+
+.landing-overlay-action p {
+  text-align: center;
+}
+
+.landing-search .search-wrapper .search-input {
+  margin-bottom: 0;
+}
+
 .search-main {
-  width: 66%;
+  width: 85%;
+}
+
+.landing-explore {
+  margin-bottom: 40px;
+}
+
+.landing-media-grid {
+  display: flex;
+}
+
+.landing-media-item {
+  margin: 0 0.5% 1% 0.5% !important;
+}
+
+.landing-more {
+  white-space: nowrap;
+  float: right;
+  margin: 10px 1% 0 0;
 }
 
 /* search data box position */
@@ -7573,6 +7641,157 @@ main {
 
 .media-overlay .media-heading {
   background-color: #354753;
+}
+
+/* ABOUT PAGE //
+/////////////*/
+.about-header {
+  position: relative;
+  color: white;
+  height: 400px;
+}
+
+.about-header h1 {
+  height: fit-content;
+  margin-bottom: 10px;
+}
+
+.about-header p {
+  height: fit-content;
+  margin-bottom: 0px;
+}
+
+.about-header img {
+  width: 100%;
+  height: 95%;
+  object-fit: fill;
+}
+
+.about-overlay {
+  position: absolute;
+  bottom: 9%;
+  background: #354753;
+  padding: 20px;
+  opacity: 95%;
+  left: 5%;
+  max-width: 46%;
+  border-top: 5px solid;
+  border-image: linear-gradient(to right, #6bc9df 0%, #6bc9df 25%, #79decc 25%, #79decc 50%, #f8859c 50%, #f8859c 74%, #f8859c 75%, #ffd900 75%, #ffd900 97%) 1 0 0 0;
+}
+
+.about-overlay-action {
+  position: absolute;
+  right: 5%;
+  bottom: 0%;
+  background: #354753;
+  padding: 20px;
+  border-radius: 2px;
+  max-width: 40%;
+}
+
+.action-button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 19px !important;
+}
+
+.action-button-request {
+  margin-left: 10px;
+}
+
+.about-datahub {
+  max-width: 54%;
+  text-align: center;
+}
+
+.about-datahub img {
+  width: 100%;
+}
+
+.about-benefits {
+  max-width: 46%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+}
+
+.benefit-box {
+  flex: 1 1 calc(50% - 10px);
+  padding: 15px;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.tdh-pink {
+  background-color: #f8859c;
+}
+
+.tdh-yellow {
+  background-color: #ffd900;
+}
+
+.tdh-green {
+  background-color: #79decc;
+}
+
+.tdh-blue {
+  background-color: #6bc9df;
+}
+
+@media (max-width: 768px) {
+  .about-tdh-content {
+    flex-direction: column;
+  }
+  .about-datahub, .about-benefits {
+    max-width: 100%;
+  }
+}
+.about-tdh-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+}
+
+.about-features {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.about-feature {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.about-feature img {
+  width: auto;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+/* SUPPORT PAGE //
+///////////////*/
+.request-form-btn {
+  margin-bottom: 20px;
+}
+
+.toggle-heading {
+  border-bottom: 0.5px solid #ccc;
+  width: fit-content;
+  margin-top: 15px;
+}
+
+.toggle-arrow {
+  color: black;
+  text-decoration: none;
 }
 
 /* SEARCH PAGE //
@@ -7607,6 +7826,12 @@ button.search-submit {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+a.search-advanced {
+  position: absolute;
+  margin: 10px 7% 0 10px;
+  white-space: nowrap;
 }
 
 i.fa.fa-search {
