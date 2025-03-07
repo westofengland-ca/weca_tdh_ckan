@@ -53,10 +53,12 @@ def join_resources(resources):
     format_list = '; '.join([resource['format'] for resource in resources])
     desc_list = '; '.join([resource['description'] for resource in resources])
     cat_list = '; '.join([data_category_lookup(int(resource['resource_data_category'])) for resource in resources])
+    acc_list = '; '.join(resource.get('resource_data_access', "Unassigned") for resource in resources)
     
     resource_list = {'name': name_list, 'url': url_list, 
                         'format': format_list, 'description': desc_list,
-                        'resource_data_category': cat_list}
+                        'resource_data_category': cat_list,
+                        'resource_data_access': acc_list}
     return resource_list
 
 def data_category_lookup(category):
@@ -80,9 +82,14 @@ def parse_datasets(datasets: dict):
                     'Publisher': dataset['organization']['name'],
                     'Data agreements': dataset['license_title'],
                     'License': dataset['license_id'],
+                    'Data owners': dataset.get('data_owners'),
+                    'Data stewards': dataset.get('data_stewards'),
+                    "Data quality score": dataset.get('data_quality_score'),
+                    "Date created": dataset.get('metadata_created'),
+                    "Last modified": dataset.get('metadata_modified'),
+                    "Last reviewed": dataset.get('last_reviewed'),
                     'Description': dataset['notes'] or "No description provided",
                     'Dataset visibility': "Private" if dataset['private'] else "Public",
-                    'Datalake': 'TRUE' if dataset['datalake_active'] else 'FALSE',
                     'Tags': dataset['tags'] or "",
                     'Topics': topics,
                     'Resource title': resources.get('name'),
@@ -90,9 +97,7 @@ def parse_datasets(datasets: dict):
                     'Resource url': resources.get('url'),
                     'Resource format': resources.get('format'),
                     'Resource data category': resources.get('resource_data_category'),
-                    'Data Owner': "",
-                    'Data Steward': "",
-                    'Date added': ""
+                    'Resource data access': resources.get('resource_data_access')
                 }
 
             writer = csv.DictWriter(csv_file, fieldnames=dataset_dict.keys())

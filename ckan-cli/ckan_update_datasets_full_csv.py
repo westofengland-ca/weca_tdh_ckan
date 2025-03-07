@@ -27,11 +27,13 @@ def seperate_resources(row):
     format_list = [resource.strip() for resource in row['Resource format'].split(';')]
     desc_list = [resource.strip() for resource in row['Resource description'].split(';')]
     cat_list = [resource.strip() for resource in row['Resource data category'].split(';')]
+    acc_list = [resource.strip() for resource in row['Resource data access'].split(';')]
     
     for i in range(0, len(name_list)):
       resources.append({'name': name_list[i], 'url': url_list[i], 
                          'format': format_list[i], 'description': desc_list[i],
-                         'resource_data_category': data_category_lookup(cat_list[i])})
+                         'resource_data_category': data_category_lookup(cat_list[i]),
+                         'resource_data_access': acc_list[i]})
     
     return resources
 
@@ -89,7 +91,6 @@ try:
                 'notes': row[csv_column_headers.DATASET_DESC] or "No description provided",
                 'resources': seperate_resources(row),
                 'groups': [] if not row[csv_column_headers.DATASET_TOPICS] else list([{'name': topic.strip()} for topic in row[csv_column_headers.DATASET_TOPICS].split(';')]),
-                'datalake_active': row['Datalake'],
             }
             update_dataset(dataset_dict)
 
