@@ -8,6 +8,7 @@ import argparse
 import traceback
 from datetime import datetime
 import csv
+import csv_column_headers
 
 date = datetime.now().strftime("%d-%m-%Y")
 
@@ -44,8 +45,15 @@ def get_datasets():
     except requests.exceptions.RequestException as err:
         raise Exception(f'get_datasets(): error {err}')
 
+
+def join_tags(tags):
+    return '; '.join([tag['display_name'] for tag in tags])
+
 def join_topics(topics):
     return '; '.join([topic['name'] for topic in topics])
+
+def join_list_items(items):
+    return '; '.join([item for item in items])
 
 def join_resources(resources):
     name_list = '; '.join([resource['name'] for resource in resources])
@@ -54,11 +62,13 @@ def join_resources(resources):
     desc_list = '; '.join([resource['description'] for resource in resources])
     cat_list = '; '.join([data_category_lookup(int(resource['resource_data_category'])) for resource in resources])
     acc_list = '; '.join(resource.get('resource_data_access', "Unassigned") for resource in resources)
+    date_list = '; '.join([resource['created'] for resource in resources])
     
     resource_list = {'name': name_list, 'url': url_list, 
                         'format': format_list, 'description': desc_list,
                         'resource_data_category': cat_list,
-                        'resource_data_access': acc_list}
+                        'resource_data_access': acc_list,
+                        'created': date_list}
     return resource_list
 
 def data_category_lookup(category):
@@ -70,10 +80,19 @@ def data_category_lookup(category):
     }
     return data_categories.get(category)
 
+def data_quality_lookup(quality):
+    data_quality_categories = {
+        0: "Unclassified",
+        1: "Poor",
+        2: "Moderate",
+        3: "Good",
+        4: "Excellent"
+    }
+    return data_quality_categories.get(quality)
+
 def parse_datasets(datasets: dict):
     with open(args.output_file, mode='a', newline='') as csv_file:
         for dataset in datasets:
-            topics = join_topics(dataset['groups'])
             resources = join_resources(dataset['resources'])
             dataset_dict = {
                     'Name': dataset['name'],
@@ -82,22 +101,24 @@ def parse_datasets(datasets: dict):
                     'Publisher': dataset['organization']['name'],
                     'Data agreements': dataset['license_title'],
                     'License': dataset['license_id'],
-                    'Data owners': dataset.get('data_owners'),
-                    'Data stewards': dataset.get('data_stewards'),
-                    "Data quality score": dataset.get('data_quality_score'),
-                    "Date created": dataset.get('metadata_created'),
-                    "Last modified": dataset.get('metadata_modified'),
-                    "Last reviewed": dataset.get('last_reviewed'),
                     'Description': dataset['notes'] or "No description provided",
-                    'Dataset visibility': "Private" if dataset['private'] else "Public",
-                    'Tags': dataset['tags'] or "",
-                    'Topics': topics,
+                    'Catalogue visibility': "Private" if dataset['private'] else "Public",
+                    'Tags': join_tags(dataset.get('tags', [])),
+                    'Topics': join_topics(dataset.get('groups', [])),
                     'Resource title': resources.get('name'),
                     'Resource description': resources.get('description'),
                     'Resource url': resources.get('url'),
                     'Resource format': resources.get('format'),
                     'Resource data category': resources.get('resource_data_category'),
-                    'Resource data access': resources.get('resource_data_access')
+                    'Resource data access type': resources.get('resource_data_access'),
+                    'Resource date created': resources.get('created'),
+                    'Data owners': join_list_items(dataset.get('data_owners', [])),
+                    'Data stewards': join_list_items(dataset.get('data_stewards', [])),
+                    "Date created": dataset.get('metadata_created'),
+                    "Last modified": dataset.get('metadata_modified'),
+                    "Last reviewed": dataset.get('last_reviewed'),
+                    "Data quality category": data_quality_lookup(int(dataset.get('data_quality', 0))),
+                    "Data quality score": dataset.get('data_quality_score')
                 }
 
             writer = csv.DictWriter(csv_file, fieldnames=dataset_dict.keys())

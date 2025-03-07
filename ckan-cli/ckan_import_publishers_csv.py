@@ -5,7 +5,7 @@ Imports a list of publishers from a CSV file via the CKAN API.
 import argparse
 from urllib.request import Request, urlopen
 from urllib.parse import quote
-from urllib.error import URLError, HTTPError
+from urllib.error import HTTPError
 import csv
 import json
 import csv_column_headers
