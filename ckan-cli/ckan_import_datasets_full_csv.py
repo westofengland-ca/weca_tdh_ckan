@@ -107,8 +107,8 @@ try:
                 'tags': [] if not row[csv_column_headers.DATASET_TAGS] else list([{'name': tag.strip()} for tag in row[csv_column_headers.DATASET_TAGS].split(';')]),
                 'groups': [] if not row[csv_column_headers.DATASET_TOPICS] else list([{'name': topic.strip()} for topic in row[csv_column_headers.DATASET_TOPICS].split(';')]),
                 'resources': seperate_resources(row),
-                #'data_owners': [] if not row[csv_column_headers.DATASET_DATA_OWNERS] else list([{'name': owner.strip()} for owner in row[csv_column_headers.DATASET_DATA_OWNERS].split(';')]),
-                #'data_stewards': [] if not row[csv_column_headers.DATASET_DATA_STEWARDS] else list([{'name': steward.strip()} for steward in row[csv_column_headers.DATASET_DATA_STEWARDS].split(';')]),
+                'data_owners': row[csv_column_headers.DATASET_DATA_OWNERS],
+                'data_stewards': row[csv_column_headers.DATASET_DATA_STEWARDS],
                 "last_reviewed": convert_date_format(row[csv_column_headers.DATASET_LAST_REVIEWED]),
                 'data_quality': data_quality_lookup(row[csv_column_headers.DATASET_DATA_QUALITY_CATEGORY]),
                 'data_quality_score': row[csv_column_headers.DATASET_DATA_QUALITY_SCORE]
