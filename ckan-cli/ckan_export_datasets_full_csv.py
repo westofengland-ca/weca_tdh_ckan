@@ -53,7 +53,7 @@ def join_topics(topics):
     return '; '.join([topic['name'] for topic in topics])
 
 def join_list_items(items):
-    return '; '.join([item for item in items])
+    return '; '.join([str(item) for item in items])
 
 def join_resources(resources):
     name_list = '; '.join([resource['name'] for resource in resources])

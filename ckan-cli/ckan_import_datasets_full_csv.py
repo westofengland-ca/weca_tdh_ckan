@@ -60,7 +60,9 @@ def data_quality_lookup(quality):
     return data_quality_categories.get(quality)
 
 def convert_date_format(date_str):
-    return datetime.strptime(date_str, "%m/%d/%Y").strftime("%Y-%m-%d")
+    if date_str:
+        date_str = datetime.strptime(date_str, "%m/%d/%Y").strftime("%Y-%m-%d")
+    return date_str
 
 def import_dataset(dataset_dict):
     global count
