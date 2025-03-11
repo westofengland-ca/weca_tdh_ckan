@@ -142,7 +142,7 @@
   {% endblock %}
   {% block data_access %}
     <h3>{{ _('Data Access') }}</h3>
-    {% if "External Link" in res.resource_data_access %}
+    {% if "External Link" in res.resource_data_access or res.url and h.is_url(res.url) %}
       <div>
         <h2 class="heading-small">{{ _('External Link') }}</h2>
         <p>{{ _('This resource is available through an external link. Click the Go to resource button or visit the URL above.') }}
@@ -168,7 +168,7 @@
         <p>{{ _('This resource is available to query using Power BI.') }}
         <a href="{{ h.url_for('weca_tdh.tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub.') }}</a></p>
       </div>
-    {% elif "Preview" in res.resource_data_access %}
+    {% elif "Preview" in res.resource_data_access or res.has_views %}
       <div>
         <h2 class="heading-small">{{ _('Preview') }}</h2>
         <p>{{ _('This resource is available to preview via the sample data below.') }}
@@ -177,6 +177,10 @@
       <div>
         <p>{{ _('A data access type has not yet been assigned to this resource.') }}
       </div>
+    {% endif %}
+    {% if res.resource_data_category != 0 %}
+      <p>{{ _('Don\'t have acesss to the data?') }}</p>
+      <a href="https://forms.office.com/e/2qBSFay0aP" class="govuk-button request-form-btn" target="_blank">{{ _('Request access') }}</a>
     {% endif %}
     <p style="font-size: 16px;">{{ _('To learn more about data access types, see our') }} <a href="{{ h.url_for('weca_tdh.support') ~ '#data-access' }}" target="_blank">{{ _('support page') }}</a>.</p>
   {% endblock %}
