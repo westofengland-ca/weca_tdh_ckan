@@ -109,19 +109,6 @@ main {
     margin-bottom: 10px;
 }
 
-.landing-access p {
-    height: fit-content;
-    margin-bottom: 0px;
-}
-
-.landing-access-search {
-    width: 100%;
-    margin-bottom: 20px;
-}
-.landing-access-search p {
-    margin-bottom: 1rem;
-}
-
 .landing-access-connect {
     display: flex;
     width: 100%;
@@ -139,15 +126,15 @@ main {
     padding: 20px;
     border-radius: 2px;
     width: 30%;
+    min-width: min-content;
     height: fit-content;
+    margin-left: 20px;
 }
 
 .landing-overlay-action p {
     text-align: center;
-}
-
-.landing-search .search-wrapper .search-input {
-    margin-bottom: 0;
+    height: fit-content;
+    margin-bottom: 0px;
 }
 
 .search-main {
