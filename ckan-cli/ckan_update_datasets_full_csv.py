@@ -8,6 +8,7 @@ from urllib.request import Request, urlopen
 from urllib.parse import quote
 from urllib.error import URLError, HTTPError
 import csv
+from datetime import datetime
 import json
 import csv_column_headers
 import traceback
@@ -22,18 +23,20 @@ count = 0
 def seperate_resources(row):
     resources = []
   
-    name_list = [resource.strip() for resource in row['Resource title'].split(';')]
-    url_list = [resource.strip() for resource in row['Resource url'].split(';')]
-    format_list = [resource.strip() for resource in row['Resource format'].split(';')]
-    desc_list = [resource.strip() for resource in row['Resource description'].split(';')]
-    cat_list = [resource.strip() for resource in row['Resource data category'].split(';')]
-    acc_list = [resource.strip() for resource in row['Resource data access'].split(';')]
+    name_list = [resource.strip() for resource in row[csv_column_headers.RESOURCE_TITLE].split(';')]
+    desc_list = [resource.strip() for resource in row[csv_column_headers.RESOURCE_DESCRIPTION].split(';')]
+    url_list = [resource.strip() for resource in row[csv_column_headers.RESOURCE_URL].split(';')]
+    format_list = [resource.strip() for resource in row[csv_column_headers.RESOURCE_FORMAT].split(';')]
+    category_list = [resource.strip() for resource in row[csv_column_headers.RESOURCE_DATA_CATEGORY].split(';')]
+    access_list = [resource.strip() for resource in row[csv_column_headers.RESOURCE_DATA_ACCESS_TYPE].split(';')]
+    date_list = [resource.strip() for resource in row[csv_column_headers.RESOURCE_DATE_CREATED].split(';')]
     
     for i in range(0, len(name_list)):
       resources.append({'name': name_list[i], 'url': url_list[i], 
                          'format': format_list[i], 'description': desc_list[i],
-                         'resource_data_category': data_category_lookup(cat_list[i]),
-                         'resource_data_access': acc_list[i]})
+                         'resource_data_category': data_category_lookup(category_list[i]),
+                         'resource_data_access': access_list[i],
+                         'created': date_list[i]})
     
     return resources
 
@@ -46,13 +49,28 @@ def data_category_lookup(category):
     }
     return data_categories.get(category)
 
+def data_quality_lookup(quality):
+    data_quality_categories = {
+        "Unclassified": "0",
+        "Poor": "1",
+        "Moderate": "2",
+        "Good": "3",
+        "Excellent": "4"
+    }
+    return data_quality_categories.get(quality)
+
+def convert_date_format(date_str):
+    if date_str:
+        date_str = datetime.strptime(date_str, "%m/%d/%Y").strftime("%Y-%m-%d")
+    return date_str
+
 def update_dataset(dataset_dict):
     global count
     
     # Use the json module to dump the dictionary to a string for posting. URL encode.
     data_string = quote(json.dumps(dataset_dict)).encode('utf-8')
-
-    # CKAN package_create function creates a new dataset.
+    
+    # Update package
     request = Request(f'{args.ckan_url}/api/action/package_update')
 
     # Creating a dataset requires an authorization header.
@@ -71,7 +89,7 @@ def update_dataset(dataset_dict):
             raise Exception(f'update_dataset(): dataset {row["Title"]} does not exist')
         raise Exception(f'update_dataset(): failed to update dataset. {err}')
     except URLError:
-        raise Exception(f'update_dataset(): invalid URL')
+        raise Exception('update_dataset(): invalid URL')
     
     return count
 
@@ -83,14 +101,20 @@ try:
         for row in reader:  
             # map the details of the dataset to create to a dict
             dataset_dict = {
-                'name': row['Name'], # required
-                'title': row['Title'],
-                'owner_org': row['Publisher'], # Publisher
-                'private': False if row['Dataset visibility'] else True,
-                'license_id': row['License'],
-                'notes': row[csv_column_headers.DATASET_DESC] or "No description provided",
-                'resources': seperate_resources(row),
+                'name': row[csv_column_headers.DATASET_NAME], # required
+                'title': row[csv_column_headers.DATASET_TITLE],
+                'owner_org': row[csv_column_headers.DATASET_PUBLISHER],
+                'license_id': row[csv_column_headers.DATASET_LICENSE],
+                'notes': row[csv_column_headers.DATASET_NOTES] or "No description provided",
+                'private': False if row[csv_column_headers.DATASET_VISIBILITY] else True,
+                'tags': [] if not row[csv_column_headers.DATASET_TAGS] else list([{'name': tag.strip()} for tag in row[csv_column_headers.DATASET_TAGS].split(';')]),
                 'groups': [] if not row[csv_column_headers.DATASET_TOPICS] else list([{'name': topic.strip()} for topic in row[csv_column_headers.DATASET_TOPICS].split(';')]),
+                'resources': seperate_resources(row),
+                'data_owners': row[csv_column_headers.DATASET_DATA_OWNERS],
+                'data_stewards': row[csv_column_headers.DATASET_DATA_STEWARDS],
+                'last_reviewed': convert_date_format(row[csv_column_headers.DATASET_LAST_REVIEWED]),
+                'data_quality': data_quality_lookup(row[csv_column_headers.DATASET_DATA_QUALITY_CATEGORY]),
+                'data_quality_score': row[csv_column_headers.DATASET_DATA_QUALITY_SCORE]
             }
             update_dataset(dataset_dict)
 
