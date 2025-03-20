@@ -8,10 +8,11 @@
     "resources": [
       {
         "name": "Timetable data",
-        "id": "bbb1bae6-4cb5-4642-bbc8-00e130d8dfb9",
+        "id": "aaa1bae6-4cb5-4642-bbc8-00e130d8dfb9",
         "path": "https://bustimetable.com/data",
         "format": "JSON",
-        "description": "Latest bus timetable data"
+        "description": "Latest bus timetable data",
+        "resource_data_category": 1
       }           
     ]
   },
@@ -24,9 +25,11 @@
     "resources": [
       {
         "name": "Train stop locations",
+        "id": "bbb1bae6-4cb5-4642-bbc8-00e130d8dfb8",
         "path": "https://trainstopmap.com/data",
         "format": "CSV",
-        "description": "Latest train stop locations"
+        "description": "Latest train stop locations",
+        "resource_data_category": 0
       }           
     ]
   },
@@ -39,9 +42,11 @@
     "resources": [
       {
         "name": "Network usage",
+        "id": "ccc1bae6-4cb5-4642-bbc8-00e130d8dfb7",
         "path": "https://busnetworkusage.com/data",
         "format": "CSV",
-        "description": "Latest bus network usage data"
+        "description": "Latest bus network usage data",
+        "resource_data_category": 0
       }           
     ]
   }

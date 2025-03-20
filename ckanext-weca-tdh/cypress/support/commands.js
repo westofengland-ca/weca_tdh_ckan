@@ -291,6 +291,7 @@ Cypress.Commands.add('loginUser', (callback) => {
   const url = Cypress.config().baseUrl
 
   cy.visit(`${url}/user/login`)
+  //cy.get('#flDebugHideToolBarButton').click();
   cy.get('input[id="field-login"]').type(Cypress.env('CKAN_USERNAME'))
   cy.get('input[id="field-password"]').type(Cypress.env('CKAN_PASSWORD'))
   cy.get('[data-cy="login-button"]').click()

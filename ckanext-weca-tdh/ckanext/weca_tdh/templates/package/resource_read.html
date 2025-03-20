@@ -180,7 +180,7 @@
     {% endif %}
     {% if res.resource_data_category | int  != 0 %}
       <p>{{ _('Don\'t have acesss to the data?') }}</p>
-      <a id="ga-request-access-data" href="https://forms.office.com/e/2qBSFay0aP" class="govuk-button request-form-btn" target="_blank">{{ _('Request access') }}</a>
+      <a id="ga-request-access-data" href="https://forms.office.com/e/2qBSFay0aP" class="govuk-button request-form-btn" target="_blank" data-cy="access-button">{{ _('Request access') }}</a>
     {% endif %}
     <p style="font-size: 16px;">{{ _('To learn more about data access types, see our') }} <a href="{{ h.url_for('weca_tdh.support') ~ '#data-access' }}" target="_blank">{{ _('support page') }}</a>.</p>
   {% endblock %}
