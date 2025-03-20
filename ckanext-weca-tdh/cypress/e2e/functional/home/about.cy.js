@@ -10,7 +10,6 @@ describe('Landing page', () => {
 
     it('should display account actions', () => {
         cy.visit('/')
-        cy.get('#flDebugHideToolBarButton').click();
         cy.get('[data-cy="login-button"]').contains('Log in').click()
         cy.url().should('contain', Cypress.config().baseUrl + '.auth/login/aad')
 
@@ -35,7 +34,6 @@ describe('About page', () => {
 
     it('should display account actions', () => {
         cy.visit('/about')
-        cy.get('#flDebugHideToolBarButton').click();
         cy.get('[data-cy="login-button"]').contains('Log in').click()
         cy.url().should('contain', Cypress.config().baseUrl + '.auth/login/aad')
 
