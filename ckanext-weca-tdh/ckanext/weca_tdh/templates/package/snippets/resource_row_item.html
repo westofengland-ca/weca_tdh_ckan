@@ -78,7 +78,7 @@
 
               {% if res.url and h.is_url(res.url) %}
                 <li>
-                  <a class="dropdown-item resource-url-analytics" href="{{ res.url }}" target="_blank" rel="noreferrer">
+                  <a class="dropdown-item" href="{{ res.url }}" target="_blank" rel="noreferrer">
                     {% if res.url_type != 'upload' %}
                       <i class="fa fa-external-link"></i>
                       {{ _('Go to resource') }}
