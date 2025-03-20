@@ -35,7 +35,7 @@
     
     <h2 class="toggle-heading">{{ _('How do I access the Data Catalogue?') }} <a href="javascript:void(0);" onclick="toggleElement('a4', this)" style="text-decoration: none;" class="toggle-arrow">&#9660;</a></h2> 
     <p class="govuk-body-m" id="a4" style="display: none;">{{ _('You can access the Data Catalogue by logging in with your existing account or requesting access by') }} 
-        <a href="https://forms.office.com/e/GnirTe2sLs" target="_blank">{{ _('filling out this form') }}</a>.</p>  
+        <a id="ga-request-access-account" href="https://forms.office.com/e/GnirTe2sLs" target="_blank">{{ _('filling out this form') }}</a>.</p>  
     
     <h2 class="toggle-heading">{{ _('What is a user story?') }} <a href="javascript:void(0);" onclick="toggleElement('a5', this)" style="text-decoration: none;" class="toggle-arrow">&#9660;</a></h2>  
     <p class="govuk-body-m" id="a5" style="display: none;">{{ _('A user story is a way to describe a data-related task or goal from an end-user’s perspective.  
@@ -44,7 +44,7 @@
     
     <h2 class="toggle-heading">{{ _('How can I add a user story?') }} <a href="javascript:void(0);" onclick="toggleElement('a6', this)" style="text-decoration: none;" class="toggle-arrow">&#9660;</a></h2>  
     <p class="govuk-body-m" id="a6" style="display: none;">{{ _('You can contribute a new user story by') }} 
-        <a href="{{ h.url_for('weca_tdh.support') }}" target="_blank">{{ _('submitting it here.') }}</a> 
+        <a id="ga-submit-idea" href="{{ h.url_for('weca_tdh.support') }}" target="_blank">{{ _('submitting it here.') }}</a> 
         {{ _('Our team will review submissions to help shape future TDH developments.') }}</p>  
     
     <h2 class="toggle-heading">{{ _('How do I get help with the TDH?') }} <a href="javascript:void(0);" onclick="toggleElement('a7', this)" style="text-decoration: none;" class="toggle-arrow">&#9660;</a></h2>  

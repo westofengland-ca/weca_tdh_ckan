@@ -4,6 +4,7 @@
     {% if userobj %}
         <p><b>{{ _('Got an idea?') }}</b></p>
         {{ govukButton({
+        'id': "ga-submit-idea",
         'text': "Submit an idea",
         'href': "/support",
         'classes': 'action-button',
@@ -18,6 +19,7 @@
         'attributes': {'data-cy': 'login-button'}
         }) }}
         {{ govukButton({
+        'id': "ga-request-access-account",
         'text': "Request account",
         'href': "https://forms.office.com/e/GnirTe2sLs",
         'classes': 'action-button action-button-request govuk-button--secondary',
