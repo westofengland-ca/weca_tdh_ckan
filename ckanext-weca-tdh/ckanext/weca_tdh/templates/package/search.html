@@ -20,7 +20,7 @@
     {% snippet "snippets/search_form.html", label="Keywords", query=q %}  
   {% endblock %}
   {% block search_filters %}
-    {% set facetLabels = ["organization", "groups", "res_format"] %}
+    {% set facetLabels = ["organization", "groups", "res_format", "res_data_access", "res_data_category"] %}
     {% for facet in facetLabels %}
       {% snippet 'package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped %}
     {% endfor %}

@@ -1,3 +1,4 @@
+import json
 import logging
 import re
 from inspect import getmembers, isfunction
@@ -28,6 +29,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IDatasetForm)
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IPackageController)
+    plugins.implements(plugins.IFacets)
 
     # IConfigurer
     def update_config(self, config: CKANConfig):
@@ -173,6 +175,33 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         return search_results
     
     def before_dataset_index(self, pkg_dict):
+        validated_data = pkg_dict.get('validated_data_dict')
+        if not validated_data:
+            return pkg_dict
+        
+        try:
+            val_dict = json.loads(validated_data)
+            res_dict = val_dict.get('resources', [])
+            
+            resource_data_access_types = [
+                res.get('resource_data_access') 
+                for res in res_dict 
+                if res.get('resource_data_access')
+            ]
+            if resource_data_access_types:
+                pkg_dict['res_data_access'] = list(set(resource_data_access_types))
+
+            resource_data_categories = [
+                res.get('resource_data_category') 
+                for res in res_dict 
+                if res.get('resource_data_category')
+            ]
+            if resource_data_categories:
+                pkg_dict['res_data_category'] = list(set(resource_data_categories))
+
+        except Exception as e:
+            log.error(f"Failed to index custom dataset metadata: {e}")
+
         return pkg_dict
     
     def before_dataset_view(self, pkg_dict):
@@ -201,3 +230,18 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def after_dataset_show(self, context, pkg_dict):
         return pkg_dict
+
+    '''
+    Override search facets
+    '''
+    def dataset_facets(self, facets_dict, package_type):
+        facets_dict['res_data_access'] = plugins.toolkit._('Data Access') 
+        facets_dict['res_data_category'] = plugins.toolkit._('Data Category') 
+
+        return facets_dict
+    
+    def organization_facets(self, facets_dict, organization_type, package_type):
+        return facets_dict
+
+    def group_facets(self, facets_dict, group_type, package_type):
+        return facets_dict

@@ -11,15 +11,26 @@
 {% from "components/select/macro.html" import govukSelect %}
 
 {% block filter_items %}
-  {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format"} %}
+  {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format", 'res_data_access': "Access Type", 'res_data_category': "Data Category"} %}
   {% set filter_items = [{'value': "", 'text': ""}] %}
+
+  {% if name == 'res_data_category' %}
+    {% set categories = h.get_resource_data_categories() %}
+  {% endif %}
 
   {% set items = h.get_facet_items_dict(name, search_facets) %}
   {% for item in items %}    
     {% if ''.join(fields_grouped[name]) == item.name %}
       {% set selected = true %}   
     {% endif %}
-    {{ filter_items.append({'value': item.name, 'text': item.display_name, 'selected': selected}) or "" }}
+
+    {% if categories %}
+      {% set text = categories[item.name | int].name %}
+    {% else %}
+      {% set text = item.name %}
+    {% endif %}
+
+    {{ filter_items.append({'value': item.name, 'text': text, 'selected': selected}) or "" }}
   {% endfor %}
 
   {% if name == 'res_format' %}
