@@ -157,18 +157,20 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     Override package search
     '''
     def before_dataset_search(self, search_params: dict) -> dict:
-        for (param, value) in search_params.items():
-            if param == 'fq' and 'res_format:"' in value:
-                # capture file format without quotes
-                pattern = r'res_format:"([^"]+)"'
+        if "fq" in search_params:
+            patterns = {
+                "res_format": r'res_format:"([^"]+)"',
+                "res_data_access": r'res_data_access:"([^"]+)"',
+                "res_data_category": r'res_data_category:"([^"]+)"'
+            }
 
-                # replace matched pattern with captured group, escape whitespace, and add wildcards
-                search_params[param] = re.sub(
+            for field, pattern in patterns.items():
+                search_params["fq"] = re.sub(
                     pattern, 
-                    lambda match: 'res_format:*{}*'.format(match.group(1).replace(" ", r"\ ")), 
-                    value
+                    lambda match: "{}:*{}*".format(field, match.group(1).replace(" ", "\\ ")), 
+                    search_params["fq"]
                 )
-            
+
         return search_params
 
     def after_dataset_search(self, search_results, search_params):
@@ -183,21 +185,17 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             val_dict = json.loads(validated_data)
             res_dict = val_dict.get('resources', [])
             
-            resource_data_access_types = [
-                res.get('resource_data_access') 
-                for res in res_dict 
-                if res.get('resource_data_access')
-            ]
+            resource_data_access_types = list(set(
+                    res.get('resource_data_access') for res in res_dict if res.get('resource_data_access')
+            ))
             if resource_data_access_types:
-                pkg_dict['res_data_access'] = list(set(resource_data_access_types))
+                pkg_dict['res_data_access'] = ', '.join(resource_data_access_types)  
 
-            resource_data_categories = [
-                res.get('resource_data_category') 
-                for res in res_dict 
-                if res.get('resource_data_category')
-            ]
+            resource_data_categories = list(set(
+                    res.get('resource_data_category') for res in res_dict if res.get('resource_data_category')
+            ))
             if resource_data_categories:
-                pkg_dict['res_data_category'] = list(set(resource_data_categories))
+                pkg_dict['res_data_category'] = ', '.join(resource_data_categories)  
 
         except Exception as e:
             log.error(f"Failed to index custom dataset metadata: {e}")

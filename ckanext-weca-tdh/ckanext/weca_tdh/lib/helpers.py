@@ -100,29 +100,19 @@ def get_data_quality_markings() -> list:
 
     return data_quality_markings
 
-def sort_file_formats(filter_items: list) -> list:  
+def sort_search_filter_items(filter_items: list, filter_type=None) -> list:  
     sorted_items = []
-
-    # Set to track seen values
     seen_values = set()
+    categories = get_resource_data_categories() if filter_type == 'res_data_category' else {}
 
     for item in filter_items:
-        if ',' in item['value']:
-            # Split the comma-separated values
-            values = item['value'].split(', ')
-            for value in values:
-                if value not in seen_values:
-                    # Add the value to the seen set
-                    seen_values.add(value)
-                    # Create new entries for each unique value
-                    sorted_items.append({'value': value, 'text': value, 'selected': item.get('selected', 'Undefined')})
-        else:
-            if item['value'] not in seen_values:
-                # Add the value to the seen set
-                seen_values.add(item['value'])
-                # Keep the entry as is
-                sorted_items.append(item)
-    
+        values = item['value'].split(', ') if ',' in item['value'] else [item['value']]
+        for value in values:
+            if value not in seen_values:
+                seen_values.add(value)
+                mapped_value = categories[int(value)].get('name', value) if value and categories else value
+                sorted_items.append({'value': value, 'text': mapped_value, 'selected': item.get('selected', 'Undefined')})
+
     return sorted_items
 
 def sort_custom_metadata(page_items: list, current_filter: str) -> list:  
