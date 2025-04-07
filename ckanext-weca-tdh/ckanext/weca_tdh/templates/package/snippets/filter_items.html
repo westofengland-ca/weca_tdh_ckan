@@ -21,7 +21,7 @@
       {% set selected = true %}
     {% endif %}
 
-    {{ filter_items.append({'value': item.name, 'text': item.name, 'selected': selected}) or "" }}
+    {{ filter_items.append({'value': item.name, 'text': item.display_name, 'selected': selected}) or "" }}
   {% endfor %}
 
   {% set filter_type = name if name in ('res_format', 'res_data_access', 'res_data_category') %}
