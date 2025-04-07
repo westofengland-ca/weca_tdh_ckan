@@ -6,9 +6,9 @@
         {{ govukButton({
         'id': "ga-submit-idea",
         'text': "Submit an idea",
-        'href': "/support",
+        'href': "https://forms.office.com/e/6rj0EMtHLN",
         'classes': 'action-button',
-        'attributes': {'data-cy': 'submit-us-button'}
+        'attributes': {'target': '_blank', 'data-cy': 'submit-us-button'}
         }) }}
     {% else %}
         <p><b>{{ _('Get Started') }}</b></p>
