@@ -42,10 +42,10 @@ def seperate_resources(row):
 
 def data_category_lookup(category):
     data_categories = {
-        "Open": 0,
-        "Controlled": 1,
-        "Controlled (Personal Info)": 2,
-        "Confidential": 3
+        "Open": "0",
+        "Controlled": "1",
+        "Controlled (Personal Info)": "2",
+        "Confidential": "3"
     }
     return data_categories.get(category)
 
