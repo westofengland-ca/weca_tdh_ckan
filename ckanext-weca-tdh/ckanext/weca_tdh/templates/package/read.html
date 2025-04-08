@@ -71,6 +71,14 @@
                     {% endif %}
                   </a>
                 </dd>
+                <dt>{{ _('Data Owner:') }}</dt>
+                <dd property="dc:owner" data-cy="package-owner">
+                  {{ ', '.join(h.json_loads(pkg.data_owners)) }}
+                </dd>
+                <dt>{{ _('Data Stewards:') }}</dt>
+                <dd property="dc:stewards" data-cy="package-stewards">
+                  {{ ', '.join(h.json_loads(pkg.data_stewards)) }}
+                </dd>
               </dl>
               {% block package_summary %}
                 <h3 class="heading-small" style="font-size:19px">{{ _('Summary') }}</h3>
