@@ -71,11 +71,11 @@
                     {% endif %}
                   </a>
                 </dd>
-                <dt>{{ _('Data Owner:') }}</dt>
+                <dt>{{ _('Data Owner(s):') }}</dt>
                 <dd property="dc:owner" data-cy="package-owner">
                   {{ ', '.join(h.json_loads(pkg.data_owners)) }}
                 </dd>
-                <dt>{{ _('Data Stewards:') }}</dt>
+                <dt>{{ _('Data Steward(s):') }}</dt>
                 <dd property="dc:stewards" data-cy="package-stewards">
                   {{ ', '.join(h.json_loads(pkg.data_stewards)) }}
                 </dd>
