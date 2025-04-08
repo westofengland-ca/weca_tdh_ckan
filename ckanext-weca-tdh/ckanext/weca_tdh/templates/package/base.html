@@ -2,7 +2,10 @@
 
 {% if pkg_dict %}
   {% set collaborators = h.get_collaborators(pkg_dict.id) %}
-  {% set pkg_dict = h.update_package_metadata(pkg_dict, key='data_stewards', value=h.transform_collaborators(collaborators)) %}
+  {% do h.update_package_metadata(pkg_dict, key='data_stewards', value=h.transform_collaborators(collaborators)) %}
+
+  {% set data_owners = h.get_organization(pkg_dict.organization.id).users %}
+  {% do h.update_package_metadata(pkg_dict, key='data_owners', value=h.transform_data_owners(data_owners)) %}
 {% endif %}
 
 {% block breadcrumb_content %}

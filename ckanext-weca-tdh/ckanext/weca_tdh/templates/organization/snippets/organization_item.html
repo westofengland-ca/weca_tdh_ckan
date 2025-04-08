@@ -1,7 +1,8 @@
 {#
 Renders a media item for a organization. This should be used in a list.
 
-organization - A organization dict.
+organization - An organization dict.
+item_class - A CSS class
 
 Example:
 
@@ -13,7 +14,7 @@ Example:
 #}
 {% set url = h.url_for(organization.type ~ '.read', id=organization.name) %}
 {% block item %}
-<li class="media-item-tdh" style="position: relative;">
+<li class="media-item-tdh {{item_class}}" style="position: relative;">
   {% block item_inner %}
   {% block image %}
     <div class="media-image-container">

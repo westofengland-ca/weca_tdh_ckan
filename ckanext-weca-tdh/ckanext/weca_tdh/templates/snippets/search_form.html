@@ -4,6 +4,7 @@
   label - The search input label
   placeholder - The search input placeholder text
   query - The search query
+  advanced - Show advanced search option
 
   Example: {% snippet "snippets/search_form.html", query=q, placeholder="Search topics..." %} 
 #}
@@ -17,5 +18,8 @@
   <div class="search-wrapper">
     <input class="search-input" id="keywords" type="text" placeholder="{{ placeholder }}" name="q" value="{{ query }}" aria-label="search-input" data-cy="search-input">           
     <button class="search-submit" type="submit" title="search-button" data-cy="search-button"><i class="fa fa-search"></i></button>
+    {% if advanced %}
+      <a class="search-advanced" href="/dataset">{{ _('Advanced search') }}</a>
+    {% endif %}
   </div>
 {% endblock %}    
