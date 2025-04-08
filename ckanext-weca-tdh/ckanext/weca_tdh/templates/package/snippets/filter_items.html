@@ -11,22 +11,25 @@
 {% from "components/select/macro.html" import govukSelect %}
 
 {% block filter_items %}
-  {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format"} %}
+  {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format", 'res_data_access': "Data Access", 'res_data_category': "Data Category"} %}
+  {% set filter_titles = {'res_data_access': "The method for accessing the data", 'res_data_category': "The data access classification (sensitivity)"} %}
   {% set filter_items = [{'value': "", 'text': ""}] %}
 
   {% set items = h.get_facet_items_dict(name, search_facets) %}
   {% for item in items %}    
     {% if ''.join(fields_grouped[name]) == item.name %}
-      {% set selected = true %}   
+      {% set selected = true %}
     {% endif %}
+
     {{ filter_items.append({'value': item.name, 'text': item.display_name, 'selected': selected}) or "" }}
   {% endfor %}
 
-  {% if name == 'res_format' %}
-    {% set filter_items = h.sort_file_formats(filter_items) %}
+  {% set filter_type = name if name in ('res_format', 'res_data_access', 'res_data_category') %}
+  {% if filter_type %}
+    {% set filter_items = h.sort_search_filter_items(filter_items, filter_type) %}
   {% endif %}
 
-  <label class="govuk-label sort-label" for="{{name}}">{{ filter_labels[name] }}</label>
+  <label class="govuk-label sort-label" title="{{filter_titles[name]}}" for="{{name}}">{{ filter_labels[name] }}</label>
   {{ govukSelect({
     'id': name,
     'name': name,

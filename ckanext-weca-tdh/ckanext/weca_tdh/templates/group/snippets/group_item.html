@@ -2,6 +2,7 @@
 Renders a media item for a group. This should be used in a list.
 
 group - A group dict.
+item_class - A CSS class
 
 Example:
 
@@ -14,7 +15,7 @@ Example:
 {% set type = group.type or 'group' %}
 {% set url = h.url_for(type ~ '.read', id=group.name) %}
 {% block item %}
-<li class="media-item-tdh" style="position: relative;">
+<li class="media-item-tdh {{item_class}}" style="position: relative;">
   {% block item_inner %}
   {% block image %}
     <div class="media-image-container">

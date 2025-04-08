@@ -51,7 +51,7 @@
                 </dd>
                 <dt>{{ _('Data Quality:') }}</dt>
                 <dd property="dc:quality" data-cy="package-quality">
-                  <a href="{{ h.url_for('home.about') ~ '#data-quality'}}">
+                  <a href="{{ h.url_for('weca_tdh.support') ~ '#data-quality'}}">
                     {% set data_quality_markings = h.get_data_quality_markings() %}
                     {% if pkg.data_quality %}
                       {% set data_quality = data_quality_markings[pkg.data_quality | int] %}
@@ -93,10 +93,27 @@
             <h3 class="heading-small">{{ _('More from this publisher') }}</h3>
             <a class="govuk-link" href="/organization/{{ pkg.organization.name }}" data-cy="publisher-link">{{ _('All datasets from') }} {{ pkg.organization.title }}</a>
           </div>
+          {% block request_access %}
+            <div class="dataset-right-sidebar">
+              {% set is_sensitive = pkg.resources 
+                | selectattr("resource_data_category", "defined") 
+                | map(attribute="resource_data_category") 
+                | select("ne", "0") 
+                | list 
+              %}
+              {% if is_sensitive %}
+                <h3 class="heading-small">{{ _('Don\'t have access to the data?') }}</h3>
+                <a id="ga-request-access-data" href="https://forms.office.com/e/2qBSFay0aP" 
+                  class="govuk-button request-form-btn" target="_blank" 
+                  data-cy="access-button">{{ _('Request access') }}</a>
+              {% endif %}
+            </div>
+          {% endblock %}
           {% block package_manage %}
             {% if self.content_action() | trim %}
               <div class="content_action">
                 {% block content_action %}
+                  <h3 class="heading-small">{{ _('Admin tools') }}</h3>
                   {% if h.check_access('package_update', {'id':pkg.id }) %}
                     {% link_for _('Manage this dataset'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-light package-manage', icon='wrench' %}
                   {% endif %}
@@ -127,7 +144,7 @@
             {% if not c.userobj %}
               <p>{{ _('You must have an account to suggest edits to this dataset.') }}</p>
               {{ govukButton({
-                'text': "Sign in",
+                'text': "Log in",
                 'href': "/user/login"
               }) }}
             {% else %}

@@ -9,7 +9,7 @@
     {% block login_redirect %}
       {% if show_login_redirect_link %}
         <div>
-          <br>{{ _("You do not have permission to access this page.") }} <a href="{{ h.url_for('user.login') }}">{{ _("Click here to login") }}</a>
+          <br>{{ _("You do not have permission to access this page.") }} <a href="{{ h.url_for('user.login') }}">{{ _("Click here to log in") }}</a>
         </div>
       {% endif %}
     {% endblock %}
