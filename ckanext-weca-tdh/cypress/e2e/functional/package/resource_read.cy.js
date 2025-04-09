@@ -20,7 +20,7 @@ describe('Upload file page', () => {
             cy.loginUser(`dataset/${datasets[0].name}/resource/${datasets[0].resources[0].id}`)
 
             cy.get('[data-cy="access-button"]').contains('Request access').click()
-                .should('have.attr', 'href', 'https://forms.office.com/e/2qBSFay0aP')
+                .should('have.attr', 'href', 'https://forms.office.com/e/nDdBdfgnhU')
         })
     });
 
