@@ -15,6 +15,16 @@
   <p style="border-bottom: 1px solid #ccc; margin-top: 1rem;"></p>
 {% endblock %}
 
+{% block heading %}
+  {{ super() }}
+  <p style="margin-top: 1rem;">
+    <b>{{ _('Data Owner(s):') }}</b>
+    {% for member in h.get_organization(organization.id).users %}
+      {{ h.linked_user(member.id, avatar=10, maxlength=25) }}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </p>
+{% endblock %}
+
 {% block description %}
   {% if organization.description %}
     <p class="description">
