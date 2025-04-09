@@ -20,7 +20,7 @@
   <p style="margin-top: 1rem;">
     <b>{{ _('Data Owner(s):') }}</b>
     {% for member in h.get_organization(organization.id).users %}
-      {{ h.linked_user(member.id, avatar=10, maxlength=25) }}{% if not loop.last %}, {% endif %}
+      {{ h.linked_user(member.id, avatar=15, maxlength=25) }}{% if not loop.last %}, {% endif %}
     {% endfor %}
   </p>
 {% endblock %}

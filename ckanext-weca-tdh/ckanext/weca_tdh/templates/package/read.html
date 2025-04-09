@@ -73,11 +73,23 @@
                 </dd>
                 <dt>{{ _('Data Owner(s):') }}</dt>
                 <dd property="dc:owner" data-cy="package-owner">
-                  {{ ', '.join(h.json_loads(pkg.data_owners)) }}
+                  {% if data_owners %}
+                    {% for owner in data_owners %}
+                      {{ h.linked_user(owner.id, avatar=15, maxlength=25) }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                  {% else %}
+                    {{ _('Unassigned') }}
+                  {% endif %}
                 </dd>
                 <dt>{{ _('Data Steward(s):') }}</dt>
                 <dd property="dc:stewards" data-cy="package-stewards">
-                  {{ ', '.join(h.json_loads(pkg.data_stewards)) }}
+                  {% if collaborators %}
+                    {% for steward in collaborators %}
+                      {{ h.linked_user(steward[0], avatar=15, maxlength=25) }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                  {% else %}
+                    {{ _('Unassigned') }}
+                  {% endif %}
                 </dd>
               </dl>
               {% block package_summary %}
