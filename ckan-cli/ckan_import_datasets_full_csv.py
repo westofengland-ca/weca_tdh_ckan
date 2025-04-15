@@ -111,7 +111,7 @@ try:
                 'resources': seperate_resources(row),
                 'data_owners': row[csv_column_headers.DATASET_DATA_OWNERS],
                 'data_stewards': row[csv_column_headers.DATASET_DATA_STEWARDS],
-                'last_reviewed': convert_date_format(row[csv_column_headers.DATASET_LAST_REVIEWED]),
+                'last_reviewed': row[csv_column_headers.DATASET_LAST_REVIEWED],
                 'data_quality': data_quality_lookup(row[csv_column_headers.DATASET_DATA_QUALITY_CATEGORY]),
                 'data_quality_score': row[csv_column_headers.DATASET_DATA_QUALITY_SCORE]
             }
