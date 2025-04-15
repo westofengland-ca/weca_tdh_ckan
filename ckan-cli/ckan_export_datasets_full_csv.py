@@ -91,8 +91,10 @@ def data_quality_lookup(quality):
     return data_quality_categories.get(quality)
 
 def parse_datasets(datasets: dict):
+    sorted_datasets = sorted(datasets, key=lambda x: x["title"])
+
     with open(args.output_file, mode='a', newline='') as csv_file:
-        for dataset in datasets:
+        for dataset in sorted_datasets:
             resources = join_resources(dataset['resources'])
             dataset_dict = {
                     'Name': dataset['name'],
@@ -112,8 +114,8 @@ def parse_datasets(datasets: dict):
                     'Resource data category': resources.get('resource_data_category'),
                     'Resource data access type': resources.get('resource_data_access'),
                     'Resource date created': resources.get('created'),
-                    'Data owners': join_list_items(dataset.get('data_owners', [])),
-                    'Data stewards': join_list_items(dataset.get('data_stewards', [])),
+                    'Data owners': dataset.get('data_owners', ['Unassigned']),
+                    'Data stewards': dataset.get('data_stewards', ['Unassigned']),
                     "Date created": dataset.get('metadata_created'),
                     "Last modified": dataset.get('metadata_modified'),
                     "Last reviewed": dataset.get('last_reviewed'),

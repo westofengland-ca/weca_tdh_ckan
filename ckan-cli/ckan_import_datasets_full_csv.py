@@ -42,10 +42,10 @@ def seperate_resources(row):
 
 def data_category_lookup(category):
     data_categories = {
-        "Open": 0,
-        "Controlled": 1,
-        "Controlled (Personal Info)": 2,
-        "Confidential": 3
+        "Open": "0",
+        "Controlled": "1",
+        "Controlled (Personal Info)": "2",
+        "Confidential": "3"
     }
     return data_categories.get(category)
 
@@ -111,7 +111,7 @@ try:
                 'resources': seperate_resources(row),
                 'data_owners': row[csv_column_headers.DATASET_DATA_OWNERS],
                 'data_stewards': row[csv_column_headers.DATASET_DATA_STEWARDS],
-                'last_reviewed': convert_date_format(row[csv_column_headers.DATASET_LAST_REVIEWED]),
+                'last_reviewed': row[csv_column_headers.DATASET_LAST_REVIEWED],
                 'data_quality': data_quality_lookup(row[csv_column_headers.DATASET_DATA_QUALITY_CATEGORY]),
                 'data_quality_score': row[csv_column_headers.DATASET_DATA_QUALITY_SCORE]
             }
