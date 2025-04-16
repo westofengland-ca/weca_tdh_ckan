@@ -156,8 +156,8 @@
             {% if self.content_action() | trim %}
               <div class="content_action">
                 {% block content_action %}
-                  <h3 class="heading-small">{{ _('Admin tools') }}</h3>
                   {% if h.check_access('package_update', {'id':pkg.id }) %}
+                    <h3 class="heading-small">{{ _('Admin tools') }}</h3>
                     {% link_for _('Manage this dataset'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-light package-manage', icon='wrench' %}
                   {% endif %}
                 {% endblock %}
