@@ -15,7 +15,7 @@ describe('Landing page', () => {
 
         cy.visit('/')
         cy.get('[data-cy="request-button"]').contains('Request account')
-            .should('have.attr', 'href', 'https://forms.office.com/e/GnirTe2sLs')
+            .should('have.attr', 'href', 'https://forms.office.com/e/F00dpVFRQx')
 
         cy.get('[data-cy="support-details"]').click()
         cy.url().should('eq', Cypress.config().baseUrl + 'support')
@@ -39,7 +39,7 @@ describe('About page', () => {
 
         cy.visit('/about')
         cy.get('[data-cy="request-button"]').contains('Request account')
-            .should('have.attr', 'href', 'https://forms.office.com/e/GnirTe2sLs')
+            .should('have.attr', 'href', 'https://forms.office.com/e/F00dpVFRQx')
 
         cy.get('[data-cy="support-details"]').click()
         cy.url().should('eq', Cypress.config().baseUrl + 'support')

@@ -1,5 +1,19 @@
 {% ckan_extends %}
 
+{% block user_about %}
+    {% if user.about %}
+        {{ user.about }}
+    {% else %}
+        <p class="empty">
+        {% if is_myself %}
+            {% trans %}You have not provided a biography.{% endtrans %}
+        {% else %}
+            {% trans %}This user has no biography.{% endtrans %}
+        {% endif %}
+        </p>
+    {% endif %}
+{% endblock %}
+
 {% block user_nums %}
     <div class="nums">
     <dl>

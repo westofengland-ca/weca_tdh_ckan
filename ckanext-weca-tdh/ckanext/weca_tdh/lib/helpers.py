@@ -166,6 +166,18 @@ def transform_data_owners(data_owners: dict) -> str:
     else:
         names_list.append('Unassigned')
         return json.dumps(names_list)
+    
+def json_loads(string_list):
+    if not string_list:
+        return []
+
+    try:
+        parsed_list = json.loads(string_list)
+        clean_list = [str(item) for item in parsed_list if item is not None]
+
+        return clean_list
+    except (json.JSONDecodeError, TypeError):
+        return []
 
 def build_databricks_auth_url(resource_id: str, referrer: str) -> str:
     client_id = C.TDH_DB_APP_CLIENT_ID
