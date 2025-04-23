@@ -2,9 +2,15 @@
 
 {% block heading_private %}
   {% if package.private %}
-    <span class="dataset-private badge pull-right dataset-marking">
+    <span class="dataset-private badge dataset-marking">
       <i class="fa fa-lock"></i>
       {{ _('Private') }}
+    </span>
+  {% endif %}
+  {% if package.availability == 'upcoming' %}
+    <span class="dataset-upcoming badge dataset-marking">
+      <i class="fa fa-hourglass-half"></i>
+      {{ _('Coming Soon') }}
     </span>
   {% endif %}
 {% endblock %}

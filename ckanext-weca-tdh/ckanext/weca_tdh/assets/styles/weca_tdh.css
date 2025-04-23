@@ -8006,17 +8006,27 @@ p.gem-c-lead-paragraph {
   margin-bottom: 20px;
 }
 
-.dataset-private, .dataset-public {
-  margin-top: 10px;
+.dataset-private, .dataset-public, .dataset-upcoming {
+  margin-top: 5px;
   text-transform: uppercase;
 }
 
 .dataset-private {
   background-color: #660000;
+  margin-right: 0px;
+  margin-left: 10px;
 }
 
 .dataset-public {
   background-color: #00703c;
+}
+
+.dataset-upcoming {
+  background-color: #007BFF;
+}
+
+.fa-lock, .fa-hourglass-half {
+  margin-right: 3px;
 }
 
 .resource-data-category {

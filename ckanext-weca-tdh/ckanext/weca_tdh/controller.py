@@ -3,6 +3,7 @@ import json
 import ckan.plugins.toolkit as toolkit
 
 import ckanext.weca_tdh.config as C
+from ckanext.weca_tdh.lib.helpers import update_package_metadata_list
 
 
 class RouteController(object):
@@ -21,6 +22,15 @@ class RouteController(object):
     @staticmethod
     def render_tdh_partner_connect_page():
         return toolkit.render('tdh_partner_connect.html')
+    
+    @staticmethod
+    def update_dataset_interest(dataset_id):
+        pkg_dict = toolkit.get_action('package_show')({}, {'id': dataset_id})
+        user_email = toolkit.g.userobj.email
+
+        update_package_metadata_list(pkg_dict, key='expressed_interest', value=user_email)
+
+        return toolkit.redirect_to('dataset.read', id=dataset_id)
     
     @staticmethod
     def download_tdh_partner_connect_file() -> str:
