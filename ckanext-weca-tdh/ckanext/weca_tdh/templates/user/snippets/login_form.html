@@ -4,7 +4,7 @@
 {% if external_only == 'True' %}
   <div class="auth-providers">
     <div class="ms-login">
-      <p class="govuk-body">{{ _('Click here to log in using West Of England Combined Authority Active Directory/Microsoft Entra ID:') }}</p>
+      <p class="govuk-body">{{ _('Click here to log in using West of England Mayoral Combined Authority Active Directory/Microsoft Entra ID:') }}</p>
         {{ govukButton({
           'text': "Log in",
           'href': "/.auth/login/aad?post_login_redirect_url=/user/adlogin?referrer=" + request.path
