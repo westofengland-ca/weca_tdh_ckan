@@ -79,6 +79,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         rules = [
             ('/support', 'support', RouteController.render_support_page),
             ('/support/<path:path>', 'support_pages', RouteController.render_support_pages),
+            ('/dataset/<dataset_id>/interest', 'dataset_interest', RouteController.update_dataset_interest),
             ('/tdh_partner_connect', 'tdh_partner_connect', RouteController.render_tdh_partner_connect_page),
             ('/tdh_partner_connect_file', 'tdh_partner_connect_file', RouteController.download_tdh_partner_connect_file)
         ]
@@ -93,6 +94,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     def _modify_package_schema(self, schema: Schema) -> Schema:
         # modify package schema with custom field
         schema.update({
+            'availability': [toolkit.get_validator('ignore_missing'),
+                            toolkit.get_converter('convert_to_extras')],
             'data_owners': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
             'data_quality': [toolkit.get_validator('ignore_missing'),
@@ -100,6 +103,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'data_quality_score': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
             'data_stewards': [toolkit.get_validator('ignore_missing'),
+                                toolkit.get_converter('convert_to_extras')],
+            'expressed_interest': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
             'last_reviewed': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')]
@@ -122,6 +127,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     def show_package_schema(self) -> Schema:
         schema: Schema = super(WecaTdhPlugin, self).show_package_schema()
         schema.update({
+            'availability': [toolkit.get_converter('convert_from_extras'),
+                            toolkit.get_validator('ignore_missing')],
             'data_owners': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing'),
                              toolkit.get_converter('convert_to_json_if_string')],
@@ -132,6 +139,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'data_stewards': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing'),
                              toolkit.get_converter('convert_to_json_if_string')],
+            'expressed_interest': [toolkit.get_converter('convert_from_extras'),
+                              toolkit.get_validator('ignore_missing')],
             'last_reviewed': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')]
         })

@@ -10,12 +10,21 @@
     <section class="meta-data">
       {% block package_metadata %}
         <div class="column-two-thirds package-content">
-          <div class="metadata-box metadata-box--in-dataset">   
+          <div class="metadata-box metadata-box--in-dataset">
             {% block package_visibility %}
               {% if pkg.private %}
-                <span class="dataset-private badge pull-right dataset-marking">
+                <span class="dataset-private badge dataset-marking">
                   <i class="fa fa-lock"></i>
                   {{ _('Private') }}
+                </span>
+              {% endif %}
+            {% endblock %}
+
+            {% block package_availability %}
+              {% if pkg.availability == 'upcoming' %}
+                <span class="dataset-upcoming badge dataset-marking">
+                  <i class="fa fa-hourglass-half"></i>
+                  {{ _('Coming Soon') }}
                 </span>
               {% endif %}
             {% endblock %}
@@ -115,17 +124,31 @@
           </div>
           {% block request_access %}
             <div class="dataset-right-sidebar">
-              {% set is_sensitive = pkg.resources 
-                | selectattr("resource_data_category", "defined") 
-                | map(attribute="resource_data_category") 
-                | select("ne", "0") 
-                | list 
+              {% set sensitive_resources = pkg.resources
+                | selectattr("resource_data_category", "defined")
+                | map(attribute="resource_data_category")
+                | select("ne", "0")
+                | list
               %}
-              {% if is_sensitive %}
+
+              {% if pkg.availability == 'upcoming' %}
+                <h3 class="heading-small">{{ _('Interested in this dataset?') }}</h3>
+                <a id="ga-express-interest-data"
+                  href="{{ url_for('weca_tdh.dataset_interest', dataset_id=pkg.name) }}"
+                  class="govuk-button request-form-btn"
+                  data-cy="interest-button">
+                  {{ _('Express interest') }}
+                </a>
+          
+              {% elif sensitive_resources %}
                 <h3 class="heading-small">{{ _('Don\'t have access to the data?') }}</h3>
-                <a id="ga-request-access-data" href="https://forms.office.com/e/nDdBdfgnhU" 
-                  class="govuk-button request-form-btn" target="_blank" 
-                  data-cy="access-button">{{ _('Request access') }}</a>
+                <a id="ga-request-access-data"
+                  href="https://forms.office.com/e/nDdBdfgnhU"
+                  class="govuk-button request-form-btn"
+                  target="_blank"
+                  data-cy="access-button">
+                  {{ _('Request access') }}
+                </a>
               {% endif %}
             </div>
           {% endblock %}
@@ -133,8 +156,8 @@
             {% if self.content_action() | trim %}
               <div class="content_action">
                 {% block content_action %}
-                  <h3 class="heading-small">{{ _('Admin tools') }}</h3>
                   {% if h.check_access('package_update', {'id':pkg.id }) %}
+                    <h3 class="heading-small">{{ _('Admin tools') }}</h3>
                     {% link_for _('Manage this dataset'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-light package-manage', icon='wrench' %}
                   {% endif %}
                 {% endblock %}

@@ -9,7 +9,17 @@
   </li>
 {% endblock %}
 
-{% block header_account_container_content %} 
+{% block header_account_logged %}
+  <li>
+    <a href="https://forms.office.com/e/6rj0EMtHLN" title="Suggest a new idea or feedback" target="_blank">
+      <i class="fa-solid fa-lightbulb"></i>
+      {{ _('Submit an idea') }}
+    </a>
+  </li>
+  {{ super() }}
+{% endblock %}
+
+{% block header_account_container_content %}
   {% if c.userobj %}
     {{ super() }}
   {% else %}
@@ -25,7 +35,7 @@
       {% endblock %}
     </ul>
   </nav>
-  {% endif %} 
+  {% endif %}
 {% endblock %}
 
 {% block header_logo %}

@@ -47,7 +47,7 @@ describe('About page', () => {
     
     it('should display idea submission', () => {
         cy.loginUser('/about')
-        cy.get('[data-cy="submit-us-button"]').contains('Submit an idea')
+        cy.get('[data-cy="submit-us-button"]').contains('Submit it here')
             .should('have.attr', 'href', '/support')
 
         cy.get('[data-cy="support-details"]').click()

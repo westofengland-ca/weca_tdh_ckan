@@ -5,7 +5,7 @@ from datetime import datetime
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.databricks import oauth_code_verify_and_challenge
-from flask import session
+from flask import flash, session
 
 log = logging.getLogger(__name__)
 
@@ -137,8 +137,21 @@ def sort_custom_metadata(page_items: list, current_filter: str) -> list:
     
     return sorted_items
 
-def update_package_metadata(pkg_dict: dict, key: str, value: any) -> dict:  
+def update_package_metadata(pkg_dict: dict, key: str, value: any) -> dict:
     pkg_dict[key] = value
+    return toolkit.get_action('package_update')(context = {'ignore_auth': True}, data_dict = pkg_dict)
+
+def update_package_metadata_list(pkg_dict: dict, key: str, value: any) -> dict:
+    existing = pkg_dict.get(key, '')
+    existing_values = [v.strip() for v in existing.split(',')] if existing else []
+
+    if value in existing_values:
+        flash("You've already expressed interest in this dataset.", category='alert-info')
+    else:
+        existing_values.append(value)
+        pkg_dict[key] = ', '.join(existing_values)
+        flash("Thanks! Your interest has been recorded.", category='alert-success')
+
     return toolkit.get_action('package_update')(context = {'ignore_auth': True}, data_dict = pkg_dict)
 
 def transform_collaborators(collaborators: tuple) -> str:
