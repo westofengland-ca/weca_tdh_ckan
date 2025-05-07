@@ -1,0 +1,37 @@
+{% set type = package.type or 'package' %}
+{% set url = h.url_for(type ~ '.read', id=package.name) %}
+
+{% block package_item %}
+  <li class="media-item-tdh {{item_class}}">
+    {% block item_inner %}
+      {% if package.availability == 'upcoming' %}
+        <span class="dataset-upcoming-home badge dataset-marking">
+          <i class="fa fa-hourglass-half"></i>
+          {{ _('Coming Soon') }}
+        </span>
+        {% else %}
+          <span class="dataset-new-home badge dataset-marking">
+            <i class="fa fa-bell"></i>
+            {{ _('New') }}
+          </span>
+      {% endif %}
+      {% block image %}
+        <div class="media-image-container">
+          <img src="{{ package.organization.image_url or h.url_for_static('/base/images/placeholder-organization.png') }}" alt="{{ package.title }}" class="media-image img-fluid">    
+        </div>
+        <p style="border-bottom: 1px solid #ccc; margin-top: 5px;"></p>
+      {% endblock %}
+      {% block title %}
+        <h2 class="media-heading">{{ package.title }}</h2>
+      {% endblock %}
+      {% block link %}
+        <a href="{{ url }}" title="{{ _('View {name}').format(name=package.title) }}" class="media-view">
+          <span>{{ _('View {name}').format(name=package.title) }}</span>
+        </a>
+      {% endblock %}
+    {% endblock %}
+  </li>
+{% endblock %}
+{% if position is divisibleby 3 or last %}
+  <li class="clearfix"></li>
+{% endif %}
