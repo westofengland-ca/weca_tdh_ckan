@@ -14,4 +14,4 @@ jobs:
     with:
       ckan-base-version: "2.11"
       ckan-version: "2.11.2"
-      tdh-version: "1.2.3"
+      tdh-version: "1.2.4"
