@@ -386,8 +386,11 @@ a.search-advanced {
     color: white;
     background: #1d70b8;
     padding: 6px;
-    border: 2px solid black;
     border-radius: 5px;
+}
+
+button.search-submit:hover, a.search-advanced:hover {
+    background-color: #256298;
 }
 
 i.fa.fa-search {
