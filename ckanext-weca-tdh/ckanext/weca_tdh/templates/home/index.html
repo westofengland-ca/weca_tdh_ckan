@@ -16,13 +16,9 @@
   {% endblock %}
 
   {% block primary_content %}
-    {% block about_header %}
+    {% block landing_header %}
       <div class="about-header">
         <img src="/assets/images/about/keyboard.png" alt="Transport Data Hub Background">
-        <div class="about-overlay">
-          <h1 class="about-header govuk-heading-l">{{ _('TRANSPORT DATA HUB:<b> DATA CATALOGUE') }}</b></h1>
-          <p>{{ _('The first comprehensive regional transport data hub in the West of England.') }}</p>
-        </div>
         <div class="landing-overlay-search">
           {% block landing_page_search %}
             <div class="row search-main">
@@ -37,11 +33,12 @@
     {% block landing_page_about %} 
       <h1 class="landing-header" data-cy="landing-heading">{{ _('Welcome to the TDH Data Catalogue') }}</h1>
       <p data-cy="landing-desc">
-        {{ _('The TDH Data Catalogue is a centralised inventory of data assets developed by the West of England Mayoral Combined Authority as part of the wider Future Transport Zone initiative.') }}
+        {{ _('The TDH Data Catalogue is a centralised inventory of data assets curated by the West of England Mayoral Combined Authority as part of the wider Future Transport Zone initiative.') }}
+        {{ _('Use the search bar or explore by Publisher and Topic to discover a wide range of datasets. ​') }}
       </p>
       <div class="landing-access">
-        <h2>{{ _('Want to access data in the TDH?') }}</h2>
-        <p>{{ _('The Data Catalogue is the front door for accessing data in the TDH. Search for and discover data resources you require.') }}</p>
+        <h2>{{ _('Looking to access TDH Data?') }}</h2>
+        <p>{{ _('This catalogue is your gateway to data in the TDH. Browse available resources and access them through the methods provided on each dataset page.') }}</p>
         <div class="landing-access-connect">
           <div class="access-connect-content">
             <div class="landing-access-methods">
@@ -83,7 +80,7 @@
               'classes': 'action-button',
               'attributes': {'download': 'tdh-partner-connect.pbids', 'data-cy': 'connect-button'}
               }) }}
-              <p style="font-size: 16px;">{{ _('Click') }} <a style="text-decoration: underline;" href="/tdh_partner_connect" data-cy="connect-details">{{ _('here') }}</a> {{ _('for more details') }}</p>
+              <p style="font-size: 16px;">{{ _('Click') }} <a style="text-decoration: underline;" href="/tdh_partner_connect" target="_blank" data-cy="connect-details">{{ _('here') }}</a> {{ _('for more details') }}</p>
             </div>
           </div>
         </div>
@@ -108,7 +105,7 @@
     {% block landing_page_topics %}
       <h3>{{ _('Topics') }}</h3>
       <div class="landing-explore" data-cy="featured-topics">
-        <p>{{ _('Topics are used to create and manage collections of datasets.') }}</p>
+        <p>{{ _('Topics are used to group related datasets.') }}</p>
         {% block topic_list %}
           {% set topics = h.get_featured_groups(5) %}
           {% if topics %}
@@ -124,7 +121,7 @@
     {% block landing_page_publishers %}
       <h3>{{ _('Publishers') }}</h3>
       <div class="landing-explore" data-cy="featured-publishers">
-        <p>{{ _('Publishers are used to create, manage and publish collections of datasets.') }}</p>
+        <p>{{ _('Publishers are used to create, manage, and publish collections of datasets.') }}</p>
         {% block publisher_list %}
           {% set publishers = h.get_featured_organizations(5) %}
           {% if publishers %}

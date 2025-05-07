@@ -7577,7 +7577,6 @@ main {
   display: flex;
   flex-wrap: nowrap;
   gap: 10px;
-  padding: 10px;
 }
 
 .access-box {
@@ -7589,6 +7588,9 @@ main {
 }
 
 .access-box-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 15px;
   border-radius: 3px;
   margin-bottom: 0;
@@ -7610,9 +7612,9 @@ main {
 
 .landing-overlay-search {
   position: absolute;
-  left: 5%;
+  left: 3%;
   right: 5%;
-  top: 20%;
+  bottom: 15%;
   opacity: 95%;
 }
 
@@ -7718,10 +7720,6 @@ main {
   margin-bottom: 10px;
   font-size: 19px !important;
   width: 100%;
-}
-
-.action-button-request {
-  margin-left: 10px;
 }
 
 .about-datahub {
@@ -7854,12 +7852,13 @@ button.search-submit {
 }
 
 a.search-advanced {
-  position: realtive;
+  position: relative;
   float: right;
   white-space: nowrap;
   color: white;
   background: #1d70b8;
   padding: 6px;
+  border: 2px solid black;
   border-radius: 5px;
 }
 
