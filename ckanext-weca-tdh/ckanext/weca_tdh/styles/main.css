@@ -108,9 +108,45 @@ main {
     margin-bottom: 10px;
 }
 
+.landing-access {
+    margin-bottom: 20px;
+}
+
 .landing-access-connect {
     display: flex;
     width: 100%;
+}
+
+.landing-access-methods {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+
+.access-box {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 calc(50% - 10px);
+    text-align: center;
+    border-radius: 5px;
+}
+
+.access-box-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 3px;
+    margin-bottom: 0;
+    background: #6bc9df;
+    min-height: 80px;
+}
+
+.access-box-content {
+    padding: 15px;
+    border-radius: 3px;
+    background: #f6f6f6;
+    flex: 1;
 }
 
 .access-connect-content {
@@ -118,26 +154,31 @@ main {
     min-width: 50%;
 }
 
+.landing-overlay-search {
+    position: absolute;
+    left: 3%;
+    right: 5%;
+    bottom: 15%;
+    opacity: 95%;
+}
+
 .landing-overlay-action {
-    display: grid;
-    background: #354753;
-    color: white;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
     border-radius: 2px;
-    width: 30%;
     min-width: min-content;
     height: fit-content;
     margin-left: 20px;
 }
 
 .landing-overlay-action p {
-    text-align: center;
     height: fit-content;
     margin-bottom: 0px;
 }
 
-.search-main {
-  width: 85%;
+.landing-action {
+    margin-bottom: 20px;
 }
 
 .landing-explore {
@@ -219,9 +260,7 @@ main {
     margin-top: 10px;
     margin-bottom: 10px;
     font-size: 19px !important;
-}
-.action-button-request {
-    margin-left: 10px;
+    width: 100%;
 }
 
 .about-datahub {
@@ -341,9 +380,17 @@ button.search-submit {
 }
 
 a.search-advanced {
-    position: absolute;
-    margin: 10px 7% 0 10px;
+    position: relative;
+    float: right;
     white-space: nowrap;
+    color: white;
+    background: #1d70b8;
+    padding: 6px;
+    border-radius: 5px;
+}
+
+button.search-submit:hover, a.search-advanced:hover {
+    background-color: #256298;
 }
 
 i.fa.fa-search {
@@ -541,8 +588,18 @@ p.gem-c-lead-paragraph {
     background-color: #00703c;
 }
 
-.dataset-upcoming {
+.dataset-upcoming, .dataset-upcoming-home {
     background-color: #007BFF;
+}
+
+.dataset-new-home {
+    background-color: #00703c;
+}
+
+.dataset-upcoming-home, .dataset-new-home {
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-size: 12px;
 }
 
 .fa-lock, .fa-hourglass-half {
