@@ -8116,6 +8116,8 @@ p.gem-c-lead-paragraph {
 
 .data-category-contpi {
   background-color: #b75c1f;
+  white-space: normal;
+  text-align: left;
 }
 
 .data-category-con {
