@@ -344,6 +344,24 @@ main {
     text-decoration: none;
 }
 
+.faq-video {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.faq-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 560px;
+    max-height: 315px;
+}
+
 /* SEARCH PAGE //
 ///////////////*/
 
@@ -620,6 +638,8 @@ p.gem-c-lead-paragraph {
 
 .data-category-contpi {
   background-color: #b75c1f;
+  white-space: normal;
+  text-align: left;
 }
 
 .data-category-con {

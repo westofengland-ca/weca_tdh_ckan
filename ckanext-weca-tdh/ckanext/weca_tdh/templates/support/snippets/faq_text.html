@@ -52,4 +52,16 @@
         <a href="{{ h.url_for('weca_tdh.support') }}" target="_blank">{{ _('support page') }}</a>  
         {{ _('or email us at transportdatahub@westofengland-ca.gov.uk.') }} 
     </p>
+
+    <h2 class="toggle-heading">{{ _('Training resources') }} <a href="javascript:void(0);" onclick="toggleElement('a8', this)" style="text-decoration: none;" class="toggle-arrow">&#9660;</a></h2>  
+    <div class="govuk-body-m" id="a8" style="display: none;">
+        <p>{{ _('Transport Data Hub walkthrough video') }}</p>
+        <div class="faq-video">
+            <iframe width="560" height="315"
+                src="https://www.youtube.com/embed/7YEdkFiStcI?si=kT8FwaLiCwlv9VpG" 
+                title="YouTube video player" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
 </div>
