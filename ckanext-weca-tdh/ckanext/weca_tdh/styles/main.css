@@ -691,8 +691,14 @@ p.gem-c-lead-paragraph {
     vertical-align: text-top;
 }
 
+@media (max-width: 750px) {
+    .metadata-box dt, .metadata-box dd {
+        display: block;
+    }
+}
+
 .metadata-box dt {
-    width: 25%;
+    min-width: 25%;
     font-weight: bold;
     white-space: nowrap;
 }
@@ -707,6 +713,7 @@ p.gem-c-lead-paragraph {
 
 .package-content {
     margin-bottom: 50px;
+    overflow-x: auto;
 }
 
 .govuk-table__cell {
