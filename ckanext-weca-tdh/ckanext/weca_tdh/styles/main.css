@@ -114,6 +114,7 @@ main {
 
 .landing-access-connect {
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
 }
 
@@ -181,6 +182,28 @@ main {
     margin-bottom: 20px;
 }
 
+/* Responsive behavior for smaller screens */
+@media (max-width: 890px) {
+    .access-connect-content,
+    .landing-overlay-action {
+        width: 100%;
+        margin-left: 0; /* remove left margin to prevent awkward spacing */
+        margin-top: 20px; /* add spacing between stacked blocks */
+    }
+
+    .landing-access-methods {
+        flex-wrap: wrap;
+    }
+
+    .landing-media-grid {
+        flex-wrap: wrap;
+    }
+
+    .landing-explore {
+        font-size: 16px;
+    }
+}
+
 .landing-explore {
     margin-bottom: 40px;
 }
@@ -191,6 +214,12 @@ main {
 
 .landing-media-item {
     margin: 0 0.5% 1% 0.5% !important;
+    min-width: 150px;
+}
+
+.media-item-tdh h2 {
+    max-height: 75px;
+    overflow: hidden;
 }
 
 .landing-more {
@@ -233,6 +262,11 @@ main {
     width: 100%;
     height: 95%;
     object-fit: fill;
+}
+@media (max-width: 450px) {
+    .about-header h1 {
+        font-size: 18px;
+    }
 }
 
 .about-overlay  {
@@ -657,8 +691,14 @@ p.gem-c-lead-paragraph {
     vertical-align: text-top;
 }
 
+@media (max-width: 750px) {
+    .metadata-box dt, .metadata-box dd {
+        display: block;
+    }
+}
+
 .metadata-box dt {
-    width: 25%;
+    min-width: 25%;
     font-weight: bold;
     white-space: nowrap;
 }
@@ -673,6 +713,7 @@ p.gem-c-lead-paragraph {
 
 .package-content {
     margin-bottom: 50px;
+    overflow-x: auto;
 }
 
 .govuk-table__cell {
