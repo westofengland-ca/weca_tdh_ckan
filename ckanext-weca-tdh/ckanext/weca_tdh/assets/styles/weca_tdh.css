@@ -7800,6 +7800,9 @@ main {
   .about-datahub, .about-benefits {
     max-width: 100%;
   }
+  .attribution {
+    float: none !important;
+  }
 }
 .about-tdh-content {
   display: flex;
