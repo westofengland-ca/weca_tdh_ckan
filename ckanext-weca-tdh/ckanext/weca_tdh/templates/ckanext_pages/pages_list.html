@@ -1,0 +1,17 @@
+{% extends 'ckanext_pages/edit_base.html' %}
+
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('Documentation'), named_route='pages.pages_index' %}</li>
+{% endblock %}
+
+{% block primary %}
+  <article class="module govuk-body" role="main">
+    {% if h.check_access('ckanext_pages_update', {}) %}
+        {% link_for _('Add document'), named_route='pages.new', page='', class_='btn btn-primary page-action', icon='plus-square' %}
+    {% endif %}
+    {% snippet 'ckanext_pages/snippets/pages_list.html', pages=c.page.items %}
+    {{ c.page.pager() }}
+  </article>
+{% endblock %}
+
+{% block secondary %}{% endblock %}

@@ -7485,7 +7485,7 @@
 .masthead .navbar .navbar-title {
   font-size: 1.4rem;
   color: white;
-  margin-right: 40px;
+  margin-right: 15px;
 }
 
 /* nav pill list */
@@ -7497,6 +7497,7 @@
 .masthead .main-navbar ul li {
   padding-right: 0px;
   padding-top: 5px;
+  margin-right: 0px;
 }
 
 /* nav pill links */
@@ -8368,6 +8369,12 @@ iframe {
 
 .govuk-form-group {
   margin-bottom: 20px;
+}
+
+/* Pages /
+///////*/
+.page-action {
+  float: right;
 }
 
 /* temp flask debug overflow fix */

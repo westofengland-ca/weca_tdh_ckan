@@ -1,5 +1,4 @@
 {% extends "package/read_base.html" %}
-{% from "components/breadcrumbs/macro.html" import govukBreadcrumbs %}
 {% from "components/button/macro.html" import govukButton %}
 
 {% set can_edit = h.check_access('package_update', {'id': pkg_dict.id}) %}
