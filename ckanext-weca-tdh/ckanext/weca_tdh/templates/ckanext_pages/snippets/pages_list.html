@@ -1,0 +1,39 @@
+{% set pages_total = pages|length %}
+{% set action = '{0}_show'.format(type) %}
+
+<h1 class="page-heading page-list-header">{{ title or "Blog" if type == "blog" else "Documentation" }}</h1>
+
+{% if pages %}
+  <div class="page-list">
+    {% set fixed_order = ['Support', 'Frequently Asked Questions (FAQ)'] %}
+
+    {# Helper block to render a page link #}
+    {% macro render_page(page) %}
+      {% if id %}
+        {% set url = h.url_for('pages.{}_pages_show'.format(c.group_dict['type']), id=id, page=page.name) %}
+      {% elif type == 'blog' %}
+        {% set url = h.url_for('pages.blog_show', page=page.name) %}
+      {% else %}
+        {% set url = h.url_for('pages.show', page=page.name) %}
+      {% endif %}
+      {% snippet 'ckanext_pages/snippets/page_item.html', url=url, page=page %}
+    {% endmacro %}
+
+    {# Fixed order pages first #}
+    {% for title in fixed_order %}
+      {% for page in pages if page.title == title %}
+        {{ render_page(page) }}
+      {% endfor %}
+    {% endfor %}
+
+    {# Remaining pages alphabetically #}
+    {% for page in pages|sort(attribute='title') if page.title not in fixed_order %}
+      {{ render_page(page) }}
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="empty">
+    {{ _('There are currently no blog articles here') if type == 'blog' else _('There are currently no documents here') }}
+  </p>
+{% endif %}
+
