@@ -1,6 +1,24 @@
 {% ckan_extends %}
 
+{% block form_basic_fields %}
+  {{ form.input('title', id='field-title', label=_('Title'), placeholder=title_placeholder, value=data.title, error=errors.title, classes=['control-full', 'control-large'], attrs={'data-module': 'slug-preview-target', 'class': 'form-control'}) }}
+
+  {% set domain = slug_domain|replace("http://", "")|replace("https://", "") %}
+  {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-prefix': domain~'/', 'data-module-placeholder': '<page>', 'class': 'form-control input-sm'} %}
+  {{ form.prepend('name', id='field-name', label=_('URL'), prepend=slug_prefix, placeholder=_(url_placeholder), value=data.name, error=errors.name, attrs=attrs, is_required=true) }}
+
+  <div class="form-group control-medium">
+    <label for="field-publish_date" class="form-label">{{ _('Publish Dates') }}</label>
+    <div class="controls">
+      {% set value = h.render_datetime(data.publish_date, date_format='%Y-%m-%d') %}
+      <input value="{{value}}" type="date" id="field-publish_date" name="publish_date" class="form-control">
+    </div>
+  </div>
+{% endblock %}
+
 {% block extra_pages_form %}
-  {% set options = [{'value': False, 'text': _('No')}, {'value': True, 'text': _('Yes')}]%}
-  {{ form.select('pin_page', id='pin_page', label='Pin Page?', options=options, selected=data.pin_page) }}
+  {% if not type == 'blog' %}
+    {% set options = [{'value': False, 'text': _('No')}, {'value': True, 'text': _('Yes')}]%}
+    {{ form.select('pin_page', id='pin_page', label='Pin Page?', options=options, selected=data.pin_page) }}
+  {% endif %}
 {% endblock extra_pages_form %}
