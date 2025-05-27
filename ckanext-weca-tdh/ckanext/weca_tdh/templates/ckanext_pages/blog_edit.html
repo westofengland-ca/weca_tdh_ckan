@@ -1,0 +1,23 @@
+{% extends 'ckanext_pages/blog_edit_base.html' %}
+
+{% block subtitle %}{{ _('Edit Article')}} {% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('Blogs'), named_route='pages.blog_index' %}</li>
+  {% if data.title %}
+    <li class="active">{% link_for data.title, named_route='pages.blog_show', page=page %}</li>
+    <li class="active">{% link_for _('Edit'), named_route='pages.blog_edit', page=page %}</li>
+  {% else %}
+    <li class="active">{% link_for _('Add'), named_route='pages.blog_new', page=page %}</li>
+  {% endif %}
+{% endblock %}
+
+{% block primary_content_inner %}
+  {% snippet 'ckanext_pages/base_form.html', page=page, data=data, errors=errors, hide_field_order=true, type='blog' %}
+{% endblock %}
+
+{% block primary_content %}
+  <section class="module govuk-body">
+    {{ self.primary_content_inner() }}
+  </section>
+{% endblock %}
