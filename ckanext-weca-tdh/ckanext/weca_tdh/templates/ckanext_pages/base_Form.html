@@ -1,0 +1,6 @@
+{% ckan_extends %}
+
+{% block extra_pages_form %}
+  {% set options = [{'value': False, 'text': _('No')}, {'value': True, 'text': _('Yes')}]%}
+  {{ form.select('pin_page', id='pin_page', label='Pin Page?', options=options, selected=data.pin_page) }}
+{% endblock extra_pages_form %}

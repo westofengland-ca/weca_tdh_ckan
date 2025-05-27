@@ -13,6 +13,7 @@ from ckan.types import Context, Schema
 from flask import Blueprint, flash, request
 
 import ckanext.weca_tdh.config as C
+from ckanext.pages.interfaces import IPagesSchema
 from ckanext.weca_tdh.auth import adauthbp
 from ckanext.weca_tdh.controller import RouteController
 from ckanext.weca_tdh.databricks import databricksbp
@@ -29,6 +30,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IDatasetForm)
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IPackageController)
+    plugins.implements(IPagesSchema)
     plugins.implements(plugins.IFacets)
 
     # IConfigurer
@@ -252,3 +254,14 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def group_facets(self, facets_dict, group_type, package_type):
         return facets_dict
+    
+    '''
+    Extend pages schema
+    '''
+    def update_pages_schema(self, schema):
+        schema.update({
+            'pin_page': [
+                toolkit.get_validator('not_empty'),
+                toolkit.get_validator('boolean_validator')]
+            })
+        return schema

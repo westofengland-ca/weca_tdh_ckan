@@ -4,9 +4,7 @@
 <h1 class="page-heading">{{ title or "Blog" if type == "blog" else "Documentation" }}</h1>
 
 {% if pages %}
-  {% set fixed_order = ['Support', 'Frequently Asked Questions (FAQ)'] %}
-
-  {# Helper block to render a page link #}
+  {# Helper block to render a page list item #}
   {% macro render_page(page, pin) %}
     {% if id %}
       {% set url = h.url_for('pages.{}_pages_show'.format(c.group_dict['type']), id=id, page=page.name) %}
@@ -18,16 +16,16 @@
     {% snippet 'ckanext_pages/snippets/page_item.html', url=url, page=page, pin=pin %}
   {% endmacro %}
 
-  {# Fixed order pages first #}
-  {% for title in fixed_order %}
-    {% for page in pages if page.title == title %}
-      {{ render_page(page, true) }}
-    {% endfor %}
+  {# Separate pinned and unpinned pages #}
+  {% set pinned_pages = pages | selectattr("pin_page", "equalto", True) | list %}
+  {% set other_pages = pages | rejectattr("pin_page", "equalto", True) | list %}
+
+  {% for page in pinned_pages | sort(attribute='title') %}
+    {{ render_page(page, page.pin_page) }}
   {% endfor %}
 
-  {# Remaining pages alphabetically #}
-  {% for page in pages|sort(attribute='title') if page.title not in fixed_order %}
-    {{ render_page(page, false) }}
+  {% for page in other_pages | sort(attribute='title') %}
+    {{ render_page(page, page.pin_page) }}
   {% endfor %}
 {% else %}
   <p class="empty">
