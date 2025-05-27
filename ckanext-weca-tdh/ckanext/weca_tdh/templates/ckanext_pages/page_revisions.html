@@ -1,0 +1,24 @@
+{% ckan_extends %}
+
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('Documentation'), named_route='pages.pages_index' %}</li>
+  <li class="active">{% link_for c.page.title, named_route='pages.show', page=c.page.name %}</li>
+  <li class="active">{% link_for _('Revisions'), named_route='pages.show', page=c.page.name %}</li>
+{% endblock %}
+
+{% block primary %}
+  <section class="module govuk-body">
+    {% block ckanext_pages_actions %}
+      {% if h.check_access('ckanext_pages_update') %}
+        {% asset 'pages/main-css' %}
+        {% link_for _('View Page'), named_route='pages.show', page=c.page.name, class_='btn btn-primary pull-right page-action', icon='eye' %}
+      {% endif %}
+    {% endblock %}
+
+    <h1 class="page-heading">{{ c.page.title }}</h1>
+
+    {% block ckanext_pages_content %}
+      {{ super() }}
+    {% endblock %}
+  </section>
+{% endblock %}
