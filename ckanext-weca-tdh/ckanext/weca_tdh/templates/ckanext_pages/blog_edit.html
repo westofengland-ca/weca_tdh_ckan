@@ -16,8 +16,10 @@
   {% snippet 'ckanext_pages/base_form.html', page=page, data=data, errors=errors, hide_field_order=true, type='blog' %}
 {% endblock %}
 
-{% block primary_content %}
+{% block primary %}
   <section class="module govuk-body">
     {{ self.primary_content_inner() }}
   </section>
 {% endblock %}
+
+{% block secondary %}{% endblock %}
