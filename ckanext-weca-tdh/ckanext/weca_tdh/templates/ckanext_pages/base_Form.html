@@ -20,6 +20,26 @@
   {% set options = [{'value': False, 'text': _('No')}, {'value': True, 'text': _('Yes')}]%}
   {{ form.select('pin_page', id='pin_page', label='Pin to top', options=options, selected=data.pin_page) }}
 
-  {% set attrs = {'maxlength': 250} %}
+  <small id="summary-char-count" class="char-count text-muted">{{ _('250 characters remaining') }}</small>
+  {% set attrs = {'maxlength': 250, 'class': 'form-control', 'oninput': 'updateCharCount(this)'} %}
   {{ form.textarea('summary', id='field-summary', label=_('Summary'), value=data.summary, placeholder='Short Summary', error=errors.summary, attrs=attrs) }}
+
+  <script>
+    function updateCharCount(textarea) {
+      var max = textarea.maxLength;
+      var current = textarea.value.length;
+      var remaining = max - current;
+      var counter = document.getElementById('summary-char-count');
+      if (counter) {
+        counter.textContent = remaining + " characters remaining";
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var textarea = document.getElementById('field-summary');
+      if (textarea) {
+        updateCharCount(textarea);
+      }
+    });
+  </script>
 {% endblock extra_pages_form %}

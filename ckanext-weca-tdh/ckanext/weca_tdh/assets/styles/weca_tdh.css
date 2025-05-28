@@ -8377,11 +8377,7 @@ iframe {
   border-bottom: 0.5px solid #ccc;
 }
 
-.page-action {
-  float: right;
-}
-
-.page-list-item .image {
+.page-action, .page-list-item .image, .char-count {
   float: right;
 }
 
