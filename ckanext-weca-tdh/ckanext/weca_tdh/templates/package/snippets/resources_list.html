@@ -18,7 +18,7 @@
           <th scope="col" class="govuk-table__header">{{ _('Date Added') }}</th>
           <th scope="col" class="govuk-table__header">{{ _('Data Category') }}</th>
           <th scope="col" class="govuk-table__header">{{ _('Data Access') }} 
-            <a href="{{ h.url_for('weca_tdh.support') ~ '#data-access'}}">
+            <a href="{{ h.url_for('pages.show', page='support') ~ '#data-access'}}">
               <i class="fa fa-info-circle info-icon" title="Indicates the method for accessing data."></i>
             </a>
           </th>
