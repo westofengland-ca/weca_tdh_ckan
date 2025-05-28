@@ -262,6 +262,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         schema.update({
             'pin_page': [
                 toolkit.get_validator('not_empty'),
-                toolkit.get_validator('boolean_validator')]
+                toolkit.get_validator('boolean_validator')],
+            'summary': [
+                toolkit.get_validator('not_empty')]
             })
         return schema

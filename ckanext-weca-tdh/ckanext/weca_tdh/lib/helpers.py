@@ -118,6 +118,19 @@ def get_featured_datasets(limit_new: int, limit_upcoming: int) -> dict:
 
     return package_list_new + package_list_upcoming
 
+def get_featured_blog_articles(limit: int, exclude=None) -> dict:
+    blog_list = toolkit.get_action('ckanext_pages_list')(None, {'order_publish_date': True, 'private': False, 'page_type': 'blog'})
+    featured_list = []
+
+    for blog in blog_list:
+        if exclude and blog['name'] == exclude:
+            continue
+        featured_list.append(blog)
+        if len(featured_list) == limit:
+            break
+
+    return featured_list
+
 def sort_search_filter_items(filter_items: list, filter_type=None) -> list:  
     sorted_items = []
     seen_values = set()

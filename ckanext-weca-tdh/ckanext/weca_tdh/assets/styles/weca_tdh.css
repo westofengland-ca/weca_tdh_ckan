@@ -7661,7 +7661,7 @@ main {
   margin-bottom: 40px;
 }
 
-.landing-media-grid {
+.landing-media-grid, .featured-blogs {
   display: flex;
 }
 
@@ -8378,6 +8378,10 @@ iframe {
 }
 
 .page-action {
+  float: right;
+}
+
+.page-list-item .image {
   float: right;
 }
 
