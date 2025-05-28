@@ -7,22 +7,6 @@ from ckanext.weca_tdh.lib.helpers import update_package_metadata_list
 
 
 class RouteController(object):
-    """Manage static page routing"""
-    
-    @staticmethod
-    def render_support_page():
-        return toolkit.render('/support/support.html')
-    
-    @staticmethod
-    def render_support_pages(path=None):
-        if not path:
-            return toolkit.render('/support/support.html')
-        return toolkit.render(f'/support/{path}.html')
-    
-    @staticmethod
-    def render_tdh_partner_connect_page():
-        return toolkit.render('tdh_partner_connect.html')
-    
     @staticmethod
     def update_dataset_interest(dataset_id):
         pkg_dict = toolkit.get_action('package_show')({}, {'id': dataset_id})

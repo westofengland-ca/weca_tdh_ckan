@@ -19,7 +19,7 @@ ckan.module('cookie_control', function (jQuery) {
           text: {
             title: "This site uses cookies",
             intro: "Some of these cookies are essential, while others help us to improve your experience by providing insights into how the site is being used. "
-                  + "<p>For more information see our <a class='ccc-link ccc-tabbable' href='/support/policy'>Cookie Policy</a>.</p>",
+                  + "<p>For more information see our <a class='ccc-link ccc-tabbable' href='/pages/cookies'>Cookie Policy</a>.</p>",
             acceptSettings: "Accept Recommended Settings",
             rejectSettings: "Reject All",
             accept: "Accept",
