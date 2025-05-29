@@ -3,7 +3,7 @@
 {% block subtitle %}{{ _('Edit Article')}} {% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Blogs'), named_route='pages.blog_index' %}</li>
+  <li class="active">{% link_for _('Articles'), named_route='pages.blog_index' %}</li>
   {% if data.title %}
     <li class="active">{% link_for data.title, named_route='pages.blog_show', page=page %}</li>
     <li class="active">{% link_for _('Edit'), named_route='pages.blog_edit', page=page %}</li>

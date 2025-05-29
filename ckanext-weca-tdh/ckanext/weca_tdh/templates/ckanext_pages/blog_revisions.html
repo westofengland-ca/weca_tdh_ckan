@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Blogs'), named_route='pages.blog_index' %}</li>
+  <li class="active">{% link_for _('Articles'), named_route='pages.blog_index' %}</li>
   <li class="active">{% link_for c.page.title, named_route='pages.blog_show', page=c.page.name %}</li>
   <li class="active">{% link_for _('Revisions'), named_route='pages.blog_revisions', page=c.page.name %}</li>
 {% endblock %}

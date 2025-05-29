@@ -3,7 +3,7 @@
 {% block subtitle %}{{ c.page.title }}{% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Blogs'), named_route='pages.blog_index' %}</li>
+  <li class="active">{% link_for _('Articles'), named_route='pages.blog_index' %}</li>
   <li class="active">{% link_for c.page.title, named_route='pages.blog_show', page=c.page.name %}</li>
 {% endblock %}
 
@@ -34,7 +34,7 @@
 
   <div class="module module-narrow module-shallow">
     <h2 class="module-heading">
-      {{ _('Blog') }}
+      {{ _('Latest Articles') }}
     </h2>
     <div class="module-content">
       {% for post in posts %}

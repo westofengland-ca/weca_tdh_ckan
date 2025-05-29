@@ -13,16 +13,10 @@
     {% endblock %}
 
     {% block page_item_content %}
-      {% if page.content %}
-        {% if editor %}
-          <div>
-            {{page.content|striptags|truncate}}
-          </div>
-        {% else %}
-          {{ h.markdown_extract(page.summary, extract_length=250) }}
-        {% endif %}
+      {% if page.summary %}
+        {{ h.markdown_extract(page.summary, extract_length=250) }}
       {% else %}
-        <p class="empty">{{ _('This page currently has no content.') }}</p>
+        <p class="empty">{{ _('This document has no summary.') }}</p>
       {% endif %}
     {% endblock %}
   </div>
