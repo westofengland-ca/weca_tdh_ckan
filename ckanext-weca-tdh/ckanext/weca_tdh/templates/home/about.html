@@ -79,6 +79,16 @@
           These needs are captured in the form of \'User Stories\': what data related task you want the TDH to be able to do and what would be the outcome of it.') }}</p>
       </div>
     {% endblock %}
+    {% block home_page_news %}
+      <h3>{{ _('Stay up to date with the TDH') }}</h3>
+      <div class="landing-explore" data-cy="featured-articles">
+        {% block blog_list %}
+          {% set blog_list = h.get_featured_blog_articles(3) %}
+          {% snippet 'ckanext_pages/snippets/featured_blogs.html', blogs=blog_list %}
+          <a class="landing-more" href="/blog" data-cy="more-blogs">{{ _('More Articles') }}</a> 
+        {% endblock %}
+      </div>
+    {% endblock %}
   </article>
 {% endblock %}
 

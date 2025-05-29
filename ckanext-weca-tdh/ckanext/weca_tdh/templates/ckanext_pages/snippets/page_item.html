@@ -1,23 +1,43 @@
+{% from "components/button/macro.html" import govukButton %}
+
 <div class="page-list-item dataset-item">
-  <div class="span11 col-md-12">
+  <div class="{% if page.image %}span8{% endif %}">
     {% block page_item_heading %}
-      <h3 class="dataset-heading">
+      <h3 class="article-heading">
         {% if pin %}
-          <i class="fa-solid fa-thumbtack" style="float: inline-end;"></i>
+          <i class="fa-solid fa-thumbtack pinned-icon"></i>
         {% endif %}
         <a href="{{ url }}" >{{ page.title }}</a>
         {% if page.publish_date %}
-          <small class="date"> {{ h.render_datetime(page.publish_date) }} </small>
+          <small class="date">{{ h.render_datetime(page.publish_date) }}</small>
         {% endif %}
       </h3>
     {% endblock %}
 
     {% block page_item_content %}
       {% if page.summary %}
-        {{ h.markdown_extract(page.summary, extract_length=250) }}
+        <div>
+          {{ h.markdown_extract(page.summary, extract_length=250) }}
+        </div>
       {% else %}
         <p class="empty">{{ _('This document has no summary.') }}</p>
       {% endif %}
+      {% if featured %}
+        {{ govukButton({
+          'text': "Read Article",
+          'href': "{{ url }}",
+          'classes': 'read-button',
+          'attributes': {'data-cy': 'read-article-button'}
+          }) }}
+      {% endif %}
     {% endblock %}
   </div>
+
+  {% block page_item_image %}
+    {% if page.image %}
+      <div class="span3 image">
+        <img src="{{ page.image }}" {% if featured %}class="featured-article-image"{% endif %}/>
+      </div>
+    {% endif %}
+  {% endblock %}
 </div>
