@@ -19,12 +19,13 @@
   {# Separate pinned and unpinned pages #}
   {% set pinned_pages = pages | selectattr("pin_page", "equalto", True) | list %}
   {% set other_pages = pages | rejectattr("pin_page", "equalto", True) | list %}
+  {% set sort_attr = '' if type == 'blog' else 'title' %}
 
-  {% for page in pinned_pages | sort(attribute='title') %}
+  {% for page in pinned_pages | sort(attribute=sort_attr) %}
     {{ render_page(page, page.pin_page) }}
   {% endfor %}
 
-  {% for page in other_pages | sort(attribute='title') %}
+  {% for page in other_pages | sort(attribute=sort_attr) %}
     {{ render_page(page, page.pin_page) }}
   {% endfor %}
 {% else %}
