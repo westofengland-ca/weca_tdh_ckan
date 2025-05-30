@@ -927,8 +927,14 @@ iframe {
 }
 
 .featured-article-image {
+    width: 300px !important;
     height: 225px !important; 
-    padding: 5px;
+}
+@media (max-width: 890px) {
+    .featured-article-image {
+        width: 200px !important;
+        height: 150px !important; 
+    }
 }
 
 .dataset-item, .section-break {
@@ -946,13 +952,20 @@ iframe {
     display: block;
 }
 .page-list-item .image {
+  width: auto !important;
   margin-bottom: 0 !important;
 }
 .page-list-item .image img {
   display: block;
-  height: 120px;
-  background-position: center center;
-  background-size: cover;
+  padding: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+  height: 150px;
+}
+@media (max-width: 499px) {
+    .page-list-item .image img {
+        display: none !important; 
+    }
 }
 
 .pinned-icon {
