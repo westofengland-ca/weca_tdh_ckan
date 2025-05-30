@@ -133,7 +133,7 @@
               {% if pkg.availability == 'upcoming' %}
                 <h3 class="heading-small">{{ _('Interested in this dataset?') }}</h3>
                 <a id="ga-express-interest-data"
-                  href="{{ url_for('weca_tdh.dataset_interest', dataset_id=pkg.name) }}"
+                  href="{{ url_for('action.dataset_interest', dataset_id=pkg.name) }}"
                   class="govuk-button request-form-btn"
                   data-cy="interest-button">
                   {{ _('Express interest') }}

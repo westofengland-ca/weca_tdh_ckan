@@ -1,12 +1,15 @@
 import json
 
 import ckan.plugins.toolkit as toolkit
+from flask import Blueprint
 
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.lib.helpers import update_package_metadata_list
 
+actionbp = Blueprint('action', __name__)
 
-class RouteController(object):
+
+class Controller(object):
     @staticmethod
     def update_dataset_interest(dataset_id):
         pkg_dict = toolkit.get_action('package_show')({}, {'id': dataset_id})
@@ -40,3 +43,8 @@ class RouteController(object):
         }
 
         return json.dumps(file)
+
+actionbp.add_url_rule('/dataset/<dataset_id>/interest', 'dataset_interest',
+                          view_func=Controller.update_dataset_interest)
+actionbp.add_url_rule('/tdh_partner_connect_file', 'tdh_partner_connect_file', 
+                          view_func=Controller.download_tdh_partner_connect_file)
