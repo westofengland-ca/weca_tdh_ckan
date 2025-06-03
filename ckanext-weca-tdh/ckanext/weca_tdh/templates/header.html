@@ -1,24 +1,5 @@
 {% ckan_extends %}
 
-{% block header_account_log_out_link %}
-  <li>
-    <a href="{{ h.url_for('user.logout') }}" title="{{ _('Log out') }}">
-      <i class="fa fa-sign-out" aria-hidden="true"></i>
-      <span class="text">{{ _('Log out') }}</span>
-    </a>
-  </li>
-{% endblock %}
-
-{% block header_account_logged %}
-  <li>
-    <a href="https://forms.office.com/e/6rj0EMtHLN" title="Suggest a new idea or feedback" target="_blank">
-      <i class="fa-solid fa-lightbulb"></i>
-      {{ _('Submit an idea') }}
-    </a>
-  </li>
-  {{ super() }}
-{% endblock %}
-
 {% block header_account_container_content %}
   {% if c.userobj %}
     {{ super() }}
@@ -36,6 +17,26 @@
     </ul>
   </nav>
   {% endif %}
+{% endblock %}
+
+{% block header_account_logged %}
+  <li>
+    <a href="https://forms.office.com/e/6rj0EMtHLN" title="Suggest a new idea or feedback" target="_blank">
+      <i class="fa-solid fa-lightbulb"></i>
+      {{ _('Submit an idea') }}
+    </a>
+  </li>
+  {% block header_account_profile %}{{ super() }}{% endblock %}
+  {% block header_dashboard %}{{ super() }}{% endblock %}
+  {% block header_account_settings_link %}{{ super() }}{% endblock %}
+  {% block header_account_log_out_link %}
+    <li>
+      <a href="{{ h.url_for('user.logout') }}" title="{{ _('Log out') }}">
+        <i class="fa fa-sign-out" aria-hidden="true"></i>
+        <span class="text">{{ _('Log out') }}</span>
+      </a>
+    </li>
+  {% endblock %}
 {% endblock %}
 
 {% block header_logo %}
@@ -74,7 +75,7 @@
       <a href="/about" class="{% if current_path.startswith('/about') %}nav-item-active{% endif %}">{{_('About')}}</a>
     </li>
     <li>
-      <a href="/support" class="{% if current_path.startswith('/support') %}nav-item-active{% endif %}">{{_('Support')}}</a>
+      <a href="/pages" class="{% if current_path.startswith('/pages') %}nav-item-active{% endif %}">{{_('Documentation')}}</a>
     </li>
   {% endblock %}
 {% endblock %}

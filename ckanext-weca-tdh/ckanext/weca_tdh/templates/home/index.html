@@ -80,7 +80,7 @@
               'classes': 'action-button',
               'attributes': {'download': 'tdh-partner-connect.pbids', 'data-cy': 'connect-button'}
               }) }}
-              <p style="font-size: 16px;">{{ _('Click') }} <a style="text-decoration: underline;" href="/tdh_partner_connect" target="_blank" data-cy="connect-details">{{ _('here') }}</a> {{ _('for more details') }}</p>
+              <p style="font-size: 16px;">{{ _('Click') }} <a style="text-decoration: underline;" href="/pages/tdh_partner_connect" target="_blank" data-cy="connect-details">{{ _('here') }}</a> {{ _('for more details') }}</p>
             </div>
           </div>
         </div>
@@ -98,6 +98,17 @@
           {% else %}
             <p>{{ _('0 Datasets found.') }}</p>
           {% endif %}
+        {% endblock %}
+      </div>
+    {% endblock %}
+
+    {% block landing_page_news %}
+      <h3>{{ _('Latest Articles') }}</h3>
+      <div class="landing-explore" data-cy="featured-articles">
+        {% block blog_list %}
+          {% set blog_list = h.get_featured_blog_articles(3) %}
+          {% snippet 'ckanext_pages/snippets/featured_blogs.html', blogs=blog_list %}
+          <a class="landing-more" href="/blog" data-cy="more-blogs">{{ _('More Articles') }}</a> 
         {% endblock %}
       </div>
     {% endblock %}

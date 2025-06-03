@@ -5,7 +5,7 @@ Tests for controller.py
 import json
 from unittest.mock import patch
 
-from ckanext.weca_tdh.controller import RouteController
+from ckanext.weca_tdh.controller import Controller
 
 mock_host = "mock.host"
 mock_path = "mock/address/path"
@@ -34,5 +34,5 @@ mock_file = {
 @patch("ckanext.weca_tdh.controller.C.TDH_CONNECT_ADDRESS_HOST", mock_host)
 @patch("ckanext.weca_tdh.controller.C.TDH_CONNECT_ADDRESS_PATH", mock_path)
 def test_download_tdh_partner_connect_file() -> None:  
-    json_file = RouteController.download_tdh_partner_connect_file()
+    json_file = Controller.download_tdh_partner_connect_file()
     assert json_file == json.dumps(mock_file)

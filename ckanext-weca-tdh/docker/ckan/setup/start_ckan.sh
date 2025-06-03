@@ -112,6 +112,9 @@ ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
 ckan config-tool $CKAN_INI expire_api_token.default_lifetime=30
 ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day
 
+# Configure pages
+ckan config-tool $CKAN_INI "ckanext.pages.allow_html = True"
+
 # Run the prerun script to init CKAN and create the default admin user
 python3 prerun.py
 

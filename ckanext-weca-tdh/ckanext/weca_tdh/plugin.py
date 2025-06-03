@@ -10,11 +10,12 @@ import ckan.plugins.toolkit as toolkit
 from ckan.common import CKANConfig
 from ckan.model.user import AnonymousUser
 from ckan.types import Context, Schema
-from flask import Blueprint, flash, request
+from flask import flash, request
 
 import ckanext.weca_tdh.config as C
+from ckanext.pages.interfaces import IPagesSchema
 from ckanext.weca_tdh.auth import adauthbp
-from ckanext.weca_tdh.controller import RouteController
+from ckanext.weca_tdh.controller import actionbp
 from ckanext.weca_tdh.databricks import databricksbp
 from ckanext.weca_tdh.lib import helpers
 from ckanext.weca_tdh.upload import uploadbp
@@ -30,6 +31,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IPackageController)
     plugins.implements(plugins.IFacets)
+    plugins.implements(IPagesSchema)
 
     # IConfigurer
     def update_config(self, config: CKANConfig):
@@ -53,7 +55,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         """
         Called on each request to identify a user.
         """
-        if C.FF_AUTH_RESTRICTED_ACCESS == 'True' and request.path != '/' and not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):
+        if C.FF_AUTH_RESTRICTED_ACCESS == 'True' and request.path != '/' \
+            and not any(subpath in request.path for subpath in C.EXLUDED_SUBPATHS):
             if isinstance(toolkit.current_user, AnonymousUser): # check for an unauthorised user
                 flash(C.ALERT_MESSAGE_AUTH, category='alert-info')
                 return toolkit.render('/user/login.html') # redirect to login page with flash message
@@ -73,20 +76,9 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def get_blueprint(self) -> list:      
         '''
-        Creates a flask blueprint with specified url rules to allow static page routing
+        Return flask blueprints for routing
         '''       
-        staticbp = Blueprint(self.name, self.__module__, template_folder='templates')
-        rules = [
-            ('/support', 'support', RouteController.render_support_page),
-            ('/support/<path:path>', 'support_pages', RouteController.render_support_pages),
-            ('/dataset/<dataset_id>/interest', 'dataset_interest', RouteController.update_dataset_interest),
-            ('/tdh_partner_connect', 'tdh_partner_connect', RouteController.render_tdh_partner_connect_page),
-            ('/tdh_partner_connect_file', 'tdh_partner_connect_file', RouteController.download_tdh_partner_connect_file)
-        ]
-        for rule in rules:
-            staticbp.add_url_rule(*rule)
-
-        return [staticbp, adauthbp, uploadbp, databricksbp]
+        return [actionbp, adauthbp, databricksbp, uploadbp]
 
     ''' 
     Modify dataset metadata fields
@@ -252,3 +244,16 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def group_facets(self, facets_dict, group_type, package_type):
         return facets_dict
+    
+    '''
+    Extend pages schema
+    '''
+    def update_pages_schema(self, schema):
+        schema.update({
+            'pin_page': [
+                toolkit.get_validator('not_empty'),
+                toolkit.get_validator('boolean_validator')],
+            'summary': [
+                toolkit.get_validator('not_empty')]
+            })
+        return schema
