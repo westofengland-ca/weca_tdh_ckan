@@ -10,6 +10,8 @@
 
 {% from "components/select/macro.html" import govukSelect %}
 
+{% asset 'weca_tdh/multiselect-js' %}
+
 {% block filter_items %}
   {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format", 'res_data_access': "Data Access", 'res_data_category': "Data Category"} %}
   {% set filter_titles = {'res_data_access': "The method for accessing the data", 'res_data_category': "The data access classification (sensitivity)"} %}
@@ -26,10 +28,59 @@
 
   {% set filter_type = name if name in ('res_format', 'res_data_access', 'res_data_category') %}
   {% if filter_type %}
-    {% set filter_items = h.sort_search_filter_items(filter_items, filter_type) %}
+    {% set selected_values = fields_grouped.get(name, []) %}
+    {% set filter_items = h.sort_search_filter_items(filter_items, filter_type, selected_values) %}
   {% endif %}
 
+<div class="govuk-form-group">
   <label class="govuk-label sort-label" title="{{filter_titles[name]}}" for="{{name}}">{{ filter_labels[name] }}</label>
+  <div class="select-wrapper">
+  <span class="select-placeholder">Select options</span>
+  <select
+    class="select2-multiselect"
+    id="{{ name }}"
+    name="{{ name }}"
+    multiple="multiple"
+    data-cy="filter-{{ name }}"
+  >
+    {% for item in filter_items | sort(attribute='value') %}
+      <option value="{{ item.value }}" {% if item.selected %}selected{% endif %}>{{ item.text }}</option>
+    {% endfor %}
+  </select>
+  </div>
+</div>
+
+<div class="govuk-form-group">
+  <div class="custom-multiselect" id="res_format_multiselect" data-name="res_format" data-inputs-id="res_format_inputs">
+    <button type="button" class="multiselect-toggle" aria-haspopup="listbox" aria-expanded="false">
+      <span class="selected-label">Select formats</span>
+      <span class="arrow-down">&#9662;</span>
+    </button>
+    <div class="multiselect-options" hidden>
+      <label><input type="checkbox" value="CSV"> Bristol city county council</label>
+      <label><input type="checkbox" value="JSON"> JSON</label>
+      <label><input type="checkbox" value="XML"> XML</label>
+            <label><input type="checkbox" value="CSV"> Bristol city county council</label>
+      <label><input type="checkbox" value="JSON"> JSON</label>
+      <label><input type="checkbox" value="XML"> XML</label>
+            <label><input type="checkbox" value="CSV"> Bristol city county council</label>
+      <label><input type="checkbox" value="JSON"> JSON</label>
+      <label><input type="checkbox" value="XML"> XML</label>
+            <label><input type="checkbox" value="CSV"> Bristol city county council</label>
+      <label><input type="checkbox" value="JSON"> JSON</label>
+      <label><input type="checkbox" value="XML"> XML</label>
+            <label><input type="checkbox" value="CSV"> Bristol city county council</label>
+      <label><input type="checkbox" value="JSON"> JSON</label>
+      <label><input type="checkbox" value="XML"> XML</label>
+            <label><input type="checkbox" value="CSV"> Bristol city county council</label>
+      <label><input type="checkbox" value="JSON"> JSON</label>
+      <label><input type="checkbox" value="XML"> XML</label>
+    </div>
+  </div>
+</div>
+
+<div id="res_format_inputs"></div>
+
   {{ govukSelect({
     'id': name,
     'name': name,
@@ -37,4 +88,16 @@
     'attributes': {'aria-label': filter_labels[name], 'data-cy': 'filter-' + name}
     }) 
   }}
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    $('.select2-multiselect').select2({
+      placeholder: "Select options",
+      allowClear: true,
+      width: '100%',
+      closeOnSelect: false
+    });
+  });
+</script>
 {% endblock %}

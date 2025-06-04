@@ -2,6 +2,9 @@
 
 {% block links -%}
   <link rel="shortcut icon" href="/assets/images/branding/weca-favicon.png" />
+  <!-- Add to <head> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+
 {% endblock -%}
 
 {% block styles %}
@@ -37,4 +40,6 @@
         data-module-analytics_enabled="{{ config['feature_flag.ga.enabled'] }}">
     </div>
   {% endblock %}
+
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 {% endblock %}
