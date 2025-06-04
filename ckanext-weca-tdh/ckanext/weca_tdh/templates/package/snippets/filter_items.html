@@ -26,7 +26,8 @@
 
   {% set filter_type = name if name in ('res_format', 'res_data_access', 'res_data_category') %}
   {% if filter_type %}
-    {% set filter_items = h.sort_search_filter_items(filter_items, filter_type) %}
+    {% set selected_values = fields_grouped.get(name, []) %}
+    {% set filter_items = h.sort_search_filter_items(filter_items, filter_type, selected_values) %}
   {% endif %}
 
   <label class="govuk-label sort-label" title="{{filter_titles[name]}}" for="{{name}}">{{ filter_labels[name] }}</label>
