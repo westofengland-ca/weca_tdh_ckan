@@ -1,6 +1,6 @@
 {% extends "page.html" %}
-{% from "components/button/macro.html" import govukButton %}
-{% from "components/select/macro.html" import govukSelect %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
 
 {% block subtitle %}{{ _('Publishers') }}{% endblock %}
 {% block toolbar %}{% endblock %}
@@ -26,6 +26,7 @@
   {{ govukSelect({
     'id': "parent_org",
     'name': "parent_org",
+    'label': "",
     'items': filter_items | sort(attribute='value'),
     'attributes': {'data-cy': 'filter-parent_org'}
     }) 

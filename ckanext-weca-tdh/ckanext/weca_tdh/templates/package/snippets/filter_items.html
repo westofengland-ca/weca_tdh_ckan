@@ -8,7 +8,7 @@
   Example: h.snippet('package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped)
 #}
 
-{% from "components/select/macro.html" import govukSelect %}
+{% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
 
 {% block filter_items %}
   {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format", 'res_data_access': "Data Access", 'res_data_category': "Data Category"} %}
@@ -34,6 +34,7 @@
   {{ govukSelect({
     'id': name,
     'name': name,
+    'label': "",
     'items': filter_items | sort(attribute='value'),
     'attributes': {'aria-label': filter_labels[name], 'data-cy': 'filter-' + name}
     }) 

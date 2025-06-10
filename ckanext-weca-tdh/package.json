@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/westofengland-ca/weca_tdh_ckan#readme",
   "dependencies": {
-    "govuk-frontend": "^4.7.0"
+    "govuk-frontend": "5.10.0"
   },
   "devDependencies": {
     "cypress": "^13.17.0",

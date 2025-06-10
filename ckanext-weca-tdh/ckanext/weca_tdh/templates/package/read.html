@@ -1,5 +1,5 @@
 {% extends "package/read_base.html" %}
-{% from "components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 
 {% set can_edit = h.check_access('package_update', {'id': pkg_dict.id}) %}
 {% block primary_class %}package-read{% endblock %}

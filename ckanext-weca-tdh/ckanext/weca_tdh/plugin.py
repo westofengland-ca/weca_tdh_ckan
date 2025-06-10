@@ -77,7 +77,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     def get_blueprint(self) -> list:      
         '''
         Return flask blueprints for routing
-        '''       
+        '''
         return [actionbp, adauthbp, databricksbp, uploadbp]
 
     ''' 
