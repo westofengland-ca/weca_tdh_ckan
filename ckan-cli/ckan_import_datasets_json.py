@@ -1,5 +1,5 @@
 '''
-Imports CKAN datasets from a Zip file via the CKAN API.
+Imports CKAN datasets from a JSON ZIP file via the CKAN API.
 '''
 
 from urllib.request import Request, urlopen
