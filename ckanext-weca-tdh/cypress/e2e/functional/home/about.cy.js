@@ -48,7 +48,7 @@ describe('About page', () => {
     it('should display idea submission', () => {
         cy.loginUser('/about')
         cy.get('[data-cy="submit-us-button"]').contains('Submit idea')
-            .should('have.attr', 'href', '/support')
+            .should('have.attr', 'href', '/pages/support')
 
         cy.get('[data-cy="support-details"]').click()
         cy.url().should('eq', Cypress.config().baseUrl + 'support')

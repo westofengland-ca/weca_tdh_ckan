@@ -1,0 +1,25 @@
+{% extends 'ckanext_pages/edit_base.html' %}
+
+{% block subtitle %}{{ _('Edit Page')}} {% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('Documentation'), named_route='pages.pages_index' %}</li>
+  {% if data.title %}
+    <li class="active">{% link_for data.title, named_route='pages.show', page=page %}</li>
+    <li class="active">{% link_for _('Edit'), named_route='pages.edit', page=page %}</li>
+  {% else %}
+    <li class="active">{% link_for _('Add'), named_route='pages.new', page=page %}</li>
+  {% endif %}
+{% endblock %}
+
+{% block primary_content_inner %}
+  {% snippet form_snippet, page=page, data=data, errors=errors, hide_field_order=true %}
+{% endblock %}
+
+{% block primary %}
+  <section class="module govuk-body">
+    {{ self.primary_content_inner() }}
+  </section>
+{% endblock %}
+
+{% block secondary %}{% endblock %}

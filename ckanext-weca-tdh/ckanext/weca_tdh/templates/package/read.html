@@ -1,5 +1,4 @@
 {% extends "package/read_base.html" %}
-{% from "components/breadcrumbs/macro.html" import govukBreadcrumbs %}
 {% from "components/button/macro.html" import govukButton %}
 
 {% set can_edit = h.check_access('package_update', {'id': pkg_dict.id}) %}
@@ -60,7 +59,7 @@
                 </dd>
                 <dt>{{ _('Data Quality:') }}</dt>
                 <dd property="dc:quality" data-cy="package-quality">
-                  <a href="{{ h.url_for('weca_tdh.support') ~ '#data-quality'}}">
+                  <a href="{{ h.url_for('pages.show', page='support') ~ '#data-quality'}}">
                     {% set data_quality_markings = h.get_data_quality_markings() %}
                     {% if pkg.data_quality %}
                       {% set data_quality = data_quality_markings[pkg.data_quality | int] %}
@@ -134,7 +133,7 @@
               {% if pkg.availability == 'upcoming' %}
                 <h3 class="heading-small">{{ _('Interested in this dataset?') }}</h3>
                 <a id="ga-express-interest-data"
-                  href="{{ url_for('weca_tdh.dataset_interest', dataset_id=pkg.name) }}"
+                  href="{{ url_for('action.dataset_interest', dataset_id=pkg.name) }}"
                   class="govuk-button request-form-btn"
                   data-cy="interest-button">
                   {{ _('Express interest') }}

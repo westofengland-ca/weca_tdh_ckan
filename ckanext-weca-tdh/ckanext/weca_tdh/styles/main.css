@@ -28,7 +28,7 @@
 .masthead .navbar .navbar-title {
     font-size: 1.4rem;
     color: white;
-    margin-right: 40px;
+    margin-right: 15px;
 }
 
 /* nav pill list */
@@ -40,6 +40,7 @@
 .masthead .main-navbar ul li {
     padding-right: 0px;
     padding-top: 5px;
+    margin-right: 0px;
 }
 
 /* nav pill links */
@@ -114,6 +115,7 @@ main {
 
 .landing-access-connect {
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
 }
 
@@ -181,16 +183,51 @@ main {
     margin-bottom: 20px;
 }
 
+/* Responsive behavior for smaller screens */
+@media (max-width: 890px) {
+    .access-connect-content,
+    .landing-overlay-action {
+        width: 100%;
+        margin-left: 0; /* remove left margin to prevent awkward spacing */
+        margin-top: 20px; /* add spacing between stacked blocks */
+    }
+
+    .landing-access-methods {
+        flex-wrap: wrap;
+    }
+
+    .landing-media-grid {
+        flex-wrap: wrap;
+    }
+
+    .landing-explore {
+        font-size: 16px;
+    }
+}
+
 .landing-explore {
     margin-bottom: 40px;
 }
 
-.landing-media-grid {
+.landing-media-grid, .featured-blogs {
     display: flex;
+}
+
+.featured-blog-item {
+    display: flow-root;
+    border-bottom: 0.5px solid #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .landing-media-item {
     margin: 0 0.5% 1% 0.5% !important;
+    min-width: 150px;
+}
+
+.media-item-tdh h2 {
+    max-height: 75px;
+    overflow: hidden;
 }
 
 .landing-more {
@@ -233,6 +270,11 @@ main {
     width: 100%;
     height: 95%;
     object-fit: fill;
+}
+@media (max-width: 450px) {
+    .about-header h1 {
+        font-size: 18px;
+    }
 }
 
 .about-overlay  {
@@ -297,6 +339,9 @@ main {
     .about-datahub, .about-benefits {
         max-width: 100%;
     }
+    .attribution {
+        float: none !important;
+    }
 }
 
 .about-tdh-content {
@@ -342,6 +387,24 @@ main {
 .toggle-arrow {
     color: black;
     text-decoration: none;
+}
+
+.faq-video {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.faq-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 560px;
+    max-height: 315px;
 }
 
 /* SEARCH PAGE //
@@ -620,6 +683,8 @@ p.gem-c-lead-paragraph {
 
 .data-category-contpi {
   background-color: #b75c1f;
+  white-space: normal;
+  text-align: left;
 }
 
 .data-category-con {
@@ -637,8 +702,14 @@ p.gem-c-lead-paragraph {
     vertical-align: text-top;
 }
 
+@media (max-width: 750px) {
+    .metadata-box dt, .metadata-box dd {
+        display: block;
+    }
+}
+
 .metadata-box dt {
-    width: 25%;
+    min-width: 25%;
     font-weight: bold;
     white-space: nowrap;
 }
@@ -653,6 +724,7 @@ p.gem-c-lead-paragraph {
 
 .package-content {
     margin-bottom: 50px;
+    overflow-x: auto;
 }
 
 .govuk-table__cell {
@@ -835,6 +907,75 @@ iframe {
 
 .govuk-form-group {
     margin-bottom: 20px;
+}
+
+/* Pages /
+///////*/
+
+.article-heading {
+  font-size: 19px;
+  line-height: 1.3;
+}
+
+.article-heading a {
+  color: #206b82;
+  text-decoration: underline;
+}
+
+.article-heading small {
+  font-size: 16px;
+}
+
+.featured-article-image {
+    width: 300px !important;
+    height: 225px !important; 
+}
+@media (max-width: 890px) {
+    .featured-article-image {
+        width: 200px !important;
+        height: 150px !important; 
+    }
+}
+
+.dataset-item, .section-break {
+    border-bottom: 0.5px solid #ccc;
+}
+
+.page-action, .page-list-item .image, .featured-blog-item .image, .char-count {
+    float: right;
+}
+
+.page-list-item {
+ display: flex;
+}
+.page-list-item h3 a {
+    display: block;
+}
+.page-list-item .image {
+  width: auto !important;
+  margin-bottom: 0 !important;
+}
+.page-list-item .image img {
+  display: block;
+  padding: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+  height: 150px;
+}
+@media (max-width: 499px) {
+    .page-list-item .image img {
+        display: none !important; 
+    }
+}
+
+.pinned-icon {
+    float: left;
+    margin-right: 10px;
+}
+
+.read-button {
+  font-size: 19px;
+  margin-top: 20px;
 }
 
 /* temp flask debug overflow fix */

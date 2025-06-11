@@ -1,0 +1,46 @@
+{% ckan_extends %}
+
+{% block form_basic_fields %}
+  {{ form.input('title', id='field-title', label=_('Title'), placeholder=title_placeholder, value=data.title, error=errors.title, classes=['control-full', 'control-large'],
+   attrs={'data-module': 'slug-preview-target', 'class': 'form-control'}) }}
+
+  {% set domain = slug_domain|replace("http://", "")|replace("https://", "") %}
+  {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-prefix': domain~'/', 'data-module-placeholder': '<page>', 'class': 'form-control input-sm'} %}
+  {{ form.prepend('name', id='field-name', label=_('URL'), prepend=slug_prefix, placeholder=_(url_placeholder), value=data.name, error=errors.name, attrs=attrs, is_required=true) }}
+
+  <div class="form-group control-medium">
+    <label for="field-publish_date" class="form-label">{{ _('Publish Date') }}</label>
+    <div class="controls">
+      {% set value = h.render_datetime(data.publish_date, date_format='%Y-%m-%d') %}
+      <input value="{{value}}" type="date" id="field-publish_date" name="publish_date" class="form-control">
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_pages_form %}
+  {% set options = [{'value': False, 'text': _('No')}, {'value': True, 'text': _('Yes')}]%}
+  {{ form.select('pin_page', id='pin_page', label='Pin to top', options=options, selected=data.pin_page) }}
+
+  <small id="summary-char-count" class="char-count text-muted">{{ _('250 characters remaining') }}</small>
+  {% set attrs = {'maxlength': 250, 'class': 'form-control', 'oninput': 'updateCharCount(this)'} %}
+  {{ form.textarea('summary', id='field-summary', label=_('Summary'), value=data.summary, placeholder='Short Summary', error=errors.summary, attrs=attrs) }}
+
+  <script>
+    function updateCharCount(textarea) {
+      var max = textarea.maxLength;
+      var current = textarea.value.length;
+      var remaining = max - current;
+      var counter = document.getElementById('summary-char-count');
+      if (counter) {
+        counter.textContent = remaining + " characters remaining";
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var textarea = document.getElementById('field-summary');
+      if (textarea) {
+        updateCharCount(textarea);
+      }
+    });
+  </script>
+{% endblock extra_pages_form %}

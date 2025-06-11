@@ -25,3 +25,6 @@ USER ckan
 RUN echo "pip install ckanext-weca-tdh..." && \
   pip3 install -r ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh/requirements.txt && \
   pip3 install -e ${SRC_EXTENSIONS_DIR}/ckanext-weca-tdh/
+
+# Install ckanext-pages
+RUN pip3 install -e 'git+https://github.com/ckan/ckanext-pages.git#egg=ckanext-pages'

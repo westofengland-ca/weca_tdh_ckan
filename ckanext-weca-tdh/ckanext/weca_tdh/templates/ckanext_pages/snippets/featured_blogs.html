@@ -1,0 +1,12 @@
+{% set blogs_total = blogs|length %}
+
+{% if blogs %}
+  {% for blog in blogs %}
+    {% set url = h.url_for('pages.blog_show', page=blog.name) %}
+    {% snippet 'ckanext_pages/snippets/page_item.html', url=url, page=blog, featured=True %}
+  {% endfor %}
+{% else %}
+  <p class="empty">
+    {{ _('There are currently no articles.') }}
+  </p>
+{% endif %}

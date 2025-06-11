@@ -1,0 +1,43 @@
+{% set pages_total = pages|length %}
+{% set action = '{0}_show'.format(type) %}
+
+<h1 class="page-heading">{{ title or "Articles" if type == "blog" else "Documentation" }}</h1>
+
+{% if pages %}
+  {# Helper block to render a page list item #}
+  {% macro render_page(page, pin) %}
+    {% if id %}
+      {% set url = h.url_for('pages.{}_pages_show'.format(c.group_dict['type']), id=id, page=page.name) %}
+    {% elif type == 'blog' %}
+      {% set url = h.url_for('pages.blog_show', page=page.name) %}
+    {% elif page.type == 'articles' %}
+      {% set url = h.url_for('pages.blog_index') %}
+    {% else %}
+      {% set url = h.url_for('pages.show', page=page.name) %}
+    {% endif %}
+    {% snippet 'ckanext_pages/snippets/page_item.html', url=url, page=page, pin=pin %}
+  {% endmacro %}
+
+  {% if not type %}
+    {% set articles_page = {'type': 'articles', 'title': 'News Articles', 'summary': 'Discover the latest Transport Data Hub news.', 'pin_page': False} %}
+    {% do pages.append(articles_page) %}
+  {% endif %}
+
+  {# Separate pinned and unpinned pages #}
+  {% set pinned_pages = pages | selectattr("pin_page", "equalto", True) | list %}
+  {% set other_pages = pages | rejectattr("pin_page", "equalto", True) | list %}
+  {% set sort_attr = '' if type == 'blog' else 'title' %}
+
+  {% for page in pinned_pages | sort(attribute=sort_attr) %}
+    {{ render_page(page, page.pin_page) }}
+  {% endfor %}
+
+  {% for page in other_pages | sort(attribute=sort_attr) %}
+    {{ render_page(page, page.pin_page) }}
+  {% endfor %}
+{% else %}
+  <p class="empty">
+    {{ _('There are currently no blog articles.') if type == 'blog' else _('There are currently no documents.') }}
+  </p>
+{% endif %}
+

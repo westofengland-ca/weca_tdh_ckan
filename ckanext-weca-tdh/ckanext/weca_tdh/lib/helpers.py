@@ -118,10 +118,24 @@ def get_featured_datasets(limit_new: int, limit_upcoming: int) -> dict:
 
     return package_list_new + package_list_upcoming
 
-def sort_search_filter_items(filter_items: list, filter_type=None) -> list:  
+def get_featured_blog_articles(limit: int, exclude=None) -> dict:
+    blog_list = toolkit.get_action('ckanext_pages_list')(None, {'order_publish_date': True, 'private': False, 'page_type': 'blog'})
+    featured_list = []
+
+    for blog in blog_list:
+        if exclude and blog['name'] == exclude:
+            continue
+        featured_list.append(blog)
+        if len(featured_list) == limit:
+            break
+
+    return featured_list
+
+def sort_search_filter_items(filter_items: list, filter_type=None, selected_values=None) -> list:
     sorted_items = []
     seen_values = set()
     categories = get_resource_data_categories() if filter_type == 'res_data_category' else {}
+    selected_set = set(selected_values or [])
 
     for item in filter_items:
         values = item['value'].split(', ') if ',' in item['value'] else [item['value']]
@@ -129,7 +143,8 @@ def sort_search_filter_items(filter_items: list, filter_type=None) -> list:
             if value not in seen_values:
                 seen_values.add(value)
                 mapped_value = categories[int(value)].get('name', value) if value and categories else value
-                sorted_items.append({'value': value, 'text': mapped_value, 'selected': item.get('selected', 'Undefined')})
+                selected = value in selected_set
+                sorted_items.append({'value': value, 'text': mapped_value, 'selected': selected})
 
     return sorted_items
 
