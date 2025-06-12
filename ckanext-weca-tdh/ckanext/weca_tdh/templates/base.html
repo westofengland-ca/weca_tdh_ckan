@@ -11,13 +11,8 @@
 
 {% block scripts %}
   {{ super() }}
+
   {% asset 'weca_tdh/govuk-frontend-js' %}
-  <script>
-    document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
-  </script>
-  <script type="module">
-    GOVUKFrontend.initAll()
-  </script>
 
   {% if config['feature_flag.ga.enabled'] == 'True' %}
     {% block google_analytics %}

@@ -8962,7 +8962,7 @@ iframe {
   text-decoration: underline !important;
 }
 
-/* Forms /
+/* FORMS /
 ///////*/
 .form-actions .control-required-message {
   float: right;
@@ -8981,7 +8981,7 @@ iframe {
   margin-bottom: 20px;
 }
 
-/* Pages /
+/* PAGES /
 ///////*/
 .article-heading {
   font-size: 19px;
@@ -9050,6 +9050,128 @@ iframe {
 .read-button {
   font-size: 19px;
   margin-top: 20px;
+}
+
+/* MULTI FILTER /
+//////////////*/
+.govuk-checkboxes__label {
+  width: 100%;
+  max-width: calc(100% - 44px);
+}
+
+.search-filter-wrapper {
+  float: left;
+  width: 100%;
+  clear: both;
+  position: relative;
+  padding: 0;
+}
+
+.search-filter-heading {
+  position: relative;
+  margin: 0;
+  padding-top: 5px;
+}
+
+.search-filter-heading:hover {
+  color: #0b0c0c;
+  background: #f3f2f1;
+}
+
+.search-filter-button {
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 600;
+  z-index: 1;
+}
+
+.search-filter-button:hover {
+  color: #0b0c0c;
+  text-decoration: none;
+}
+
+.search-filter-button:hover .filter-icon {
+  color: #0b0c0c;
+}
+
+.search-filter-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.chevron-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  float: left;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #1d70b8;
+  border-radius: 50%;
+  margin: 0.1rem 0.5em 0 0;
+  color: #1d70b8;
+}
+
+.chevron-button svg {
+  stroke: currentColor;
+}
+
+.search-filter-button.is-open + .chevron-button svg {
+  transform: rotate(180deg);
+}
+
+.search-filter-button:hover + .chevron-button,
+.search-filter-button:focus + .chevron-button {
+  background-color: black;
+  border-color: black;
+  color: white;
+}
+
+.search-filter-summary {
+  font-size: 14px;
+  margin: 5px 0 0 2rem;
+}
+
+.search-filter-content {
+  display: none;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-left: 10px;
+}
+
+.search-filter-tag-input {
+  display: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.search-filter-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  background: #e4e4e4;
+  padding: 2px 6px 2px 0;
+  border: 1px solid black;
+  border-radius: 4px;
+  margin: 0 4px 4px 0;
+  font-size: 14px;
+}
+
+.search-filter-tag-pill button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
 }
 
 /* temp flask debug overflow fix */

@@ -8,12 +8,13 @@
   Example: h.snippet('package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped)
 #}
 
-{% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
+{% asset 'weca_tdh/multi_select-js' %}
+{% from "govuk_frontend_jinja/components/checkboxes/macro.html" import govukCheckboxes %}
 
 {% block filter_items %}
   {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format", 'res_data_access': "Data Access", 'res_data_category': "Data Category"} %}
-  {% set filter_titles = {'res_data_access': "The method for accessing the data", 'res_data_category': "The data access classification (sensitivity)"} %}
-  {% set filter_items = [{'value': "", 'text': ""}] %}
+  {% set filter_summaries = {'res_data_access': "Methods for accessing data", 'res_data_category': "Data classification (sensitivity)"} %}
+  {% set filter_items = [] %}
 
   {% set items = h.get_facet_items_dict(name, search_facets) %}
   {% for item in items %}    
@@ -30,13 +31,29 @@
     {% set filter_items = h.sort_search_filter_items(filter_items, filter_type, selected_values) %}
   {% endif %}
 
-  <label class="govuk-label sort-label" title="{{filter_titles[name]}}" for="{{name}}">{{ filter_labels[name] }}</label>
-  {{ govukSelect({
-    'id': name,
-    'name': name,
-    'label': "",
-    'items': filter_items | sort(attribute='value'),
-    'attributes': {'aria-label': filter_labels[name], 'data-cy': 'filter-' + name}
-    }) 
-  }}
+  <div class="search-filter-wrapper">
+    <h3 class="search-filter-heading ">
+      <button type="button" class="govuk-link search-filter-button" onclick="toggleCheckboxContainer('{{name}}'); this.classList.toggle('is-open');">
+        {{ filter_labels[name] }}
+      </button>
+      <span class="chevron-button" aria-hidden="true">
+        <svg class="govuk-accordion__icon" xmlns="http://www.w3.org/2000/svg" focusable="false" width="12" height="12" viewBox="0 0 17 17">
+          <path d="M1.5 5l6.5 6 6.5-6" fill="none" stroke="currentColor" stroke-width="3"/>
+        </svg>
+      </span>
+      <div id="search-filter-summary-{{name}}" class="govuk-label search-filter-summary">
+        {{ filter_summaries[name] or "No filters selected" }}
+      </div>
+    </h3>
+    <div id="{{name}}" class="search-filter-content">
+      {{ govukCheckboxes({
+        'idPrefix': 'filter-' + name,
+        'name': name,
+        'classes': "govuk-checkboxes--small",
+        'items': filter_items
+      }) }}
+    </div>
+    <div id="search-filter-tag-input-{{ name }}" class="search-filter-tag-input govuk-!-margin-bottom-2"></div>
+    <p style="border-bottom: 2px solid #ccc; margin-top: 10px;"></p>
+  </div>
 {% endblock %}

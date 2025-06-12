@@ -15,9 +15,9 @@
 {% endblock %}
 
 {% block secondary_content %}  
-  <h2 class="govuk-body-m govuk-!-font-weight-bold">{{ _('Filter by') }}</h2>
+  <h2>{{ _('Filter search') }}</h2>
   {% block search_input %}
-    {% snippet "snippets/search_form.html", label="Keywords", query=q %}  
+    {% snippet "snippets/search_form.html", query=q %}  
   {% endblock %}
   {% block search_filters %}
     {% set facetLabels = ["organization", "groups", "res_format", "res_data_access", "res_data_category"] %}
