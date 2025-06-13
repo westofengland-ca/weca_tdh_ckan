@@ -502,7 +502,7 @@ p.gem-c-lead-paragraph {
     float: right;
 }
 
-.footer-links, .sort-label {
+.footer-links {
     font-size: 16px;
 }
 
@@ -927,8 +927,9 @@ iframe {
   text-decoration: underline;
 }
 
-.article-heading small {
-  font-size: 16px;
+.article-heading-date {
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .featured-article-image {
@@ -954,7 +955,7 @@ iframe {
  display: flex;
 }
 .page-list-item h3 a {
-    display: block;
+    display: inline !important;
 }
 .page-list-item .image {
   width: auto !important;

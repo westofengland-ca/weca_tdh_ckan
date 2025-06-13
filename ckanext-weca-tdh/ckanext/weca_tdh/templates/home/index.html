@@ -80,7 +80,8 @@
               'classes': 'action-button',
               'attributes': {'download': 'tdh-partner-connect.pbids', 'data-cy': 'connect-button'}
               }) }}
-              <p style="font-size: 16px;">{{ _('Click') }} <a style="text-decoration: underline;" href="/pages/tdh_partner_connect" target="_blank" data-cy="connect-details">{{ _('here') }}</a> {{ _('for more details') }}</p>
+              <p style="font-size: 16px;">{{ _('Click') }} <a class="govuk-link" href="/pages/tdh_partner_connect" 
+                target="_blank" data-cy="connect-details">{{ _('here') }}</a> {{ _('for more details') }}</p>
             </div>
           </div>
         </div>
@@ -94,7 +95,7 @@
           {% set datasets = h.get_featured_datasets(limit_new=2, limit_upcoming=3) %}
           {% if datasets %}
             {% snippet 'home/snippets/package_list.html', packages=datasets, list_class="landing-media-grid", item_class="landing-media-item" %}
-            <a class="landing-more" href="/dataset" data-cy="more-datasets">{{ _('More Datasets') }}</a> 
+            <a class="govuk-link govuk-link--no-visited-state landing-more" href="/dataset" data-cy="more-datasets">{{ _('More Datasets') }}</a> 
           {% else %}
             <p>{{ _('0 Datasets found.') }}</p>
           {% endif %}
@@ -108,7 +109,7 @@
         {% block blog_list %}
           {% set blog_list = h.get_featured_blog_articles(3) %}
           {% snippet 'ckanext_pages/snippets/featured_blogs.html', blogs=blog_list %}
-          <a class="landing-more" href="/blog" data-cy="more-blogs">{{ _('More Articles') }}</a> 
+          <a class="govuk-link govuk-link--no-visited-state landing-more" href="/blog" data-cy="more-blogs">{{ _('More Articles') }}</a> 
         {% endblock %}
       </div>
     {% endblock %}
@@ -121,7 +122,7 @@
           {% set topics = h.get_featured_groups(5) %}
           {% if topics %}
             {% snippet "group/snippets/group_list.html", groups=topics, list_class="landing-media-grid", item_class="landing-media-item" %}
-            <a class="landing-more" href="/group" data-cy="more-topics">{{ _('More Topics') }}</a> 
+            <a class="govuk-link govuk-link--no-visited-state landing-more" href="/group" data-cy="more-topics">{{ _('More Topics') }}</a> 
           {% else %}
             <p>{{ _('0 Topics found.') }}</p>
           {% endif %}
@@ -137,7 +138,7 @@
           {% set publishers = h.get_featured_organizations(5) %}
           {% if publishers %}
             {% snippet "organization/snippets/organization_list.html", organizations=publishers, list_class="landing-media-grid", item_class="landing-media-item" %}
-            <a class="landing-more" href="/organization" data-cy="more-publishers">{{ _('More Publishers') }}</a> 
+            <a class="govuk-link govuk-link--no-visited-state landing-more" href="/organization" data-cy="more-publishers">{{ _('More Publishers') }}</a> 
           {% else %}
             <p>{{ _('0 Publishers found.') }}</p>
           {% endif %}

@@ -9,7 +9,7 @@
         {% endif %}
         <a class="govuk-link" href="{{ url }}" >{{ page.title }}</a>
         {% if page.publish_date %}
-          <small class="date">{{ h.render_datetime(page.publish_date) }}</small>
+          <div class="article-heading-date">{{ h.render_datetime(page.publish_date) }}</div>
         {% endif %}
       </h3>
     {% endblock %}

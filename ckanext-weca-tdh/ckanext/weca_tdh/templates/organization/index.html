@@ -16,12 +16,12 @@
 {% endblock %}
 
 {% block secondary_content %}
-  <h2 class="govuk-body-m govuk-!-font-weight-bold">{{ _('Filter by') }}</h2>
+  <h2>{{ _('Filter by') }}</h2>
   {% block search_input %}
     {% snippet "snippets/search_form.html", label="Keywords", placeholder="Search publishers...", query=q %}  
   {% endblock %}
 
-  <label class="govuk-label sort-label" for="parent_org">{{ _('Parent Organisation') }}</label>
+  <label class="govuk-label" for="parent_org">{{ _('Parent Organisation') }}</label>
   {% set filter_items = h.sort_custom_metadata(page.items, request.args.get('parent_org', "")) %}
   {{ govukSelect({
     'id': "parent_org",
@@ -36,7 +36,7 @@
     'text': "Update results",
     'attributes': {'data-cy': 'filter-button'}
   }) }}
-  <p class="govuk-body sort-label">
+  <p class="govuk-body">
     <a class="govuk-link" href="{{ h.url_for('organization.index') }}" data-cy="filter-remove">{{ _('Remove filters') }}</a>
   </p>
 

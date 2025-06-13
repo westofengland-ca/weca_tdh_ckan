@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block secondary_content %}
-  <h2 class="govuk-body-m govuk-!-font-weight-bold">{{ _('Filter by') }}</h2>
+  <h2>{{ _('Filter by') }}</h2>
   {% block search_input %}
     {% snippet "snippets/search_form.html", label="Keywords", placeholder="Search topics...", query=q %}  
   {% endblock %}      
