@@ -8481,6 +8481,10 @@ main {
 
 /* SEARCH PAGE //
 ///////////////*/
+.search-sidebar-heading {
+  margin-bottom: 25px;
+}
+
 .search-wrapper {
   position: relative;
   width: 100%;
@@ -8586,7 +8590,12 @@ p.gem-c-lead-paragraph {
 .dataset-listclass {
   margin-top: 30px;
   list-style-type: none;
-  padding: 0px;
+  border-left: 4px solid #1d70b8;
+  padding-left: 20px;
+}
+
+.dataset-heading {
+  font-size: 19px;
 }
 
 .dataset-heading a {
@@ -8603,10 +8612,6 @@ p.gem-c-lead-paragraph {
 .btn-primary {
   background-color: #354753;
   border-color: initial;
-}
-
-.govuk-button {
-  font-size: 16px;
 }
 
 .heading-small {
@@ -9085,7 +9090,8 @@ iframe {
   text-align: left;
   padding: 0;
   cursor: pointer;
-  font-weight: 600;
+  font-size: 19px;
+  font-weight: 700;
   z-index: 1;
 }
 
