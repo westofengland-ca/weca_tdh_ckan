@@ -50,7 +50,7 @@
         'idPrefix': 'filter-' + name,
         'name': name,
         'classes': "govuk-checkboxes--small",
-        'items': filter_items
+        'items': filter_items | sort(attribute='value')
       }) }}
     </div>
     <div id="search-filter-tag-input-{{ name }}" class="search-filter-tag-input govuk-!-margin-bottom-2"></div>
