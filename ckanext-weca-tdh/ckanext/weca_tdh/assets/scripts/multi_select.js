@@ -3,24 +3,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const defaultSummaries = {};
 
     function updateTagContainer(groupName) {
-        const filterSummary = document.getElementById(`search-filter-summary-${groupName}`);
-        const tagContainer = document.getElementById(`search-filter-tag-input-${groupName}`);
+    const filterSummary = document.getElementById(`search-filter-summary-${groupName}`);
+    const tagContainer = document.getElementById(`search-filter-tag-input-${groupName}`);
+    if (!filterSummary || !tagContainer) return;
 
-        if (!tagContainer || !filterSummary ) return;
+    const checkboxes = document.querySelectorAll(`.govuk-checkboxes input[name="${groupName}"]`);
+    let checkedCount = 0;
 
-        if (!(groupName in defaultSummaries)) {
-            defaultSummaries[groupName] = filterSummary.textContent;
-        }
+    if (!(groupName in defaultSummaries)) {
+        defaultSummaries[groupName] = filterSummary.dataset.defaultSummary || "No filters selected";
+    }
 
-        tagContainer.innerHTML = "";
+    tagContainer.innerHTML = "";
 
-        const checkboxes = document.querySelectorAll(`.govuk-checkboxes input[name="${groupName}"]`);
-        let checkedCount = 0;
-
-        checkboxes.forEach(cb => {
+    checkboxes.forEach(cb => {
         if (cb.checked) {
             checkedCount++;
-
             const label = cb.labels[0]?.innerText || cb.value;
 
             const tag = document.createElement("span");
@@ -30,21 +28,25 @@ document.addEventListener("DOMContentLoaded", function () {
             const removeBtn = document.createElement("button");
             removeBtn.type = "button";
             removeBtn.setAttribute("aria-label", `Remove ${label}`);
+            removeBtn.setAttribute("data-value", cb.value);
             removeBtn.innerHTML = "&times;";
             removeBtn.onclick = () => {
-            cb.checked = false;
-            cb.dispatchEvent(new Event("change"));
+                cb.checked = false;
+                cb.dispatchEvent(new Event("change"));
             };
 
             tag.prepend(removeBtn);
             tagContainer.appendChild(tag);
         }
-        });
+    });
 
-        const hasChecked = checkedCount > 0;
-        tagContainer.style.display = hasChecked ? "block" : "none";
-        filterSummary.textContent = hasChecked ? `${checkedCount} filter${checkedCount === 1 ? '' : 's'} selected` : defaultSummaries[groupName];
-    }
+    const hasChecked = checkedCount > 0;
+    tagContainer.style.display = hasChecked ? "block" : "none";
+
+    filterSummary.textContent = hasChecked
+        ? `${checkedCount} filter${checkedCount === 1 ? '' : 's'} selected`
+        : defaultSummaries[groupName];
+}
 
     allCheckboxes.forEach(cb => {
         const name = cb.name;

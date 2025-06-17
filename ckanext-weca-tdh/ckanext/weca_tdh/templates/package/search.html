@@ -21,9 +21,10 @@
       {% snippet "snippets/search_form.html", query=q %}  
     {% endblock %}
     {% block search_filters %}
-      {% set facetLabels = ["organization", "groups", "res_format", "res_data_access", "res_data_category"] %}
-      {% for facet in facetLabels %}
-        {% snippet 'package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped %}
+      {% set facet_fields = ["organization", "groups", "res_format", "res_data_access", "res_data_category"] %}
+      {% set search_facets_all = h.get_package_search_facets(facet_fields) %}
+      {% for field in facet_fields %}
+        {% snippet 'package/snippets/filter_items.html', name=field, search_facets=search_facets_all, fields_grouped=fields_grouped %}
       {% endfor %}
       {{ govukButton({
         'text': "Update results",
