@@ -8076,11 +8076,12 @@
 /* main header that contains logo, nav links and search */
 .masthead {
   background: #354753;
+  min-height: 64px;
 }
 
 /* main nav bar logo */
 .masthead .navbar .logo img {
-  max-height: 48px;
+  height: 48px;
 }
 
 /* navbar title */
@@ -8495,6 +8496,7 @@ input.search-input {
   border: 2px solid;
   padding: 8px;
   width: 100%;
+  height: 45px;
   float: left;
 }
 
@@ -8510,6 +8512,7 @@ button.search-submit {
   background-color: #1d70b8;
   width: 10%;
   min-width: 45px;
+  height: 45px;
   padding: 8px;
   position: absolute;
   top: 0;
