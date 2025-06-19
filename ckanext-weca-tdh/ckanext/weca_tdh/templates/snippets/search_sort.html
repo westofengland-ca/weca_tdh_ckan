@@ -6,7 +6,7 @@
   Example: h.snippet('package/snippets/search_sort.html', sort_by_selected=sort_by_selected)
 #}
 
-{% from "components/select/macro.html" import govukSelect %}
+{% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
 
 {% set sort_options = sort_options if sort_options else [(_('Name Ascending'), 'name asc'), (_('Name Descending'), 'name desc')] %}
 
@@ -24,6 +24,7 @@
   {{ govukSelect({
     'id': "search-sort",
     'name': "sort",
+    'label': "",
     'items': sort_items,
     'attributes': {'onchange': "this.form.submit()", 'aria-labelledby': 'search-sort', 'data-cy': 'search-sort'},
     }) 

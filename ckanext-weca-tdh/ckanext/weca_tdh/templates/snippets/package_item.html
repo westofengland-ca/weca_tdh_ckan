@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block heading_title %}
-  <a href="{{ h.url_for('%s.read' % package.type, id=package.name) }}" title="{{ title }}" data-cy="dataset-title">
+  <a class="govuk-link" href="{{ h.url_for('%s.read' % package.type, id=package.name) }}" title="{{ title }}" data-cy="dataset-title">
     {{ title|truncate(80) }}
   </a>
 {% endblock%}

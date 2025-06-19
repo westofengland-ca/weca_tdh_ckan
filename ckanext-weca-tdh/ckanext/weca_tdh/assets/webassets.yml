@@ -1,8 +1,8 @@
-govuk-js:
+govuk-frontend-js:
   filters: rjsmin
-  output: weca_tdh/%(version)s_govuk.js
+  output: weca_tdh/%(version)s_govuk-frontend.js
   contents:
-    - scripts/govuk.js
+    - scripts/govuk-frontend.js
 
 cookie_control-js:
   filters: rjsmin
@@ -15,6 +15,12 @@ google_analytics-js:
   output: weca_tdh/%(version)s_google_analytics.js
   contents:
     - scripts/google_analytics.js
+
+multi_select-js:
+  filters: rjsmin
+  output: weca_tdh/%(version)s_multi_select.js
+  contents:
+    - scripts/multi_select.js
 
 weca_tdh-css:
   output: weca_tdh/%(version)s_weca_tdh.css

@@ -1,34 +1,27 @@
 {#
-  Populates dataset filter selector items
+  Populates publisher filter selector items
 
-  name - The field name identifying the facet field, eg. "groups"
+  name - The field name identifying the facet field, eg. "parent_org"
   search_facets - A dictionary with search facets
-  fields_grouped - A list of fields
 
-  Example: h.snippet('package/snippets/filter_items.html', name=facet, search_facets=search_facets, fields_grouped=fields_grouped)
+  Example: h.snippet('organization/snippets/filter_items.html', name=facet, search_facets=search_facets)
 #}
 
 {% asset 'weca_tdh/multi_select-js' %}
 {% from "govuk_frontend_jinja/components/checkboxes/macro.html" import govukCheckboxes %}
 
 {% block filter_items %}
-  {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format", 'res_data_access': "Data Access", 'res_data_category': "Data Category"} %}
-  {% set filter_summaries = {'res_data_access': "Methods for accessing data", 'res_data_category': "Data classification (sensitivity)"} %}
+  {% set filter_labels = {'parent_org': "Parent Organisation"} %}
+  {% set filter_summaries = {'parent_org': ""} %}
   {% set filter_items = [] %}
-
-  {% set items = h.get_facet_items_dict(name, search_facets) %}
-  {% for item in items %}    
-    {% if item.name in ''.join(fields_grouped[name]) %}
+    
+  {% for item in search_facets %}    
+    {% if name in request.args and item.text in request.args.getlist(name) %}
       {% set checked = true %}
     {% endif %}
 
-    {{ filter_items.append({'value': item.name, 'text': item.display_name, 'checked': checked}) or "" }}
+    {{ filter_items.append({'value': item.value, 'text': item.text, 'checked': checked}) or "" }}
   {% endfor %}
-
-  {% if name in ('res_format', 'res_data_access', 'res_data_category') %}
-    {% set checked_values = fields_grouped.get(name, []) %}
-    {% set filter_items = h.sort_search_filter_items(filter_items, name, checked_values) %}
-  {% endif %}
 
   <div class="search-filter-wrapper">
     <h3 class="search-filter-heading ">

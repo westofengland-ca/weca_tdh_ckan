@@ -1,5 +1,5 @@
 {% extends "page.html" %}
-{% from "components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 
 {% block subtitle %}{{ _('Topics') }}{% endblock %}
 {% block toolbar %}{% endblock %}
@@ -15,9 +15,9 @@
 {% endblock %}
 
 {% block secondary_content %}
-  <h2 class="govuk-body-m govuk-!-font-weight-bold">{{ _('Filter by') }}</h2>
+  <h2 class="search-sidebar-heading">{{ _('Filter results') }}</h2>
   {% block search_input %}
-    {% snippet "snippets/search_form.html", label="Keywords", placeholder="Search topics...", query=q %}  
+    {% snippet "snippets/search_form.html", placeholder="Search topics...", query=q %}  
   {% endblock %}      
   {% snippet "group/snippets/group_sidebar.html", group_type=group_type %}       
 {% endblock %}

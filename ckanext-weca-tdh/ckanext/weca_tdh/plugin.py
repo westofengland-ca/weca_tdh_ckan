@@ -77,7 +77,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     def get_blueprint(self) -> list:      
         '''
         Return flask blueprints for routing
-        '''       
+        '''
         return [actionbp, adauthbp, databricksbp, uploadbp]
 
     ''' 
@@ -158,19 +158,43 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     Override package search
     '''
     def before_dataset_search(self, search_params: dict) -> dict:
-        if "fq" in search_params:
-            patterns = {
-                "res_format": r'res_format:"([^"]+)"',
-                "res_data_access": r'res_data_access:"([^"]+)"',
-                "res_data_category": r'res_data_category:"([^"]+)"'
-            }
+        if "fq" not in search_params:
+            return search_params
+        
+        patterns = {
+            "res_format": r'res_format:"([^"]+)"',
+            "res_data_access": r'res_data_access:"([^"]+)"',
+            "res_data_category": r'res_data_category:"([^"]+)"'
+        }
 
-            for field, pattern in patterns.items():
-                search_params["fq"] = re.sub(
-                    pattern, 
-                    lambda match: "{}:*{}*".format(field, match.group(1).replace(" ", "\\ ")), 
-                    search_params["fq"]
-                )
+        for field, pattern in patterns.items():
+            search_params["fq"] = re.sub(
+                pattern, 
+                lambda match: "{}:*{}*".format(field, match.group(1).replace(" ", "\\ ")), 
+                search_params["fq"]
+            )
+
+        matches = re.findall(r'(\w+):(?:"([^"]+)"|([^"]+?))(?=\s+\w+:|$)', search_params["fq"])
+        
+        field_map = {}
+        
+        for field, quoted_val, unquoted_val in matches:
+            value = quoted_val if quoted_val else unquoted_val.strip()
+            if field in field_map:
+                field_map[field].append(value)
+            else:
+                field_map[field] = [value]
+        
+        new_fq_list = []
+
+        for field, values in field_map.items():
+            if len(values) == 1:
+                new_fq_list.append(f"{field}:{values[0]}")
+            else:
+                or_clause = f"{field}:(" + " OR ".join(values) + ")"
+                new_fq_list.append(or_clause)
+
+        search_params["fq"] = " ".join(new_fq_list)
 
         return search_params
 
@@ -240,6 +264,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         return facets_dict
     
     def organization_facets(self, facets_dict, organization_type, package_type):
+        facets_dict['parent_org'] = plugins.toolkit._('Parent Organisation') 
+        
         return facets_dict
 
     def group_facets(self, facets_dict, group_type, package_type):
