@@ -8364,12 +8364,15 @@ main {
 }
 
 .about-datahub {
+  aspect-ratio: 1.875;
   max-width: 54%;
+  width: 100%;
   text-align: center;
 }
 
 .about-datahub img {
   width: 100%;
+  height: 100%;
 }
 
 .about-benefits {
