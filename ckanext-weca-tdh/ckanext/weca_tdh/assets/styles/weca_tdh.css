@@ -8467,14 +8467,13 @@ main {
   text-decoration: none;
 }
 
-.faq-video {
+.faq-video, .pbi-report {
   position: relative;
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
   width: 100%;
 }
-
 .faq-video iframe {
   position: absolute;
   top: 0;
@@ -8483,6 +8482,13 @@ main {
   height: 100%;
   max-width: 560px;
   max-height: 315px;
+}
+.pbi-report iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* SEARCH PAGE //
