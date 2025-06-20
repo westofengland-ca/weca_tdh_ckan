@@ -16,8 +16,8 @@
     <label class="govuk-label" for="keywords" title="Title, description, tags, topics, publishers, format, license...">{{ label }}</label>
   {% endif %}
   <div class="search-wrapper">
-    <input class="search-input" {% if advanced %}style="border: 3px solid white;"{% endif %} id="keywords" type="text" placeholder="{{ placeholder }}" name="q" value="{{ query }}" aria-label="search-input" data-cy="search-input">           
-    <button class="search-submit" {% if advanced %}style="border: 3px solid white;"{% endif %} type="submit" title="search-button" data-cy="search-button"><i class="fa fa-search"></i></button>
+    <input class="search-input" {% if advanced %}style="border: 2px solid white;"{% endif %} id="keywords" type="text" placeholder="{{ placeholder }}" name="q" value="{{ query }}" aria-label="search-input" data-cy="search-input">           
+    <button class="search-submit" {% if advanced %}style="border: 2px solid white;"{% endif %} type="submit" title="search-button" data-cy="search-button"><i class="fa fa-search"></i></button>
     {% if advanced %}
       <a class="search-advanced" href="/dataset">{{ _('Advanced search') }}</a>
     {% endif %}

@@ -17,18 +17,19 @@
 /* main header that contains logo, nav links and search */
 .masthead {
     background: #354753;
+    min-height: 64px;
 }
 
 /* main nav bar logo */
 .masthead .navbar .logo img {
-    max-height: 48px;
+    height: 48px;
 }
 
 /* navbar title */
 .masthead .navbar .navbar-title {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     color: white;
-    margin-right: 15px;
+    margin-right: 3.5rem;
 }
 
 /* nav pill list */
@@ -38,14 +39,12 @@
 
 /* nav pill list item */
 .masthead .main-navbar ul li {
-    padding-right: 0px;
-    padding-top: 5px;
-    margin-right: 0px;
+    align-content: center;
 }
 
 /* nav pill links */
 .masthead .main-navbar ul li a {
-    padding: 0.8rem 1.5rem;
+    padding: 0.8rem 1rem;
     border-left: 0.5px solid #ccc;
     font-weight: 700;
     font-size: 1rem;
@@ -66,6 +65,11 @@
 
 .nav-item-active {
     text-decoration: underline !important;
+}
+
+.navbar-light .navbar-toggler {
+    color: white;
+    border: none;
 }
 
 /* FOOTER //
@@ -306,11 +310,14 @@ main {
 }
 
 .about-datahub {
+    aspect-ratio: 1.875;
     max-width: 54%;
+    width: 100%;
     text-align: center;
 }
 .about-datahub img {
     width: 100%;
+    height: 100%
 }
 
 .about-benefits {
@@ -407,6 +414,22 @@ main {
     max-height: 315px;
 }
 
+.pbi-report {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.pbi-report iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
 /* SEARCH PAGE //
 ///////////////*/
 
@@ -425,6 +448,7 @@ input.search-input {
     border: 2px solid;
     padding: 8px;
     width: 100%;
+    height: 45px;
     float: left;
 }
 
@@ -440,6 +464,7 @@ button.search-submit {
     background-color: #1d70b8;
     width: 10%;
     min-width: 45px;
+    height: 45px;
     padding: 8px;
     position: absolute;
     top: 0;
