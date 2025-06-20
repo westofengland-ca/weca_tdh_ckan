@@ -1,7 +1,7 @@
 {% set pages_total = pages|length %}
 {% set action = '{0}_show'.format(type) %}
 
-<h1 class="page-heading">{{ title or "Articles" if type == "blog" else "Documentation" }}</h1>
+<h1 class="page-heading">{{ title or "Articles" if type == "blog" else "Resources" }}</h1>
 
 {% if pages %}
   {# Helper block to render a page list item #}
@@ -37,7 +37,7 @@
   {% endfor %}
 {% else %}
   <p class="empty">
-    {{ _('There are currently no blog articles.') if type == 'blog' else _('There are currently no documents.') }}
+    {{ _('There are currently no articles.') if type == 'blog' else _('There are currently no resources.') }}
   </p>
 {% endif %}
 
