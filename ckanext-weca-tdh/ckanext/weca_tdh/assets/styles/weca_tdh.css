@@ -8086,9 +8086,9 @@
 
 /* navbar title */
 .masthead .navbar .navbar-title {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   color: white;
-  margin-right: 25px;
+  margin-right: 3.5rem;
 }
 
 /* nav pill list */
@@ -8098,14 +8098,12 @@
 
 /* nav pill list item */
 .masthead .main-navbar ul li {
-  padding-right: 0px;
-  padding-top: 5px;
-  margin-right: 0px;
+  align-content: center;
 }
 
 /* nav pill links */
 .masthead .main-navbar ul li a {
-  padding: 0.8rem 1.5rem;
+  padding: 0.8rem 1rem;
   border-left: 0.5px solid #ccc;
   font-weight: 700;
   font-size: 1rem;
@@ -8126,6 +8124,11 @@
 
 .nav-item-active {
   text-decoration: underline !important;
+}
+
+.navbar-light .navbar-toggler {
+  color: white;
+  border: none;
 }
 
 /* FOOTER //
