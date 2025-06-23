@@ -13,11 +13,15 @@ extras is a list of tuples of the form (key, value)
       </tr>
     </thead>
     <tbody>
-      {% for extra in extras %}
-        {% set key, value = extra %}
-        {% set key = 'Parent Organisation' if key == 'parent_org' else key %}
-        <tr rel="dc:relation" resource="_:extra{{ i }}">
-          <th scope="row" class="dataset-label" property="rdfs:label">{{ _(key|e) }}</th>
+      {% set key_labels = {
+        'parent_org': _('Parent Organisation'), 
+        'tdh_schema': _('TDH Query Path') 
+      } %}
+      {% for key, value in extras %}
+        <tr rel="dc:relation" resource="_:extra{{ loop.index0 }}">
+          <th scope="row" class="dataset-label" property="rdfs:label">
+            {{ key_labels.get(key, key)|e }}
+          </th>
           <td class="dataset-details" property="rdf:value">{{ value }}</td>
         </tr>
       {% endfor %}
