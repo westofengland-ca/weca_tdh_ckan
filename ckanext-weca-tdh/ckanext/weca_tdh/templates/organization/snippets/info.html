@@ -17,10 +17,11 @@
 
 {% block heading %}
   {{ super() }}
+  {% set data_owners = h.get_organization(organization.id).users %}
   <p style="margin-top: 1rem;">
-    <b>{{ _('Data Owner(s):') }}</b>
-    {% for member in h.get_organization(organization.id).users %}
-      {{ h.linked_user(member.id, avatar=15, maxlength=25) }}{% if not loop.last %}, {% endif %}
+    <b>{{ ngettext('Data Owner', 'Data Owners', data_owners | length) }}:</b>
+    {% for owner in data_owners %}
+      {{ h.linked_user(owner.id, avatar=15, maxlength=25) }}{% if not loop.last %}, {% endif %}
     {% endfor %}
   </p>
 {% endblock %}

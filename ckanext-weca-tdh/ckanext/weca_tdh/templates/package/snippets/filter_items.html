@@ -44,11 +44,12 @@
       {% set default_summary = filter_summaries[name] or "No filters selected" %}
       {% set checked_items = filter_items | selectattr("checked") | list %}
       {% set checked_count = checked_items | length %}
+
       <div id="search-filter-summary-{{ name }}"
           class="govuk-label search-filter-summary"
           data-default-summary="{{ default_summary }}">
         {% if checked_count %}
-          {{ checked_count }} filter{{ 's' if checked_count != 1 else '' }} selected
+          {{ ngettext('%(num)d filter selected', '%(num)d filters selected', checked_count) % {'num': checked_count} }}
         {% else %}
           {{ default_summary }}
         {% endif %}

@@ -79,7 +79,7 @@
                     {% endif %}
                   </a>
                 </dd>
-                <dt>{{ _('Data Owner(s):') }}</dt>
+                <dt>{{ ngettext('Data Owner', 'Data Owners', data_owners | length) }}:</dt>
                 <dd property="dc:owner" data-cy="package-owner">
                   {% if data_owners %}
                     {% for owner in data_owners %}
@@ -89,7 +89,7 @@
                     {{ _('Unassigned') }}
                   {% endif %}
                 </dd>
-                <dt>{{ _('Data Steward(s):') }}</dt>
+                <dt>{{ ngettext('Data Steward', 'Data Stewards', collaborators | length) }}:</dt>
                 <dd property="dc:stewards" data-cy="package-stewards">
                   {% if collaborators %}
                     {% for steward in collaborators %}
