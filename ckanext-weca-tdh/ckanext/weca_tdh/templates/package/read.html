@@ -99,6 +99,12 @@
                     {{ _('Unassigned') }}
                   {% endif %}
                 </dd>
+                {% if tdh_Schema %}
+                  <dt>{{ _('TDH Query Path:') }}</dt>
+                  <dd property="dc:query" data-cy="package-query">
+                    {{ tdh_schema }}
+                  </dd>
+                {% endif %}
               </dl>
               {% block package_summary %}
                 <h3 class="heading-small" style="font-size:19px">{{ _('Summary') }}</h3>
