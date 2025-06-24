@@ -2,5 +2,5 @@ azure-identity==1.19.0
 azure-keyvault-secrets==4.9.0
 azure-storage-blob==12.24.0
 ckanext-pdfview
-bs4==4.12.3
+beautifulsoup4==4.12.3
 markdown==3.6
