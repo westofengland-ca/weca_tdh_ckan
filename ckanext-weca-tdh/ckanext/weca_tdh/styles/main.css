@@ -781,6 +781,10 @@ p.gem-c-lead-paragraph {
     display: inline-grid;
 }
 
+.group-sidebar .module-heading, .group-sidebar .module-content {
+    padding: 0.5rem !important;
+}
+
 .group-btn-remove {
     position: relative;
     z-index: +1;
@@ -840,6 +844,10 @@ p.gem-c-lead-paragraph {
 
 .resource-wrapper {
     padding: 0px;
+}
+
+.resource-wrapper .module-content {
+    padding: 1rem;
 }
 
 .resource-upload-field .btn-remove-url {

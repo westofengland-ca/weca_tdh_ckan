@@ -8467,13 +8467,14 @@ main {
   text-decoration: none;
 }
 
-.faq-video, .pbi-report {
+.faq-video {
   position: relative;
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
   width: 100%;
 }
+
 .faq-video iframe {
   position: absolute;
   top: 0;
@@ -8483,6 +8484,15 @@ main {
   max-width: 560px;
   max-height: 315px;
 }
+
+.pbi-report {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
 .pbi-report iframe {
   position: absolute;
   top: 0;
@@ -8844,6 +8854,10 @@ p.gem-c-lead-paragraph {
   display: inline-grid;
 }
 
+.group-sidebar .module-heading, .group-sidebar .module-content {
+  padding: 0.5rem !important;
+}
+
 .group-btn-remove {
   position: relative;
   z-index: 1;
@@ -8902,6 +8916,10 @@ p.gem-c-lead-paragraph {
 ///////////////*/
 .resource-wrapper {
   padding: 0px;
+}
+
+.resource-wrapper .module-content {
+  padding: 1rem;
 }
 
 .resource-upload-field .btn-remove-url {
