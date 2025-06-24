@@ -6,6 +6,7 @@ import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.databricks import oauth_code_verify_and_challenge
 from flask import flash, session
+from typing import Any
 
 log = logging.getLogger(__name__)
 
@@ -131,11 +132,11 @@ def get_featured_blog_articles(limit: int, exclude=None) -> dict:
 
     return featured_list
 
-def sort_search_filter_items(filter_items: list, filter_type=None, selected_values=None) -> list:
+def sort_search_filter_items(filter_items: list, filter_type=None, checked_values=None) -> list:
     sorted_items = []
     seen_values = set()
     categories = get_resource_data_categories() if filter_type == 'res_data_category' else {}
-    selected_set = set(selected_values or [])
+    checked_set = set(checked_values or [])
 
     for item in filter_items:
         values = item['value'].split(', ') if ',' in item['value'] else [item['value']]
@@ -143,32 +144,46 @@ def sort_search_filter_items(filter_items: list, filter_type=None, selected_valu
             if value not in seen_values:
                 seen_values.add(value)
                 mapped_value = categories[int(value)].get('name', value) if value and categories else value
-                selected = value in selected_set
-                sorted_items.append({'value': value, 'text': mapped_value, 'selected': selected})
+                checked = value in checked_set
+                sorted_items.append({'value': value, 'text': mapped_value, 'checked': checked})
 
     return sorted_items
 
-def sort_custom_metadata(page_items: list, current_filter: str) -> list:  
-    sorted_items = [{'value': "", 'text': ""}]
+def get_orgs_or_groups_extras_list(is_org: bool, q: str = "") -> list:
+    page_results: dict[str, Any] = {
+        u'all_fields': True,
+        u'q': q,
+        u'include_extras': True,
+        u'include_dataset_count': True,
+        u'include_member_count': True,
+    }
 
-    # Set to track seen values
+    action_name = 'organization_list' if is_org else 'group_list'
+    data_dict = toolkit.get_action(action_name)(context={'ignore_auth': True}, data_dict=page_results)
+
+    sorted_items = []
     seen_values = set()
     
-    for item in page_items:
+    for item in data_dict:
         for extra in item.get('extras'):
             value = extra.get('value')
-            if extra.get('key') == 'parent_org' and value and value not in seen_values:
-                # Add the value to the seen set
+            if value and value not in seen_values:
                 seen_values.add(value)
-                 
-                # Create new entries for each unique value
-                sorted_items.append({
-                    'value': value, 
-                    'text': value,
-                    'selected': value == current_filter
-                })
+                sorted_items.append({'value': value, 'text': value})
     
     return sorted_items
+
+def get_package_search_facets(facets: list[str], q: str = "") -> dict:
+    data_dict: dict[str, Any] = {
+        u'q': q,
+        u'facet': True,
+        u'facet.field': facets,
+        u'facet.limit': -1, # unlimited
+        u'rows': 0,
+    }
+    result = toolkit.get_action('package_search')(context={'ignore_auth': True}, data_dict=data_dict)
+                
+    return result.get('search_facets', {})
 
 def update_package_metadata(pkg_dict: dict, key: str, value: any) -> dict:
     pkg_dict[key] = value

@@ -1,6 +1,6 @@
 {% extends "page.html" %}
-{% from "components/button/macro.html" import govukButton %}
-{% from "components/select/macro.html" import govukSelect %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
 
 {% block subtitle %}{{ _('Publishers') }}{% endblock %}
 {% block toolbar %}{% endblock %}
@@ -16,28 +16,27 @@
 {% endblock %}
 
 {% block secondary_content %}
-  <h2 class="govuk-body-m govuk-!-font-weight-bold">{{ _('Filter by') }}</h2>
-  {% block search_input %}
-    {% snippet "snippets/search_form.html", label="Keywords", placeholder="Search publishers...", query=q %}  
-  {% endblock %}
-
-  <label class="govuk-label sort-label" for="parent_org">{{ _('Parent Organisation') }}</label>
-  {% set filter_items = h.sort_custom_metadata(page.items, request.args.get('parent_org', "")) %}
-  {{ govukSelect({
-    'id': "parent_org",
-    'name': "parent_org",
-    'items': filter_items | sort(attribute='value'),
-    'attributes': {'data-cy': 'filter-parent_org'}
-    }) 
-  }}
-
-  {{ govukButton({
-    'text': "Apply filters",
-    'attributes': {'data-cy': 'filter-button'}
-  }) }}
-  <p class="govuk-body sort-label">
-    <a class="govuk-link" href="{{ h.url_for('organization.index') }}" data-cy="filter-remove">{{ _('Remove filters') }}</a>
-  </p>
+  <div class="search-sidebar">
+    <h2 class="search-sidebar-heading">{{ _('Filter results') }}</h2>
+    {% block search_input %}
+      {% snippet "snippets/search_form.html", placeholder="Search publishers...", query=q %}  
+    {% endblock %}
+    {% block search_filters %}
+      {% set facet_fields = ["parent_org"] %}
+      {% set search_facets_all = h.get_orgs_or_groups_extras_list(is_org=true) %}
+      {% for field in facet_fields %}
+        {% snippet 'organization/snippets/filter_items.html', name=field, search_facets=search_facets_all %}
+      {% endfor %}
+      {{ govukButton({
+        'text': "Update results",
+        'type': 'submit',
+        'attributes': {'data-cy': 'filter-button'}
+      }) }}
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ h.url_for('organization.index') }}" data-cy="filter-remove">{{ _('Remove filters') }}</a>
+      </p>
+    {% endblock %}
+  </div>
 
   {% snippet "organization/snippets/organization_sidebar.html", group_type=group_type %} 
 {% endblock %}
@@ -48,28 +47,31 @@
       {% snippet 'snippets/search_sort.html', sorting_selected=sort_by_selected %}
     </div>
   {% endblock %}
-  {% block search_results_count %}
-    <span class="results_summary" data-cy="results-summary">
-      <span class="govuk-body-m govuk-!-font-weight-bold">{% snippet 'snippets/search_result_text.html', query=q, sort_by_selected=sort_by_selected, count=page.item_count, type=group_type %}</span>
-    </span>
-  {% endblock %}
+  
+  {% block search_results %}
+    {% set filter_items = [] %}
+    {% set item_count = page.item_count %}
 
-  {% block organizations_list %}
+    {% if not request.args.parent_org %}
+      {% set filter_items = page.items %}
+    {% else %}
+      {% for item in page.items %}
+        {% if item.extras %}
+          {% if item.extras[0].get('value') in request.args.getlist('parent_org') %}
+            {{ filter_items.append(item) or "" }}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% set item_count = filter_items | length %}
+    {% endif %}
+
+    <span class="results_summary" data-cy="results-summary">
+      <span class="govuk-body-m govuk-!-font-weight-bold">{% snippet 'snippets/search_result_text.html', query=q, sort_by_selected=sort_by_selected, count=item_count, type=group_type %}</span>
+    </span>
+
     <div class="group-listclass">
       {% if page.items %}
-        {% if not request.args.parent_org %}
-          {% snippet "organization/snippets/organization_list.html", organizations=page.items %}
-        {% else %}
-          {% set filter_items = [] %}
-          {% for item in page.items %}
-            {% if item.extras %}
-              {% if item.extras[0].get('value') == request.args.parent_org %}
-                {{ filter_items.append(item) or "" }}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-          {% snippet "organization/snippets/organization_list.html", organizations=filter_items, all_fields=False %}
-        {% endif %}
+        {% snippet "organization/snippets/organization_list.html", organizations=filter_items, all_fields=False %}
       {% else %}
         <p class="empty">
           {{ _('There are currently no publishers for this site') }}.
@@ -79,9 +81,11 @@
         </p>
       {% endif %}
     </div>
-  {% endblock %}
 
-  {% block page_pagination %}
-    {{ page.pager(q=q or '', sort=sort_by_selected or '') }}
-  {% endblock %} 
-{% endblock %}  
+    {% if not item_count <= page.items_per_page %}
+      {% block page_pagination %}
+        {{ page.pager(q=q or '', sort=sort_by_selected or '') }}
+      {% endblock %}
+    {% endif %}
+  {% endblock %}
+{% endblock %}
