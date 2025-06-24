@@ -140,7 +140,6 @@
         {{ h.render_markdown(res.description) }}
       {% endif %}
     </div>
-      <p class="content-seperator" style="margin-top: 5px;"></p>
   {% endblock %}
 
   {% block data_access %}
@@ -168,7 +167,7 @@
           {% endif %}
         {% elif "TDH Query" in res.resource_data_access %}
           {% if tdh_schema and res.tdh_table %}
-            <p>Connection details:</p>
+            <p>{{ _('Connection details:') }}</p>
             <p class="heading-small"><b>{{ _('TDH Query Path:') }}</b> {{ tdh_schema }}/{{ res.tdh_table }}</p>
           {% endif %}
         {% endif %}
