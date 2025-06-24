@@ -8922,6 +8922,13 @@ p.gem-c-lead-paragraph {
   padding: 1rem;
 }
 
+.resource-data-access {
+  background: #eee;
+  border-radius: 5px;
+  padding: 1rem 1rem 0.1rem;
+  margin-bottom: 1rem;
+}
+
 .resource-upload-field .btn-remove-url {
   margin-top: 13px;
 }
@@ -8966,6 +8973,10 @@ html {
 
 .info-icon {
   color: #354753;
+}
+
+.content-seperator {
+  border-bottom: 1px solid #ccc;
 }
 
 /* Data Preview /

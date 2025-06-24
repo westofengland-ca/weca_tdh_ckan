@@ -12,7 +12,7 @@
   <div class="media-image-container">
     <img src="{{ group.image_display_url or h.url_for_static('/base/images/placeholder-group.png') }}" alt="{{ group.name }}" class="media-image img-fluid" style="max-height: 160px;">
   </div>
-  <p style="border-bottom: 1px solid #ccc; margin-top: 1rem;"></p>
+  <p class="content-seperator" style="margin-top: 1rem;"></p>
 {% endblock %}
 
 {% block description %}
