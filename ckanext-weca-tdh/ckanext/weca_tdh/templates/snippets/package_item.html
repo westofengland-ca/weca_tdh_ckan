@@ -28,7 +28,7 @@
   </div>
   <div data-cy="dataset-notes">
     {% if notes %}
-      {{ h.truncate(h.extract_markdown_description(package.notes) or h.strip_markdown(package.notes), 170) }}
+      {{ (h.extract_markdown_description(package.notes) or h.strip_markdown(package.notes)) | truncate(170) }}
     {% else %}
       {{ _('There is currently no description for this dataset.') }}
     {% endif %}
