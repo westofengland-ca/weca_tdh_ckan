@@ -850,12 +850,6 @@ p.gem-c-lead-paragraph {
     padding: 1rem;
 }
 
-.resource-data-access {
-    border-left: 3px solid #eee;
-    padding: 1rem 1rem 0.1rem;
-    margin-bottom: 1rem;
-}
-
 .resource-upload-field .btn-remove-url {
     margin-top: 13px;
 }
@@ -873,6 +867,77 @@ p.gem-c-lead-paragraph {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.resource-control-flex {
+    display: flex;
+}
+
+.resource-control-flex input {
+    flex: 1;
+}
+
+.resource-control-flex span {
+    margin: 1% 1% 0 1%;
+}
+
+.resource-data-access {
+  background: #f9f9f9;
+  border-left: 4px solid #0077cc;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+.resource-data-access h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.data-access-img {
+  margin: 0 0 0.5rem 0.5rem;
+}
+
+.data-access-icon {
+  margin-left: 0.5rem;
+}
+
+.connection-details {
+  margin-top: 1rem;
+  font-family: monospace;
+}
+
+.tdh-query-path {
+  display: flex;
+  max-width: fit-content;
+  align-items: center;
+  background: #fff;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.tdh-query-path code {
+  flex: 1;
+}
+
+.tdh-query-path button {
+  margin-left: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.tdh-query-path button:hover {
+  background: #dee2e6;
+}
+
+.data-access-support-link {
+  margin-top: 1rem;
+  font-size: 0.95rem;
 }
 
 /* GLOBAL /
