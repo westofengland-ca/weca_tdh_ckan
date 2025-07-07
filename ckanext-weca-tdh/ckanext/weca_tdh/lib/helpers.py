@@ -256,9 +256,15 @@ def user_has_valid_db_token() -> bool:
         return False
 
     access_token = token_data.get("access_token")
-    expires_at = token_data.get("expires_at")
+    expires_at = token_data.get("expires_at", 0)
+    refresh_expires_at = token_data.get("refresh_expires_at", 0)
+
+    now = time.time()
 
     try:
-        return bool(access_token) and float(expires_at) > time.time()
+        return (
+            bool(access_token)
+            and (float(expires_at) > now or float(refresh_expires_at) > now)
+        )
     except (TypeError, ValueError):
         return False
