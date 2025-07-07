@@ -32,12 +32,12 @@
             {% endif %} 
           </a>
         {% elif "File Download" in res.resource_data_access %}
-          {% if not session.get('access_token')%}
-            <a id="ga-databricks-connect" class="btn btn-primary" href="{{ h.build_databricks_auth_url(res.id, request.path) }}">
+          {% if not h.user_has_valid_db_token() %}
+            <a id="ga-databricks-connect" class="btn btn-primary" 
+              href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}">
               <i class="fa fa-arrow-circle-down"></i> {{ _('Connect to TDH') }}
             </a>
           {% else %}
-          {% set resource_id = res.id %}
             <a id="ga-file-download-db" class="btn btn-primary" onclick="return start_download('{{ res.id }}');">
               <i class="fa fa-arrow-circle-down"></i> {{ _('Download File') }}
               <div id="spinner" class="download-spinner"></div>

@@ -1,12 +1,12 @@
 import json
 import logging
+import time
 from datetime import datetime
+from typing import Any
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
-from ckanext.weca_tdh.databricks import oauth_code_verify_and_challenge
 from flask import flash, session
-from typing import Any
 
 log = logging.getLogger(__name__)
 
@@ -240,21 +240,19 @@ def json_loads(string_list):
     except (json.JSONDecodeError, TypeError):
         return []
 
-def build_databricks_auth_url(resource_id: str, referrer: str) -> str:
-    client_id = C.TDH_DB_APP_CLIENT_ID
-    redirect_url = C.TDH_DB_APP_REDIRECT_URL
-    
-    code_verifier, code_challenge = oauth_code_verify_and_challenge()
-    session['code_verifier'] = code_verifier
-    session['referrer'] = referrer
-    
-    url = f"https://{C.TDH_CONNECT_ADDRESS_HOST}/oidc/v1/authorize" + \
-        f"?client_id={client_id}" + \
-        f"&redirect_uri={redirect_url}" + \
-        "&response_type=code" + \
-        f"&state={resource_id}" + \
-        f"&code_challenge={code_challenge}" + \
-        "&code_challenge_method=S256" + \
-        "&scope=all-apis+offline_access"
-        
-    return url
+def user_has_valid_db_token():
+    """Checks if a valid Databricks access token exists in session.
+
+    :return: True if access token is valid and not expired, otherwise False.
+    """
+    token_data = session.get('databricks')
+    if not token_data:
+        return False
+
+    access_token = token_data.get("access_token")
+    expires_at = token_data.get("expires_at")
+
+    try:
+        return access_token and expires_at and time.time() < float(expires_at)
+    except (TypeError, ValueError):
+        return False

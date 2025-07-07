@@ -10,7 +10,7 @@ import ckan.plugins.toolkit as toolkit
 from ckan.common import CKANConfig
 from ckan.model.user import AnonymousUser
 from ckan.types import Context, Schema
-from flask import flash, request
+from flask import flash, request, session
 
 import ckanext.weca_tdh.config as C
 from ckanext.pages.interfaces import IPagesSchema
@@ -68,6 +68,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         """
         Called on logout.
         """
+        session.pop('databricks', None)
         toolkit.logout_user()
 
         # if user logged in using AD, log out of AD

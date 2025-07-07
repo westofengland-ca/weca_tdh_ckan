@@ -33,7 +33,12 @@ ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL" \
     "ckan.site_description = $CKAN_SITE_DESCRIPTION"
 
 # Set the session config
-ckan config-tool $CKAN_INI SESSION_PERMANENT=False
+ckan config-tool $CKAN_INI SESSION_TYPE=redis
+ckan config-tool $CKAN_INI SESSION_KEY_PREFIX=session:
+ckan config-tool $CKAN_INI SESSION_PERMANENT=True
+ckan config-tool $CKAN_INI SESSION_PERMANENT=604800 # 7 days
+ckan config-tool $CKAN_INI SESSION_REFRESH_EACH_REQUEST=True
+ckan config-tool $CKAN_INI SESSION_USE_SIGNER=True
 
 # Set the search result configs
 ckan config-tool $CKAN_INI ckan.group_and_organization_list_all_fields_max=1000

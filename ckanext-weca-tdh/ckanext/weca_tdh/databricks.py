@@ -3,6 +3,7 @@ import hashlib
 import logging
 import os
 import threading
+import time
 import uuid
 
 import ckan.plugins.toolkit as toolkit
@@ -123,20 +124,61 @@ class DatabricksWorkspace(object):
         self.host = C.TDH_CONNECT_ADDRESS_HOST
         self.warehouse_id = str(C.TDH_CONNECT_ADDRESS_PATH).split('/')[-1]
         
+    @property
+    def user_id(self):
+        return toolkit.current_user.id if toolkit.current_user else "anon"
+    
+    def authenticate(self, resource_id):
+        referrer = request.args.get("referrer", "/dataset")
+        code_verifier, code_challenge = oauth_code_verify_and_challenge()
+
+        session['databricks'] = {
+            "code_verifier": code_verifier,
+            "referrer": referrer,
+            "access_token": None,
+            "refresh_token": None,
+            "expires_at": None,
+        }
+
+        # Redirect to OAuth
+        auth_url = self.build_databricks_auth_url(code_challenge, resource_id)
+        return toolkit.redirect_to(auth_url)
+    
+    @staticmethod
+    def build_databricks_auth_url(code_challenge: str, resource_id: str) -> str:
+        client_id = C.TDH_DB_APP_CLIENT_ID
+        redirect_url = C.TDH_DB_APP_REDIRECT_URL
+
+        return (
+            f"https://{C.TDH_CONNECT_ADDRESS_HOST}/oidc/v1/authorize"
+            f"?client_id={client_id}"
+            f"&redirect_uri={redirect_url}"
+            f"&response_type=code"
+            f"&state={resource_id}"
+            f"&code_challenge={code_challenge}"
+            f"&code_challenge_method=S256"
+            f"&scope=all-apis+offline_access"
+        )
+        
     def authorise(self):
         try:
-            referrer = session.get('referrer', '/')
+            referrer = session['databricks'].get('referrer', '/')
             
             # Get workspace authorisation code for user
             auth_code = self.get_workspace_auth_code()
             
             # Get auth code verifier
-            code_verifier = session.get('code_verifier')
+            code_verifier = session['databricks'].get('code_verifier')
             
             # Get/set workspace access token for user
-            access_token = self.generate_workspace_access_token(code_verifier, auth_code)
-            session['access_token'] = access_token
+            response_dict = self.generate_workspace_access_token(code_verifier, auth_code)
             
+            session['databricks'].update({
+                'access_token': response_dict.get("access_token"),
+                'refresh_token': response_dict.get("refresh_token"),
+                'expires_at': int(time.time()) + int(response_dict.get("expires_in", 3600))
+            })
+
             # Redirect back to resource page
             return toolkit.redirect_to(referrer)
 
@@ -147,10 +189,6 @@ class DatabricksWorkspace(object):
     @staticmethod
     def get_workspace_auth_code() -> str:  
         return request.args.get('code')
-    
-    @staticmethod
-    def get_workspace_access_token() -> str:
-        return session.get('access_token')
 
     def generate_workspace_access_token(self, code_verifier: str, auth_code: str) -> str:
         base_url = f"https://{self.host}/oidc/v1/token"
@@ -169,9 +207,54 @@ class DatabricksWorkspace(object):
         try:
             response = requests.post(base_url, data=data)
             response_dict = response.json()
-            return response_dict.get("access_token")
+            return response_dict
         except Exception:
             raise Exception('invalid access token')
+        
+    def get_workspace_access_token(self) -> str:
+        token_info = session.get('databricks')
+
+        if not token_info:
+            raise Exception("Databricks token not found in session")
+
+        access_token = token_info.get("access_token")
+        refresh_token = token_info.get("refresh_token")
+        expires_at = int(token_info.get("expires_at", 0))
+
+        # Refresh access token if expired
+        if time.time() > expires_at:
+            if not refresh_token:
+                session.pop('databricks', None)
+                raise Exception("Databricks refresh token missing or expired. Please log in again")
+
+            access_token, new_expires_at = self.refresh_workspace_access_token(refresh_token)
+
+            # Save updated access token and expiry time
+            session['databricks']['access_token'] = access_token
+            session['databricks']['expires_at'] = new_expires_at
+
+        return access_token
+
+    def refresh_workspace_access_token(self, refresh_token: str) -> tuple[str, int]:
+        base_url = f"https://{self.host}/oidc/v1/token"
+        client_id = C.TDH_DB_APP_CLIENT_ID
+
+        data = {
+            "client_id": client_id,
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token
+        }
+
+        response = requests.post(base_url, data=data)
+        response_dict = response.json()
+
+        if "access_token" not in response_dict:
+            raise Exception("Failed to refresh Databricks access token. Please log in to Databricks again")
+
+        access_token = response_dict["access_token"]
+        expires_at = int(time.time()) + int(response_dict.get("expires_in", 3600))
+
+        return access_token, expires_at
         
     def start_download(self):
         try:
@@ -217,6 +300,9 @@ class DatabricksWorkspace(object):
         catalog_files = json_data.get("catalog_files", {})
         return catalog_files.get(resource_id, None)
 
+
+databricksbp.add_url_rule('/databricks/auth/initiate/<resource_id>', 
+                          view_func=DatabricksWorkspace().authenticate)
 databricksbp.add_url_rule('/databricks/auth', 
                           view_func=DatabricksWorkspace().authorise)
 databricksbp.add_url_rule('/databricks/download/start', 
