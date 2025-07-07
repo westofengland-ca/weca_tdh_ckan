@@ -183,7 +183,7 @@ class DatabricksWorkspace(object):
             return toolkit.redirect_to(referrer)
 
         except Exception as e:
-            flash(f"Download authorisation failed: {e}. Contact the Data Owner for support.", category='alert-danger')
+            flash(f"Download authorisation failed: {e}. Contact the Data Owner for additional support.", category='alert-danger')
             return toolkit.redirect_to(referrer)
 
     @staticmethod
@@ -252,7 +252,7 @@ class DatabricksWorkspace(object):
             raise Exception("Failed to refresh Databricks access token. Please log in to Databricks again")
 
         access_token = response_dict["access_token"]
-        expires_at = int(time.time()) + int(response_dict.get("expires_in", 3600))
+        expires_at = int(time.time()) + int(response_dict.get("expires_in", 86400))
 
         return access_token, expires_at
         

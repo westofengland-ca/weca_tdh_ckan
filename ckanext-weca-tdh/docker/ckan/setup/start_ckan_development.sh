@@ -36,7 +36,7 @@ ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL" \
 ckan config-tool $CKAN_INI SESSION_TYPE=redis
 ckan config-tool $CKAN_INI SESSION_KEY_PREFIX=session:
 ckan config-tool $CKAN_INI SESSION_PERMANENT=True
-ckan config-tool $CKAN_INI SESSION_PERMANENT=604800 # 7 days
+ckan config-tool $CKAN_INI PERMANENT_SESSION_LIFETIME=86400 # 24 hours
 ckan config-tool $CKAN_INI SESSION_REFRESH_EACH_REQUEST=True
 ckan config-tool $CKAN_INI SESSION_USE_SIGNER=True
 
