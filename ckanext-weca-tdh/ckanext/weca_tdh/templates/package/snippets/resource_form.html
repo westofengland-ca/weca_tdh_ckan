@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <div class="form-group control-medium">
+  <div id="tdh-query-path-wrapper" class="form-group control-medium" style="display:none;">
     <label for="field-tdh_table" class="form-label">{{ _('TDH Query Path') }}</label>
     <div class="controls resource-control-flex">
       {% set value = data.get('tdh_catalog', '') %}
@@ -40,4 +40,22 @@
       <input value="{{value}}" placeholder="e.g. trips_route" id="field-tdh_table" name="tdh_table" class="form-control">
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const wrapper = document.getElementById('tdh-query-path-wrapper');
+      const select = document.querySelector('select[name="resource_data_access"]');
+
+      function toggleTdhFields() {
+        if (select && select.value === 'TDH Query') {
+          wrapper.style.display = 'block';
+        } else {
+          wrapper.style.display = 'none';
+        }
+      }
+
+      $(select).on('change', toggleTdhFields);
+      toggleTdhFields(); // Initial state
+    });
+  </script>
 {% endblock %}
