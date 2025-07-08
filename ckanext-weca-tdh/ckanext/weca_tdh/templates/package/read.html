@@ -178,9 +178,14 @@
       {% if c.userobj %}
         <section class="data-links">
           <div class="package-content">
-            {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources, can_edit=can_edit %}
+            {% set reports = pkg.resources | selectattr("resource_data_access", "equalto", "Power BI Report") | list %}
+            {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=reports, heading="Reports", can_edit=can_edit %}
           </div>
-        </section>
+          <div class="package-content">
+            {% set datasets = pkg.resources | rejectattr("resource_data_access", "equalto", "Power BI Report") | list %}
+            {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=datasets, heading="Datasets", can_edit=can_edit %}
+          </div>
+        </section> 
       {% endif %}
     {% endblock %}
 

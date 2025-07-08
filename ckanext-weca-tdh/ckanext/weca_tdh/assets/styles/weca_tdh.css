@@ -8720,7 +8720,7 @@ p.gem-c-lead-paragraph {
   border-color: #ddd;
 }
 
-/* PRODUCT PAGE //
+/* PACKAGE PAGE //
 ///////////////*/
 .column-one-third {
   float: left;
@@ -8924,6 +8924,10 @@ p.gem-c-lead-paragraph {
 
 .resource-upload-field .btn-remove-url {
   margin-top: 13px;
+}
+
+.module-resource .actions {
+  top: -2px;
 }
 
 .download-spinner {

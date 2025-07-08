@@ -23,6 +23,19 @@
       {{ h.filter_datetime(res.created, 'short') }}
     </td>
     <td class="govuk-table__cell">
+      {% if res.resource_data_access %}
+        {{ res.resource_data_access }} 
+      {% else %}
+        {% if res.url and h.is_url(res.url) %}
+          {{ _('External Link') }}
+        {% elif res.has_views %}
+          {{ _('Preview') }}
+        {% else %}
+          {{ _('N/A') }}
+        {% endif %}
+      {% endif %}
+    </td>
+    <td class="govuk-table__cell">
       <a href="{{ h.url_for('pages.show', page='support') ~ '#data-categories'}}">
         {% set categories = h.get_resource_data_categories() %}
         {% if res.resource_data_category %}
@@ -37,67 +50,6 @@
             title="{{ categories[0].desc }}"></i></span>
         {% endif %}
       </a>
-    </td>
-    <td class="govuk-table__cell">
-      {% if res.resource_data_access %}
-        {{ res.resource_data_access }} 
-      {% else %}
-        {% if res.url and h.is_url(res.url) %}
-          {{ _('External Link') }}
-        {% elif res.has_views %}
-          {{ _('Preview') }}
-        {% else %}
-          {{ _('N/A') }}
-        {% endif %}
-      {% endif %}
-    </td>
-    <td class="govuk-table__cell">
-      {% block resource_item_explore %}
-        {% if not url_is_edit %}
-        <div class="dropdown btn-group">
-          <a href="#" class="btn btn-primary dropdown-toggle" type="button" id="dropdownExplorer" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-share"></i>
-            {{ _('Explore') }}
-            <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="dropdownExplorer">
-            {% block resource_item_explore_links %}
-              {% block explore_view %}
-                <li>
-                  <a class="dropdown-item" href="{{ url }}">
-                    {% if res.has_views %}
-                      <i class="fa fa-chart-bar"></i>
-                      {{ _('Preview') }}
-                    {% else %}
-                      <i class="fa fa-info-circle"></i>
-                      {{ _('More information') }}
-                    {% endif %}
-                  </a>
-                </li>
-              {% endblock explore_view %}
-
-              {% if res.url and h.is_url(res.url) %}
-                <li>
-                  <a class="dropdown-item" href="{{ res.url }}" target="_blank" rel="noreferrer">
-                    {% if res.url_type != 'upload' %}
-                      <i class="fa fa-external-link"></i>
-                      {{ _('Go to resource') }}
-                    {% else %}
-                      <i class="fa fa-arrow-circle-down"></i>
-                      {{ _('Download') }}
-                    {% endif %}
-                  </a>
-                </li>
-              {% endif %}
-
-              {% if can_edit %}
-                <li>{% link_for _('Edit resource'), named_route=pkg.type ~ '_resource.edit', id=pkg.name, resource_id=res.id, class_='dropdown-item', icon='pencil' %}</li>
-              {% endif %}
-            {% endblock %}
-          </ul>
-        </div>
-        {% endif %}
-      {% endblock %}
     </td>
   </tr>
 {% endblock %}
