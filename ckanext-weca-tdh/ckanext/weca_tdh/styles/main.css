@@ -900,6 +900,15 @@ p.gem-c-lead-paragraph {
   align-items: center;
 }
 
+.resource-data-access .resource-data-action {
+    float: right;
+}
+@media (max-width: 600px) {
+    .resource-data-access .resource-data-action {
+        float: none;
+    }
+}
+
 .data-access-img {
   margin: 0 0 0.5rem 0.5rem;
 }
@@ -925,6 +934,7 @@ p.gem-c-lead-paragraph {
 
 .tdh-query-path code {
   flex: 1;
+  overflow-x: auto;
 }
 
 .tdh-query-path button {

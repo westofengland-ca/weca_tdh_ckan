@@ -1,5 +1,7 @@
 {% ckan_extends %}
 
+{% import 'package/macros/data_access.html' as data_access_macro %}
+
 {% block resource_license %}{% endblock %}
 
 {% block pre_primary %}
@@ -146,77 +148,13 @@
     <div class="resource-data-access">
       {% block data_access %}
         {% if res.resource_data_access %}
-          {% set data_access_info = {
-            'File Download': {
-              'title': "Direct Download",
-              'icon': 'fa-solid fa-download',
-              'description': 'This resource is available to download directly from the TDH.'
-            },
-            'Power BI Report': {
-              'title': 'Power BI Report',
-              'img': "/assets/images/branding/pbi-logo.svg",
-              'description': 'A Power BI Report is available for this resource. To view the report, click the Go to resource button or visit the URL above.'
-            },
-            'TDH Query': {
-              'title': "Connect with Power BI",
-              'img': "/assets/images/branding/pbi-logo.svg",
-              'description': "This resource is available to query using Power BI. <a href='/pages/tdh_partner_connect'><i class='fa fa-info-circle info-icon' title='Learn how to connect to the Transport Data Hub.'></i></a>"
-            },
-            'External Link': {
-              'title': 'Signposted Data',
-              'icon': 'fa-solid fa-arrow-up-right-from-square',
-              'description': 'This resource is available through an external link. Click the Go to resource button or visit the URL above.'
-            },
-            'Preview': {
-              'title': 'Preview',
-              'icon': 'fa-solid fa-chart-simple',
-              'description': 'This resource is available to preview using the sample data below.'
-            }
-          } %}
-
-          {% set data_access = data_access_info.get(res.resource_data_access) %}
-          {% if data_access %}
-            <div class="data-access-summary">
-              <h2>
-                {{ data_access.title | safe }}
-                {% if data_access.img %}
-                  <span class="data-access-img" aria-hidden="true">
-                    <img src="{{ data_access.img }}" alt="{{ data_access.title }}" width="30" height="30"/>
-                  </span>
-                {% elif data_access.icon %}
-                  <span class="data-access-icon" aria-hidden="true">
-                    <i class="{{ data_access.icon }}" alt="{{ data_access.title }}"></i>
-                  </span>
-                {% endif %}
-              </h2>
-              <p>{{ data_access.description | safe }}</p>
-
-              {% if "File Download" in res.resource_data_access %}
-                {% if not session.get('access_token')%}
-                  <p>{{ _('Click the Connect to TDH button above to start a new download session.') }}</p>
-                {% else %}
-                  <p>{{ _('To download, click the Download File button.') }}</p>
-                {% endif %}
-              {% elif "TDH Query" in res.resource_data_access %}
-                {% if tdh_schema and res.tdh_table %}
-                  <div class="connection-details">
-                    <label for="tdh-query-path">{{ _('TDH Query Path') }}</label>
-                    <div class="tdh-query-path">
-                      <code id="tdh-query-path">{{ res.tdh_catalog }}.{{ tdh_schema }}.{{ res.tdh_table }}</code>
-                      <button onclick="copyPath()"><i class="fa-regular fa-copy" aria-hidden="true"></i></button>
-                    </div>
-                  </div>
-                {% endif %}
-              {% endif %}
-            </div>
-          {% endif %}
+          {{ data_access_macro.render(res, tdh_schema) }}
+          <p class="heading-small data-access-support-link">{{ _('To learn more about data access methods, visit the') }} 
+            <a class="govuk-link" href="{{ h.url_for('pages.show', page='support') ~ '#data-access' }}" target="_blank">{{ _('Support page') }}</a>.
+          </p>
         {% else %}
           <p>{{ _('A data access type has not been assigned to this resource.') }}</p>
         {% endif %}
-
-        <p class="heading-small data-access-support-link">{{ _('To learn more about data access, visit the') }} 
-          <a class="govuk-link" href="{{ h.url_for('pages.show', page='support') ~ '#data-access' }}" target="_blank">{{ _('Support page') }}</a>.
-        </p>
 
         <script>
           function copyPath() {
