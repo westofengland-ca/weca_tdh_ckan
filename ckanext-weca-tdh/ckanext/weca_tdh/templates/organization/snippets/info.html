@@ -29,7 +29,7 @@
   {% set tdh_schema = (organization.extras | selectattr("key", "equalto", "tdh_schema") | map(attribute="value") | list).0 %}
   {% if tdh_schema %}
     <p style="margin-top: 1rem;">
-      <b>{{ _('TDH Query Path:') }}</b>
+      <b>{{ _('TDH Schema:') }}</b>
       {{ tdh_schema }}
     </p>
   {% endif %}

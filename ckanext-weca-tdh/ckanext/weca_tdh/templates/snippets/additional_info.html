@@ -15,7 +15,7 @@ extras is a list of tuples of the form (key, value)
     <tbody>
       {% set key_labels = {
         'parent_org': _('Parent Organisation'), 
-        'tdh_schema': _('TDH Query Path') 
+        'tdh_schema': _('TDH Schema') 
       } %}
       {% for key, value in extras %}
         <tr rel="dc:relation" resource="_:extra{{ loop.index0 }}">

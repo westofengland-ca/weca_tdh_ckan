@@ -32,10 +32,10 @@
     <div class="controls resource-control-flex">
       {% set value = data.get('tdh_catalog', '') %}
       <input value="{{value}}" placeholder="e.g. bronze_production" id="field-tdh_catalog" name="tdh_catalog" class="form-control">
-      <span>/</span>
+      <span>.</span>
       {% set value = tdh_schema or "not assigned" %}
       <input value="{{value}}" id="field-tdh_schema" name="tdh_schema" class="form-control" disabled>
-      <span>/</span>
+      <span>.</span>
       {% set value = data.get('tdh_table', '') %}
       <input value="{{value}}" placeholder="e.g. trips_route" id="field-tdh_table" name="tdh_table" class="form-control">
     </div>

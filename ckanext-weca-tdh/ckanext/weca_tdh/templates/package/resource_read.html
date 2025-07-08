@@ -202,7 +202,7 @@
                   <div class="connection-details">
                     <label for="tdh-query-path">{{ _('TDH Query Path') }}</label>
                     <div class="tdh-query-path">
-                      <code id="tdh-query-path">{{ res.tdh_catalog }}/{{ tdh_schema }}/{{ res.tdh_table }}</code>
+                      <code id="tdh-query-path">{{ res.tdh_catalog }}.{{ tdh_schema }}.{{ res.tdh_table }}</code>
                       <button onclick="copyPath()"><i class="fa-regular fa-copy" aria-hidden="true"></i></button>
                     </div>
                   </div>
