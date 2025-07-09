@@ -143,8 +143,7 @@
                   class="govuk-button request-form-btn"
                   data-cy="interest-button">
                   {{ _('Express interest') }}
-                </a>
-          
+                </a>         
               {% elif sensitive_resources %}
                 <h3 class="heading-small">{{ _('Don\'t have access to the data?') }}</h3>
                 <a id="ga-request-access-data"
@@ -177,14 +176,18 @@
     {% block data_links %}
       {% if c.userobj %}
         <section class="data-links">
-          <div class="package-content">
-            {% set reports = pkg.resources | selectattr("resource_data_access", "equalto", "Power BI Report") | list %}
-            {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=reports, heading="Reports", can_edit=can_edit %}
-          </div>
-          <div class="package-content">
-            {% set datasets = pkg.resources | rejectattr("resource_data_access", "equalto", "Power BI Report") | list %}
-            {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=datasets, heading="Datasets", can_edit=can_edit %}
-          </div>
+          {% set reports = pkg.resources | selectattr("resource_data_access", "equalto", "Power BI Report") | list %}
+          {% set datasets = pkg.resources | rejectattr("resource_data_access", "equalto", "Power BI Report") | list %}
+          {% if reports %}
+            <div class="package-content">
+              {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=reports, heading="Reports", tdh_schema=tdh_schema, can_edit=can_edit %}
+            </div>
+          {% endif %}
+          {% if datasets %}
+            <div class="package-content">
+              {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=datasets, heading="Datasets", tdh_schema=tdh_schema, can_edit=can_edit %}
+            </div>
+          {% endif %}
         </section> 
       {% endif %}
     {% endblock %}

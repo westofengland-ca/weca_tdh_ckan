@@ -36,7 +36,7 @@
         <a id="ga-tdh-connect-{{ res.id }}" 
            class="btn btn-primary resource-data-action" 
            href="{{ h.url_for('action.tdh_partner_connect_file') }}?tdh_catalog={{ res.tdh_catalog }}&tdh_schema={{ tdh_schema }}" 
-           download="tdh-{{ res.name | replace(' ', '_') }}.pbids">
+           download="TDH-{{ res.name | replace(' ', '_') }}.pbids">
             <i class="fa fa-arrow-circle-down"></i> {{ _('Partner Connect File') }}
         </a>
       {% endif %}

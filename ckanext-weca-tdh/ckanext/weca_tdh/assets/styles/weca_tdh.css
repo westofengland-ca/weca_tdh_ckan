@@ -8808,9 +8808,12 @@ p.gem-c-lead-paragraph {
   vertical-align: text-top;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 800px) {
   .metadata-box dt, .metadata-box dd {
     display: block;
+  }
+  .package-content {
+    overflow-x: auto;
   }
 }
 .metadata-box dt {
@@ -8829,7 +8832,6 @@ p.gem-c-lead-paragraph {
 
 .package-content {
   margin-bottom: 50px;
-  overflow-x: auto;
 }
 
 .govuk-table__cell {
@@ -8965,6 +8967,7 @@ p.gem-c-lead-paragraph {
   border-left: 4px solid #0077cc;
   padding: 1rem;
   margin-top: 1rem;
+  margin-bottom: 1rem;
   border-radius: 8px;
 }
 

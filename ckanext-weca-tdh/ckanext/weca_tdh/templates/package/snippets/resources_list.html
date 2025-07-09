@@ -23,11 +23,12 @@
             </a>
           </th>
           <th scope="col" class="govuk-table__header col-2">{{ _('Data category') }}</th>
+          <th scope="col" class="govuk-table__header col-2">{{ _('Explore') }}</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">              
         {% for resource in resources %}
-          {% snippet 'package/snippets/resource_row_item.html', pkg=pkg, res=resource, can_edit=can_edit %}
+          {% snippet 'package/snippets/resource_row_item.html', pkg=pkg, res=resource, tdh_schema=tdh_schema, can_edit=can_edit %}
         {% endfor %}
       </tbody>
     </table>  
