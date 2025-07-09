@@ -130,7 +130,7 @@ def get_data_quality_markings() -> list:
 
 def get_featured_datasets(limit_new: int, limit_upcoming: int) -> dict:
     data_dict = {
-        'fq': '-availability:upcoming',
+        'fq': 'availability:available',
         'sort': 'metadata_created desc',
         'rows': limit_new
     }
@@ -139,6 +139,7 @@ def get_featured_datasets(limit_new: int, limit_upcoming: int) -> dict:
     
     data_dict = {
         'fq': 'availability:upcoming',
+        'sort': 'metadata_created desc',
         'rows': limit_upcoming
     }
     package_list_upcoming = toolkit.get_action('package_search')(context = {'ignore_auth': True}, data_dict = data_dict)

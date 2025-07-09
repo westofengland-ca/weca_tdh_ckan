@@ -34,34 +34,41 @@
       <h1 class="landing-header" data-cy="landing-heading">{{ _('Welcome to the TDH Data Catalogue') }}</h1>
       <p data-cy="landing-desc">
         {{ _('The TDH Data Catalogue is a centralised inventory of data assets curated by the West of England Mayoral Combined Authority as part of the wider Future Transport Zone initiative.') }}
-        {{ _('Use the search bar or explore by Publisher and Topic to discover a wide range of datasets. ​') }}
+        {{ _('Use the search bar or explore by Publisher and Topic to discover a wide range of datasets.') }}
       </p>
+      <h2>{{ _('Get Started with TDH Data') }}</h2>
       <div class="landing-access">
-        <h2>{{ _('Looking to access TDH Data?') }}</h2>
+        <p>{{ _('Kick off your data journey with the ') }}
+          <a class="govuk-link" href="/pages/tdh_data_explorer" 
+            data-cy="tdh-data-explorer">{{ _('Summary and Sample Data Explorer') }}
+          </a>  
+          {{ _(" - an interactive tool that lets you explore, visualise, and sample data from across the TDH. It's the quickest way to understand what’s available and how the data can support your work.") }}
+        </p>
+        <h3>{{ _('Looking to access TDH Data?') }}</h3>
         <p>{{ _('This catalogue is your gateway to data in the TDH. Browse available resources and access them through the methods provided on each dataset page.') }}</p>
         <div class="landing-access-connect">
           <div class="access-connect-content">
             <div class="landing-access-methods">
               <div class="access-box">
                 <h3 class="access-box-heading">{{ _('External Link') }}</h3>
-                <p class="access-box-content">{{ _('Access open data hosted by 3rd parties using the links signposted in the catalogue') }}</p>
+                <p class="access-box-content">{{ _('Access open data hosted by trusted third parties via signposted links') }}</p>
               </div>
               <div class="access-box">
                 <h3 class="access-box-heading">{{ _('File Download') }}</h3>
-                <p class="access-box-content">{{ _('Directly download files stored in TDH using the data catalogue') }}</p>
+                <p class="access-box-content">{{ _('Download datasets directly from the TDH in various formats') }}</p>
               </div>
               <div class="access-box">
                 <h3 class="access-box-heading">{{ _('Power BI Report') }}</h3>
-                <p class="access-box-content">{{ _('Access existing reports using the links signposted in the catalogue') }}</p>
+                <p class="access-box-content">{{ _('Explore published dashboards for ready-to-use insights') }}</p>
               </div>
               <div class="access-box">
                 <h3 class="access-box-heading">{{ _('TDH Query') }}</h3>
-                <p class="access-box-content">{{ _('For custom analysis, directly access data in the TDH via Power BI') }}</p>
+                <p class="access-box-content">{{ _('For custom analysis, access data in the TDH directly via Power BI') }}</p>
               </div>
             </div>
           </div>
           <div class="landing-overlay-action">
-            <p><b>{{ _('Got an idea?') }}</b></p>
+            <p><b>{{ _('Have a Suggestion?') }}</b></p>
             <div class="landing-action">
               {{ govukButton({
               'id': 'ga-submit-idea',

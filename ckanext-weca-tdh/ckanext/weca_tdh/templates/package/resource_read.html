@@ -128,13 +128,6 @@
 
 {% block resource_content %}
   <h1 class="page-heading" title="{{ h.resource_display_name(res) }}">{{ h.resource_display_name(res) | truncate(50) }}</h1>
-  {% block url %}
-    {% if res.url and h.is_url(res.url) %}
-      <p class="text-muted ellipsis">{{ _('URL:') }} <a href="{{ res.url }}" title="{{ res.url }}">{{ res.url }}</a></p>
-    {% elif res.url %}
-      <p class="text-muted break-word">{{ _('URL:') }} {{ res.url }}</p>
-    {% endif %}
-  {% endblock %}
 
   {% block description %}
     <div>
