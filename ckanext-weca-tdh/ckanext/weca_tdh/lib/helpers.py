@@ -8,10 +8,9 @@ from typing import Any
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
 from bs4 import BeautifulSoup
-from ckanext.weca_tdh.databricks import oauth_code_verify_and_challenge
-from flask import flash, session
-from markdown import markdown
 from ckanext.weca_tdh.redis_config import RedisConfig
+from flask import flash
+from markdown import markdown
 
 log = logging.getLogger(__name__)
 
