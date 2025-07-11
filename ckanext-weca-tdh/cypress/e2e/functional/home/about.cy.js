@@ -18,7 +18,7 @@ describe('Landing page', () => {
             .should('have.attr', 'href', 'https://forms.office.com/e/F00dpVFRQx')
 
         cy.get('[data-cy="support-details"]').click()
-        cy.url().should('eq', Cypress.config().baseUrl + 'support')
+        cy.url().should('eq', Cypress.config().baseUrl + 'pages/support')
     })
 })
 
@@ -42,15 +42,15 @@ describe('About page', () => {
             .should('have.attr', 'href', 'https://forms.office.com/e/F00dpVFRQx')
 
         cy.get('[data-cy="support-details"]').click()
-        cy.url().should('eq', Cypress.config().baseUrl + 'support')
+        cy.url().should('eq', Cypress.config().baseUrl + 'pages/support')
     })
     
     it('should display idea submission', () => {
         cy.loginUser('/about')
         cy.get('[data-cy="submit-us-button"]').contains('Submit idea')
-            .should('have.attr', 'href', '/pages/support')
+            .should('have.attr', 'href', 'https://forms.office.com/e/6rj0EMtHLN')
 
         cy.get('[data-cy="support-details"]').click()
-        cy.url().should('eq', Cypress.config().baseUrl + 'support')
+        cy.url().should('eq', Cypress.config().baseUrl + 'pages/support')
     })
 })

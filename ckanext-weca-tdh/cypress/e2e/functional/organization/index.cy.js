@@ -26,7 +26,9 @@ describe('Publisher list page', () => {
       cy.get('.media-heading').first().should("contain.text", publishers[0].title)
 
       // filter by parent org
-      cy.get('[data-cy="filter-parent_org"]').select("Gloucester Council")
+      cy.get('[data-cy="filter-btn-parent_org"]').click()
+      cy.get('[data-cy="filter-parent_org"]').get('input[type="checkbox"][value="Gloucester Council"]').check()
+
       cy.get('[data-cy="filter-button"]').click()
 
       cy.url().should('eq', Cypress.config().baseUrl + 'organization?q=' + 
@@ -42,7 +44,7 @@ describe('Publisher list page', () => {
       cy.get('[data-cy="search-input"]').should("have.value", publishers[0].title)
   
       cy.get('[data-cy="search-button"]').click()
-      cy.url().should('eq', Cypress.config().baseUrl + 'organization?q=' + publishers[0].title +'&parent_org=&sort=name+asc')
+      cy.url().should('eq', Cypress.config().baseUrl + 'organization?q=' + publishers[0].title +'&sort=name+asc')
   
       cy.get('[data-cy="results-summary"]').should("contain.text", publishers[0].title)
       cy.get('.group-listclass').find('li').its('length').should("equal", 2)

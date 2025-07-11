@@ -32,11 +32,13 @@
 
   <div class="search-filter-wrapper">
     <h3 class="search-filter-heading ">
-      <button type="button" class="govuk-link search-filter-button" onclick="toggleCheckboxContainer('{{name}}'); this.classList.toggle('is-open');">
+      <button type="button" class="govuk-link search-filter-button" data-cy="filter-btn-{{name}}" 
+        onclick="toggleCheckboxContainer('{{name}}'); this.classList.toggle('is-open');">
         {{ filter_labels[name] }}
       </button>
       <span class="chevron-button" aria-hidden="true">
-        <svg class="govuk-accordion__icon" xmlns="http://www.w3.org/2000/svg" focusable="false" width="12" height="12" viewBox="0 0 17 17">
+        <svg class="govuk-accordion__icon" xmlns="http://www.w3.org/2000/svg" 
+          focusable="false" width="12" height="12" viewBox="0 0 17 17">
           <path d="M1.5 5l6.5 6 6.5-6" fill="none" stroke="currentColor" stroke-width="3"/>
         </svg>
       </span>
@@ -55,7 +57,7 @@
         {% endif %}
       </div>
     </h3>
-    <div id="{{name}}" class="search-filter-content">
+    <div id="{{name}}" class="search-filter-content" data-cy="filter-{{name}}">
       {{ govukCheckboxes({
         'idPrefix': 'filter-' + name,
         'name': name,
