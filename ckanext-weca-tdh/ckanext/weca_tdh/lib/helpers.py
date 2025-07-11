@@ -1,13 +1,16 @@
 import json
 import logging
+import re
 import time
 from datetime import datetime
 from typing import Any
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
+from bs4 import BeautifulSoup
 from ckanext.weca_tdh.redis_config import RedisConfig
 from flask import flash
+from markdown import markdown
 
 log = logging.getLogger(__name__)
 
@@ -26,6 +29,30 @@ def filter_datetime(string: str, format: str = 'full') -> str:
         return dt.strftime('%d %b %Y')      
  
     return dt.strftime('%d %b %Y %H:%M:%S')
+
+def strip_markdown(text: str) -> str:
+    html = markdown(text or '')
+    soup = BeautifulSoup(html, 'html.parser')
+    return soup.get_text()
+
+def extract_markdown_description(text: str) -> str:
+    if not text:
+        return ''
+
+    pattern = re.compile(
+        r'(?i)^#{1,6}\s*description\s*\n?(.*?)(?=^#{1,6}\s*\S|\Z)', 
+        re.MULTILINE | re.DOTALL
+    )
+
+    match = pattern.search(text)
+    if not match:
+        return ''
+
+    section = match.group(1).strip()
+    html = markdown(section)
+    soup = BeautifulSoup(html, 'html.parser')
+
+    return soup.get_text(separator=' ').strip()
 
 def get_cookie_control_config() -> dict:
     cookie_control_config = {}
@@ -104,7 +131,7 @@ def get_data_quality_markings() -> list:
 
 def get_featured_datasets(limit_new: int, limit_upcoming: int) -> dict:
     data_dict = {
-        'fq': '-availability:upcoming',
+        'fq': 'availability:available',
         'sort': 'metadata_created desc',
         'rows': limit_new
     }
@@ -113,6 +140,7 @@ def get_featured_datasets(limit_new: int, limit_upcoming: int) -> dict:
     
     data_dict = {
         'fq': 'availability:upcoming',
+        'sort': 'metadata_created desc',
         'rows': limit_upcoming
     }
     package_list_upcoming = toolkit.get_action('package_search')(context = {'ignore_auth': True}, data_dict = data_dict)

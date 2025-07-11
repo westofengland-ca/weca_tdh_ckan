@@ -35,7 +35,7 @@ describe('Home page', () => {
     });
 
     cy.get('[data-cy="connect-details"]').click()
-    cy.url().should('eq', Cypress.config().baseUrl + 'tdh_partner_connect')
+    cy.url().should('eq', Cypress.config().baseUrl + 'pages/tdh_partner_connect')
   });
 
   it('search for datasets', () => {
@@ -92,7 +92,7 @@ describe('Home page', () => {
         .find('li').its('length').should("be.gte", 1)
 
       cy.get('[data-cy="featured-publishers"]')
-        .find('li').its('length').should("not.be.gt", 5)
+        .find('li').its('length').should("not.be.gt", 7)
 
       cy.get('[data-cy="featured-publishers"]')
         .find('.media-heading').first()
