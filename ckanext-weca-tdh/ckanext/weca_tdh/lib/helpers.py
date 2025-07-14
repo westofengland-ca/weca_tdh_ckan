@@ -16,6 +16,12 @@ log = logging.getLogger(__name__)
 
 
 def filter_datetime(string: str, format: str = 'full') -> str:
+    """Parses a datetime string and returns it in a human-readable format.
+
+    :param string: The datetime string to format.
+    :param format: The format to use, either 'full' or 'short'.
+    :return: Formatted datetime string or empty string if parsing fails.
+    """
     try:
         dt = datetime.strptime(string, '%Y-%m-%dT%H:%M:%S.%f')   
 
@@ -30,12 +36,24 @@ def filter_datetime(string: str, format: str = 'full') -> str:
  
     return dt.strftime('%d %b %Y %H:%M:%S')
 
+
 def strip_markdown(text: str) -> str:
+    """Strips markdown from a text field
+    
+    :param string: The input text containing markdown
+    :return: Raw text
+    """
     html = markdown(text or '')
     soup = BeautifulSoup(html, 'html.parser')
     return soup.get_text()
 
+
 def extract_markdown_description(text: str) -> str:
+    """Extracts description section from markdown text
+    
+    param string: The input text containing markdown
+    return: The text content following a Description heading
+    """
     if not text:
         return ''
 
@@ -54,82 +72,62 @@ def extract_markdown_description(text: str) -> str:
 
     return soup.get_text(separator=' ').strip()
 
+
 def get_cookie_control_config() -> dict:
-    cookie_control_config = {}
+    """Returns the configuration dict for Cookie Control.
 
-    api_key = C.CCC_API_KEY
-    cookie_control_config['api_key'] = api_key
+    :return: Dict containing API key and license type.
+    """
+    return {
+        'api_key': C.CCC_API_KEY,
+        'license_type': C.CCC_LICENSE,
+    }
 
-    license_type = C.CCC_LICENSE
-    cookie_control_config['license_type'] = license_type
-
-    return cookie_control_config
 
 def get_google_analytics_config() -> dict:
-    google_analytics_config = {}
+    """Returns the configuration dict for Google Analytics.
 
-    ga_id = C.GA_ID
-    google_analytics_config['ga_id'] = ga_id
+    :return: Dictcontaining the GA tracking ID.
+    """
+    return {
+        'ga_id': C.GA_ID,
+    }
 
-    return google_analytics_config
 
 def get_resource_data_categories() -> list:
-    data_categories = [{
-        "id": 0,
-        "name": "Open",
-        "desc": "Can be accessed by anyone (with access to the TDH).",
-        "class": "data-category-open"
-      },
-      {
-        "id": 1,
-        "name": "Controlled",
-        "desc": "Can be accessed by defined teams or persons.",
-        "class": "data-category-cont"
-      },
-      {
-        "id": 2,
-        "name": "Controlled (Personal Info)",
-        "desc": "Subject to GDPR; only accessible by relevant teams or persons.",
-        "class": "data-category-contpi"
-      },
-      {
-        "id": 3,
-        "name": "Confidential",
-        "class": "data-category-con"
-    }]
+    """Returns a predefined list of data access categories.
 
-    return data_categories
+    :return: List of dicts describing access levels and labels.
+    """
+    return [
+        {"id": 0, "name": "Open", "desc": "Can be accessed by anyone (with access to the TDH).", "class": "data-category-open"},
+        {"id": 1, "name": "Controlled", "desc": "Can be accessed by defined teams or persons.", "class": "data-category-cont"},
+        {"id": 2, "name": "Controlled (Personal Info)", "desc": "Subject to GDPR; only accessible by relevant teams or persons.", "class": "data-category-contpi"},
+        {"id": 3, "name": "Confidential", "class": "data-category-con"}
+    ]
+
 
 def get_data_quality_markings() -> list:
-    data_quality_markings = [{
-        "id": 0,
-        "name": "Unclassified",
-        "score": "Unclassified",
-      },
-      {
-        "id": 1,
-        "name": "Poor",
-        "score": "<45",
-      },
-      {
-        "id": 2,
-        "name": "Moderate",
-        "score": "45-54",
-      },
-      {
-        "id": 3,
-        "name": "Good",
-        "score": "55-64",
-      },
-      {
-        "id": 4,
-        "name": "Excellent",
-        "score": "65-76",
-    }]
+    """Returns a predefined list of data quality stats.
 
-    return data_quality_markings
+    :return: List of dicts describing data quality markings and scores.
+    """
+    return [
+        {"id": 0, "name": "Unclassified", "score": "Unclassified"},
+        {"id": 1, "name": "Poor", "score": "<45"},
+        {"id": 2, "name": "Moderate", "score": "45-54"},
+        {"id": 3, "name": "Good", "score": "55-64"},
+        {"id": 4, "name": "Excellent", "score": "65-76"},
+    ]
+
 
 def get_featured_datasets(limit_new: int, limit_upcoming: int) -> dict:
+    """Gets a combined list of newly added and upcoming datasets.
+
+    :param limit_new: Number of new datasets to retrieve.
+    :param limit_upcoming: Number of upcoming datasets to retrieve.
+    :return: Combined list of datasets.
+    """
     data_dict = {
         'fq': 'availability:available',
         'sort': 'metadata_created desc',
@@ -148,7 +146,14 @@ def get_featured_datasets(limit_new: int, limit_upcoming: int) -> dict:
 
     return package_list_new + package_list_upcoming
 
+
 def get_featured_blog_articles(limit: int, exclude=None) -> dict:
+    """Gets a list of featured blog articles.
+
+    :param limit: Maximum number of articles to return.
+    :param exclude: Optional name of an article to exclude.
+    :return: List of featured articles.
+    """
     blog_list = toolkit.get_action('ckanext_pages_list')(None, {'order_publish_date': True, 'private': False, 'page_type': 'blog'})
     featured_list = []
 
@@ -161,7 +166,15 @@ def get_featured_blog_articles(limit: int, exclude=None) -> dict:
 
     return featured_list
 
+
 def sort_search_filter_items(filter_items: list, filter_type=None, checked_values=None) -> list:
+    """Sorts and formats extra filter items for display in the UI.
+
+    :param filter_items: List of filter items.
+    :param filter_type: Optional filter type for mapping values.
+    :param checked_values: List of selected filter values.
+    :return: Sorted and formatted filter items.
+    """
     sorted_items = []
     seen_values = set()
     categories = get_resource_data_categories() if filter_type == 'res_data_category' else {}
@@ -178,7 +191,14 @@ def sort_search_filter_items(filter_items: list, filter_type=None, checked_value
 
     return sorted_items
 
+
 def get_orgs_or_groups_extras_list(is_org: bool, q: str = "") -> list:
+    """Gets a list of unique extra values from organisations or groups.
+
+    :param is_org: True to query organisations, False for groups.
+    :param q: Optional search query.
+    :return: List of unique extras.
+    """
     page_results: dict[str, Any] = {
         u'all_fields': True,
         u'q': q,
@@ -202,23 +222,47 @@ def get_orgs_or_groups_extras_list(is_org: bool, q: str = "") -> list:
     
     return sorted_items
 
-def get_package_search_facets(facets: list[str], q: str = "") -> dict:
+
+def get_package_search_facets(facets: list[str], q: str = "", include_private=False) -> dict:
+    """Gets facet information for the given fields using the package search API.
+
+    :param facets: List of fields to facet on.
+    :param q: Optional search query.
+    :return: Dict of facet counts per field.
+    """
     data_dict: dict[str, Any] = {
         u'q': q,
         u'facet': True,
         u'facet.field': facets,
         u'facet.limit': -1, # unlimited
         u'rows': 0,
+        u'include_private': include_private
     }
     result = toolkit.get_action('package_search')(context={'ignore_auth': True}, data_dict=data_dict)
                 
     return result.get('search_facets', {})
 
+
 def update_package_metadata(pkg_dict: dict, key: str, value: any) -> dict:
+    """Updates a metadata key on a package.
+
+    :param pkg_dict: The dataset/package dict.
+    :param key: Metadata key to update.
+    :param value: New value for the key.
+    :return: Updated package dict.
+    """
     pkg_dict[key] = value
     return toolkit.get_action('package_update')(context = {'ignore_auth': True}, data_dict = pkg_dict)
 
+
 def update_package_metadata_list(pkg_dict: dict, key: str, value: any) -> dict:
+    """Appends a value to a comma-separated list in a package metadata field.
+
+    :param pkg_dict: The dataset/package dict.
+    :param key: Metadata key to append to.
+    :param value: Value to add.
+    :return: Updated package dict.
+    """
     existing = pkg_dict.get(key, '')
     existing_values = [v.strip() for v in existing.split(',')] if existing else []
 
@@ -231,7 +275,13 @@ def update_package_metadata_list(pkg_dict: dict, key: str, value: any) -> dict:
 
     return toolkit.get_action('package_update')(context = {'ignore_auth': True}, data_dict = pkg_dict)
 
+
 def transform_collaborators(collaborators: tuple) -> str:
+    """Converts a tuple of collaborator user IDs into a JSON list of full names.
+
+    :param collaborators: Tuple of (user_id, ...) values.
+    :return: JSON string of user full names.
+    """
     ids_list = [user[0] for user in collaborators]
     names_list = []
 
@@ -247,8 +297,14 @@ def transform_collaborators(collaborators: tuple) -> str:
     else:
         names_list.append('Unassigned')
         return json.dumps(names_list)
-    
+   
+ 
 def transform_data_owners(data_owners: dict) -> str:
+    """Converts a list of data owner user objects into a JSON list of full names.
+
+    :param data_owners: List of user dicts.
+    :return: JSON string of user full names.
+    """
     names_list = [user[C.CKAN_USER_FULLNAME] for user in data_owners]
 
     if names_list:
@@ -257,7 +313,13 @@ def transform_data_owners(data_owners: dict) -> str:
         names_list.append('Unassigned')
         return json.dumps(names_list)
     
+
 def json_loads(string_list):
+    """Safely loads a JSON list from a string.
+
+    :param string_list: JSON-encoded string.
+    :return: List of stringified elements or empty list if parsing fails.
+    """
     if not string_list:
         return []
 
@@ -268,7 +330,8 @@ def json_loads(string_list):
         return clean_list
     except (json.JSONDecodeError, TypeError):
         return []
-    
+
+
 def user_has_valid_db_token() -> bool:
     """Checks if a valid Databricks access token exists in Redis for the current user.
 
