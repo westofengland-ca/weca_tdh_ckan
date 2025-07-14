@@ -1,5 +1,6 @@
 {% extends "page.html" %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/checkboxes/macro.html" import govukCheckboxes %}
 
 {% block subtitle %}{{ _("Search") }}{% endblock %}
 {% block toolbar %}{% endblock %}
@@ -21,13 +22,19 @@
       {% snippet "snippets/search_form.html", query=q %}  
     {% endblock %}
     {% block search_filters %}
-      {% set facet_fields = ["organization", "groups", "res_format", "res_data_access", "res_data_category"] %}
-      {% set search_facets_all = h.get_package_search_facets(facet_fields) %}
+      {% set is_sysadmin = h.check_access('sysadmin') %}
+      {% set facet_fields = ["organization", "groups", "res_format", "res_data_access", "res_data_category", "availability"] %}
+      {% if is_sysadmin %}
+        {% do facet_fields.append("private") %}
+      {% endif %}
+
+      {% set search_facets_all = h.get_package_search_facets(facet_fields, include_private=is_sysadmin) %}
       {% for field in facet_fields %}
         {% snippet 'package/snippets/filter_items.html', name=field, search_facets=search_facets_all, fields_grouped=fields_grouped %}
       {% endfor %}
+
       {{ govukButton({
-        'text': "Update results",
+        'text': 'Update results',
         'type': 'submit',
         'attributes': {'data-cy': 'filter-button'}
       }) }}

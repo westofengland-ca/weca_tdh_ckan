@@ -202,13 +202,14 @@ def get_orgs_or_groups_extras_list(is_org: bool, q: str = "") -> list:
     
     return sorted_items
 
-def get_package_search_facets(facets: list[str], q: str = "") -> dict:
+def get_package_search_facets(facets: list[str], q: str = "", include_private=False) -> dict:
     data_dict: dict[str, Any] = {
         u'q': q,
         u'facet': True,
         u'facet.field': facets,
         u'facet.limit': -1, # unlimited
         u'rows': 0,
+        u'include_private': include_private
     }
     result = toolkit.get_action('package_search')(context={'ignore_auth': True}, data_dict=data_dict)
                 
