@@ -3,7 +3,7 @@
 {% block subtitle %}{{ c.page.title }}{% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Documentation'), named_route='pages.pages_index' %}</li>
+  <li class="active">{% link_for _('Resources'), named_route='pages.pages_index' %}</li>
   <li class="active">{% link_for c.page.title, named_route='pages.show', page=c.page.name %}</li>
 {% endblock %}
 
