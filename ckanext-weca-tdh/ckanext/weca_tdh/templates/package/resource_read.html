@@ -20,8 +20,7 @@
     <div class="btn-group">
       {% block button_group %}
         {% if res.url and h.is_url(res.url) %}
-          {% set target = "_blank" if not res.resource_type in ('listing', 'service', 'api') and not res.has_views and not res.url_type == 'upload' else "" %}
-          <a class="btn btn-primary" href="{{ res.url }}" target="{{target}}">
+          <a class="btn btn-primary" href="{{ res.url }}">
             {% if res.resource_type in ('listing', 'service') %}
               <i class="fa fa-eye"></i> {{ _('View') }}
             {% elif res.resource_type == 'api' %}

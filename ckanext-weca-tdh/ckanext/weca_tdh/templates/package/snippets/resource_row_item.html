@@ -63,15 +63,17 @@
               {% block resource_item_explore_links %}
                 {% if res.url and h.is_url(res.url) %}
                   <li>
-                    <a class="dropdown-item" href="{{ res.url }}" target="_blank" rel="noreferrer noopener">
-                      {% if res.url_type != 'upload' %}
+                    {% if res.url_type != 'upload' %}
+                      <a class="dropdown-item" href="{{ res.url }}">
                         <i class="fa fa-external-link"></i>
                         {{ _('Go to resource') }}
-                      {% else %}
+                      </a>
+                    {% else %}
+                      <a class="dropdown-item" href="{{ res.url }}" target="_blank" rel="noreferrer noopener">
                         <i class="fa fa-arrow-circle-down"></i>
                         {{ _('Download') }}
-                      {% endif %}
-                    </a>
+                      </a>
+                    {% endif %}
                   </li>
                 {% endif %}
 
