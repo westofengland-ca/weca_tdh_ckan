@@ -9,14 +9,13 @@
 #}
 
 {% set url_action = pkg.type ~ ('_resource.edit' if url_is_edit and can_edit else '_resource.read') %}
-{% set external = res.resource_data_access and res.resource_data_access == 'External Link' %}
+{% set external = res.resource_data_access and res.resource_data_access in ('External Link', 'Power BI Report') %}
 {% set url = res.url if external else url or h.url_for(url_action, id=pkg.name, resource_id=res.id) %}
-{% set target = "_blank" if external else "" %}
 
 {% block resource_item %}
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">
-      <a class="govuk-link" href="{{ url }}" target="{{ target }}">{{ h.resource_display_name(res) | truncate(50) }}</a>
+      <a class="govuk-link" href="{{ url }}">{{ h.resource_display_name(res) | truncate(50) }}</a>
     </td>
     <td class="govuk-table__cell">
       {{ res.format or 'Data' }}
@@ -64,7 +63,7 @@
               {% block resource_item_explore_links %}
                 {% if res.url and h.is_url(res.url) %}
                   <li>
-                    <a class="dropdown-item" href="{{ res.url }}" target="_blank" rel="noreferrer">
+                    <a class="dropdown-item" href="{{ res.url }}" target="_blank" rel="noreferrer noopener">
                       {% if res.url_type != 'upload' %}
                         <i class="fa fa-external-link"></i>
                         {{ _('Go to resource') }}
