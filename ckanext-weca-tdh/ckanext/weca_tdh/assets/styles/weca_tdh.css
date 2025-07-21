@@ -8467,13 +8467,14 @@ main {
   text-decoration: none;
 }
 
-.faq-video, .pbi-report {
+.faq-video {
   position: relative;
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
   width: 100%;
 }
+
 .faq-video iframe {
   position: absolute;
   top: 0;
@@ -8483,6 +8484,15 @@ main {
   max-width: 560px;
   max-height: 315px;
 }
+
+.pbi-report {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
 .pbi-report iframe {
   position: absolute;
   top: 0;
@@ -9070,6 +9080,17 @@ iframe {
 .read-button {
   font-size: 19px;
   margin-top: 20px;
+}
+
+.hljs {
+  background-color: #f6f8fa;
+}
+
+.ckanext-pages-content code {
+  background-color: #f6f8fa;
+  color: black;
+  padding: 2px;
+  border-radius: 5px;
 }
 
 /* MULTI FILTER /

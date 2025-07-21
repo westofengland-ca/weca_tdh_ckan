@@ -6,8 +6,14 @@ from typing import Any
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
+from bs4 import BeautifulSoup
 from ckanext.weca_tdh.redis_config import RedisConfig
 from flask import flash
+from markdown_it import MarkdownIt
+from mdit_py_plugins.deflist import deflist_plugin
+from mdit_py_plugins.footnote import footnote_plugin
+from mdit_py_plugins.front_matter import front_matter_plugin
+from mdit_py_plugins.tasklists import tasklists_plugin
 
 log = logging.getLogger(__name__)
 
@@ -268,3 +274,35 @@ def user_has_valid_db_token() -> bool:
         )
     except (TypeError, ValueError):
         return False
+
+
+def render_markdown_gfm(data: str):
+    md = MarkdownIt("gfm-like") \
+        .use(footnote_plugin) \
+        .use(front_matter_plugin) \
+        .use(deflist_plugin) \
+        .use(tasklists_plugin)
+
+    html = md.render(data)
+    soup = BeautifulSoup(html, "html.parser")
+
+    for table in soup.find_all("table"):
+        table["class"] = table.get("class", []) + ["govuk-table"]
+
+        thead = table.find("thead")
+        if thead:
+            thead["class"] = thead.get("class", []) + ["govuk-table__head"]
+            
+        tbody = table.find("tbody")
+        if tbody:
+            thead["class"] = thead.get("class", []) + ["govuk-table__body govuk-body-s"]
+
+        for tr in table.find_all("tr"):
+            tr["class"] = tr.get("class", []) + ["govuk-table__row"]
+
+            for th in tr.find_all("th"):
+                th["class"] = th.get("class", []) + ["govuk-table__header"]
+            for td in tr.find_all("td"):
+                td["class"] = td.get("class", []) + ["govuk-table__cell"]
+        
+    return str(soup)

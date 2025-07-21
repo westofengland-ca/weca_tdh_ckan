@@ -1009,6 +1009,17 @@ iframe {
   margin-top: 20px;
 }
 
+.hljs {
+    background-color: #f6f8fa;
+}
+
+.ckanext-pages-content code {
+  background-color: #f6f8fa;
+  color: black;
+  padding: 2px;
+  border-radius: 5px;
+}
+
 /* MULTI FILTER /
 //////////////*/
 
