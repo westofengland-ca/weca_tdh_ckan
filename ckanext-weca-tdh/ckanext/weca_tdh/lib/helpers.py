@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from ckanext.weca_tdh.redis_config import RedisConfig
 from flask import flash
 from markdown_it import MarkdownIt
+from mdit_py_plugins.container import container_plugin
 from mdit_py_plugins.deflist import deflist_plugin
 from mdit_py_plugins.footnote import footnote_plugin
 from mdit_py_plugins.front_matter import front_matter_plugin
@@ -276,14 +277,35 @@ def user_has_valid_db_token() -> bool:
         return False
 
 
-def render_markdown_gfm(data: str):
+ALERT_ICONS = {
+    "note": "<i class='fa-solid fa-circle-info markdown-alert-icon'></i>",
+    "tip": "<i class='fa-solid fa-lightbulb markdown-alert-icon'></i>",
+    "important": "<i class='fa-solid fa-flag markdown-alert-icon'></i>",
+    "warning": "<i class='fa-solid fa-triangle-exclamation markdown-alert-icon'></i>",
+    "caution": "<i class='fa-solid fa-circle-exclamation markdown-alert-icon'></i>"
+}
+
+def _render_container_alert(name: str):
+    icon = ALERT_ICONS.get(name, "")
+    def _render(self, tokens, idx, _options, _env):
+        if tokens[idx].nesting == 1:
+            return f'<div class="markdown-alert markdown-alert-{name}"><p class="markdown-alert-title">{icon} {name.title()}</p>\n'
+        else:
+            return '</div>\n'
+    return _render
+
+def render_markdown_gfm(content: str) -> str:
     md = MarkdownIt("gfm-like") \
         .use(footnote_plugin) \
         .use(front_matter_plugin) \
         .use(deflist_plugin) \
         .use(tasklists_plugin)
+        
+    container_types = ["note", "tip", "important", "warning", "caution"]
+    for name in container_types:
+        md.use(container_plugin, name=name, render=_render_container_alert(name))
 
-    html = md.render(data)
+    html = md.render(content)
     soup = BeautifulSoup(html, "html.parser")
 
     for table in soup.find_all("table"):
