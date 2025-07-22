@@ -289,7 +289,8 @@ def _render_container_alert(name: str):
     icon = ALERT_ICONS.get(name, "")
     def _render(self, tokens, idx, _options, _env):
         if tokens[idx].nesting == 1:
-            return f'<div class="markdown-alert markdown-alert-{name}"><p class="markdown-alert-title">{icon} {name.title()}</p>\n'
+            return f'<div class="markdown-alert markdown-alert-{name}"> \
+                <p class="markdown-alert-title">{icon} <strong>{name.title()}</strong></p>\n'
         else:
             return '</div>\n'
     return _render
