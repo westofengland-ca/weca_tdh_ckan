@@ -278,11 +278,11 @@ def user_has_valid_db_token() -> bool:
 
 
 ALERT_ICONS = {
-    "note": "<i class='fa-solid fa-circle-info markdown-alert-icon'></i>",
-    "tip": "<i class='fa-solid fa-lightbulb markdown-alert-icon'></i>",
-    "important": "<i class='fa-solid fa-flag markdown-alert-icon'></i>",
-    "warning": "<i class='fa-solid fa-triangle-exclamation markdown-alert-icon'></i>",
-    "caution": "<i class='fa-solid fa-circle-exclamation markdown-alert-icon'></i>"
+    "note": "fa-solid fa-circle-info",
+    "tip": "fa-solid fa-lightbulb",
+    "important": "fa-solid fa-flag",
+    "warning": "fa-solid fa-triangle-exclamation",
+    "caution": "fa-solid fa-circle-exclamation"
 }
 
 def _render_container_alert(name: str):
@@ -290,7 +290,8 @@ def _render_container_alert(name: str):
     def _render(self, tokens, idx, _options, _env):
         if tokens[idx].nesting == 1:
             return f'<div class="markdown-alert markdown-alert-{name}"> \
-                <p class="markdown-alert-title">{icon} <strong>{name.title()}</strong></p>\n'
+                <p class="markdown-alert-title"><i class="{icon} markdown-alert-icon"></i> \
+                    <strong>{name.title()}</strong></p>\n'
         else:
             return '</div>\n'
     return _render
