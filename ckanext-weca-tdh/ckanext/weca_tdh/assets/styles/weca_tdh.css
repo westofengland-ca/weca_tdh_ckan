@@ -8136,12 +8136,11 @@
 .site-footer {
   background: #354753;
   border-top: 10px solid;
-  border-image: linear-gradient(to right, #6bc9df 0%, #6bc9df 25%, #79decc 25%, #79decc 50%, #f8859c 50%, #f8859c 74%, #f8859c 75%, #ffd900 75%, #ffd900 97%) 1 0 0 0;
+  border-image: linear-gradient(to right, #6bc9df 0%, #6bc9df 25%, #79decc 25%, #79decc 50%, #f8859c 50%, #f8859c 75%, #ffd900 75%, #ffd900 100%) 1 0 0 0;
 }
 
 /* LANDING PAGE //
 ///////////////*/
-/* base background color #354753 */
 body {
   background-color: #fff;
 }
@@ -8346,7 +8345,7 @@ main {
   left: 5%;
   max-width: 46%;
   border-top: 5px solid;
-  border-image: linear-gradient(to right, #6bc9df 0%, #6bc9df 25%, #79decc 25%, #79decc 50%, #f8859c 50%, #f8859c 74%, #f8859c 75%, #ffd900 75%, #ffd900 97%) 1 0 0 0;
+  border-image: linear-gradient(to right, #6bc9df 0%, #6bc9df 25%, #79decc 25%, #79decc 50%, #f8859c 50%, #f8859c 75%, #ffd900 75%, #ffd900 100%) 1 0 0 0;
 }
 
 .about-overlay-action {
