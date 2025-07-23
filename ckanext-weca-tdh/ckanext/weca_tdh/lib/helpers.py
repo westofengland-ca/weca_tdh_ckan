@@ -11,6 +11,12 @@ from bs4 import BeautifulSoup
 from ckanext.weca_tdh.redis_config import RedisConfig
 from flask import flash
 from markdown import markdown
+from markdown_it import MarkdownIt
+from mdit_py_plugins.container import container_plugin
+from mdit_py_plugins.deflist import deflist_plugin
+from mdit_py_plugins.footnote import footnote_plugin
+from mdit_py_plugins.front_matter import front_matter_plugin
+from mdit_py_plugins.tasklists import tasklists_plugin
 
 log = logging.getLogger(__name__)
 
@@ -359,3 +365,58 @@ def user_has_valid_db_token() -> bool:
         )
     except (TypeError, ValueError):
         return False
+
+
+ALERT_ICONS = {
+    "note": "fa-solid fa-circle-info",
+    "tip": "fa-solid fa-lightbulb",
+    "important": "fa-solid fa-flag",
+    "warning": "fa-solid fa-triangle-exclamation",
+    "caution": "fa-solid fa-circle-exclamation"
+}
+
+def _render_container_alert(name: str):
+    icon = ALERT_ICONS.get(name, "")
+    def _render(self, tokens, idx, _options, _env):
+        if tokens[idx].nesting == 1:
+            return f'<div class="markdown-alert markdown-alert-{name}"> \
+                <p class="markdown-alert-title"><i class="{icon} markdown-alert-icon"></i> \
+                    <strong>{name.title()}</strong></p>\n'
+        else:
+            return '</div>\n'
+    return _render
+
+def render_markdown_gfm(content: str) -> str:
+    md = MarkdownIt("gfm-like") \
+        .use(footnote_plugin) \
+        .use(front_matter_plugin) \
+        .use(deflist_plugin) \
+        .use(tasklists_plugin)
+        
+    container_types = ["note", "tip", "important", "warning", "caution"]
+    for name in container_types:
+        md.use(container_plugin, name=name, render=_render_container_alert(name))
+
+    html = md.render(content)
+    soup = BeautifulSoup(html, "html.parser")
+
+    for table in soup.find_all("table"):
+        table["class"] = table.get("class", []) + ["govuk-table"]
+
+        thead = table.find("thead")
+        if thead:
+            thead["class"] = thead.get("class", []) + ["govuk-table__head"]
+            
+        tbody = table.find("tbody")
+        if tbody:
+            thead["class"] = thead.get("class", []) + ["govuk-table__body govuk-body-s"]
+
+        for tr in table.find_all("tr"):
+            tr["class"] = tr.get("class", []) + ["govuk-table__row"]
+
+            for th in tr.find_all("th"):
+                th["class"] = th.get("class", []) + ["govuk-table__header"]
+            for td in tr.find_all("td"):
+                td["class"] = td.get("class", []) + ["govuk-table__cell"]
+        
+    return str(soup)

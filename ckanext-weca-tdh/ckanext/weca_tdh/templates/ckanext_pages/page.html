@@ -28,7 +28,7 @@
               {{ c.page.content|safe }}
             </div>
           {% else %}
-            {{ h.render_content(c.page.content) }}
+            {{ h.render_markdown_gfm(c.page.content) | safe }}
           {% endif %}
         </div>
       {% else %}
