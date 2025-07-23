@@ -8622,7 +8622,7 @@ p.gem-c-lead-paragraph {
 }
 
 .dataset-heading a {
-  color: #206b82;
+  color: #1d70b8;
   text-decoration: underline;
 }
 
@@ -8871,7 +8871,7 @@ p.gem-c-lead-paragraph {
   height: auto;
   padding-top: 1%;
   background: #fbfbfb url("../../../base/images/bg.png");
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
 }
 
 .media-item-tdh, .module-item {
@@ -8935,8 +8935,8 @@ p.gem-c-lead-paragraph {
   display: none; /* Hidden by default */
   width: 20px;
   height: 20px;
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #3498db;
+  border: 2px solid white;
+  border-top: 2px solid #1d70b8;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -9003,7 +9003,7 @@ p.gem-c-lead-paragraph {
   display: flex;
   max-width: fit-content;
   align-items: center;
-  background: #fff;
+  background: white;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -9111,17 +9111,17 @@ iframe {
 
 /* PAGES /
 ///////*/
-.article-heading {
+.page-heading {
   font-size: 19px;
   line-height: 1.3;
 }
 
-.article-heading a {
-  color: #206b82;
+.page-heading a {
+  color: #1d70b8;
   text-decoration: underline;
 }
 
-.article-heading-date {
+.page-heading-date {
   font-size: 16px;
   font-weight: 600;
 }
