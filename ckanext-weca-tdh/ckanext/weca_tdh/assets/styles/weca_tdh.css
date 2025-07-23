@@ -8136,12 +8136,11 @@
 .site-footer {
   background: #354753;
   border-top: 10px solid;
-  border-image: linear-gradient(to right, #6bc9df 0%, #6bc9df 25%, #79decc 25%, #79decc 50%, #f8859c 50%, #f8859c 74%, #f8859c 75%, #ffd900 75%, #ffd900 97%) 1 0 0 0;
+  border-image: linear-gradient(to right, #6bc9df 0%, #6bc9df 25%, #79decc 25%, #79decc 50%, #f8859c 50%, #f8859c 75%, #ffd900 75%, #ffd900 100%) 1 0 0 0;
 }
 
 /* LANDING PAGE //
 ///////////////*/
-/* base background color #354753 */
 body {
   background-color: #fff;
 }
@@ -8346,7 +8345,7 @@ main {
   left: 5%;
   max-width: 46%;
   border-top: 5px solid;
-  border-image: linear-gradient(to right, #6bc9df 0%, #6bc9df 25%, #79decc 25%, #79decc 50%, #f8859c 50%, #f8859c 74%, #f8859c 75%, #ffd900 75%, #ffd900 97%) 1 0 0 0;
+  border-image: linear-gradient(to right, #6bc9df 0%, #6bc9df 25%, #79decc 25%, #79decc 50%, #f8859c 50%, #f8859c 75%, #ffd900 75%, #ffd900 100%) 1 0 0 0;
 }
 
 .about-overlay-action {
@@ -8467,13 +8466,14 @@ main {
   text-decoration: none;
 }
 
-.faq-video, .pbi-report {
+.faq-video {
   position: relative;
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
   width: 100%;
 }
+
 .faq-video iframe {
   position: absolute;
   top: 0;
@@ -8483,6 +8483,15 @@ main {
   max-width: 560px;
   max-height: 315px;
 }
+
+.pbi-report {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
 .pbi-report iframe {
   position: absolute;
   top: 0;
@@ -9070,6 +9079,83 @@ iframe {
 .read-button {
   font-size: 19px;
   margin-top: 20px;
+}
+
+.hljs {
+  background-color: #f6f8fa;
+}
+
+.ckanext-pages-content code {
+  background-color: #f6f8fa;
+  color: black;
+  padding: 2px;
+  border-radius: 5px;
+}
+
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  color: inherit;
+  border-left: 0.25em solid #3d444d;
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1;
+}
+
+.markdown-alert > :first-child {
+  margin-top: 0;
+}
+
+.markdown-alert > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: #1f6feb;
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: #238636;
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: #8957e5;
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: #9e6a03;
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: #da3633;
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: #4493f8;
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: #3fb950;
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: #ab7df8;
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: #d29922;
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: #f85149;
+}
+
+.markdown-alert-icon {
+  margin-right: 5px;
 }
 
 /* MULTI FILTER /
