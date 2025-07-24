@@ -1,5 +1,7 @@
 {% ckan_extends %}
 
+{% block content_action %}{% endblock %}
+
 {% block content_primary_nav %}
   {{ super() }}
   {{ h.build_nav_icon('upload.blob', _('File upload'), id=pkg.name, resource_id=res.id, icon='upload') }}
