@@ -724,7 +724,7 @@ p.gem-c-lead-paragraph {
 }
 
 .metadata-box--in-dataset {
-    background: #eee;
+    background: $md-code-block-bg;
     padding: 25px 30px 15px 30px;
 }
 
@@ -890,7 +890,7 @@ p.gem-c-lead-paragraph {
 }
 
 .resource-data-access {
-  background: #f9f9f9;
+  background: $md-code-block-bg;
   border-left: 4px solid $gds-accent-blue;
   padding: 1rem;
   margin-top: 1rem;
@@ -1297,6 +1297,9 @@ iframe {
   border: none;
   cursor: pointer;
   font-size: 0.875rem;
+}
+.search-filter-tag-pill button:hover {
+    color: grey;
 }
 
 /* temp flask debug overflow fix */
