@@ -1,7 +1,7 @@
 {% set pages_total = pages|length %}
 {% set action = '{0}_show'.format(type) %}
 
-<h1 class="page-heading">{{ title or "Articles" if type == "blog" else "Resources" }}</h1>
+<h1>{{ title or "Articles" if type == "blog" else "Resources" }}</h1>
 
 {% if pages %}
   {# Helper block to render a page list item #}
