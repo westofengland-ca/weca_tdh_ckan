@@ -107,7 +107,7 @@
                 {% endif %}
               </dl>
               {% block package_summary %}
-                <h3 class="heading-small" style="font-size:19px">{{ _('Summary') }}</h3>
+                <h2 class="heading-small" style="font-size:19px">{{ _('Summary') }}</h2>
                 <div class="notes embedded-content" data-cy="package-notes">
                   {% if pkg.notes %}
                     {{ h.render_markdown(h.get_translated(pkg, 'notes')) }}

@@ -57,7 +57,6 @@
               success: function (response) {
                 const taskId = response.task_id;
                 const downloadUrl = response.download_url;
-                // Poll for task completion
                 pollTaskStatus(taskId, downloadUrl);
               },
               error: function (err) {
@@ -81,7 +80,6 @@
                   $("#spinner").css("display", "none");
                   window.location.reload();
                 } else {
-                  // Continue polling if the task is still in progress
                   setTimeout(() => pollTaskStatus(taskId, downloadUrl), 2000);
                 }
               },
@@ -126,7 +124,7 @@
 {% endblock %}
 
 {% block resource_content %}
-  <h1 class="page-heading" title="{{ h.resource_display_name(res) }}">{{ h.resource_display_name(res) | truncate(50) }}</h1>
+  <h1 class="page-heading" alt="{{ h.resource_display_name(res) }}">{{ h.resource_display_name(res) | truncate(50) }}</h1>
 
   {% block description %}
     <div>

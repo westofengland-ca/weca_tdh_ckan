@@ -8388,7 +8388,6 @@ main {
 .benefit-box {
   flex: 1 1 calc(50% - 10px);
   padding: 15px;
-  color: white;
   text-align: center;
   border-radius: 5px;
 }
@@ -8757,7 +8756,7 @@ p.gem-c-lead-paragraph {
 }
 
 .dataset-upcoming, .dataset-upcoming-home {
-  background-color: #007BFF;
+  background-color: #1f6feb;
 }
 
 .dataset-new-home {
@@ -8963,7 +8962,7 @@ p.gem-c-lead-paragraph {
 
 .resource-data-access {
   background: #f9f9f9;
-  border-left: 4px solid #0077cc;
+  border-left: 4px solid #1d70b8;
   padding: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -9092,6 +9091,10 @@ iframe {
 
 /* FORMS /
 ///////*/
+.control-required {
+  color: #da3633;
+}
+
 .form-actions .control-required-message {
   float: right;
 }
