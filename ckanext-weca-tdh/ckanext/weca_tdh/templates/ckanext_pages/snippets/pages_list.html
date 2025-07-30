@@ -4,7 +4,6 @@
 <h1>{{ title or "Articles" if type == "blog" else "Resources" }}</h1>
 
 {% if pages %}
-  {# Helper block to render a page list item #}
   {% macro render_page(page, pin) %}
     {% if id %}
       {% set url = h.url_for('pages.{}_pages_show'.format(c.group_dict['type']), id=id, page=page.name) %}
@@ -23,7 +22,6 @@
     {% do pages.append(articles_page) %}
   {% endif %}
 
-  {# Separate pinned and unpinned pages #}
   {% set pinned_pages = pages | selectattr("pin_page", "equalto", True) | list %}
   {% set other_pages = pages | rejectattr("pin_page", "equalto", True) | list %}
   {% set sort_attr = '' if type == 'blog' else 'title' %}
