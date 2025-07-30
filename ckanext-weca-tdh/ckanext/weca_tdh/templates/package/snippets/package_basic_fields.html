@@ -1,5 +1,14 @@
 {% ckan_extends %}
 
+{% block package_basic_fields_description %}
+  {% if data.notes %}
+    {% set value = data.notes %}
+  {% else %}
+    {% set value %}{% include 'package/snippets/package_desc_template.html' %}{% endset %}
+  {% endif %}
+  {{ form.markdown('notes', id='field-notes', label=_('Description'), placeholder=_('eg. Some useful notes about the data'), value=value, error=errors.notes) }}
+{% endblock %}
+
 {% block package_metadata_fields_visibility %}
   <div class="form-group control-medium">
     <label for="field-private" class="form-label">{{ _('Dataset Visibility') }}</label>
