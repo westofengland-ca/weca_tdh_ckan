@@ -1,5 +1,7 @@
+import json
 import redis
 import threading
+import time
 from urllib.parse import urlparse
 
 
@@ -38,9 +40,35 @@ class RedisConfig:
 
     def set_download_status(self, task_id: str, status: str, message: str, file_path=None):
         self.client.hset(f"task:{task_id}", mapping={"status": status, "message": message, "file_path": str(file_path)})
+        self.client.expire(f"task:{task_id}", 3600)
 
     def get_download_status(self, task_id: str):
         return self.client.hgetall(f"task:{task_id}")
     
     def delete_download_task(self, task_id):
         self.client.delete(f"task:{task_id}")
+        
+    def _token_key(self, user_id: str) -> str:
+        return f"databricks:tokens:{user_id}"
+
+    def set_databricks_tokens(self, user_id: str, access_token: str, refresh_token: str, expires_at: int, refresh_expires_at: int):
+        token_data = {
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "expires_at": expires_at,
+            "refresh_expires_at": refresh_expires_at
+        }
+        ttl = refresh_expires_at - int(time.time())
+        if ttl <= 0:
+            ttl = 1
+        
+        self.client.set(self._token_key(user_id), json.dumps(token_data), ex=ttl)
+
+    def get_databricks_tokens(self, user_id: str):
+        data = self.client.get(self._token_key(user_id))
+        if not data:
+            return None
+        return json.loads(data)
+
+    def delete_databricks_tokens(self, user_id: str):
+        self.client.delete(self._token_key(user_id))
