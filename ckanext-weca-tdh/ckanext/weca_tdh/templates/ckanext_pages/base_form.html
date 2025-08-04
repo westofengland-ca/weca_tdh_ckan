@@ -56,4 +56,22 @@
       </select>
     </div>
   </div>
+
+  <input type="hidden" id="field-private" name="private"
+        value="{{ 'true' if data.visibility == 'private' else 'false' }}">
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var visibilitySelect = document.getElementById('field-visibility');
+      var privateInput = document.getElementById('field-private');
+
+      function updatePrivateFlag() {
+        var visibility = visibilitySelect.value;
+        privateInput.value = visibility === 'private' ? 'true' : 'false';
+      }
+
+      visibilitySelect.addEventListener('change', updatePrivateFlag);
+      updatePrivateFlag();
+    });
+  </script>
 {% endblock %}
