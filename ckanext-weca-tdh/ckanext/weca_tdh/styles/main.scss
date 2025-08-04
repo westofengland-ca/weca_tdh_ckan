@@ -333,7 +333,6 @@ main {
 .benefit-box {
     flex: 1 1 calc(50% - 10px);
     padding: 15px;
-    color: white;
     text-align: center;
     border-radius: 5px;
 }
@@ -556,7 +555,7 @@ p.gem-c-lead-paragraph {
 }
 
 .dataset-heading a {
-    color: #206b82;
+    color: $gds-accent-blue;
     text-decoration: underline;
 }
 
@@ -646,7 +645,7 @@ p.gem-c-lead-paragraph {
     border-color: #ddd;
 }
 
-/* PRODUCT PAGE //
+/* PACKAGE PAGE //
 ///////////////*/
 
 .column-one-third {
@@ -725,7 +724,7 @@ p.gem-c-lead-paragraph {
 }
 
 .metadata-box--in-dataset {
-    background: #eee;
+    background: $md-code-block-bg;
     padding: 25px 30px 15px 30px;
 }
 
@@ -735,9 +734,12 @@ p.gem-c-lead-paragraph {
     vertical-align: text-top;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 800px) {
     .metadata-box dt, .metadata-box dd {
         display: block;
+    }
+    .package-content {
+        overflow-x: auto;
     }
 }
 
@@ -784,6 +786,10 @@ p.gem-c-lead-paragraph {
     display: inline-grid;
 }
 
+.group-sidebar .module-heading, .group-sidebar .module-content {
+    padding: 0.5rem !important;
+}
+
 .group-btn-remove {
     position: relative;
     z-index: +1;
@@ -796,7 +802,7 @@ p.gem-c-lead-paragraph {
     height: auto;
     padding-top: 1%;
     background: #fbfbfb url("../../../base/images/bg.png");
-    border: 1px solid #ddd;
+    border: 1px solid $content-divider;
 }
 
 .media-item-tdh, .module-item {
@@ -925,6 +931,10 @@ iframe {
 /* FORMS /
 ///////*/
 
+.control-required {
+    color: $container-alert-caution-emp;
+}
+
 .form-actions .control-required-message {
     float: right;
 }
@@ -951,7 +961,7 @@ iframe {
 }
 
 .page-heading a {
-  color: #206b82;
+  color:  $gds-accent-blue;
   text-decoration: underline;
 }
 
@@ -1194,6 +1204,9 @@ iframe {
   border: none;
   cursor: pointer;
   font-size: 0.875rem;
+}
+.search-filter-tag-pill button:hover {
+    font-weight: bold;
 }
 
 /* temp flask debug overflow fix */
