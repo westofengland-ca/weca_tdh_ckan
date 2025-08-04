@@ -27,6 +27,10 @@
     <p data-cy="dataset-updated"><b>{{ _('Last Updated:') }}</b> {{ h.filter_datetime(package.metadata_modified, 'short') }}</p>
   </div>
   <div data-cy="dataset-notes">
-    {{ super() }}
+    {% if notes %}
+      {{ (h.extract_markdown_description(package.notes) or h.strip_markdown(package.notes)) | truncate(170) }}
+    {% else %}
+      {{ _('There is currently no description for this dataset.') }}
+    {% endif %}
   </div>
 {% endblock %}
