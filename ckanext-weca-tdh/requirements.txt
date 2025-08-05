@@ -5,3 +5,4 @@ beautifulsoup4
 ckanext-pdfview
 markdown-it-py[linkify,plugins]
 mdit-py-plugins
+markdown==3.6

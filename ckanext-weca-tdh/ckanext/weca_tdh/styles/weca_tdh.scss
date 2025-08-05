@@ -1,38 +1,4 @@
-$gds-accent-blue: #1d70b8;
-$gds-accent-blue-emp: #256298;
-$gds-focus-highlight: #fd0;
-
-$tdh-background-main: #354753;
-$tdh-accent-pink: #f8859c;
-$tdh-accent-yellow: #ffd900;
-$tdh-accent-green: #79decc;
-$tdh-accent-blue: #6bc9df;
-
-$content-divider: #ccc;
-
-$dataset-marking-private: #660000;
-$dataset-marking-public: #00703c;
-$dataset-marking-upcoming: #007BFF;
-
-$search-filter-hover: #0b0c0c;
-
-$data-category-open: #00703c;
-$data-category-cont: #0c56ac;
-$data-category-contpi: #b75c1f;
-$data-category-conf: #660000;
-
-$md-code-block-bg: #f6f8fa;
-$container-alert-note: #4493f8;
-$container-alert-note-emp: #1f6feb;
-$container-alert-tip: #3fb950;
-$container-alert-tip-emp: #238636;
-$container-alert-important: #ab7df8;
-$container-alert-important-emp: #8957e5;
-$container-alert-warning: #d29922;
-$container-alert-warning-emp: #9e6a03;
-$container-alert-caution: #f85149;
-$container-alert-caution-emp: #da3633;
-
+@import "variables.scss";
 $govuk-assets-path: "/assets/";
 @import "../../../node_modules/govuk-frontend/dist/govuk/index.scss";
 @import "main.scss";

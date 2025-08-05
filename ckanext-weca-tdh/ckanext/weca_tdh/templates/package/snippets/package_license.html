@@ -9,7 +9,7 @@
 {% block license_string %}
   {% if pkg_dict.license_title %}
     {% if 'license_url' in pkg_dict %}
-      <a href="{{ pkg_dict.license_url }}" target="_blank" rel="dc:rights">{{ pkg_dict.license_title }}</a>
+      <a href="{{ pkg_dict.license_url }}" target="_blank" rel="noreferrer noopener">{{ pkg_dict.license_title }}</a>
     {% else %}
       <span property="dc:rights">{{ pkg_dict.license_title }}</span>
     {% endif %}

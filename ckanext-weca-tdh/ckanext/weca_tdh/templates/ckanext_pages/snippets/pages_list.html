@@ -1,10 +1,9 @@
 {% set pages_total = pages|length %}
 {% set action = '{0}_show'.format(type) %}
 
-<h1 class="page-heading">{{ title or "Articles" if type == "blog" else "Documentation" }}</h1>
+<h1>{{ title or "Articles" if type == "blog" else "Documentation" }}</h1>
 
 {% if pages %}
-  {# Helper block to render a page list item #}
   {% macro render_page(page, pin) %}
     {% if id %}
       {% set url = h.url_for('pages.{}_pages_show'.format(c.group_dict['type']), id=id, page=page.name) %}
@@ -23,7 +22,6 @@
     {% do pages.append(articles_page) %}
   {% endif %}
 
-  {# Separate pinned and unpinned pages #}
   {% set pinned_pages = pages | selectattr("pin_page", "equalto", True) | list %}
   {% set other_pages = pages | rejectattr("pin_page", "equalto", True) | list %}
   {% set sort_attr = '' if type == 'blog' else 'title' %}
@@ -37,7 +35,7 @@
   {% endfor %}
 {% else %}
   <p class="empty">
-    {{ _('There are currently no blog articles.') if type == 'blog' else _('There are currently no documents.') }}
+    {{ _('There are currently no articles.') if type == 'blog' else _('There are currently no documents.') }}
   </p>
 {% endif %}
 
