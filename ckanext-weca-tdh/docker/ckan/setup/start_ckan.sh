@@ -5,7 +5,7 @@ ckan config-tool $CKAN_INI ckan.datapusher.api_token=xxx
 
 # Set secrets
 ckan config-tool $CKAN_INI "SECRET_KEY=${CKAN_SECRET_KEY}"
-ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=${CKAN_SECRET_KEY}"
+ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=${CKAN_CSRF_SECRET_KEY}"
 ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=${CKAN_JWT_SECRET}"
 ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=${CKAN_JWT_SECRET}"
 
