@@ -6,11 +6,12 @@ import pytest
 import ckan.plugins as plugins
 
 
-@pytest.mark.ckan_config("ckan.plugins", "weca_tdh")
+@pytest.mark.ckan_config("ckan.plugins", "weca_tdh pages")
 @pytest.mark.usefixtures("with_plugins")
 def test_plugin() -> None:
     assert plugins.plugin_loaded("weca_tdh")
-    
+    assert plugins.plugin_loaded("pages")
+
 def test_accessibility_endpoint(app) -> None:
     url = plugins.toolkit.url_for('pages.show', page='accessibility')
     response = app.get(url)
