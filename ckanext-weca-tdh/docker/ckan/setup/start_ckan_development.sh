@@ -91,6 +91,17 @@ ckan config-tool $CKAN_INI "tdh.upload.storage_container = $TDH_UPLOAD_STORAGE_C
 decoded_url=$(echo "$TDH_UPLOAD_HTTP_TRIGGER" | sed 's/%2F/\//g')
 ckan config-tool $CKAN_INI "tdh.upload.http_trigger = $decoded_url"
 
+# Configure token expiry
+ckan config-tool $CKAN_INI expire_api_token.default_lifetime=30
+ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day
+
+# Configure pages
+ckan config-tool $CKAN_INI "ckanext.pages.allow_html = True"
+
+# Configure logging
+ckan config-tool $CKAN_INI --section logger_ckan "level = WARNING"
+ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
+
 # Update test-core.ini DB, SOLR & Redis settings
 echo "Loading test settings into test-core.ini"
 ckan config-tool $SRC_DIR/ckan/test-core.ini \
@@ -99,17 +110,6 @@ ckan config-tool $SRC_DIR/ckan/test-core.ini \
     "ckan.datastore.read_url = $TEST_CKAN_DATASTORE_READ_URL" \
     "solr_url = $TEST_CKAN_SOLR_URL" \
     "ckan.redis.url = $TEST_CKAN_REDIS_URL"
-
-# Configure logging
-ckan config-tool $CKAN_INI --section logger_ckan "level = WARNING"
-ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
-
-# Configure token expiry
-ckan config-tool $CKAN_INI expire_api_token.default_lifetime=30
-ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day
-
-# Configure pages
-ckan config-tool $CKAN_INI "ckanext.pages.allow_html = True"
 
 # Run the prerun script to init CKAN and create the default admin user
 python3 prerun.py
