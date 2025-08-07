@@ -1,7 +1,7 @@
 import json
 
 import ckan.plugins.toolkit as toolkit
-from flask import Blueprint
+from flask import Blueprint, request
 
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.lib.helpers import update_package_metadata_list
@@ -21,6 +21,9 @@ class Controller(object):
     
     @staticmethod
     def download_tdh_partner_connect_file() -> str:
+        tdh_catalog = request.args.get('tdh_catalog', '')  # or set a default
+        tdh_schema = request.args.get('tdh_schema', '')
+
         # get config values
         host = C.TDH_CONNECT_ADDRESS_HOST
         path = C.TDH_CONNECT_ADDRESS_PATH
@@ -32,11 +35,17 @@ class Controller(object):
                 {
                     "details": {
                         "protocol": "databricks-sql",
-                        "address": {"host": host, "path": path},
+                        "address": {
+                            "host": host, 
+                            "path": path
+                        },
                         "authentication": None,
                         "query": None,
                     },
-                    "options": {"Catalog": "", "Database": ""},
+                    "options": {
+                        "Catalog": tdh_catalog, 
+                        "Database": tdh_schema
+                    },
                     "mode": "DirectQuery",
                 }
             ],

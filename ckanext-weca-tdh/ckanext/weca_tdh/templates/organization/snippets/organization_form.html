@@ -25,25 +25,41 @@
     {{ form.image_upload(data, errors, is_upload_enabled=h.uploads_enabled(), is_url=is_url, is_upload=is_upload) }}
 
   {% endblock %}
+{% block custom_fields %}
+  <div data-module="custom-fields">
+    {% set extras = data.extras or [] %}
+    {% set parent_org = (extras | selectattr("key", "equalto", "parent_org") | map(attribute="value") | list).0 %}
+    {% set tdh_schema = (extras | selectattr("key", "equalto", "tdh_schema") | map(attribute="value") | list).0 %}
 
-  {% block custom_fields %}
-    <div data-module="custom-fields">
-      {% set extras = data.extras %}
-      {% set total_extras = extras|count %}
+    {# Parent Organisation field #}
+    {% set prefix = 'extras__0__' %}
+    <input name="{{ prefix ~ 'key' }}" id="field-extras-0" value="parent_org" type="hidden">
+    {{ form.input(
+        prefix ~ 'value',
+        label=_('Parent Organisation'),
+        id='field-extras-0',
+        placeholder=_('Parent Organisation'),
+        value=parent_org or '',
+        error=errors[prefix ~ 'key'] or errors[prefix ~ 'value'],
+        classes=['control-full']
+    ) }}
 
-      {% if total_extras > 0 %}
-        {% for extra in extras %}
-          {% set prefix = 'extras__%d__' % loop.index0 %}
-          <input name="{{prefix ~ 'key'}}" id="{{'field-extras-%d' % loop.index0}}" value={{extra.key}} type="hidden">
-          {{ form.input(prefix ~ 'value', label=_('Parent organisation'), id='field-extras-%d' % loop.index0, placeholder=_('Parent organisation'), value=extra.value, error=errors[prefix ~ 'key'] or errors[prefix ~ 'value'], classes=['control-full']) }}
-        {% endfor %}
-      {% else %}
-        {% set prefix = 'extras__0__' %}
-        <input name="{{prefix ~ 'key'}}" id="'field-extras-0'" value="parent_org" type="hidden">
-        {{ form.input(prefix ~ 'value', label=_('Parent organisation'), id='field-extras-0', placeholder=_('Parent organisation'), value=data.value, error=errors[prefix ~ 'key'] or errors[prefix ~ 'value'], classes=['control-full']) }}
-      {% endif %}
-    </div>
-  {% endblock %}
+    {# TDH Schema field #}
+    {% set prefix = 'extras__1__' %}
+    <input name="{{ prefix ~ 'key' }}" id="field-extras-1" value="tdh_schema" type="hidden">
+    {{ form.input(
+        prefix ~ 'value',
+        label=_('TDH Schema'),
+        id='field-extras-1',
+        placeholder=_('Databricks schema name e.g. ftz_urbanfreight'),
+        value=tdh_schema or '',
+        error=errors[prefix ~ 'key'] or errors[prefix ~ 'value'],
+        classes=['control-full']
+    ) }}
+  </div>
+{% endblock %}
+
+
 
   {{ form.required_message() }}
 
