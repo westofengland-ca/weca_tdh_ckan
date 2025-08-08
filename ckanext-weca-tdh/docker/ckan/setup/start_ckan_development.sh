@@ -92,7 +92,7 @@ decoded_url=$(echo "$TDH_UPLOAD_HTTP_TRIGGER" | sed 's/%2F/\//g')
 ckan config-tool $CKAN_INI "tdh.upload.http_trigger = $decoded_url"
 
 # Configure token expiry
-ckan config-tool $CKAN_INI expire_api_token.default_lifetime=30
+ckan config-tool $CKAN_INI expire_api_token.default_lifetime=90
 ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day
 
 # Configure pages
