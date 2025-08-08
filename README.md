@@ -39,4 +39,4 @@ into the main branch. The main branch can then be deployed, as part of a CI/CD
 process to a development environment.
 
 Releases are made from the main branch and are simply tagged using a semantic
-version number.
+version number before being merged into the deploy/weca-prod branch.
