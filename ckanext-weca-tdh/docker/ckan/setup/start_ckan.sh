@@ -3,17 +3,11 @@
 # Add ckan.datapusher.api_token to the CKAN config file (updated with corrected value later)
 ckan config-tool $CKAN_INI ckan.datapusher.api_token=xxx
 
-# Set up the Secret key used by Beaker and Flask
-# This can be overriden using a CKAN___BEAKER__SESSION__SECRET env var
-if grep -qE "SECRET_KEY ?= ?$" ckan.ini
-then
-    echo "Setting SECRET_KEY in ini file"
-    ckan config-tool $CKAN_INI "SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
-    ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
-    JWT_SECRET=$(python3 -c 'import secrets; print("string:" + secrets.token_urlsafe())')
-    ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=${JWT_SECRET}"
-    ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=${JWT_SECRET}"
-fi
+# Set secrets
+ckan config-tool $CKAN_INI "SECRET_KEY=${CKAN_SECRET_KEY}"
+ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=${CKAN_CSRF_SECRET_KEY}"
+ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=${CKAN_JWT_SECRET}"
+ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=${CKAN_JWT_SECRET}"
 
 # Set the SQLAlchemy (postgres) URL
 ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL"
@@ -104,16 +98,16 @@ ckan config-tool $CKAN_INI "tdh.upload.storage_container = $TDH_UPLOAD_STORAGE_C
 decoded_url=$(echo "$TDH_UPLOAD_HTTP_TRIGGER" | sed 's/%2F/\//g')
 ckan config-tool $CKAN_INI "tdh.upload.http_trigger = $decoded_url"
 
-# Configure logging
-ckan config-tool $CKAN_INI --section logger_ckan "level = WARNING"
-ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
-
 # Configure token expiry
 ckan config-tool $CKAN_INI expire_api_token.default_lifetime=30
 ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day
 
 # Configure pages
 ckan config-tool $CKAN_INI "ckanext.pages.allow_html = True"
+
+# Configure logging
+ckan config-tool $CKAN_INI --section logger_ckan "level = WARNING"
+ckan config-tool $CKAN_INI --section logger_ckanext "level = WARNING"
 
 # Run the prerun script to init CKAN and create the default admin user
 python3 prerun.py
