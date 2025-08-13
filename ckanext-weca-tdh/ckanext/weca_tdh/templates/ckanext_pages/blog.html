@@ -24,7 +24,20 @@
     {% endif %}
 
     {% block ckanext_pages_content %}
-      {{ super() }}
+      {% if c.page.content %}
+        <div class="ckanext-pages-content">
+          {% set editor = h.pages_get_wysiwyg_editor() %}
+          {% if editor %}
+            <div>
+              {{ c.page.content|safe }}
+            </div>
+          {% else %}
+            {{ h.render_markdown_gfm(c.page.content) | safe }}
+          {% endif %}
+        </div>
+      {% else %}
+        <p class="empty">{{ _('This article currently has no content.') }}</p>
+      {% endif %}
     {% endblock %}
   </section>
 {% endblock %}
