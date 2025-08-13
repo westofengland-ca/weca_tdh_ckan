@@ -19,7 +19,7 @@ from flask import (
 
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.redis_config import RedisConfig
-from ckanext.weca_tdh.upload import BlobStorage
+from ckanext.weca_tdh.platform.upload import BlobStorage
 
 log = logging.getLogger(__name__)
 databricksbp = Blueprint('databricks', __name__)
