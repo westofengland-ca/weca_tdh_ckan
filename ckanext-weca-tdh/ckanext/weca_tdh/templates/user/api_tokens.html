@@ -1,0 +1,24 @@
+{% ckan_extends %}
+
+{% block additional_fields %}
+    {% set default_lifetime = h.expire_api_token_default_token_lifetime() %}
+    {% set unit_options = [
+      {'value': 1, 'text': _('Seconds')},
+      {'value': 60, 'text': _('Minutes')},
+      {'value': 3600, 'text': _('Hours')},
+      {'value': 3600*24, 'text': _('Days')},
+    ] %}
+
+  <div class="form-group ">
+    {{ form.input('expires_in', label=_('Expires in'), is_required=true, type='number', value=data.expires_in or default_lifetime, 
+      error=errors.expires_in,
+      attrs={
+        'min': '1',
+        'max': default_lifetime|string,
+        'onkeyup': 'if(value<1)value=1;if(value>' ~ default_lifetime ~ ')value=' ~ default_lifetime ~ ';',
+        'class': 'form-control'
+      }
+    ) }}
+    {{ form.select('unit', label=_('Units'), options=unit_options, selected=data.unit or unit_options[3].value, error=errors.unit) }}
+  </div>
+{% endblock additional_fields %}

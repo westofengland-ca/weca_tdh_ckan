@@ -9261,6 +9261,16 @@ iframe {
   margin-right: 5px;
 }
 
+.ckanext-pages-content blockquote {
+  border-left: 8px solid #b1b4b6;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.ckanext-pages-content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
 /* MULTI FILTER /
 //////////////*/
 .govuk-checkboxes__label {
