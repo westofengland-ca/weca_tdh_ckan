@@ -12,7 +12,8 @@
         "path": "https://bustimetable.com/data",
         "format": "JSON",
         "description": "Latest bus timetable data",
-        "resource_data_category": 1
+        "resource_data_access": "External Link",
+        "resource_data_category": "0"
       }           
     ]
   },
@@ -29,7 +30,8 @@
         "path": "https://trainstopmap.com/data",
         "format": "CSV",
         "description": "Latest train stop locations",
-        "resource_data_category": 0
+        "resource_data_access": "External Link",
+        "resource_data_category": "0"
       }           
     ]
   },
@@ -46,7 +48,8 @@
         "path": "https://busnetworkusage.com/data",
         "format": "CSV",
         "description": "Latest bus network usage data",
-        "resource_data_category": 0
+        "resource_data_access": "External Link",
+        "resource_data_category": "0"
       }           
     ]
   }
