@@ -13,6 +13,7 @@ from ckan.types import Context, Schema
 from flask import flash, request
 
 import ckanext.weca_tdh.config as C
+import ckanext.weca_tdh.logic.actions as pages_actions
 from ckanext.pages.interfaces import IPagesSchema
 from ckanext.weca_tdh.auth import adauthbp
 from ckanext.weca_tdh.controller import actionbp
@@ -26,20 +27,28 @@ redis_client = RedisConfig(C.REDIS_URL)
 
 
 class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
+    plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(plugins.IAuthenticator, inherit=True)
     plugins.implements(plugins.IBlueprint, inherit=True)
     plugins.implements(plugins.IConfigurer, inherit=True)
     plugins.implements(plugins.IDatasetForm)
-    plugins.implements(plugins.ITemplateHelpers)
-    plugins.implements(plugins.IPackageController)
     plugins.implements(plugins.IFacets)
+    plugins.implements(plugins.IPackageController)
     plugins.implements(IPagesSchema)
+    plugins.implements(plugins.ITemplateHelpers)
 
     # IConfigurer
     def update_config(self, config: CKANConfig):
         toolkit.add_template_directory(config, "templates")
         toolkit.add_public_directory(config, "public")
         toolkit.add_resource("assets", "weca_tdh")
+    
+    # IActions
+    def get_actions(self):
+        return {
+            "ckanext_pages_list": pages_actions.pages_list,
+            "ckanext_pages_show": pages_actions.pages_show
+        }
 
     def get_helpers(self) -> dict:       
         '''
@@ -286,6 +295,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                 toolkit.get_validator('not_empty'),
                 toolkit.get_validator('boolean_validator')],
             'summary': [
+                toolkit.get_validator('not_empty')],
+            'visibility': [
                 toolkit.get_validator('not_empty')]
             })
         return schema

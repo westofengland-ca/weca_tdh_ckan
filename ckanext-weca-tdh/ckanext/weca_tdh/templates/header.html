@@ -22,7 +22,9 @@
 {% block header_account_logged %}
   {% block header_feedback %}
     <li>
-      <a href="https://forms.office.com/e/6rj0EMtHLN" title="Suggest a new idea or feedback" target="_blank">
+      <a href="https://forms.office.com/e/6rj0EMtHLN" 
+        title="Suggest a new idea or feedback" 
+        target="_blank" rel="noreferrer noopener">
         <i class="fa-solid fa-lightbulb"></i>
         {{ _('Submit an idea') }}
       </a>
@@ -59,11 +61,11 @@
     </a>
   {% else %}
     <h1>
-        <a href="{{ h.url_for('home.index') }}">{{ g.site_title }}</a>
+      <a href="{{ h.url_for('home.index') }}">{{ g.site_title }}</a>
     </h1>
-  {% if g.site_description %}
-    <h2>{{ g.site_description }}</h2>
-  {% endif %}
+    {% if g.site_description %}
+      <h2>{{ g.site_description }}</h2>
+    {% endif %}
   {% endif %}
 {% endblock %}
 

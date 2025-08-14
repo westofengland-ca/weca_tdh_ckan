@@ -66,7 +66,9 @@
     {% endif %}
 
     <span class="results_summary" data-cy="results-summary">
-      <span class="govuk-body-m govuk-!-font-weight-bold">{% snippet 'snippets/search_result_text.html', query=q, sort_by_selected=sort_by_selected, count=item_count, type=group_type %}</span>
+      <span class="govuk-body-m govuk-!-font-weight-bold">
+        {% snippet 'snippets/search_result_text.html', query=q, sort_by_selected=sort_by_selected, count=item_count, type=group_type %}
+      </span>
     </span>
 
     <div class="group-listclass">

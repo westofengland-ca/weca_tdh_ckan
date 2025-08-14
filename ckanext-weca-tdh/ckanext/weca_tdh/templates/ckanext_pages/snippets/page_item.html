@@ -1,15 +1,15 @@
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 
 <div class="page-list-item dataset-item">
-  <div class="{% if page.image %}span8{% endif %}">
+  <div {% if page.image %}style="flex: 2;"{% endif %}>
     {% block page_item_heading %}
-      <h3 class="article-heading">
+      <h3 class="page-heading">
         {% if pin %}
           <i class="fa-solid fa-thumbtack pinned-icon"></i>
         {% endif %}
         <a class="govuk-link" href="{{ url }}" >{{ page.title }}</a>
         {% if page.publish_date %}
-          <div class="article-heading-date">{{ h.render_datetime(page.publish_date) }}</div>
+          <div class="page-heading-date">{{ h.render_datetime(page.publish_date) }}</div>
         {% endif %}
       </h3>
     {% endblock %}
@@ -35,7 +35,7 @@
 
   {% block page_item_image %}
     {% if page.image %}
-      <div class="span3 image">
+      <div class="image">
         <img src="{{ page.image }}" {% if featured %}class="featured-article-image"{% endif %}/>
       </div>
     {% endif %}
