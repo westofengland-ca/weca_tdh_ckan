@@ -92,7 +92,7 @@
       <h3>{{ _('Featured Datasets') }}</h3>
       <div class="landing-explore" data-cy="featured-datasets">
         {% block dataset_list %}
-          {% set datasets = h.get_featured_datasets(limit_new=2, limit_upcoming=3) %}
+          {% set datasets = h.get_featured_datasets() %}
           {% if datasets %}
             {% snippet 'home/snippets/package_list.html', packages=datasets, list_class="landing-media-grid", item_class="landing-media-item" %}
             <a class="govuk-link govuk-link--no-visited-state landing-more" href="/dataset" data-cy="more-datasets">{{ _('More Datasets') }}</a> 
@@ -107,7 +107,7 @@
       <h3>{{ _('Latest Articles') }}</h3>
       <div class="landing-explore" data-cy="featured-articles">
         {% block blog_list %}
-          {% set blog_list = h.get_featured_blog_articles(3) %}
+          {% set blog_list = h.get_featured_blog_articles() %}
           {% snippet 'ckanext_pages/snippets/featured_blogs.html', blogs=blog_list %}
           <a class="govuk-link govuk-link--no-visited-state landing-more" href="/blog" data-cy="more-blogs">{{ _('More Articles') }}</a> 
         {% endblock %}
