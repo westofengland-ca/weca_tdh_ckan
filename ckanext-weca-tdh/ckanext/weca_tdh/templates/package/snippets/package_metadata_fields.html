@@ -14,6 +14,15 @@
   </div>
   {% endblock %}
 
+  {% block package_metadata_fields_featured %}
+  <div class="form-group control-medium">
+    <div class="controls">
+      {% set options = [{'value': False, 'text': _('No')}, {'value': True, 'text': _('Yes')}]%}
+      {{ form.select('featured', id='field-featured', label='Feature on Home Page', options=options, selected=data.featured) }}
+    </div>
+  </div>
+  {% endblock %}
+
   {% block package_metadata_fields_data_quality %}
     <div class="form-group control-medium">
       <label for="field-dq" class="form-label">{{ _('Data Quality Category') }}</label>

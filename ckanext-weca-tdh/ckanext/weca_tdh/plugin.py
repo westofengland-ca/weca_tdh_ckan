@@ -114,7 +114,10 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'expressed_interest': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
             'last_reviewed': [toolkit.get_validator('ignore_missing'),
-                                toolkit.get_converter('convert_to_extras')]
+                                toolkit.get_converter('convert_to_extras')],
+            'featured': [toolkit.get_validator('ignore_missing'),
+                        toolkit.get_validator('boolean_validator'),
+                        toolkit.get_converter('convert_to_extras')]
         })
         schema['resources'].update({
                 'resource_data_access': [toolkit.get_validator('ignore_missing')],
@@ -149,7 +152,10 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'expressed_interest': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing')],
             'last_reviewed': [toolkit.get_converter('convert_from_extras'),
-                                toolkit.get_validator('ignore_missing')]
+                                toolkit.get_validator('ignore_missing')],
+            'featured': [toolkit.get_converter('convert_from_extras'),
+                        toolkit.get_validator('boolean_validator'),
+                        toolkit.get_validator('ignore_missing')]
         })
         schema['resources'].update({
                 'resource_data_access': [toolkit.get_validator('ignore_missing')],
