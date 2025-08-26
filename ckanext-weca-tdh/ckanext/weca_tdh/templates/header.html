@@ -76,12 +76,24 @@
     {% set org_type = h.default_group_type('organization') %}
     {% set group_type = h.default_group_type('group') %}
     {% set current_path = request.path %}
-    <li>
-      <a href="/dataset?q=&res_data_access=Power+BI+Report">{{_('Reports')}}</a>
-    </li>
-    <li>
-      <a href="/dataset?q=&res_data_access=File+Download&res_data_access=Preview&res_data_access=TDH+Query">{{_('Datasets')}}</a>
-    </li>
+    {% set preset_filters = {
+      'reports': {
+        'label': _('Reports'),
+        'filters': ['Power BI Report']
+      },
+      'datasets': {
+        'label': _('Datasets'),
+        'filters': ['External Link', 'File Download', 'Preview', 'TDH Query']
+      }
+    } %}
+
+    {% for key, item in preset_filters.items() %}
+      <li>
+        <a href="/dataset?q={% for f in item.filters %}&res_data_access={{ f | urlencode }}{% endfor %}">
+          {{ item.label }}
+        </a>
+      </li>
+    {% endfor %}
     <li>
       <a href="/organization" class="{% if current_path.startswith('/organization') %}nav-item-active{% endif %}">{{_('Publishers')}}</a>
     </li>
@@ -89,7 +101,7 @@
         <a href="/group" class="{% if current_path.startswith('/group') %}nav-item-active{% endif %}">{{_('Topics')}}</a>
     </li>
     <li>
-      <a href="/pages" class="{% if current_path.startswith('/pages') %}nav-item-active{% endif %}">{{_('Resources')}}</a>
+      <a href="/pages" class="{% if current_path.startswith('/pages') %}nav-item-active{% endif %}">{{_('Support')}}</a>
     </li>
   {% endblock %}
 {% endblock %}
