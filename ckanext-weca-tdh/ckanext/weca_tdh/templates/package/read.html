@@ -79,7 +79,7 @@
                     {% endif %}
                   </a>
                 </dd>
-                <dt>{{ _('Data Owner(s):') }}</dt>
+                <dt>{{ ngettext('Data Owner', 'Data Owners', data_owners | length) }}:</dt>
                 <dd property="dc:owner" data-cy="package-owner">
                   {% if data_owners %}
                     {% for owner in data_owners %}
@@ -89,7 +89,7 @@
                     {{ _('Unassigned') }}
                   {% endif %}
                 </dd>
-                <dt>{{ _('Data Steward(s):') }}</dt>
+                <dt>{{ ngettext('Data Steward', 'Data Stewards', collaborators | length) }}:</dt>
                 <dd property="dc:stewards" data-cy="package-stewards">
                   {% if collaborators %}
                     {% for steward in collaborators %}
@@ -99,6 +99,12 @@
                     {{ _('Unassigned') }}
                   {% endif %}
                 </dd>
+                {% if tdh_schema %}
+                  <dt>{{ _('TDH Schema:') }}</dt>
+                  <dd property="dc:query" data-cy="package-query">
+                    {{ tdh_schema }}
+                  </dd>
+                {% endif %}
               </dl>
               {% block package_summary %}
                 <h2 class="heading-small" style="font-size:19px">{{ _('Summary') }}</h2>
@@ -137,14 +143,14 @@
                   class="govuk-button request-form-btn"
                   data-cy="interest-button">
                   {{ _('Express interest') }}
-                </a>
-          
+                </a>         
               {% elif sensitive_resources %}
                 <h3 class="heading-small">{{ _('Don\'t have access to the data?') }}</h3>
                 <a id="ga-request-access-data"
                   href="https://forms.office.com/e/nDdBdfgnhU"
                   class="govuk-button request-form-btn"
                   target="_blank"
+                  rel="noreferrer noopener"
                   data-cy="access-button">
                   {{ _('Request access') }}
                 </a>
@@ -171,10 +177,19 @@
     {% block data_links %}
       {% if c.userobj %}
         <section class="data-links">
-          <div class="package-content">
-            {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources, can_edit=can_edit %}
-          </div>
-        </section>
+          {% set reports = pkg.resources | selectattr("resource_data_access", "equalto", "Power BI Report") | list %}
+          {% set datasets = pkg.resources | rejectattr("resource_data_access", "equalto", "Power BI Report") | list %}
+          {% if reports %}
+            <div class="package-content">
+              {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=reports, heading="Reports", tdh_schema=tdh_schema, can_edit=can_edit %}
+            </div>
+          {% endif %}
+          {% if datasets %}
+            <div class="package-content">
+              {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=datasets, heading="Datasets", tdh_schema=tdh_schema, can_edit=can_edit %}
+            </div>
+          {% endif %}
+        </section> 
       {% endif %}
     {% endblock %}
 

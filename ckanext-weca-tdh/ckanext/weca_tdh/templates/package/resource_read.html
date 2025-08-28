@@ -1,5 +1,7 @@
 {% ckan_extends %}
 
+{% import 'package/macros/data_access.html' as data_access_macro %}
+
 {% block resource_license %}{% endblock %}
 
 {% block pre_primary %}
@@ -18,8 +20,7 @@
     <div class="btn-group">
       {% block button_group %}
         {% if res.url and h.is_url(res.url) %}
-          {% set target = "_blank" if not res.resource_type in ('listing', 'service', 'api') and not res.has_views and not res.url_type == 'upload' else "" %}
-          <a class="btn btn-primary" href="{{ res.url }}" target="{{target}}">
+          <a class="btn btn-primary" href="{{ res.url }}">
             {% if res.resource_type in ('listing', 'service') %}
               <i class="fa fa-eye"></i> {{ _('View') }}
             {% elif res.resource_type == 'api' %}
@@ -124,59 +125,35 @@
 
 {% block resource_content %}
   <h1 class="page-heading" alt="{{ h.resource_display_name(res) }}">{{ h.resource_display_name(res) | truncate(50) }}</h1>
-  {% block url %}
-    {% if res.url and h.is_url(res.url) %}
-      <p class="text-muted ellipsis">{{ _('URL:') }} <a href="{{ res.url }}" title="{{ res.url }}">{{ res.url }}</a></p>
-    {% elif res.url %}
-      <p class="text-muted break-word">{{ _('URL:') }} {{ res.url }}</p>
-    {% endif %}
-  {% endblock %}
+
   {% block description %}
-    <div class="prose notes" property="rdfs:label">
+    <div>
       {% if res.description %}
         {{ h.render_markdown(res.description) }}
       {% endif %}
     </div>
   {% endblock %}
-  {% block data_access %}
-    <h3>{{ _('Data Access') }}</h3>
-    {% if "File Download" in res.resource_data_access %}
-      <div>
-        <h2 class="heading-small">{{ _('File Download') }}</h2>
-        <p>{{ _('This resource is available to download from the TDH.') }}
-        {% if not session.get('access_token')%}
-          {{ _('To download, click the Connect to TDH button to start a new download session.') }}</p>
+
+  {% block res_metadata %}
+    <div class="resource-data-access">
+      {% block data_access %}
+        {% if res.resource_data_access %}
+          {{ data_access_macro.render(res, tdh_schema) }}
+          <p class="heading-small data-access-support-link">{{ _('To learn more about data access methods, visit the') }} 
+            <a class="govuk-link" href="{{ h.url_for('pages.show', page='support') ~ '#data-access' }}">{{ _('Support page') }}</a>.
+          </p>
         {% else %}
-          {{ _('To download, click the Download File button.') }}</p>
+          <p>{{ _('A data access type has not been assigned to this resource.') }}</p>
         {% endif %}
-      </div>
-    {% elif "Power BI Report" in res.resource_data_access %}
-      <div>
-        <h2 class="heading-small">{{ _('Power BI Report') }}</h2>
-        <p>{{ _('A Power BI Report is available for this resource. To view the report, click the Go to resource button or visit the URL above.') }}
-      </div>
-    {% elif "TDH Query" in res.resource_data_access %}
-      <div>
-        <h2 class="heading-small">{{ _('TDH Query') }}</h2>
-        <p>{{ _('This resource is available to query using Power BI.') }}
-        <a href="{{ h.url_for('pages.show', page='tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub.') }}</a></p>
-      </div>
-    {% elif "External Link" in res.resource_data_access or res.url and h.is_url(res.url) %}
-      <div>
-        <h2 class="heading-small">{{ _('External Link') }}</h2>
-        <p>{{ _('This resource is available through an external link. Click the Go to resource button or visit the URL above.') }}
-      </div>
-    {% elif "Preview" in res.resource_data_access or res.has_views %}
-      <div>
-        <h2 class="heading-small">{{ _('Preview') }}</h2>
-        <p>{{ _('This resource is available to preview via the sample data below.') }}
-      </div>
-    {% else %}
-      <div>
-        <p>{{ _('A data access type has not yet been assigned to this resource.') }}
-      </div>
-    {% endif %}
-    <p style="font-size: 16px;">{{ _('To learn more about data access types, see our') }} <a href="{{ h.url_for('pages.show', page='support') ~ '#data-access' }}" target="_blank">{{ _('Support page') }}</a>.</p>
+
+        <script>
+          function copyPath() {
+            const text = document.getElementById('tdh-query-path').innerText;
+            navigator.clipboard.writeText(text);
+          }
+        </script>
+      {% endblock %}
+    </div>
   {% endblock %}
 {% endblock %}
 

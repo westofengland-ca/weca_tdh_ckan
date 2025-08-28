@@ -20,7 +20,7 @@ Example:
     <div class="media-image-container">
         <img src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" alt="{{ organization.name }}" class="img-fluid media-image">
     </div>
-    <p style="border-bottom: 1px solid #ccc; margin-top: 5px;"></p>
+  <p class="content-seperator" style="margin-top: 5px;"></p>
   {% endblock %}
   {% block title %}
     <h2 class="media-heading">{{ organization.display_name }}</h2>

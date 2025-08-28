@@ -8,7 +8,7 @@
         <div class="media-image-container">
           <img src="{{ package.organization.image_url or h.url_for_static('/base/images/placeholder-organization.png') }}" alt="{{ package.title }}" class="media-image img-fluid">    
         </div>
-        <p style="border-bottom: 1px solid #ccc; margin-top: 5px;"></p>
+        <p class="content-seperator" style="margin-top: 5px;"></p>
       {% endblock %}
       {% block title %}
         <h2 class="media-heading">{{ package.title }}</h2>
