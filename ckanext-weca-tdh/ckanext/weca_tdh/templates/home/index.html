@@ -48,23 +48,37 @@
         <p>{{ _('This catalogue is your gateway to data in the TDH. Browse available resources and access them through the methods provided on each dataset page.') }}</p>
         <div class="landing-access-connect">
           <div class="access-connect-content">
+            {% set data_access_types = {
+              'external': {
+                'label': _('External Link'),
+                'summary': _('Access open data hosted by trusted third parties via signposted links'),
+                'filters': ['External Link']
+              },
+              'download': {
+                'label': _('File Download'),
+                'summary': _('Download datasets directly from the TDH in various formats'),
+                'filters': ['File Download']
+              },
+              'report': {
+                'label': _('Power BI Report'),
+                'summary': _('Explore published dashboards for ready-to-use insights'),
+                'filters': ['Power BI Report']
+              },
+              'query': {
+                'label': _('TDH Query'),
+                'summary': _('Access data in the TDH directly for custom analysis'),
+                'filters': ['TDH Query']
+              }
+            } %}
             <div class="landing-access-methods">
-              <div class="access-box">
-                <h3 class="access-box-heading">{{ _('External Link') }}</h3>
-                <p class="access-box-content">{{ _('Access open data hosted by trusted third parties via signposted links') }}</p>
-              </div>
-              <div class="access-box">
-                <h3 class="access-box-heading">{{ _('File Download') }}</h3>
-                <p class="access-box-content">{{ _('Download datasets directly from the TDH in various formats') }}</p>
-              </div>
-              <div class="access-box">
-                <h3 class="access-box-heading">{{ _('Power BI Report') }}</h3>
-                <p class="access-box-content">{{ _('Explore published dashboards for ready-to-use insights') }}</p>
-              </div>
-              <div class="access-box">
-                <h3 class="access-box-heading">{{ _('TDH Query') }}</h3>
-                <p class="access-box-content">{{ _('For custom analysis, access data in the TDH directly via Power BI') }}</p>
-              </div>
+              {% for key, item in data_access_types.items() %}
+                <a href="/dataset?q={% for f in item.filters %}&res_data_access={{ f | urlencode }}{% endfor %}" class="access-box-link">
+                  <div class="access-box">
+                    <h3 class="access-box-heading">{{ item.label }}</h3>
+                    <p class="access-box-content">{{ item.summary }}</p>
+                  </div>
+                </a>
+              {% endfor %}
             </div>
           </div>
           <div class="landing-overlay-action">

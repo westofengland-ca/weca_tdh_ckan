@@ -8186,6 +8186,22 @@ main {
   gap: 10px;
 }
 
+.access-box-link {
+  display: flex;
+  flex: 1 1 calc(50% - 10px);
+  color: black;
+  border: 1px solid #ddd;
+  transition: all 0.2s ease-in;
+  border-radius: 3px;
+}
+
+.access-box-link:hover {
+  text-decoration: none;
+  color: black;
+  border-color: #005d7a;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
 .access-box {
   display: flex;
   flex-direction: column;
@@ -8199,7 +8215,6 @@ main {
   align-items: center;
   justify-content: center;
   padding: 15px;
-  border-radius: 3px;
   margin-bottom: 0;
   background: #6bc9df;
   min-height: 80px;
@@ -8210,6 +8225,7 @@ main {
   border-radius: 3px;
   background: #f6f6f6;
   flex: 1;
+  margin-bottom: 0;
 }
 
 .access-connect-content {
