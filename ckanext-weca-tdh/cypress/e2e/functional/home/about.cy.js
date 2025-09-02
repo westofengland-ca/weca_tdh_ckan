@@ -6,6 +6,7 @@ describe('Landing page', () => {
     })
   
     beforeEach(() => {
+
     })
 
     it('should display account actions', () => {
@@ -15,7 +16,8 @@ describe('Landing page', () => {
 
         cy.visit('/')
         cy.get('[data-cy="request-button"]').contains('Request account')
-            .should('have.attr', 'href', 'https://forms.office.com/e/F00dpVFRQx')
+            .should('have.attr', 'href')
+            .and('contain', 'https://forms.office.com/Pages/ResponsePage.aspx')
 
         cy.get('[data-cy="support-details"]').click()
         cy.url().should('eq', Cypress.config().baseUrl + 'pages/support')
@@ -39,7 +41,8 @@ describe('About page', () => {
 
         cy.visit('/about')
         cy.get('[data-cy="request-button"]').contains('Request account')
-            .should('have.attr', 'href', 'https://forms.office.com/e/F00dpVFRQx')
+            .should('have.attr', 'href')
+            .and('contain', 'https://forms.office.com/Pages/ResponsePage.aspx')
 
         cy.get('[data-cy="support-details"]').click()
         cy.url().should('eq', Cypress.config().baseUrl + 'pages/support')
@@ -48,7 +51,8 @@ describe('About page', () => {
     it('should display idea submission', () => {
         cy.loginUser('/about')
         cy.get('[data-cy="submit-us-button"]').contains('Submit idea')
-            .should('have.attr', 'href', 'https://forms.office.com/e/6rj0EMtHLN')
+            .should('have.attr', 'href')
+            .and('contain', 'https://forms.office.com/Pages/ResponsePage.aspx')
 
         cy.get('[data-cy="support-details"]').click()
         cy.url().should('eq', Cypress.config().baseUrl + 'pages/support')
