@@ -6,7 +6,7 @@
         {{ govukButton({
         'id': "ga-submit-idea",
         'text': "Submit idea",
-        'href': "https://forms.office.com/e/6rj0EMtHLN",
+        'href': h.build_form_url('submit_idea', name=userobj.fullname, email=userobj.email),
         'classes': 'action-button',
         'attributes': {'target': '_blank', 'data-cy': 'submit-us-button'}
         }) }}
@@ -21,7 +21,7 @@
         {{ govukButton({
         'id': "ga-request-access-account",
         'text': "Request account",
-        'href': "https://forms.office.com/e/F00dpVFRQx",
+        'href': h.build_form_url('request_account'),
         'classes': 'action-button govuk-button--secondary',
         'attributes': {'target': '_blank', 'data-cy': 'request-button'}
         }) }}
