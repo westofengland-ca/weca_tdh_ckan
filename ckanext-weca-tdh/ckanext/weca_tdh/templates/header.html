@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
 {% block header_account_container_content %}
-  {% if c.userobj %}
+  {% if g.userobj %}
     {{ super() }}
   {% else %}
   <nav class="account not-authed" aria-label="{{ _('Account') }}">
@@ -22,7 +22,7 @@
 {% block header_account_logged %}
   {% block header_feedback %}
     <li>
-      <a href="https://forms.office.com/e/6rj0EMtHLN" 
+      <a href="{{ h.build_form_url('submit_idea', name=g.userobj.fullname, email=g.userobj.email) }}" 
         title="Suggest a new idea or feedback" 
         target="_blank" rel="noreferrer noopener">
         <i class="fa-solid fa-lightbulb"></i>
@@ -31,7 +31,7 @@
     </li>
   {% endblock %}
   {% block header_sysadmin %}
-    {% if c.userobj.sysadmin %}
+    {% if g.userobj.sysadmin %}
       <li>
         <a href="{{ h.url_for('admin.index') }}" title="{{ _('Sysadmin settings') }}">
           <i class="fa fa-gavel" aria-hidden="true"></i>

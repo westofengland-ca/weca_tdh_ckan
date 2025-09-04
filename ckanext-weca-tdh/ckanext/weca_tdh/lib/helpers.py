@@ -4,10 +4,12 @@ import re
 import time
 from datetime import datetime
 from typing import Any
+from urllib.parse import quote, urlencode
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
 from bs4 import BeautifulSoup
+from ckanext.weca_tdh.lib.forms import get_form
 from ckanext.weca_tdh.redis_config import RedisConfig
 from flask import flash
 from markdown import markdown
@@ -431,3 +433,21 @@ def user_has_valid_db_token() -> bool:
         )
     except (TypeError, ValueError):
         return False
+
+
+def build_form_url(form_name: str, **kwargs) -> str:
+    """Return a form URL with parameters applied."""
+    form = get_form(form_name)
+    if not form:
+        return None
+
+    base_url = form["base_url"]
+    form_id = form.get("form_id")
+    params = {"id": form_id} if form_id else {}
+
+    for key, ms_param in form.get("parameters", {}).items():
+        if key in kwargs:
+            params[ms_param] = kwargs[key]
+
+    query = urlencode(params, safe="", quote_via=quote)
+    return f"{base_url}?{query}"
