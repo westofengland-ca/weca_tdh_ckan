@@ -28,8 +28,16 @@
 /* navbar title */
 .masthead .navbar .navbar-title {
     font-size: 1.5rem;
-    color: white;
     margin-right: 4rem;
+}
+.masthead .navbar .navbar-title a {
+   color: white;
+   text-decoration: none;
+}
+
+.masthead .navbar .logo img:hover, 
+.masthead .navbar .navbar-title a:hover {
+   opacity: 0.9;
 }
 
 /* nav pill list */
