@@ -276,7 +276,7 @@ class DatabricksWorkspace(object):
             if not resource_id:
                 raise Exception("missing resource ID")
             
-            catalog = self.get_catalog_files_local(resource_id)
+            catalog = self.get_catalog_files(resource_id)
             if not catalog:
                 raise Exception("unable to retrieve file catalog")
             
@@ -310,16 +310,6 @@ class DatabricksWorkspace(object):
     def get_catalog_files(resource_id):
         json_data = BlobStorage().download_blob_as_json('databricks.json')
         catalog_files = json_data.get("catalog_files", {})
-        return catalog_files.get(resource_id, None)
-    
-    @staticmethod
-    def get_catalog_files_local(resource_id):
-        import json
-        file_path = "/srv/app/src_extensions/ckanext-weca-tdh/ckanext/weca_tdh/config/test/databricks.json"
-        with open(file_path, 'r') as file:
-            data = json.load(file) 
-
-        catalog_files = data.get("catalog_files", {})
         return catalog_files.get(resource_id, None)
 
 
