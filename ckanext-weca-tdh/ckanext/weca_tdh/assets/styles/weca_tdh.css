@@ -8951,8 +8951,8 @@ p.gem-c-lead-paragraph {
   margin-top: 13px;
 }
 
-.module-resource .actions {
-  top: -2px;
+.module-resource .actions ul {
+  margin: 0;
 }
 
 .download-spinner {
