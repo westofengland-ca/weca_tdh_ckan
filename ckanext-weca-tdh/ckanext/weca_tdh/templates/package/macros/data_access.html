@@ -32,8 +32,18 @@
     <p>{{ _('A data access type has not been assigned to this resource.') }}</p>
   {% else %}
     <div class="data-access-summary">
-      {% if res.resource_data_access == "TDH Query" %}
-        <a id="ga-tdh-connect-{{ res.id }}" 
+      {% if res.resource_data_access == "File Download" %}
+        <a id="ga-file-download-db" class="btn btn-primary resource-data-action"
+          {% if h.user_has_valid_db_token() %}
+            onclick="return start_download('{{ res.id }}');"
+          {% else %}
+            href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}&autodownload={{ res.id }}"
+          {% endif %}>
+          <i class="fa fa-arrow-circle-down"></i> {{ _('Download File') }}
+          <div id="spinner" class="download-spinner"></div>
+        </a>
+      {% elif res.resource_data_access == "TDH Query" %}
+        <a id="ga-tdh-connect" 
            class="btn btn-primary resource-data-action" 
            href="{{ h.url_for('action.tdh_partner_connect_file') }}?tdh_catalog={{ res.tdh_catalog }}&tdh_schema={{ tdh_schema }}" 
            download="TDH-{{ res.name | replace(' ', '_') }}.pbids">
@@ -56,19 +66,15 @@
 
       <p>{{ access.description | safe }}</p>
 
-      {% if res.resource_data_access == "File Download" %}
-        {% if not session.get('access_token') %}
-          <p>{{ _('Click the Connect to TDH button above to start a new download session.') }}</p>
-        {% else %}
-          <p>{{ _('To download, click the Download File button.') }}</p>
-        {% endif %}
-      {% elif res.resource_data_access == "TDH Query" %}
+      {% if res.resource_data_access == "TDH Query" %}
         {% if tdh_schema and res.tdh_table %}
           <div class="connection-details">
             <label for="tdh-query-path">{{ _('TDH Query Path') }}</label>
             <div class="tdh-query-path">
               <code id="tdh-query-path">{{ res.tdh_catalog }}.{{ tdh_schema }}.{{ res.tdh_table }}</code>
-              <button onclick="copyPath()"><i class="fa-regular fa-copy" aria-hidden="true"></i></button>
+              <button onclick="copyQueryPath()">
+                <i id="tdh-query-path-icon" class="fa-regular fa-copy" aria-hidden="true"></i>
+              </button>
             </div>
           </div>
         {% endif %}

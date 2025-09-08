@@ -32,64 +32,7 @@
               {% if download_url.append(1) %}{% endif %}    
             {% endif %} 
           </a>
-        {% elif "File Download" in res.resource_data_access %}
-          {% if not h.user_has_valid_db_token() %}
-            <a id="ga-databricks-connect" class="btn btn-primary" 
-              href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}">
-              <i class="fa fa-arrow-circle-down"></i> {{ _('Connect to TDH') }}
-            </a>
-          {% else %}
-            <a id="ga-file-download-db" class="btn btn-primary" onclick="return start_download('{{ res.id }}');">
-              <i class="fa fa-arrow-circle-down"></i> {{ _('Download File') }}
-              <div id="spinner" class="download-spinner"></div>
-            </a>
-          {% endif %}
         {% endif %}
-        <script>
-          function start_download(resource_id) {
-            $("#spinner").css("display", "inline-block");
-
-            $.ajax({
-              url: "/databricks/download/start",
-              method: "POST",
-              data: JSON.stringify({ resource_id: resource_id }),
-              contentType: "application/json",
-              success: function (response) {
-                const taskId = response.task_id;
-                const downloadUrl = response.download_url;
-                pollTaskStatus(taskId, downloadUrl);
-              },
-              error: function (err) {
-                $("#spinner").css("display", "none");
-                window.location.reload();
-              }
-            });
-          };
-          function pollTaskStatus(taskId, downloadUrl) {
-            $.ajax({
-              url: "/databricks/download/status",
-              method: "POST",
-              data: JSON.stringify({ task_id: taskId }),
-              contentType: "application/json",
-              success: function (response) {
-                const status = response.status;
-                if (status === "completed") {
-                  $("#spinner").css("display", "none");
-                  window.location.href = downloadUrl;
-                } else if (status === "error") {
-                  $("#spinner").css("display", "none");
-                  window.location.reload();
-                } else {
-                  setTimeout(() => pollTaskStatus(taskId, downloadUrl), 2000);
-                }
-              },
-              error: function (err) {
-                $("#spinner").css("display", "none");
-                window.location.reload();
-              }
-            });
-          }
-        </script>
         {% block download_resource_button %}
           {% if res.datastore_active %}
             <button class="btn btn-primary dropdown-toggle" role="button" id="dropdownDownloadFormat" data-bs-toggle="dropdown" aria-expanded="false" aria-label="list of downloadable formats">         
@@ -146,12 +89,19 @@
           <p>{{ _('A data access type has not been assigned to this resource.') }}</p>
         {% endif %}
 
-        <script>
-          function copyPath() {
-            const text = document.getElementById('tdh-query-path').innerText;
-            navigator.clipboard.writeText(text);
-          }
-        </script>
+        {% if res.resource_data_access == "File Download" and request.args.get("autodownload") %}
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              start_download("{{ request.args.get('autodownload') }}");
+
+              if (window.history.replaceState) {
+                const url = new URL(window.location);
+                url.searchParams.delete("autodownload");
+                window.history.replaceState({}, document.title, url.toString());
+              }
+            });
+          </script>
+        {% endif %}
       {% endblock %}
     </div>
   {% endblock %}
@@ -161,4 +111,9 @@
   {% if resource_views %}
     {{ super () }}
   {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% asset 'weca_tdh/data_access-js' %}
 {% endblock %}
