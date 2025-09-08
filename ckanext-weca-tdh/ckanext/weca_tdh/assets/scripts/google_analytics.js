@@ -58,16 +58,6 @@ ckan.module('google_analytics',  function(jQuery, _) {
           'page_title': pagePath
         });
       });
-
-      // Databricks connect
-      $(document).on('click', '#ga-databricks-connect', function (event) {
-        var pageHeading = $('.page-heading').text().trim();
-
-        gtag('event', 'databricks_connect', {
-          'category': 'Databricks connect',
-          'resource_title': pageHeading,
-        });
-      });
     
       // Databricks file download
       $(document).on('click', '#ga-file-download-db', function (event) {
