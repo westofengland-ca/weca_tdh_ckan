@@ -95,6 +95,9 @@ ckan config-tool $CKAN_INI "tdh.upload.http_trigger = $decoded_url"
 ckan config-tool $CKAN_INI expire_api_token.default_lifetime=90
 ckan config-tool $CKAN_INI expire_api_token.default_unit=86400 # 1 day
 
+# Configure datatables
+ckan config-tool $CKAN_INI ckan.datatables.ellipsis_length=0
+
 # Configure pages
 ckan config-tool $CKAN_INI "ckanext.pages.allow_html = True"
 
