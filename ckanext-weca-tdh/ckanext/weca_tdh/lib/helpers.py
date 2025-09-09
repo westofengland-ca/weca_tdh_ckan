@@ -204,7 +204,7 @@ def get_featured_datasets(limit: int = 5) -> list[dict]:
 
     featured_datasets = []
     queries = [
-        ("featured:true", "title desc"),
+        ("featured:true", "title asc"),
         ("featured:false AND availability:available", "metadata_created desc"),
         ("featured:false AND availability:upcoming", "metadata_created desc"),
     ]
