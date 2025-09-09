@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
 {% block header_account_container_content %}
-  {% if c.userobj %}
+  {% if g.userobj %}
     {{ super() }}
   {% else %}
   <nav class="account not-authed" aria-label="{{ _('Account') }}">
@@ -22,7 +22,7 @@
 {% block header_account_logged %}
   {% block header_feedback %}
     <li>
-      <a href="https://forms.office.com/e/6rj0EMtHLN" 
+      <a href="{{ h.build_form_url('submit_idea', name=g.userobj.fullname, email=g.userobj.email) }}" 
         title="Suggest a new idea or feedback" 
         target="_blank" rel="noreferrer noopener">
         <i class="fa-solid fa-lightbulb"></i>
@@ -31,7 +31,7 @@
     </li>
   {% endblock %}
   {% block header_sysadmin %}
-    {% if c.userobj.sysadmin %}
+    {% if g.userobj.sysadmin %}
       <li>
         <a href="{{ h.url_for('admin.index') }}" title="{{ _('Sysadmin settings') }}">
           <i class="fa fa-gavel" aria-hidden="true"></i>
@@ -70,15 +70,32 @@
 {% endblock %}
 
 {% block header_site_navigation %}
-  <div class="navbar-title" role="heading" aria-level="1">{{ g.site_title }}</div>
+  <div class="navbar-title" role="heading" aria-level="1">
+    <a class="site-title" href="/">{{ g.site_title }}</a>
+  </div>
   {% block header_site_navigation_tabs %}
     {% set package_type = h.default_package_type() %}
     {% set org_type = h.default_group_type('organization') %}
     {% set group_type = h.default_group_type('group') %}
     {% set current_path = request.path %}
-    <li>
-      <a href="/dataset" class="{% if current_path.startswith('/dataset') %}nav-item-active{% endif %}">{{_('Search')}}</a>
-    </li>
+    {% set preset_filters = {
+      'reports': {
+        'label': _('Reports'),
+        'filters': ['Power BI Report']
+      },
+      'datasets': {
+        'label': _('Datasets'),
+        'filters': ['External Link', 'File Download', 'Preview', 'TDH Query']
+      }
+    } %}
+
+    {% for key, item in preset_filters.items() %}
+      <li>
+        <a href="/dataset?q={% for f in item.filters %}&res_data_access={{ f | urlencode }}{% endfor %}">
+          {{ item.label }}
+        </a>
+      </li>
+    {% endfor %}
     <li>
       <a href="/organization" class="{% if current_path.startswith('/organization') %}nav-item-active{% endif %}">{{_('Publishers')}}</a>
     </li>
@@ -86,10 +103,7 @@
         <a href="/group" class="{% if current_path.startswith('/group') %}nav-item-active{% endif %}">{{_('Topics')}}</a>
     </li>
     <li>
-      <a href="/about" class="{% if current_path.startswith('/about') %}nav-item-active{% endif %}">{{_('About')}}</a>
-    </li>
-    <li>
-      <a href="/pages" class="{% if current_path.startswith('/pages') %}nav-item-active{% endif %}">{{_('Documentation')}}</a>
+      <a href="/pages" class="{% if current_path.startswith('/pages') %}nav-item-active{% endif %}">{{_('Support')}}</a>
     </li>
   {% endblock %}
 {% endblock %}

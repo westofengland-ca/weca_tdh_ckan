@@ -4,10 +4,12 @@ import re
 import time
 from datetime import datetime
 from typing import Any
+from urllib.parse import quote, urlencode
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
 from bs4 import BeautifulSoup
+from ckanext.weca_tdh.lib.forms import get_form
 from ckanext.weca_tdh.redis_config import RedisConfig
 from flask import flash
 from markdown import markdown
@@ -187,33 +189,39 @@ def get_data_quality_markings() -> list:
     ]
 
 
-def get_featured_datasets(limit_new: int, limit_upcoming: int) -> dict:
-    """Gets a combined list of newly added and upcoming datasets.
+def get_featured_datasets(limit: int = 5) -> list[dict]:
+    """Get up to `limit` featured datasets, falling back to available
+    and then upcoming datasets if not enough are featured.
 
-    :param limit_new: Number of new datasets to retrieve.
-    :param limit_upcoming: Number of upcoming datasets to retrieve.
-    :return: Combined list of datasets.
+    :param limit: Minimum number of datasets to retrieve.
+    :return: List of dataset dicts.
     """
-    data_dict = {
-        'fq': 'availability:available',
-        'sort': 'metadata_created desc',
-        'rows': limit_new
-    }
-    package_list_new = toolkit.get_action('package_search')(context = {'ignore_auth': True}, data_dict = data_dict)
-    package_list_new = package_list_new.get('results')
-    
-    data_dict = {
-        'fq': 'availability:upcoming',
-        'sort': 'metadata_created desc',
-        'rows': limit_upcoming
-    }
-    package_list_upcoming = toolkit.get_action('package_search')(context = {'ignore_auth': True}, data_dict = data_dict)
-    package_list_upcoming = package_list_upcoming.get('results')
+    def search_datasets(fq: str, sort: str, rows: int) -> list[dict]:
+        return toolkit.get_action('package_search')(
+            context={'ignore_auth': True},
+            data_dict={'fq': fq, 'sort': sort, 'rows': rows}
+        ).get('results', [])
 
-    return package_list_new + package_list_upcoming
+    featured_datasets = []
+    queries = [
+        ("featured:true", "title desc"),
+        ("featured:false AND availability:available", "metadata_created desc"),
+        ("featured:false AND availability:upcoming", "metadata_created desc"),
+    ]
+
+    for fq, sort in queries:
+        if len(featured_datasets) >= limit:
+            break
+        needed = limit - len(featured_datasets)
+        results = search_datasets(fq, sort, needed)
+
+        seen_ids = {dataset["id"] for dataset in featured_datasets}
+        featured_datasets.extend([dataset for dataset in results if dataset["id"] not in seen_ids])
+
+    return featured_datasets
 
 
-def get_featured_blog_articles(limit: int, exclude=None) -> dict:
+def get_featured_blog_articles(limit: int = 3, exclude=None) -> list[dict]:
     """Gets a list of featured blog articles.
 
     :param limit: Maximum number of articles to return.
@@ -425,3 +433,21 @@ def user_has_valid_db_token() -> bool:
         )
     except (TypeError, ValueError):
         return False
+
+
+def build_form_url(form_name: str, **kwargs) -> str:
+    """Return a form URL with parameters applied."""
+    form = get_form(form_name)
+    if not form:
+        return None
+
+    base_url = form["base_url"]
+    form_id = form.get("form_id")
+    params = {"id": form_id} if form_id else {}
+
+    for key, ms_param in form.get("parameters", {}).items():
+        if key in kwargs:
+            params[ms_param] = kwargs[key]
+
+    query = urlencode(params, safe="", quote_via=quote)
+    return f"{base_url}?{query}"

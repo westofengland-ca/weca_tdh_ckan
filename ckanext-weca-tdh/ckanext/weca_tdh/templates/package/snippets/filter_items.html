@@ -9,20 +9,44 @@
 #}
 
 {% asset 'weca_tdh/multi_select-js' %}
-{% from "govuk_frontend_jinja/components/checkboxes/macro.html" import govukCheckboxes %}
+{% from 'govuk_frontend_jinja/components/checkboxes/macro.html' import govukCheckboxes %}
 
 {% block filter_items %}
-  {% set filter_labels = {'organization': "Publisher", 'groups': "Topics", 'res_format': "Format", 'res_data_access': "Data Access", 'res_data_category': "Data Category"} %}
-  {% set filter_summaries = {'res_data_access': "Methods for accessing data", 'res_data_category': "Data classification (sensitivity)"} %}
-  {% set filter_items = [] %}
+  {% set filter_labels = {
+    'organization': 'Publisher', 
+    'groups': 'Topics', 
+    'res_format': 'Format', 
+    'res_data_access': 'Data Access', 
+    'res_data_category': 'Data Category', 
+    'availability': 'Availability', 
+    'private': 'Visibility'} %}
+  
+  {% set filter_summaries = {
+    'res_data_access': 'Methods for accessing data', 
+    'res_data_category': 'Data classification (sensitivity)', 
+    'availability': 'Current data status'} %}
 
+  {% set filter_text = {
+    'availability': {
+      'available': 'Available',
+      'upcoming': 'Coming Soon'
+    },
+    'private': {
+      'false': 'Public',
+      'true': 'Private'
+    }
+  } %}
+
+  {% set filter_items = [] %}
   {% set items = h.get_facet_items_dict(name, search_facets) %}
+
   {% for item in items %}    
     {% if item.name in ''.join(fields_grouped[name]) %}
       {% set checked = true %}
     {% endif %}
 
-    {{ filter_items.append({'value': item.name, 'text': item.display_name, 'checked': checked}) or "" }}
+    {% set filter_text = filter_text[name][item.name] if filter_text.get(name) and filter_text[name].get(item.name) else item.display_name %}
+    {{ filter_items.append({'value': item.name, 'text': filter_text, 'checked': checked}) or "" }}
   {% endfor %}
 
   {% if name in ('res_format', 'res_data_access', 'res_data_category') %}
@@ -32,11 +56,16 @@
 
   <div class="search-filter-wrapper">
     <h3 class="search-filter-heading ">
-      <button type="button" class="govuk-link search-filter-button" onclick="toggleCheckboxContainer('{{name}}'); this.classList.toggle('is-open');">
+      <button type="button" class="govuk-link search-filter-button" data-cy="filter-btn-{{name}}" 
+        onclick="toggleCheckboxContainer('{{name}}'); this.classList.toggle('is-open');">
         {{ filter_labels[name] }}
+        {% if name == 'private' %}
+          <span style="font-size: 14px"><i class="fa fa-gavel" aria-hidden="true"></i></span>
+        {% endif %}
       </button>
       <span class="chevron-button" aria-hidden="true">
-        <svg class="govuk-accordion__icon" xmlns="http://www.w3.org/2000/svg" focusable="false" width="12" height="12" viewBox="0 0 17 17">
+        <svg class="govuk-accordion__icon" xmlns="http://www.w3.org/2000/svg" 
+          focusable="false" width="12" height="12" viewBox="0 0 17 17">
           <path d="M1.5 5l6.5 6 6.5-6" fill="none" stroke="currentColor" stroke-width="3"/>
         </svg>
       </span>
@@ -44,17 +73,18 @@
       {% set default_summary = filter_summaries[name] or "No filters selected" %}
       {% set checked_items = filter_items | selectattr("checked") | list %}
       {% set checked_count = checked_items | length %}
+
       <div id="search-filter-summary-{{ name }}"
           class="govuk-label search-filter-summary"
           data-default-summary="{{ default_summary }}">
         {% if checked_count %}
-          {{ checked_count }} filter{{ 's' if checked_count != 1 else '' }} selected
+          {{ ngettext('%(num)d filter selected', '%(num)d filters selected', checked_count) % {'num': checked_count} }}
         {% else %}
           {{ default_summary }}
         {% endif %}
       </div>
     </h3>
-    <div id="{{name}}" class="search-filter-content">
+    <div id="{{name}}" class="search-filter-content" data-cy="filter-{{name}}">
       {{ govukCheckboxes({
         'idPrefix': 'filter-' + name,
         'name': name,

@@ -1,5 +1,7 @@
 {% ckan_extends %}
 
+{% import 'package/macros/data_access.html' as data_access_macro %}
+
 {% block resource_license %}{% endblock %}
 
 {% block pre_primary %}
@@ -18,8 +20,7 @@
     <div class="btn-group">
       {% block button_group %}
         {% if res.url and h.is_url(res.url) %}
-          {% set target = "_blank" if not res.resource_type in ('listing', 'service', 'api') and not res.has_views and not res.url_type == 'upload' else "" %}
-          <a class="btn btn-primary" href="{{ res.url }}" target="{{target}}">
+          <a class="btn btn-primary" href="{{ res.url }}">
             {% if res.resource_type in ('listing', 'service') %}
               <i class="fa fa-eye"></i> {{ _('View') }}
             {% elif res.resource_type == 'api' %}
@@ -31,64 +32,7 @@
               {% if download_url.append(1) %}{% endif %}    
             {% endif %} 
           </a>
-        {% elif "File Download" in res.resource_data_access %}
-          {% if not h.user_has_valid_db_token() %}
-            <a id="ga-databricks-connect" class="btn btn-primary" 
-              href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}">
-              <i class="fa fa-arrow-circle-down"></i> {{ _('Connect to TDH') }}
-            </a>
-          {% else %}
-            <a id="ga-file-download-db" class="btn btn-primary" onclick="return start_download('{{ res.id }}');">
-              <i class="fa fa-arrow-circle-down"></i> {{ _('Download File') }}
-              <div id="spinner" class="download-spinner"></div>
-            </a>
-          {% endif %}
         {% endif %}
-        <script>
-          function start_download(resource_id) {
-            $("#spinner").css("display", "inline-block");
-
-            $.ajax({
-              url: "/databricks/download/start",
-              method: "POST",
-              data: JSON.stringify({ resource_id: resource_id }),
-              contentType: "application/json",
-              success: function (response) {
-                const taskId = response.task_id;
-                const downloadUrl = response.download_url;
-                pollTaskStatus(taskId, downloadUrl);
-              },
-              error: function (err) {
-                $("#spinner").css("display", "none");
-                window.location.reload();
-              }
-            });
-          };
-          function pollTaskStatus(taskId, downloadUrl) {
-            $.ajax({
-              url: "/databricks/download/status",
-              method: "POST",
-              data: JSON.stringify({ task_id: taskId }),
-              contentType: "application/json",
-              success: function (response) {
-                const status = response.status;
-                if (status === "completed") {
-                  $("#spinner").css("display", "none");
-                  window.location.href = downloadUrl;
-                } else if (status === "error") {
-                  $("#spinner").css("display", "none");
-                  window.location.reload();
-                } else {
-                  setTimeout(() => pollTaskStatus(taskId, downloadUrl), 2000);
-                }
-              },
-              error: function (err) {
-                $("#spinner").css("display", "none");
-                window.location.reload();
-              }
-            });
-          }
-        </script>
         {% block download_resource_button %}
           {% if res.datastore_active %}
             <button class="btn btn-primary dropdown-toggle" role="button" id="dropdownDownloadFormat" data-bs-toggle="dropdown" aria-expanded="false" aria-label="list of downloadable formats">         
@@ -124,59 +68,42 @@
 
 {% block resource_content %}
   <h1 class="page-heading" alt="{{ h.resource_display_name(res) }}">{{ h.resource_display_name(res) | truncate(50) }}</h1>
-  {% block url %}
-    {% if res.url and h.is_url(res.url) %}
-      <p class="text-muted ellipsis">{{ _('URL:') }} <a href="{{ res.url }}" title="{{ res.url }}">{{ res.url }}</a></p>
-    {% elif res.url %}
-      <p class="text-muted break-word">{{ _('URL:') }} {{ res.url }}</p>
-    {% endif %}
-  {% endblock %}
+
   {% block description %}
-    <div class="prose notes" property="rdfs:label">
+    <div>
       {% if res.description %}
         {{ h.render_markdown(res.description) }}
       {% endif %}
     </div>
   {% endblock %}
-  {% block data_access %}
-    <h3>{{ _('Data Access') }}</h3>
-    {% if "File Download" in res.resource_data_access %}
-      <div>
-        <h2 class="heading-small">{{ _('File Download') }}</h2>
-        <p>{{ _('This resource is available to download from the TDH.') }}
-        {% if not session.get('access_token')%}
-          {{ _('To download, click the Connect to TDH button to start a new download session.') }}</p>
+
+  {% block res_metadata %}
+    <div class="resource-data-access">
+      {% block data_access %}
+        {% if res.resource_data_access %}
+          {{ data_access_macro.render(res, tdh_schema) }}
+          <p class="heading-small data-access-support-link">{{ _('To learn more about data access methods, visit the') }} 
+            <a class="govuk-link" href="{{ h.url_for('pages.show', page='support') ~ '#data-access' }}">{{ _('Support page') }}</a>.
+          </p>
         {% else %}
-          {{ _('To download, click the Download File button.') }}</p>
+          <p>{{ _('A data access type has not been assigned to this resource.') }}</p>
         {% endif %}
-      </div>
-    {% elif "Power BI Report" in res.resource_data_access %}
-      <div>
-        <h2 class="heading-small">{{ _('Power BI Report') }}</h2>
-        <p>{{ _('A Power BI Report is available for this resource. To view the report, click the Go to resource button or visit the URL above.') }}
-      </div>
-    {% elif "TDH Query" in res.resource_data_access %}
-      <div>
-        <h2 class="heading-small">{{ _('TDH Query') }}</h2>
-        <p>{{ _('This resource is available to query using Power BI.') }}
-        <a href="{{ h.url_for('pages.show', page='tdh_partner_connect') }}">{{ _('Learn how to connect to the Transport Data Hub.') }}</a></p>
-      </div>
-    {% elif "External Link" in res.resource_data_access or res.url and h.is_url(res.url) %}
-      <div>
-        <h2 class="heading-small">{{ _('External Link') }}</h2>
-        <p>{{ _('This resource is available through an external link. Click the Go to resource button or visit the URL above.') }}
-      </div>
-    {% elif "Preview" in res.resource_data_access or res.has_views %}
-      <div>
-        <h2 class="heading-small">{{ _('Preview') }}</h2>
-        <p>{{ _('This resource is available to preview via the sample data below.') }}
-      </div>
-    {% else %}
-      <div>
-        <p>{{ _('A data access type has not yet been assigned to this resource.') }}
-      </div>
-    {% endif %}
-    <p style="font-size: 16px;">{{ _('To learn more about data access types, see our') }} <a href="{{ h.url_for('pages.show', page='support') ~ '#data-access' }}" target="_blank">{{ _('Support page') }}</a>.</p>
+
+        {% if res.resource_data_access == "File Download" and request.args.get("autodownload") %}
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              start_download("{{ request.args.get('autodownload') }}");
+
+              if (window.history.replaceState) {
+                const url = new URL(window.location);
+                url.searchParams.delete("autodownload");
+                window.history.replaceState({}, document.title, url.toString());
+              }
+            });
+          </script>
+        {% endif %}
+      {% endblock %}
+    </div>
   {% endblock %}
 {% endblock %}
 
@@ -184,4 +111,9 @@
   {% if resource_views %}
     {{ super () }}
   {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% asset 'weca_tdh/data_access-js' %}
 {% endblock %}

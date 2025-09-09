@@ -1,0 +1,84 @@
+{% macro render(res, tdh_schema) %}
+  {% set data_access_info = {
+    'File Download': {
+      'title': "Direct Download",
+      'icon': 'fa-solid fa-download',
+      'description': 'This resource is available to download directly from the TDH.'
+    },
+    'Power BI Report': {
+      'title': 'Power BI Report',
+      'img': "/assets/images/branding/pbi-logo.svg",
+      'description': 'A Power BI Report is available for this resource. To view the report, click the Go to resource button above.'
+    },
+    'TDH Query': {
+      'title': "Connect with Power BI",
+      'img': "/assets/images/branding/pbi-logo.svg",
+      'description': "This resource is available to query using Power BI. <a href='/pages/tdh_partner_connect'><i class='fa fa-info-circle info-icon' title='Learn how to connect to the Transport Data Hub.'></i></a>"
+    },
+    'External Link': {
+      'title': 'Signposted Data',
+      'icon': 'fa-solid fa-arrow-up-right-from-square',
+      'description': 'This resource is available through an external link. To view, click the Go to resource button above.'
+    },
+    'Preview': {
+      'title': 'Preview',
+      'icon': 'fa-solid fa-chart-simple',
+      'description': 'This resource is available to preview using the sample data below.'
+    }
+  } %}
+
+  {% set access = data_access_info.get(res.resource_data_access) %}
+  {% if not access %}
+    <p>{{ _('A data access type has not been assigned to this resource.') }}</p>
+  {% else %}
+    <div class="data-access-summary">
+      {% if res.resource_data_access == "File Download" %}
+        <a id="ga-file-download-db" class="btn btn-primary resource-data-action"
+          {% if h.user_has_valid_db_token() %}
+            onclick="return start_download('{{ res.id }}');"
+          {% else %}
+            href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}&autodownload={{ res.id }}"
+          {% endif %}>
+          <i class="fa fa-arrow-circle-down"></i> {{ _('Download File') }}
+          <div id="spinner" class="download-spinner"></div>
+        </a>
+      {% elif res.resource_data_access == "TDH Query" %}
+        <a id="ga-tdh-connect" 
+           class="btn btn-primary resource-data-action" 
+           href="{{ h.url_for('action.tdh_partner_connect_file') }}?tdh_catalog={{ res.tdh_catalog }}&tdh_schema={{ tdh_schema }}" 
+           download="TDH-{{ res.name | replace(' ', '_') }}.pbids">
+            <i class="fa fa-arrow-circle-down"></i> {{ _('Partner Connect File') }}
+        </a>
+      {% endif %}
+
+      <h2>
+        {{ access.title }}
+        {% if access.img %}
+          <span class="data-access-img" aria-hidden="true">
+            <img src="{{ access.img }}" alt="{{ access.title }}" width="30" height="30"/>
+          </span>
+        {% elif access.icon %}
+          <span class="data-access-icon" aria-hidden="true">
+            <i class="{{ access.icon }}"></i>
+          </span>
+        {% endif %}
+      </h2>
+
+      <p>{{ access.description | safe }}</p>
+
+      {% if res.resource_data_access == "TDH Query" %}
+        {% if tdh_schema and res.tdh_table %}
+          <div class="connection-details">
+            <label for="tdh-query-path">{{ _('TDH Query Path') }}</label>
+            <div class="tdh-query-path">
+              <code id="tdh-query-path">{{ res.tdh_catalog }}.{{ tdh_schema }}.{{ res.tdh_table }}</code>
+              <button onclick="copyQueryPath()">
+                <i id="tdh-query-path-icon" class="fa-regular fa-copy" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  {% endif %}
+{% endmacro %}

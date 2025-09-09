@@ -79,7 +79,7 @@
                     {% endif %}
                   </a>
                 </dd>
-                <dt>{{ _('Data Owner(s):') }}</dt>
+                <dt>{{ ngettext('Data Owner', 'Data Owners', data_owners | length) }}:</dt>
                 <dd property="dc:owner" data-cy="package-owner">
                   {% if data_owners %}
                     {% for owner in data_owners %}
@@ -89,7 +89,7 @@
                     {{ _('Unassigned') }}
                   {% endif %}
                 </dd>
-                <dt>{{ _('Data Steward(s):') }}</dt>
+                <dt>{{ ngettext('Data Steward', 'Data Stewards', collaborators | length) }}:</dt>
                 <dd property="dc:stewards" data-cy="package-stewards">
                   {% if collaborators %}
                     {% for steward in collaborators %}
@@ -99,6 +99,12 @@
                     {{ _('Unassigned') }}
                   {% endif %}
                 </dd>
+                {% if tdh_schema %}
+                  <dt>{{ _('TDH Schema:') }}</dt>
+                  <dd property="dc:query" data-cy="package-query">
+                    {{ tdh_schema }}
+                  </dd>
+                {% endif %}
               </dl>
               {% block package_summary %}
                 <h2 class="heading-small" style="font-size:19px">{{ _('Summary') }}</h2>
@@ -122,34 +128,36 @@
             <a class="govuk-link" href="/organization/{{ pkg.organization.name }}" data-cy="publisher-link">{{ _('All datasets from') }} {{ pkg.organization.title }}</a>
           </div>
           {% block request_access %}
-            <div class="dataset-right-sidebar">
-              {% set sensitive_resources = pkg.resources
-                | selectattr("resource_data_category", "defined")
-                | map(attribute="resource_data_category")
-                | select("ne", "0")
-                | list
-              %}
+            {% if g.userobj %}
+              <div class="dataset-right-sidebar">
+                {% set sensitive_resources = pkg.resources
+                  | selectattr("resource_data_category", "defined")
+                  | map(attribute="resource_data_category")
+                  | select("ne", "0")
+                  | list
+                %}
 
-              {% if pkg.availability == 'upcoming' %}
-                <h3 class="heading-small">{{ _('Interested in this dataset?') }}</h3>
-                <a id="ga-express-interest-data"
-                  href="{{ url_for('action.dataset_interest', dataset_id=pkg.name) }}"
-                  class="govuk-button request-form-btn"
-                  data-cy="interest-button">
-                  {{ _('Express interest') }}
-                </a>
-          
-              {% elif sensitive_resources %}
-                <h3 class="heading-small">{{ _('Don\'t have access to the data?') }}</h3>
-                <a id="ga-request-access-data"
-                  href="https://forms.office.com/e/nDdBdfgnhU"
-                  class="govuk-button request-form-btn"
-                  target="_blank"
-                  data-cy="access-button">
-                  {{ _('Request access') }}
-                </a>
-              {% endif %}
-            </div>
+                {% if pkg.availability == 'upcoming' %}
+                  <h3 class="heading-small">{{ _('Interested in this dataset?') }}</h3>
+                  <a id="ga-express-interest-data"
+                    href="{{ url_for('action.dataset_interest', dataset_id=pkg.name) }}"
+                    class="govuk-button request-form-btn"
+                    data-cy="interest-button">
+                    {{ _('Express interest') }}
+                  </a>         
+                {% elif sensitive_resources %}
+                  <h3 class="heading-small">{{ _('Don\'t have access to the data?') }}</h3>
+                  <a id="ga-request-access-data"
+                    href="{{ h.build_form_url('request_dataset_access', dataset_id=pkg.id, name=g.userobj.fullname, email=g.userobj.email) }}"
+                    class="govuk-button request-form-btn"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    data-cy="access-button">
+                    {{ _('Request access') }}
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
           {% endblock %}
           {% block package_manage %}
             {% if self.content_action() | trim %}
@@ -169,12 +177,21 @@
   </div>
   <div class="row">
     {% block data_links %}
-      {% if c.userobj %}
+      {% if g.userobj %}
         <section class="data-links">
-          <div class="package-content">
-            {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources, can_edit=can_edit %}
-          </div>
-        </section>
+          {% set reports = pkg.resources | selectattr("resource_data_access", "equalto", "Power BI Report") | list %}
+          {% set datasets = pkg.resources | rejectattr("resource_data_access", "equalto", "Power BI Report") | list %}
+          {% if reports %}
+            <div class="package-content">
+              {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=reports, heading="Reports", tdh_schema=tdh_schema, can_edit=can_edit %}
+            </div>
+          {% endif %}
+          {% if datasets %}
+            <div class="package-content">
+              {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=datasets, heading="Datasets", tdh_schema=tdh_schema, can_edit=can_edit %}
+            </div>
+          {% endif %}
+        </section> 
       {% endif %}
     {% endblock %}
 
@@ -183,7 +200,7 @@
         <section class="edit">
           <div class="package-content">
             <h2 class="heading-medium">{{ _('Edit this dataset') }}</h2>
-            {% if not c.userobj %}
+            {% if not g.userobj %}
               <p>{{ _('You must have an account to suggest edits to this dataset.') }}</p>
               {{ govukButton({
                 'text': "Log in",

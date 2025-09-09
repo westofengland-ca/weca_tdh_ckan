@@ -25,11 +25,13 @@
 
   <div class="search-filter-wrapper">
     <h3 class="search-filter-heading ">
-      <button type="button" class="govuk-link search-filter-button" onclick="toggleCheckboxContainer('{{name}}'); this.classList.toggle('is-open');">
+      <button type="button" class="govuk-link search-filter-button" data-cy="filter-btn-{{name}}" 
+        onclick="toggleCheckboxContainer('{{name}}'); this.classList.toggle('is-open');">
         {{ filter_labels[name] }}
       </button>
       <span class="chevron-button" aria-hidden="true">
-        <svg class="govuk-accordion__icon" xmlns="http://www.w3.org/2000/svg" focusable="false" width="12" height="12" viewBox="0 0 17 17">
+        <svg class="govuk-accordion__icon" xmlns="http://www.w3.org/2000/svg" 
+          focusable="false" width="12" height="12" viewBox="0 0 17 17">
           <path d="M1.5 5l6.5 6 6.5-6" fill="none" stroke="currentColor" stroke-width="3"/>
         </svg>
       </span>
@@ -37,17 +39,18 @@
       {% set default_summary = filter_summaries[name] or "No filters selected" %}
       {% set checked_items = filter_items | selectattr("checked") | list %}
       {% set checked_count = checked_items | length %}
+
       <div id="search-filter-summary-{{ name }}"
           class="govuk-label search-filter-summary"
           data-default-summary="{{ default_summary }}">
         {% if checked_count %}
-          {{ checked_count }} filter{{ 's' if checked_count != 1 else '' }} selected
+          {{ ngettext('%(num)d filter selected', '%(num)d filters selected', checked_count) % {'num': checked_count} }}
         {% else %}
           {{ default_summary }}
         {% endif %}
       </div>
     </h3>
-    <div id="{{name}}" class="search-filter-content">
+    <div id="{{name}}" class="search-filter-content" data-cy="filter-{{name}}">
       {{ govukCheckboxes({
         'idPrefix': 'filter-' + name,
         'name': name,

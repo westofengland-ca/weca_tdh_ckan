@@ -1,0 +1,27 @@
+[
+    {
+        "name": "request_account",
+        "base_url": "https://forms.office.com/Pages/ResponsePage.aspx",
+        "form_id": "yMHJPgLkaEmP9KEN614Ek0qT_8CZgKpMoawuDJ9iWkJUNUFUS1FNNDFFTTlSVFdBT0pYWlNXVVNQSiQlQCN0PWcu",
+        "parameters": {}
+    },
+    {
+        "name": "request_dataset_access",
+        "base_url": "https://forms.office.com/Pages/ResponsePage.aspx",
+        "form_id": "yMHJPgLkaEmP9KEN614Ek0qT_8CZgKpMoawuDJ9iWkJURTQ2MllEUEQ1RkY1MTg5UjJYSlNBVExGUyQlQCN0PWcu",
+        "parameters": {
+            "name": "r13fdabdcc0bd4d2cbd450198132051e5",
+            "email": "rccb02cbd52354402a1bf8a683e08839b",
+            "dataset_id": "r4baefa01b6c24227a70596d40499a121"
+        }
+    },
+    {
+        "name": "submit_idea",
+        "base_url": "https://forms.office.com/Pages/ResponsePage.aspx",
+        "form_id": "yMHJPgLkaEmP9KEN614Ek0qT_8CZgKpMoawuDJ9iWkJURVpEWUdaRUdMQVpJNlk5NEJVUDBYTDlGSyQlQCN0PWcu",
+        "parameters": {
+            "name": "rf22f032f8caa46dc9c98a39d256d5fd6",
+            "email": "r9bd083f0fdd64748abb8da644c9d0490"
+        }
+    }
+]    

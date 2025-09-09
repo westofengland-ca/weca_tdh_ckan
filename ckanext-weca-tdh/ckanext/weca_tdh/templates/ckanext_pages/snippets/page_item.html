@@ -20,7 +20,7 @@
           {{ h.markdown_extract(page.summary, extract_length=250) }}
         </div>
       {% else %}
-        <p class="empty">{{ _('This document has no summary.') }}</p>
+        <p class="empty">{{ _('This page has no summary.') }}</p>
       {% endif %}
       {% if featured %}
         {{ govukButton({

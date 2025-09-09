@@ -49,9 +49,20 @@ describe("Dataset search page", () => {
   })
 
   it("filter datasets using search facets", () => {
-    cy.get('[data-cy="filter-organization"]').select("Plymouth Council")
-    cy.get('[data-cy="filter-groups"]').select("Train")
-    cy.get('[data-cy="filter-res_format"]').select("CSV")
+    cy.get('[data-cy="filter-btn-organization"]').click()
+    cy.get('[data-cy="filter-organization"]').get('input[type="checkbox"][value="plymouth_council"]').check()
+
+    cy.get('[data-cy="filter-btn-groups"]').click()
+    cy.get('[data-cy="filter-groups"]').get('input[type="checkbox"][value="train"]').check()
+
+    cy.get('[data-cy="filter-btn-res_format"]').click()
+    cy.get('[data-cy="filter-res_format"]').get('input[type="checkbox"][value="CSV"]').check()
+
+    cy.get('[data-cy="filter-btn-res_data_access"]').click()
+    cy.get('[data-cy="filter-res_data_access"]').get('input[type="checkbox"][value="External Link"]').check()
+
+    cy.get('[data-cy="filter-btn-res_data_category"]').click()
+    cy.get('[data-cy="filter-res_data_category"]').get('input[type="checkbox"][value="0"]').check()
     
     cy.get('[data-cy="filter-button"]').click()
     cy.get('[data-cy="dataset-title"]').first().should("contain", "Train stop locations")

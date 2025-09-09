@@ -142,7 +142,8 @@ class DatabricksWorkspace(object):
 
         session['databricks'] = {
             "code_verifier": code_verifier,
-            "referrer": referrer
+            "referrer": referrer,
+            "resource_id": resource_id
         }
 
         # Redirect to OAuth
@@ -168,18 +169,16 @@ class DatabricksWorkspace(object):
     def authorise(self):
         try:
             referrer = session.get('databricks', {}).get('referrer', '/')
-            
-            # Get workspace authorisation code for user
+            resource_id = session.get('databricks', {}).get('resource_id')
+
             auth_code = self.get_workspace_auth_code()
-            
-            # Get auth code verifier
             code_verifier = session.get('databricks', {}).get('code_verifier')
-            
-            # Get/set workspace access token for user
+
             response_dict = self.generate_workspace_access_token(code_verifier, auth_code)
             
             access_token = response_dict.get("access_token")
             refresh_token = response_dict.get("refresh_token")
+
             now = time.time()
             expires_at = int(now) + int(response_dict.get("expires_in", 3600))
             refresh_expires_at = int(now) + 604800 # 7 days
@@ -187,7 +186,10 @@ class DatabricksWorkspace(object):
             self.set_tokens(access_token, refresh_token, expires_at, refresh_expires_at)
             session.pop('databricks', None)
 
-            # Redirect back to resource page
+            if resource_id:
+                sep = "&" if "?" in referrer else "?"
+                referrer = f"{referrer}{sep}autodownload={resource_id}"
+
             return toolkit.redirect_to(referrer)
 
         except Exception as e:
