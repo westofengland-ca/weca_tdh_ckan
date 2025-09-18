@@ -42,7 +42,8 @@
       <label for="field-dqs" class="form-label">{{ _('Data Quality Score') }}</label>
       <div class="controls">
         {% set value = data.get('data_quality_score') %}
-        <input value="{{value}}" type="number" placeholder="0 - 100" id="field-dqs" name="data_quality_score" class="form-control" min="0" max="100" onkeyup="if(value<0) value=0; if(value>100) value=100;">
+        <input value="{{value}}" type="number" placeholder="0 - 100" id="field-dqs" name="data_quality_score" class="form-control" 
+          min="0" max="100" onkeyup="if(value<0) value=0; if(value>100) value=100;">
       </div>
     </div>
   {% endblock %}
@@ -55,6 +56,22 @@
       </div>
     </div>
   {% endblock %}
+
+  {% block package_metadata_fields_user_group %}
+    <div class="form-group control-medium">
+      <label for="field-ug" class="form-label">{{ _('User Group') }}</label>
+      <div class="controls">
+        {% set value = data.get('user_group', "") %}
+        <input value="{{value}}" type="text" placeholder="tdh_<groupname>" id="field-ug" name="user_group" class="form-control">
+
+        <span class="info-block">
+          <i class="fa fa-info-circle"></i>
+            {{ _('Azure AD/Entra ID user management group used to control dataset access') }}
+        </span>
+      </div>
+    </div>
+  {% endblock %}
+
   {{ super() }}
 {% endblock %}
 
