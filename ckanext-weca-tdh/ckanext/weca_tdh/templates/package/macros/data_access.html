@@ -13,7 +13,8 @@
     'TDH Query': {
       'title': "Connect with Power BI",
       'img': "/assets/images/branding/pbi-logo.svg",
-      'description': "This resource is available to query using Power BI. <a href='/pages/tdh_partner_connect'><i class='fa fa-info-circle info-icon' title='Learn how to connect to the Transport Data Hub.'></i></a>"
+      'description': "This resource is available to query using Power BI. <a href='/pages/tdh_partner_connect' aria-label='Data access'>
+        <i class='fa fa-info-circle info-icon' title='Learn how to connect to the Transport Data Hub.' aria-hidden='true'></i></a>"
     },
     'External Link': {
       'title': 'Signposted Data',
@@ -72,7 +73,7 @@
             <label for="tdh-query-path">{{ _('TDH Query Path') }}</label>
             <div class="tdh-query-path">
               <code id="tdh-query-path">{{ res.tdh_catalog }}.{{ tdh_schema }}.{{ res.tdh_table }}</code>
-              <button onclick="copyQueryPath()">
+              <button onclick="copyQueryPath()" aria-label="Copy query path">
                 <i id="tdh-query-path-icon" class="fa-regular fa-copy" aria-hidden="true"></i>
               </button>
             </div>

@@ -16,14 +16,22 @@
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header col-4">{{ _('Link to the data') }}</th>
           <th scope="col" class="govuk-table__header col-2">{{ _('Format') }}</th>
-          <th scope="col" class="govuk-table__header col-2">{{ _('Date added') }}</th>
+          <th id="th-data-layer" scope="col" class="govuk-table__header col-2">{{ _('Data layer') }}
+            <a href="{{ h.url_for('pages.show', page='support') ~ '#data-layer'}}" aria-labelledby="th-data-layer">
+              <i class="fa fa-info-circle info-icon" title="Indicates the data medallion layer." aria-hidden="true"></i>
+            </a>
+          </th>
           <th scope="col" class="govuk-table__header col-2">{{ _('Data access') }} 
             <a href="{{ h.url_for('pages.show', page='support') ~ '#data-access'}}">
               <i class="fa fa-info-circle info-icon" title="Indicates the method for accessing data."></i>
             </a>
           </th>
-          <th scope="col" class="govuk-table__header col-2">{{ _('Data category') }}</th>
-          <th scope="col" class="govuk-table__header col-2">{{ _('Explore') }}</th>
+          <th scope="col" class="govuk-table__header col-2">{{ _('Data category') }}
+            <a href="{{ h.url_for('pages.show', page='support') ~ '#data-category'}}" aria-labelledby="th-data-layer">
+              <i class="fa fa-info-circle info-icon" title="Indicates the data sensitivity." aria-hidden="true"></i>
+            </a>
+          </th>
+          <th scope="col" class="govuk-table__header">{{ _('Explore') }}</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">              

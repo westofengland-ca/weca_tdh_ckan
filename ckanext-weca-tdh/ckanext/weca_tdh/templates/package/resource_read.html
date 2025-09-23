@@ -78,6 +78,18 @@
   {% endblock %}
 
   {% block res_metadata %}
+    {% block data_layer %}
+      <p>{{ _('Data layer:') }} 
+        {% set tdh_catalog = res.tdh_catalog %}
+        {% if tdh_catalog %}
+          {% set medallion_level = tdh_catalog.split('_')[0] %}
+          <i class="fa fa-database medallion-level-{{ medallion_level }}"></i> {{ medallion_level | capitalize  }}
+        {% else %}
+          <i class="fa fa-signs-post medallion-level-wood"></i> {{ _('Wood') }}
+        {% endif %}
+      </p>
+    {% endblock %}
+
     <div class="resource-data-access">
       {% block data_access %}
         {% if res.resource_data_access %}
