@@ -46,7 +46,7 @@ def get_datasets():
         with urlopen(request) as response:
             if response.code == 200:
                 response_dict = json.loads(response.read())
-                if response_dict['success'] == True:
+                if response_dict['success']:
                   datasets = response_dict['result']
                   datasets_file = io.BytesIO(json.dumps(datasets).encode())
                   return datasets_file.getvalue()
@@ -55,8 +55,8 @@ def get_datasets():
 
     except HTTPError as err:
         raise Exception(f'get_datasets(): failed to get datasets. {err}')
-    except URLError:
-        raise Exception(f'get_datasets(): invalid URL')
+    except URLError as err:
+        raise Exception(f'get_datasets(): invalid URL. {err}')
 
 def get_publishers():
     # Gets list of all organisations with all fields.
@@ -70,7 +70,7 @@ def get_publishers():
         with urlopen(request) as response:
             if response.code == 200:
                 response_dict = json.loads(response.read())
-                if response_dict['success'] == True:
+                if response_dict['success']:
                   publishers = response_dict['result']
                   publishers_file = io.BytesIO(json.dumps(publishers).encode())
                   return publishers_file.getvalue()
@@ -79,8 +79,8 @@ def get_publishers():
 
     except HTTPError as err:
         raise Exception(f'get_publishers(): failed to get publishers. {err}')
-    except URLError:
-        raise Exception(f'get_publishers(): invalid URL')
+    except URLError as err:
+        raise Exception(f'get_publishers(): invalid URL. {err}')
 
 def get_topics():
     # Gets list of all groups with all fields.
@@ -94,7 +94,7 @@ def get_topics():
         with urlopen(request) as response:
             if response.code == 200:
                 response_dict = json.loads(response.read())
-                if response_dict['success'] == True:
+                if response_dict['success']:
                   topics = response_dict['result']
                   topics_file = io.BytesIO(json.dumps(topics).encode())
                   return topics_file.getvalue()
@@ -103,8 +103,8 @@ def get_topics():
 
     except HTTPError as err:
         raise Exception(f'get_topics(): failed to get topics. {err}')
-    except URLError:
-        raise Exception(f'get_topics(): invalid URL')
+    except URLError as err:
+        raise Exception(f'get_topics(): invalid URL {err}')
 
 try:
     with io.BytesIO() as zip_buffer:

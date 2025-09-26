@@ -41,7 +41,6 @@ def import_datasets(datasets):
         # provide API key from your user account on the CKAN site that you're creating the dataset on.
         request.add_header('Authorization', args.api_key)
 
-        # Make the HTTP request.
         try:
             urlopen(request, data_string)
         except HTTPError as err:
@@ -51,8 +50,8 @@ def import_datasets(datasets):
                 update_dataset(dataset)
             else:
                 raise Exception(f'import_datasets(): failed to import dataset. {err}')
-        except URLError:
-            raise Exception(f'import_datasets(): invalid URL')
+        except URLError as err:
+            raise Exception(f'import_datasets(): invalid URL. {err}')
 
         count += 1
     return count
@@ -62,14 +61,13 @@ def update_dataset(dataset):
     request = Request(f'{args.ckan_url}/api/action/package_update')
     request.add_header('Authorization', args.api_key)
 
-    # Make the HTTP request to update the dataset.
     try:
         urlopen(request, data_string)
         print(f'update_dataset(): successfully updated dataset {dataset.get("name")}')
     except HTTPError as err:
         raise Exception(f'import_datasets(): failed to update dataset. {err}')
-    except URLError:
-        raise Exception(f'import_datasets(): invalid URL')
+    except URLError as err:
+        raise Exception(f'import_datasets(): invalid URL. {err}')
 
 try:
     json_files = get_json_files_from_zip(args.zipfile)
