@@ -3,12 +3,13 @@ Exports full dataset list to CSV from a CKAN instance via the API.
 Outputs data to a .csv file.
 '''
 
-import requests
 import argparse
+import csv
 import traceback
 from datetime import datetime
-import csv
-import csv_column_headers
+
+import csv_column_headers as head
+import requests
 
 date = datetime.now().strftime("%d-%m-%Y")
 
@@ -19,11 +20,10 @@ parser.add_argument("--output_file", dest="output_file", help="Output path for c
 parser.add_argument("--limit", dest="limit", help="Maximum number of datasets to export", default=1000, type=int)
 args = parser.parse_args()
 
+
 def get_datasets():
     # Gets list of all datasets with all fields.
     url = f'{args.ckan_url}/api/action/current_package_list_with_resources?limit={args.limit}'
-
-    # provide API key from your user account on the CKAN site that you're creating the dataset on.
     payload = {}
     files={}
     headers = {
@@ -34,7 +34,7 @@ def get_datasets():
         response = requests.request("GET", url, headers=headers, data=payload, files=files, verify=False)
         if response.status_code == 200:
             response_dict = response.json()
-            if response_dict['success'] == True:
+            if response_dict['success']:
                 parse_datasets(response_dict['result'])
 
         else:
@@ -49,27 +49,45 @@ def get_datasets():
 def join_tags(tags):
     return '; '.join([tag['display_name'] for tag in tags])
 
+
 def join_topics(topics):
     return '; '.join([topic['name'] for topic in topics])
+
 
 def join_list_items(items):
     return '; '.join([str(item) for item in items])
 
+
 def join_resources(resources):
-    name_list = '; '.join([resource['name'] for resource in resources])
-    url_list = '; '.join([resource['url'] for resource in resources])
-    format_list = '; '.join([resource['format'] for resource in resources])
-    desc_list = '; '.join([resource['description'] for resource in resources])
-    cat_list = '; '.join([data_category_lookup(int(resource['resource_data_category'])) for resource in resources])
-    acc_list = '; '.join(resource.get('resource_data_access', "Unassigned") for resource in resources)
-    date_list = '; '.join([resource['created'] for resource in resources])
-    
-    resource_list = {'name': name_list, 'url': url_list, 
-                        'format': format_list, 'description': desc_list,
-                        'resource_data_category': cat_list,
-                        'resource_data_access': acc_list,
-                        'created': date_list}
-    return resource_list
+    def join_field(key, default="", transform=lambda v: v, condition=lambda r: True):
+        values = [
+            transform(r.get(key, default))
+            for r in resources
+            if condition(r) and r.get(key, default) is not None
+        ]
+        return "; ".join(values)
+
+    return {
+        "name": join_field("name"),
+        "url": join_field("url"),
+        "format": join_field("format"),
+        "description": join_field("description"),
+        "resource_data_category": join_field(
+            "resource_data_category",
+            transform=lambda v: data_category_lookup(int(v)),
+        ),
+        "resource_data_access": join_field("resource_data_access"),
+        "created": join_field("created"),
+        "tdh_catalog": join_field(
+            "tdh_catalog",
+            condition=lambda r: r.get("resource_data_access") in ("Power BI Report", "TDH Query"),
+        ),
+        "tdh_table": join_field(
+            "tdh_table",
+            condition=lambda r: r.get("resource_data_access") == "TDH Query",
+        ),
+    }
+
 
 def data_category_lookup(category):
     data_categories = {
@@ -79,6 +97,7 @@ def data_category_lookup(category):
         3: "Confidential"
     }
     return data_categories.get(category)
+
 
 def data_quality_lookup(quality):
     data_quality_categories = {
@@ -90,38 +109,44 @@ def data_quality_lookup(quality):
     }
     return data_quality_categories.get(quality)
 
+
 def parse_datasets(datasets: dict):
-    sorted_datasets = sorted(datasets, key=lambda x: x["title"])
+    sorted_datasets = sorted(datasets, key=lambda x: x['title'])
 
     with open(args.output_file, mode='a', newline='') as csv_file:
         for dataset in sorted_datasets:
             resources = join_resources(dataset['resources'])
             dataset_dict = {
-                    'Name': dataset['name'],
-                    'Title': dataset['title'],
-                    'Source': dataset['organization']['title'],
-                    'Publisher': dataset['organization']['name'],
-                    'Data agreements': dataset['license_title'],
-                    'License': dataset['license_id'],
-                    'Description': dataset['notes'] or "No description provided",
-                    'Catalogue visibility': "Private" if dataset['private'] else "Public",
-                    'Tags': join_tags(dataset.get('tags', [])),
-                    'Topics': join_topics(dataset.get('groups', [])),
-                    'Resource title': resources.get('name'),
-                    'Resource description': resources.get('description'),
-                    'Resource url': resources.get('url'),
-                    'Resource format': resources.get('format'),
-                    'Resource data category': resources.get('resource_data_category'),
-                    'Resource data access type': resources.get('resource_data_access'),
-                    'Resource date created': resources.get('created'),
-                    'Data owners': dataset.get('data_owners', ['Unassigned']),
-                    'Data stewards': dataset.get('data_stewards', ['Unassigned']),
-                    "Date created": dataset.get('metadata_created'),
-                    "Last modified": dataset.get('metadata_modified'),
-                    "Last reviewed": dataset.get('last_reviewed'),
-                    "Data quality category": data_quality_lookup(int(dataset.get('data_quality', 0))),
-                    "Data quality score": dataset.get('data_quality_score')
-                }
+                head.DATASET_NAME: dataset['name'],
+                head.DATASET_TITLE: dataset['title'],
+                head.DATASET_SOURCE: dataset['organization']['title'],
+                head.DATASET_PUBLISHER: dataset['organization']['name'],
+                head.DATASET_DATA_AGREEMENTS: dataset['license_title'],
+                head.DATASET_LICENSE: dataset['license_id'],
+                head.DATASET_NOTES: dataset['notes'] or 'No description provided',
+                head.DATASET_AVAILABILITY: dataset.get('availability', 'available'),
+                head.DATASET_VISIBILITY: 'Private' if dataset['private'] else 'Public',
+                head.DATASET_FEATURED: dataset.get('featured', False),
+                head.DATASET_TAGS: join_tags(dataset.get('tags', [])),
+                head.DATASET_TOPICS: join_topics(dataset.get('groups', [])),
+                head.RESOURCE_TITLE: resources.get('name'),
+                head.RESOURCE_DESCRIPTION: resources.get('description'),
+                head.RESOURCE_URL: resources.get('url'),
+                head.RESOURCE_FORMAT: resources.get('format'),
+                head.RESOURCE_DATA_CATEGORY: resources.get('resource_data_category'),
+                head.RESOURCE_DATA_ACCESS_TYPE: resources.get('resource_data_access'),
+                head.RESOURCE_DATE_CREATED: resources.get('created'),
+                head.RESOURCE_TDH_CATALOG: resources.get('tdh_catalog'),
+                head.RESOURCE_TDH_TABLE: resources.get('tdh_table'),
+                head.DATASET_DATA_OWNERS: dataset.get('data_owners', ['Unassigned']),
+                head.DATASET_DATA_STEWARDS: dataset.get('data_stewards', ['Unassigned']),
+                head.DATASET_DATE_CREATED: dataset.get('metadata_created'),
+                head.DATASET_LAST_MODFIED: dataset.get('metadata_modified'),
+                head.DATASET_LAST_REVIEWED: dataset.get('last_reviewed'),
+                head.DATASET_DATA_QUALITY_CATEGORY: data_quality_lookup(int(dataset.get('data_quality', 0))),
+                head.DATASET_DATA_QUALITY_SCORE: dataset.get('data_quality_score'),
+                head.DATASET_USER_GROUP: dataset.get('user_group')
+            }
 
             writer = csv.DictWriter(csv_file, fieldnames=dataset_dict.keys())
 
