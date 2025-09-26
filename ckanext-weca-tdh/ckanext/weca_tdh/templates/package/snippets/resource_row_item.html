@@ -21,10 +21,9 @@
       {{ res.format or 'Data' }}
     </td>
     <td class="govuk-table__cell">
-      {% set tdh_catalog = res.tdh_catalog %}
-      {% if tdh_catalog %}
-        {% set medallion_level = tdh_catalog.split('_')[0] %}
-        <i class="fa fa-database medallion-level-{{ medallion_level }}"></i> {{ medallion_level | capitalize  }}
+      {% set data_layer = res.resource_data_layer %}
+      {% if data_layer %}
+        <i class="fa {% if data_layer=='Wood' %}fa-signs-post{% else %}fa-database{% endif %} medallion-level-{{data_layer|lower}}"></i> {{ data_layer }}
       {% else %}
         <i class="fa fa-signs-post medallion-level-wood"></i> {{ _('Wood') }}
       {% endif %}
