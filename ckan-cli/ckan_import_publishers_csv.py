@@ -61,6 +61,10 @@ try:
                   {
                     'key': 'parent_org',
                     'value': row[csv_column_headers.PUBLISHER_PARENT_ORG]
+                  },
+                  {
+                    'key': 'tdh_schema',
+                    'value': row[csv_column_headers.PUBLISHER_TDH_SCHEMA]
                   }
                 ]
             }
