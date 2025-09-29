@@ -31,16 +31,16 @@ def separate_resources(row):
         "resource_data_category": head.RESOURCE_DATA_CATEGORY,
         "resource_data_access": head.RESOURCE_DATA_ACCESS_TYPE,
         "created": head.RESOURCE_DATE_CREATED,
+        "resource_data_layer": head.RESOURCE_DATA_LAYER,
         "tdh_catalog": head.RESOURCE_TDH_CATALOG,
         "tdh_table": head.RESOURCE_TDH_TABLE,
     }
 
     split_fields = {
-        key: [value.strip() for value in row[col].split(";") if value.strip()]
+        key: [value.strip() for value in row.get(col, "").split(";")]
         for key, col in field_map.items()
     }
 
-    # Ensure all lists have the same length
     max_len = max(len(values) for values in split_fields.values())
     for key, values in split_fields.items():
         if len(values) < max_len:
@@ -49,7 +49,17 @@ def separate_resources(row):
     resources = []
     for i in range(max_len):
         resource = {key: values[i] for key, values in split_fields.items()}
-        resource["resource_data_category"] = data_category_lookup(resource["resource_data_category"])
+
+        if resource.get("resource_data_category"):
+            resource["resource_data_category"] = data_category_lookup(resource["resource_data_category"])
+
+        if not resource.get("resource_data_layer"):
+            resource["resource_data_layer"] = "Wood"
+
+        if resource.get("resource_data_access") != "TDH Query":
+            resource["tdh_catalog"] = ""
+            resource["tdh_table"] = ""
+
         resources.append(resource)
 
     return resources

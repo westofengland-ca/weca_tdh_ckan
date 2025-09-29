@@ -60,11 +60,12 @@ def join_list_items(items):
 
 def join_resources(resources):
     def join_field(key, default="", transform=lambda v: v, condition=lambda r: True):
-        values = [
-            transform(r.get(key, default))
-            for r in resources
-            if condition(r) and r.get(key, default) is not None
-        ]
+        values = []
+        for r in resources:
+            if condition(r):
+                values.append(transform(r.get(key, default)))
+            else:
+                values.append("")
         return "; ".join(values)
 
     return {
@@ -78,13 +79,17 @@ def join_resources(resources):
         ),
         "resource_data_access": join_field("resource_data_access"),
         "created": join_field("created"),
+        "resource_data_layer": join_field(
+            "resource_data_layer",
+            default="Wood",
+        ),
         "tdh_catalog": join_field(
             "tdh_catalog",
-            condition=lambda r: r.get("resource_data_access") in ("Power BI Report", "TDH Query"),
+            condition=lambda r: r.get("resource_data_access") == "TDH Query"
         ),
         "tdh_table": join_field(
             "tdh_table",
-            condition=lambda r: r.get("resource_data_access") == "TDH Query",
+            condition=lambda r: r.get("resource_data_access") == "TDH Query"
         ),
     }
 
@@ -136,6 +141,7 @@ def parse_datasets(datasets: dict):
                 head.RESOURCE_DATA_CATEGORY: resources.get('resource_data_category'),
                 head.RESOURCE_DATA_ACCESS_TYPE: resources.get('resource_data_access'),
                 head.RESOURCE_DATE_CREATED: resources.get('created'),
+                head.RESOURCE_DATA_LAYER: resources.get('resource_data_layer'),
                 head.RESOURCE_TDH_CATALOG: resources.get('tdh_catalog'),
                 head.RESOURCE_TDH_TABLE: resources.get('tdh_table'),
                 head.DATASET_DATA_OWNERS: dataset.get('data_owners', ['Unassigned']),
