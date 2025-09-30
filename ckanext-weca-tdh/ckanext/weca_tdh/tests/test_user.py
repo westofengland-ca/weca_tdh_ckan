@@ -3,7 +3,7 @@ Tests for user.py
 """
 
 from ckan.logic import NotFound
-from ckanext.weca_tdh.user import User
+from ckanext.weca_tdh.platform.auth.user import User
 from unittest.mock import MagicMock, patch
 import pytest, unittest
 

@@ -8,7 +8,7 @@ from unittest.mock import patch
 import json
 import ckanext.weca_tdh.tests.config as test_config
 import ckanext.weca_tdh.config as C
-from ckanext.weca_tdh.auth import ADAuth
+from ckanext.weca_tdh.platform.auth.azure import ADAuth
 
 
 class Auth(unittest.TestCase):

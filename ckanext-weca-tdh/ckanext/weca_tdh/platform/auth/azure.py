@@ -7,7 +7,7 @@ import ckan.plugins.toolkit as toolkit
 from flask import Blueprint, flash, request
 
 import ckanext.weca_tdh.config as C
-from ckanext.weca_tdh.user import User
+from ckanext.weca_tdh.platform.auth.user import User
 
 log = logging.getLogger(__name__)
 adauthbp = Blueprint('adauth', __name__)
@@ -41,6 +41,7 @@ class ADAuth(object):
             raise Exception('invalid AD access token.')
 
         user_info = json.loads(token)
+        log.error(f"user_info: {user_info}")
         claims = user_info.get('claims', {})
 
         if claims:
@@ -71,7 +72,7 @@ class ADAuth(object):
                     claims_map[C.CKAN_ROLE_SYSADMIN] = True
 
         if C.FF_AUTH_USER_GROUP_ONLY == 'True' and not in_user_group:
-            raise Exception('account not in authorised user group.')
+           raise Exception('account not in authorised user group.')
 
         return claims_map
     
