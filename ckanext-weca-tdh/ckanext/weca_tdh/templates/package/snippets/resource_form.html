@@ -71,7 +71,7 @@
 
       function toggleWrappers() {
         const val = dataAccessSelect.value;
-        if (val === 'TDH Query' || val === 'Power BI Report') {
+        if (val != 'External Link') {
           dataLayerWrapper.style.display = 'block';
           if (!dataLayerSelect.value) dataLayerSelect.value = 'Wood';
         } else {

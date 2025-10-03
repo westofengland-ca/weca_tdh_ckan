@@ -114,9 +114,9 @@ def update_dataset(dataset_dict):
         if err.code == 409:
             raise Exception(f'update_dataset(): data conflict in row {row}')
         elif err.code == 404:
-            #raise Exception(f'update_dataset(): dataset {row["Title"]} does not exist')
-            pass
-        #raise Exception(f'update_dataset(): failed to update dataset. {err}')
+            raise Exception(f'update_dataset(): dataset {row["Title"]} does not exist')
+        else:
+            raise Exception(f'update_dataset(): failed to update dataset. {err}')
     except URLError:
         raise Exception('update_dataset(): invalid URL')
     
