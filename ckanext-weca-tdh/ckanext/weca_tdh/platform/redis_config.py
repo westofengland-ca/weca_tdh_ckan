@@ -72,3 +72,14 @@ class RedisConfig:
 
     def delete_databricks_tokens(self, user_id: str):
         self.client.delete(self._token_key(user_id))
+        
+    def _group_name_key(self, group_id: str) -> str:
+        return f"user:group:{group_id}"
+
+    def set_group_name(self, group_id: str, name: str, ttl: int = 86400 * 180):
+        """Cache a single AD group name globally"""
+        self.client.set(self._group_name_key(group_id), name, ex=ttl)
+
+    def get_group_name(self, group_id: str) -> str | None:
+        """Get cached AD group name; return None if missing"""
+        return self.client.get(self._group_name_key(group_id))
