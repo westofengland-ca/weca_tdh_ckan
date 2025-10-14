@@ -12,6 +12,7 @@ ckan config-tool $CKAN_INI "SECRET_KEY=${CKAN_SECRET_KEY}"
 ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=${CKAN_CSRF_SECRET_KEY}"
 ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=${CKAN_JWT_SECRET}"
 ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=${CKAN_JWT_SECRET}"
+ckan config-tool $CKAN_INI "tdh.ad_app.client_secret=${TDH_AD_APP_CLIENT_SECRET}"
 
 # Update the plugins setting in the ini file with the values defined in the env var
 echo "Loading the following plugins: $CKAN__PLUGINS"

@@ -8,6 +8,7 @@ ckan config-tool $CKAN_INI "SECRET_KEY=${CKAN_SECRET_KEY}"
 ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=${CKAN_CSRF_SECRET_KEY}"
 ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=${CKAN_JWT_SECRET}"
 ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=${CKAN_JWT_SECRET}"
+ckan config-tool $CKAN_INI "tdh.ad_app.client_secret=${TDH_AD_APP_CLIENT_SECRET}"
 
 # Set the SQLAlchemy (postgres) URL
 ckan config-tool $CKAN_INI "sqlalchemy.url = $CKAN_SQLALCHEMY_URL"

@@ -6,10 +6,11 @@ CKAN_SITE_URL= config['ckan.site_url']
 
 # CKAN user
 CKAN_USER_ID = "id"
+CKAN_AD_USER_ID = "ad_id"
 CKAN_USER_NAME = "name"
 CKAN_USER_EMAIL = "email"
 CKAN_USER_FULLNAME = "fullname"
-CKAN_USER_STATE = 'state'
+CKAN_USER_STATE = "state"
 
 # CKAN roles
 CKAN_ROLE_SYSADMIN = "sysadmin"
@@ -21,19 +22,26 @@ CKAN_ROUTE_AD_LOGOUT = "/.auth/logout?post_logout_redirect_uri=/user/login"
 # AD Auth
 AD_USER_ID = "X-Ms-Client-Principal-Id"
 AD_ID_TOKEN = "X-Ms-Client-Principal"
-AD_SESSION_COOKIE = 'AppServiceAuthSession'
+AD_SESSION_COOKIE = "AppServiceAuthSession"
+AD_USER_GROUPS = "ad_groups"
 
 # AD Claims
+AD_CLAIM_ID_URL = "http://schemas.microsoft.com/identity/claims"
 AD_CLAIM_URL = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims"
 AD_CLAIM_TYPE = "typ"
 AD_CLAIM_VALUE = "val"
+AD_CLAIM_TENANT = "tenantid"
+AD_CLAIM_AUDIENCE = "aud"
 AD_CLAIM_EMAIL = "emailaddress"
-AD_CLAIM_NAME = 'name'
+AD_CLAIM_NAME = "name"
 AD_CLAIM_GROUPS = "groups"
 
 # AD Groups
 AD_GROUP_CKAN_ID = config['ad.group.ckan_id']
 AD_GROUP_SYSADMIN_ID = config.get('ad.group.sysadmin_id', "")
+
+# AD App
+TDH_AD_APP_CLIENT_SECRET = config.get('tdh.ad_app.client_secret', "")
 
 # Feature flags
 FF_AUTH_RESTRICTED_ACCESS = config['feature_flag.auth.restricted_access']
@@ -57,7 +65,7 @@ ALERT_MESSAGE_SUPPORT = f"See the <a href='/pages/support'><u>Support Page</u></
 
 # Cookie Control config
 CCC_API_KEY = config['ccc.api_key']
-CCC_LICENSE = 'PRO'
+CCC_LICENSE = "PRO"
 
 # Google Analytics config
 GA_ID = config.get('ga.id', "")
