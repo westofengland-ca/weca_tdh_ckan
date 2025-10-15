@@ -146,15 +146,21 @@
                     {{ _('Express interest') }}
                   </a>         
                 {% elif sensitive_resources %}
-                  <h3 class="heading-small">{{ _('Don\'t have access to the data?') }}</h3>
-                  <a id="ga-request-access-data"
-                    href="{{ h.build_form_url('request_dataset_access', dataset_id=pkg.id, name=g.userobj.fullname, email=g.userobj.email) }}"
-                    class="govuk-button request-form-btn"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    data-cy="access-button">
-                    {{ _('Request access') }}
-                  </a>
+                  {% set plugin_extras = g.userobj.plugin_extras or {} %}
+                  {% set ad_groups = plugin_extras.get('ad_groups', []) %}
+                  {% set ad_group_ids = ad_groups | map(attribute='name') | list %}
+
+                  {% if pkg.user_group not in ad_group_ids and "tdh_developer" not in ad_group_ids %}
+                    <h3 class="heading-small">{{ _('Want access to the data?') }}</h3>
+                    <a id="ga-request-access-data"
+                      href="{{ h.build_form_url('request_dataset_access', dataset_id=pkg.id, name=g.userobj.fullname, email=g.userobj.email) }}"
+                      class="govuk-button request-form-btn"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      data-cy="access-button">
+                      {{ _('Request access') }}
+                    </a>
+                  {% endif %}
                 {% endif %}
               </div>
             {% endif %}
