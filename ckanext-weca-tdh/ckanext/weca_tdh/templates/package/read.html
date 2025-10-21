@@ -124,7 +124,7 @@
       {% block package_sidebar %}
         <div class="column-one-third dataset-right">
           <div class="dataset-right-sidebar">
-            <h3 class="heading-small">{{ _('More from this publisher') }}</h3>
+            <h3>{{ _('More from this publisher') }}</h3>
             <a class="govuk-link" href="/organization/{{ pkg.organization.name }}" data-cy="publisher-link">{{ _('All datasets from') }} {{ pkg.organization.title }}</a>
           </div>
           {% block request_access %}
@@ -137,25 +137,37 @@
                   | list
                 %}
 
-                {% if pkg.availability == 'upcoming' %}
-                  <h3 class="heading-small">{{ _('Interested in this dataset?') }}</h3>
-                  <a id="ga-express-interest-data"
-                    href="{{ url_for('action.dataset_interest', dataset_id=pkg.name) }}"
-                    class="govuk-button request-form-btn"
-                    data-cy="interest-button">
-                    {{ _('Express interest') }}
-                  </a>         
-                {% elif sensitive_resources %}
-                  <h3 class="heading-small">{{ _('Don\'t have access to the data?') }}</h3>
-                  <a id="ga-request-access-data"
-                    href="{{ h.build_form_url('request_dataset_access', dataset_id=pkg.id, name=g.userobj.fullname, email=g.userobj.email) }}"
-                    class="govuk-button request-form-btn"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    data-cy="access-button">
-                    {{ _('Request access') }}
-                  </a>
-                {% endif %}
+                <div class="dataset-data-access">
+                  {% if pkg.availability == 'upcoming' %}
+                    <h3>{{ _('Data coming soon') }}</h3>
+                    <p>{{ _('Interested in this dataset?') }}</p>
+                    <a id="ga-express-interest-data"
+                      href="{{ url_for('action.dataset_interest', dataset_id=pkg.name) }}"
+                      class="govuk-button request-form-btn mgb-0"
+                      data-cy="interest-button">
+                      {{ _('Express interest') }}
+                    </a>         
+                  {% elif sensitive_resources %}
+                    <h3>{{ _('Restricted data') }}</h3>
+                    {% set plugin_extras = g.userobj.plugin_extras or {} %}
+                    {% set ad_groups = plugin_extras.get('ad_groups', []) %}
+                    {% set ad_group_ids = ad_groups | map(attribute='name') | list %}
+
+                    {% if pkg.user_group not in ad_group_ids and "tdh_developer" not in ad_group_ids %}
+                      <p>{{ _('Need access to the data?') }}</p>
+                      <a id="ga-request-access-data"
+                        href="{{ h.build_form_url('request_dataset_access', dataset_id=pkg.id, name=g.userobj.fullname, email=g.userobj.email) }}"
+                        class="govuk-button request-form-btn mgb-0"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        data-cy="access-button">
+                        {{ _('Request access') }}
+                      </a>
+                    {% else %}
+                      <p class="mgb-0">{{ _('You have access to this data.') }}</p>
+                    {% endif %}
+                  {% endif %}
+                </div>
               </div>
             {% endif %}
           {% endblock %}

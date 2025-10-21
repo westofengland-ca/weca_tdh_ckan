@@ -15,11 +15,11 @@ from flask import flash, request
 import ckanext.weca_tdh.config as C
 import ckanext.weca_tdh.logic.actions as pages_actions
 from ckanext.pages.interfaces import IPagesSchema
-from ckanext.weca_tdh.auth import adauthbp
+from ckanext.weca_tdh.platform.auth.azure import adauthbp
 from ckanext.weca_tdh.controller import actionbp
 from ckanext.weca_tdh.databricks import databricksbp
 from ckanext.weca_tdh.lib import helpers
-from ckanext.weca_tdh.redis_config import RedisConfig
+from ckanext.weca_tdh.platform.redis_config import RedisConfig
 from ckanext.weca_tdh.upload import uploadbp
 
 log = logging.getLogger(__name__)

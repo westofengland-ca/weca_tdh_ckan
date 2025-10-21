@@ -3,7 +3,7 @@ Tests for user.py
 """
 
 from ckan.logic import NotFound
-from ckanext.weca_tdh.user import User
+from ckanext.weca_tdh.platform.auth.user import User
 from unittest.mock import MagicMock, patch
 import pytest, unittest
 
@@ -101,11 +101,12 @@ class ADUser(unittest.TestCase):
             User.get_or_create_ad_user(claims_map)
 
             # Assert that 'user_show' was called once with user id
-            mock_user_show.assert_called_once_with(data_dict={'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000'})
+            mock_user_show.assert_called_once_with(data_dict={'id': f"ad-{claims_map['id']}"})
 
             # Assert that 'user_update' was called once with updated user data
-            mock_user_update.assert_called_once_with(context={'ignore_auth': True}, data_dict={'id': 'ad-5f43883e-63a8-4dc6-a070-b27681a5d000', 'name': 'mock_user-test',
-                                                                                                'fullname': 'Updated User', 'email': 'mockuser@test.com'})
+            mock_user_update.assert_called_once_with(context={'ignore_auth': True}, data_dict={'id': f"ad-{claims_map['id']}", 'name': 'mock_user-test',
+                                                                                                'fullname': 'Updated User', 'email': 'mockuser@test.com', 
+                                                                                                'plugin_extras': {'ad_id': claims_map['id'], 'ad_groups': []}})
 
             # Assert that 'user_create' was not called
             mock_user_create.assert_not_called()

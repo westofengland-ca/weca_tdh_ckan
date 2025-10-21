@@ -8861,7 +8861,17 @@ p.gem-c-lead-paragraph {
 }
 
 .dataset-right {
-  padding-left: 25px;
+  padding: 25px 0 0 25px;
+}
+
+.dataset-data-access {
+  border-left: 4px solid #354753;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.mgb-0 {
+  margin-bottom: 0;
 }
 
 .package-content {
