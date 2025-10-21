@@ -152,8 +152,9 @@
                     {% set plugin_extras = g.userobj.plugin_extras or {} %}
                     {% set ad_groups = plugin_extras.get('ad_groups', []) %}
                     {% set ad_group_ids = ad_groups | map(attribute='name') | list %}
+                    {% set allowed_groups = ['tdh_developer', 'tdh_engineer', 'tdh_engineer_readonly'] %}
 
-                    {% if pkg.user_group not in ad_group_ids and "tdh_developer" not in ad_group_ids %}
+                    {% if pkg.user_group not in ad_group_ids and not (ad_group_ids | select('in', allowed_groups) | list) %}
                       <p>{{ _('Need access to the data?') }}</p>
                       <a id="ga-request-access-data"
                         href="{{ h.build_form_url('request_dataset_access', dataset_id=pkg.id, name=g.userobj.fullname, email=g.userobj.email) }}"
