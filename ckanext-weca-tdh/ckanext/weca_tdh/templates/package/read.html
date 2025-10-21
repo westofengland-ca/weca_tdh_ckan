@@ -138,7 +138,7 @@
                 %}
                 {% set upcoming_dataset = pkg.availability == 'upcoming' %}
 
-                {% if sensitive_resources or upcoming %}
+                {% if sensitive_resources or upcoming_dataset %}
                   <div class="dataset-data-access">
                     {% if upcoming_dataset %}
                       <h3>{{ _('Data coming soon') }}</h3>
