@@ -20,7 +20,7 @@ from ckanext.weca_tdh.controller import actionbp
 from ckanext.weca_tdh.platform.databricks.views import databricksbp
 from ckanext.weca_tdh.lib import helpers
 from ckanext.weca_tdh.platform.redis_config import RedisConfig
-from ckanext.weca_tdh.upload import uploadbp
+from ckanext.weca_tdh.platform.upload.views import uploadbp
 
 log = logging.getLogger(__name__)
 redis_client = RedisConfig(C.REDIS_URL)

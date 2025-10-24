@@ -17,7 +17,7 @@ from ckanext.weca_tdh.platform.databricks.workspace import (
     DatabricksWorkspace,
     redis_client,
 )
-from ckanext.weca_tdh.upload import BlobStorage
+from ckanext.weca_tdh.platform.upload.blob_storage import BlobStorage
 from flask import Flask
 
 log = logging.getLogger(__name__)

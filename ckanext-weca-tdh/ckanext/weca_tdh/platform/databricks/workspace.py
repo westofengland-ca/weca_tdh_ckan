@@ -4,7 +4,7 @@ import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
 import requests
 from ckanext.weca_tdh.platform.redis_config import RedisConfig
-from ckanext.weca_tdh.upload import BlobStorage
+from ckanext.weca_tdh.platform.upload.blob_storage import BlobStorage
 from flask import request
 
 redis_client = RedisConfig(C.REDIS_URL)
