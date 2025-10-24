@@ -3,6 +3,8 @@
 CKAN extension for the TDH Data Catalogue. Adds custom functionality and themeing to CKAN, including:
 - Azure Active Directory/Entra ID integration.
 - Azure Blob Storage file transfer.
+- Databricks file transfer.
+- Power BI integration.
 - GOV.UK Design System integration.
 - Custom dataset visibility and data catagory controls.
 
@@ -15,8 +17,9 @@ Compatibility with core CKAN versions:
 | CKAN version    | Compatible?   |
 | --------------- | ------------- |
 | 2.8 and earlier | not tested    |
-| 2.9             | yes           |
+| 2.9             | not tested    |
 | 2.10            | yes           |
+| 2.11            | yes           |
 
 ## Local development
 
@@ -40,7 +43,7 @@ Build the images:
 
 The docker build will automatically install ‘requirements.txt’ and run ‘setup.py’ for the extension.
 
-Live changes are enabled for templates. Any Python changes require a restart to the ckan container.
+Live changes are enabled for templates in dev mode. Any Python changes require a restart to the ckan container.
 
 ### VM installation
 
@@ -93,7 +96,7 @@ To run the Cypress e2e tests, go to the `ckanext-weca-tdh` directory and run com
     npm run cypress-open
 
 ## Styles
-The styling is a combination of CKAN, GDS and TDH styles.
+The styling is a combination of CKAN, GDS, and TDH styles.
 
 To build the stylesheets, go to the `ckanext-weca-tdh` directory and run command:
 
@@ -103,7 +106,7 @@ For live changes, use:
 
     npm run sass-dev
 
-## CKAN commands
+## CKAN admin commands
 
 ### Promote user to sysadmin
 To manually promote a user to a sysadmin, connect to the running CKAN instance using the Container App console and run commands:
