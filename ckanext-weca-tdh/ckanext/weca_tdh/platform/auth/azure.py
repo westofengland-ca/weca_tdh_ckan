@@ -1,4 +1,5 @@
 import base64
+import itertools
 import json
 import logging
 from typing import Any
@@ -18,6 +19,12 @@ from flask.views import MethodView
 log = logging.getLogger(__name__)
 adauthbp = Blueprint('adauth', __name__)
 redis_client = RedisConfig(C.REDIS_URL)
+
+BATCH_LIMIT = 20
+
+
+class UserAuthError(Exception):
+    pass
 
 
 class ADAuth(object):
@@ -39,9 +46,15 @@ class ADAuth(object):
             if referrer == toolkit.url_for('user.login'):
                 referrer = 'dashboard.datasets'
             return toolkit.redirect_to(referrer)
-
+        
         except Exception as e:
-            flash(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
+            log.exception(f"Authorisation failed: {e}")
+
+            if isinstance(e, UserAuthError):
+                flash(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
+            else:
+                flash(f"Failed to login. {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
+
             return toolkit.redirect_to('user.login')
 
 
@@ -106,23 +119,27 @@ class ADAuth(object):
         claims_map[C.AD_USER_GROUPS] = self.resolve_group_names(group_ids, access_token)
 
         if C.FF_AUTH_USER_GROUP_ONLY == 'True' and not in_user_group:
-           raise Exception('account not in authorised user group.')
+           raise UserAuthError('account not in authorised user group.')
 
         return claims_map
-    
+
+
     @staticmethod
     def get_graph_token(aud: str, tenant_id: str):
         """Obtain an Azure AD Graph API token for the app."""
         token = ""
         
         if not aud or not tenant_id:
-            log.error("Authentication: Missing audience or tenant ID for Graph token.")
+            log.warning("Auth: Missing audience or tenant ID for Graph token.")
             return token
         
         cache_key = f"graph_token:{tenant_id}:{aud}"
-        cached_token = redis_client.client.get(cache_key)
-        if cached_token:
-            return cached_token
+        try:
+            cached_token = redis_client.client.get(cache_key)
+            if cached_token:
+                return cached_token
+        except Exception as e:
+            log.warning(f"Auth: Redis unavailable, skipping cache lookup. {e}")
         
         url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
         data = {
@@ -145,30 +162,42 @@ class ADAuth(object):
             return token
         
         except Exception as e:
-            log.error(f"Authentication: Failed to obtain Graph API token. {e}")
+            log.warning(f"Auth: Failed to obtain Graph API token. {e}", exc_info=True)
         
         return token
 
-    @staticmethod
-    def resolve_group_names(group_ids: list, access_token: str) -> list:
+
+    def resolve_group_names(self, group_ids: list, access_token: str) -> list:
         """
         Resolves AD group IDs to names using Microsoft Graph API with batch requests.
         Uses a global Redis cache for all users.
         """
         resolved = []
         to_fetch = []
+        
+        if not access_token:
+            log.warning("Auth: Missing or invalid Graph API token. Skipping group name resolution.")
+            return resolved
 
         for gid in group_ids:
-            name = redis_client.get_group_name(gid)
+            try:
+                name = redis_client.get_group_name(gid)
+            except Exception as e:
+                log.warning(f"Auth: Redis unavailable, skipping group cache lookup for {gid}. {e}")
+                name = None
+
             if name:
                 resolved.append({"id": gid, "name": name})
             else:
                 to_fetch.append(gid)
+         
+        if not to_fetch:
+            return resolved
 
-        if to_fetch:
+        for batch_index, batch in enumerate(self._chunks(to_fetch, BATCH_LIMIT)):
             batch_requests = [
                 {"id": str(i), "method": "GET", "url": f"/groups/{gid}?$select=displayName"}
-                for i, gid in enumerate(to_fetch)
+                for i, gid in enumerate(batch)
             ]
 
             try:
@@ -185,26 +214,38 @@ class ADAuth(object):
                 results = resp.json().get("responses", [])
 
                 for res in results:
-                    gid = to_fetch[int(res["id"])]
+                    gid = batch[int(res["id"])]
                     if res.get("status") == 200:
                         display_name = res["body"]["displayName"]
                     else:
                         display_name = gid
-                        
                     if str(display_name).startswith("tdh_"):
                         resolved.append({"id": gid, "name": display_name})
                         redis_client.set_group_name(gid, display_name)
             
             except Exception as e:
-                log.error(f"Authentication: Failed to resolve group names via Graph API. {e}")
+                log.warning(f"Auth: Failed to resolve group names via Graph API. {e}", exc_info=True)
 
         return resolved
+
+
+    @staticmethod
+    def _chunks(iterable, size):
+        """Yield successive n-sized chunks from iterable."""
+        it = iter(iterable)
+        while True:
+            chunk = list(itertools.islice(it, size))
+            if not chunk:
+                break
+            yield chunk
+
 
     @staticmethod
     def decode_token(token: str) -> str:
         """Decode base64-encoded AD token"""
         return base64.b64decode(token + '==').decode('utf-8')
-    
+
+
     @staticmethod
     def login_to_ckan(username: str) -> None:
         userobj = model.User.get(username)
