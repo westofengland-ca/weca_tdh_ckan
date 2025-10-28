@@ -51,9 +51,9 @@ class ADAuth(object):
             log.exception(f"Authorisation failed: {e}")
 
             if isinstance(e, UserAuthError):
-                flash(f"Authorisation failed: {e} {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
+                flash(f"Failed to log in: {e} {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
             else:
-                flash(f"Failed to login. {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
+                flash(f"Failed to log in. {C.ALERT_MESSAGE_SUPPORT}.", category='alert-danger')
 
             return toolkit.redirect_to('user.login')
 
