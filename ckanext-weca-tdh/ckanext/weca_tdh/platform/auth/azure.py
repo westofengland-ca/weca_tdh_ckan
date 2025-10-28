@@ -113,9 +113,11 @@ class ADAuth(object):
     @staticmethod
     def get_graph_token(aud: str, tenant_id: str):
         """Obtain an Azure AD Graph API token for the app."""
+        token = ""
         
         if not aud or not tenant_id:
-            raise Exception("Missing audience or tenant ID for Graph token.")
+            log.error("Authentication: Missing audience or tenant ID for Graph token.")
+            return token
         
         cache_key = f"graph_token:{tenant_id}:{aud}"
         cached_token = redis_client.client.get(cache_key)
@@ -142,8 +144,10 @@ class ADAuth(object):
 
             return token
         
-        except Exception:
-            raise Exception("Failed to obtain Graph API token.")
+        except Exception as e:
+            log.error(f"Authentication: Failed to obtain Graph API token. {e}")
+        
+        return token
 
     @staticmethod
     def resolve_group_names(group_ids: list, access_token: str) -> list:
@@ -191,8 +195,8 @@ class ADAuth(object):
                         resolved.append({"id": gid, "name": display_name})
                         redis_client.set_group_name(gid, display_name)
             
-            except Exception:
-                raise Exception("Failed to resolve group names via Graph API.")
+            except Exception as e:
+                log.error(f"Authentication: Failed to resolve group names via Graph API. {e}")
 
         return resolved
 
