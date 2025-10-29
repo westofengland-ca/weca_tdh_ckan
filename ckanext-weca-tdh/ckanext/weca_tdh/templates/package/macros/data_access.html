@@ -1,4 +1,4 @@
-{% macro render(res, tdh_schema) %}
+{% macro render(res, tdh_schema, ns) %}
   {% set data_access_info = {
     'File Download': {
       'title': "Direct Download",
@@ -41,7 +41,7 @@
             href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}&autodownload={{ res.id }}"
           {% endif %}>
           <i class="fa fa-arrow-circle-down"></i> {{ _('Download File') }}
-          <div id="spinner" class="download-spinner"></div>
+          <div id="download-spinner" class="download-spinner"></div>
         </a>
       {% elif res.resource_data_access == "TDH Query" %}
         <a id="ga-tdh-connect" 
@@ -68,8 +68,8 @@
       <p>{{ access.description | safe }}</p>
 
       {% if res.resource_data_access == "TDH Query" %}
-        {% if tdh_schema and res.tdh_table %}
-          <div class="connection-details">
+        {% if res.tdh_catalog and tdh_schema and res.tdh_table %}
+          <div class="tdh-query-block">
             <label for="tdh-query-path">{{ _('TDH Query Path') }}</label>
             <div class="tdh-query-path">
               <code id="tdh-query-path">{{ res.tdh_catalog }}.{{ tdh_schema }}.{{ res.tdh_table }}</code>
@@ -78,6 +78,39 @@
               </button>
             </div>
           </div>
+
+          {% set queries = h.get_databricks_queries(res.id) %}
+
+          {% for query in queries %}
+            {% set sql_query = query['sql'] %}
+            {% set summary = query['summary'] %}
+            {% set query_id = "tdh-query-" ~ loop.index0 %}
+            {% set query_response_id = "tdh-query-response-" ~ loop.index0 %}
+            {% set query_spinner_id = "query-spinner-" ~ loop.index0 %}
+
+            {% do ns.queries.append({
+              'query_id': query_id,
+              'sql_query': sql_query,
+              'query_response_id': query_response_id,
+              'spinner_id': query_spinner_id
+            }) %}
+
+            <div class="tdh-query-block">
+              <label for="{{query_id}}">{{ summary }}</label>
+              <div id="{{query_id}}">
+                <a id="ga-res-query-db-{{query_id}}" class="btn btn-primary"
+                  {% if h.user_has_valid_db_token() %}
+                    onclick="return start_query_download('{{ loop.index0 }}', '{{ sql_query }}', '{{ res.tdh_table }}');"
+                  {% else %}
+                    href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}&autodownload={{ loop.index0 }}"
+                  {% endif %}>
+                  <i class="fa fa-arrow-circle-down"></i> {{ _('Execute Query') }}
+                  <div id="{{query_spinner_id}}" class="download-spinner"></div>
+                </a>
+              </div>
+              <div id="{{query_response_id}}"></div>
+            </div>
+          {% endfor %}
         {% endif %}
       {% endif %}
     </div>

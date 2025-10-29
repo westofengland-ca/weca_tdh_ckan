@@ -1,5 +1,6 @@
 function start_download(resource_id) {
-    $("#spinner").css("display", "inline-block");
+    const $spinner = $("#download-spinner");
+    $spinner.css("display", "inline-block");
 
     $.ajax({
         url: "/databricks/download/start",
@@ -7,38 +8,85 @@ function start_download(resource_id) {
         data: JSON.stringify({ resource_id: resource_id }),
         contentType: "application/json",
         success: function (response) {
-        const taskId = response.task_id;
-        const downloadUrl = response.download_url;
-        pollTaskStatus(taskId, downloadUrl);
+            const taskId = response.task_id;
+            const downloadUrl = response.download_url;
+            pollDownloadTaskStatus(taskId, downloadUrl, $spinner);
         },
-        error: function (err) {
-        $("#spinner").css("display", "none");
-        window.location.reload();
+        error: function () {
+            $spinner.hide()
+            window.location.reload();
         }
     });
 };
 
-function pollTaskStatus(taskId, downloadUrl) {
+function pollDownloadTaskStatus(taskId, downloadUrl, $spinner) {
     $.ajax({
         url: "/databricks/download/status",
         method: "POST",
         data: JSON.stringify({ task_id: taskId }),
         contentType: "application/json",
         success: function (response) {
-        const status = response.status;
-        if (status === "completed") {
-            $("#spinner").css("display", "none");
-            window.location.href = downloadUrl;
-        } else if (status === "error") {
-            $("#spinner").css("display", "none");
-            window.location.reload();
-        } else {
-            setTimeout(() => pollTaskStatus(taskId, downloadUrl), 2000);
-        }
+            const status = response.status;
+            if (status === "completed") {
+                $spinner.hide()
+                window.location.href = downloadUrl;
+            } else if (status === "error") {
+                $spinner.hide()
+                window.location.reload();
+            } else {
+                setTimeout(() => pollDownloadTaskStatus(taskId, downloadUrl), 2000);
+            }
         },
-        error: function (err) {
-        $("#spinner").css("display", "none");
-        window.location.reload();
+        error: function () {
+            $spinner.hide()
+            window.location.reload();
+        }
+    });
+}
+
+function start_query_download(id, sql_query, tdh_table) {
+    const $spinner = $("#query-spinner-" + id);
+    $spinner.css("display", "inline-block");
+
+    $.ajax({
+        url: "/databricks/query/start_download",
+        method: "POST",
+        data: JSON.stringify({ sql_query: sql_query, tdh_table: tdh_table }),
+        contentType: "application/json",
+        success: function (response) {
+            const taskId = response.task_id;
+            const downloadUrl = response.download_url;
+            pollQueryDownloadTaskStatus(taskId, downloadUrl, $spinner);
+        },
+        error: function () {
+            $spinner.hide()
+            window.location.reload();
+        }
+    });
+}
+
+function pollQueryDownloadTaskStatus(taskId, downloadUrl, $spinner) {
+    $.ajax({
+        url: "/databricks/query/status",
+        method: "POST",
+        data: JSON.stringify({ task_id: taskId }),
+        contentType: "application/json",
+        success: function (response) {
+            const status = response.status;
+            if (status === "completed") {
+                $spinner.hide()
+                window.location.href = downloadUrl;
+            } else if (status === "error") {
+                $spinner.hide()
+                window.location.reload();
+                document.getElementById('tdh-query-response-0').innerHTML = response.message
+            } else {
+                setTimeout(() => pollQueryDownloadTaskStatus(taskId, downloadUrl), 2000);
+            }
+        },
+        error: function () {
+            $spinner.hide()
+            window.location.reload();
         }
     });
 }

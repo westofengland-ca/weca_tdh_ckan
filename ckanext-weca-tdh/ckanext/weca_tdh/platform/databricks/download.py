@@ -17,7 +17,7 @@ redis_client = RedisConfig(C.REDIS_URL)
 
 def download_file_from_url(task_id, file_url, output_path, access_token):
     try:
-        redis_client.set_download_status(task_id, status="in_progress", message="Download started.")
+        redis_client.set_download_status(task_id, status="in_progress", message="Download started...")
         headers = {
             'Authorization': f'Bearer {access_token}'
         }
@@ -44,7 +44,7 @@ def download_file_from_url(task_id, file_url, output_path, access_token):
         redis_client.set_download_status(task_id, status="error", message=f"Download failed: {e}.")
 
 
-def get_task_status():
+def get_download_task_status():
     data = request.get_json()
     task_id = data.get("task_id")
     
@@ -94,8 +94,8 @@ def start_download():
     workspace = DatabricksWorkspace()
     try:
         data = request.get_json()
-
         resource_id = data.get("resource_id")
+
         if not resource_id:
             raise Exception("missing resource ID")
         

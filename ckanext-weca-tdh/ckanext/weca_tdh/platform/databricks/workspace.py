@@ -5,8 +5,11 @@ import ckanext.weca_tdh.config as C
 import requests
 from ckanext.weca_tdh.platform.redis_config import RedisConfig
 from ckanext.weca_tdh.platform.upload.blob_storage import BlobStorage
+from databricks.sdk import WorkspaceClient
+from databricks.sdk.service.sql import StatementState
 from flask import request
-
+import logging
+log = logging.getLogger(__name__)
 redis_client = RedisConfig(C.REDIS_URL)
 
 
@@ -18,6 +21,30 @@ class DatabricksWorkspace(object):
     @property
     def user_id(self):
         return toolkit.current_user.id if toolkit.current_user else "anon"
+    
+    def get_workspace_client(self):
+        return WorkspaceClient(host=self.host, token=self.get_workspace_access_token())
+    
+    def execute_statement(self, client, statement, timeout=30):
+        stmt = client.statement_execution.execute_statement(
+            statement=statement,
+            warehouse_id=self.warehouse_id
+        )
+        
+        start_time = time.time()
+        status = stmt.status.state
+
+        while status in (StatementState.PENDING, StatementState.RUNNING):
+            if time.time() - start_time > timeout:
+                raise TimeoutError("SQL execution timed out")
+            time.sleep(1)
+            stmt = client.statement_execution.get_statement(stmt.statement_id)
+            status = stmt.status.state
+
+        if status != StatementState.SUCCEEDED:
+            raise Exception(f"SQL execution failed: {stmt.status}")
+
+        return stmt
     
     def set_tokens(self, access_token, refresh_token, expires_at, refresh_expires_at):
         redis_client.set_databricks_tokens(self.user_id, access_token, refresh_token, expires_at, refresh_expires_at)

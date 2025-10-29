@@ -8,10 +8,12 @@ from .workspace import DatabricksWorkspace
 
 
 def authenticate(resource_id):
+    action = request.args.get("autodownload")
     referrer = request.args.get("referrer", "/dataset")
     code_verifier, code_challenge = oauth_code_verify_and_challenge()
 
     session['databricks'] = {
+        "action": action,
         "code_verifier": code_verifier,
         "referrer": referrer,
         "resource_id": resource_id
@@ -24,6 +26,7 @@ def authenticate(resource_id):
 def authorise():
     workspace = DatabricksWorkspace()
     try:
+        action = session.get('databricks', {}).get('action')
         referrer = session.get('databricks', {}).get('referrer', '/')
         resource_id = session.get('databricks', {}).get('resource_id')
 
@@ -44,7 +47,7 @@ def authorise():
         
         if resource_id:
             sep = "&" if "?" in referrer else "?"
-            referrer = f"{referrer}{sep}autodownload={resource_id}"
+            referrer = f"{referrer}{sep}autodownload={action}"
 
         return toolkit.redirect_to(referrer)
 
