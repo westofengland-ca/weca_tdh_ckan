@@ -1,10 +1,13 @@
 {% ckan_extends %}
 
+{% block content_action %}{% endblock %}
+
 {% block content_primary_nav %}
   {{ h.build_nav_icon('user.read', h.humanize_entity_type('package', dataset_type, 'content tab') or _('Datasets'), id=user.name, icon='sitemap') }}
   {{ h.build_nav_icon('user.read_organizations', _('Publishers'), id=user.name, icon='building') }}
   {{ h.build_nav_icon('user.read_groups', _('Topics'), id=user.name, icon='folder') }}
   {% if h.check_access('api_token_list', {'user': user['name']}) %}
-    {{ h.build_nav_icon('user.api_tokens', _('API Tokens'), id=user.name, icon='key') }}
+    {{ h.build_nav_icon('user.api_tokens', _('API'), id=user.name, icon='key') }}
+    {{ h.build_nav_icon('adauth.read_access_groups', _('Groups'), id=user.name, icon='user-group') }}
   {% endif %}
 {% endblock %}

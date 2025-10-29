@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from redis import StrictRedis
 
-from ckanext.weca_tdh.redis_config import RedisConfig
+from ckanext.weca_tdh.platform.redis_config import RedisConfig
 
 
 @pytest.fixture

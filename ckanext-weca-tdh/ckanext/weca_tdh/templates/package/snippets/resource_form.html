@@ -3,6 +3,8 @@
 {% block basic_fields_url %}
   {{ super() }}
 
+  {% set site_id = config.get('ckan.site_id', 'tdh-development').split('-')[-1] %}
+
   <div class="form-group control-medium">
     <label for="field-data_category" class="form-label">{{ _('Data Category') }}</label>
     <div class="controls">
@@ -27,11 +29,23 @@
     </div>
   </div>
 
-  <div id="tdh-query-path-wrapper" class="form-group control-medium" style="display:none;">
+  <div id="data-layer-wrapper" class="form-group control-medium" style="display:none;">
+    <label for="field-data_layer" class="form-label">{{ _('Data Layer') }}</label>
+    <div class="controls" style="margin-bottom: 30px;">
+      {% set selected_layer = data.get('resource_data_layer', 'Wood') %}
+      <select id="field-data_layer" name="resource_data_layer" data-module="autocomplete">
+        {% for layer in ["Wood", "Bronze", "Silver", "Gold"] %}
+          <option value="{{layer}}" {% if selected_layer == layer %}selected{% endif %}>{{ _(layer) }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div id="tdh-query-wrapper" class="form-group control-medium" style="display:none;">
     <label for="field-tdh_table" class="form-label">{{ _('TDH Query Path') }}</label>
     <div class="controls resource-control-flex">
       {% set value = data.get('tdh_catalog', '') %}
-      <input value="{{value}}" placeholder="e.g. bronze_production" id="field-tdh_catalog" name="tdh_catalog" class="form-control">
+      <input value="{{value}}" placeholder="" id="field-tdh_catalog" name="tdh_catalog" class="form-control">
       <span>.</span>
       {% set value = tdh_schema or "not assigned" %}
       <input value="{{value}}" id="field-tdh_schema" name="tdh_schema" class="form-control" disabled>
@@ -39,23 +53,55 @@
       {% set value = data.get('tdh_table', '') %}
       <input value="{{value}}" placeholder="e.g. trips_route" id="field-tdh_table" name="tdh_table" class="form-control">
     </div>
+    <span class="info-block">
+      <i class="fa fa-info-circle"></i>
+        {{ _('Databricks table query path (catalog.schema.table). The catalog and schema will be filled automatically.') }}
+    </span>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const wrapper = document.getElementById('tdh-query-path-wrapper');
-      const select = document.querySelector('select[name="resource_data_access"]');
+      const dataAccessSelect = document.querySelector('select[name="resource_data_access"]');
+      const dataLayerWrapper = document.getElementById('data-layer-wrapper');
+      const tdhQueryWrapper = document.getElementById('tdh-query-wrapper');
+      const dataLayerSelect = document.querySelector('select[name="resource_data_layer"]');
+      const tdhCatalogInput = document.getElementById('field-tdh_catalog');
+      const tdhTableInput = document.getElementById('field-tdh_table');
+      const siteId = "{{ site_id }}";
 
-      function toggleTdhFields() {
-        if (select && select.value === 'TDH Query') {
-          wrapper.style.display = 'block';
+      function toggleWrappers() {
+        const val = dataAccessSelect.value;
+        if (val != 'External Link') {
+          dataLayerWrapper.style.display = 'block';
+          if (!dataLayerSelect.value) dataLayerSelect.value = 'Wood';
         } else {
-          wrapper.style.display = 'none';
+          dataLayerWrapper.style.display = 'none';
+          dataLayerSelect.value = 'Wood';
+        }
+
+        if (val === 'TDH Query') {
+          tdhQueryWrapper.style.display = 'block';
+          updateCatalog();
+        } else {
+          tdhQueryWrapper.style.display = 'none';
+          tdhCatalogInput.value = '';
+          tdhCatalogInput.placeholder = '';
+          tdhTableInput.value = '';
         }
       }
 
-      $(select).on('change', toggleTdhFields);
-      toggleTdhFields(); // Initial state
+      function updateCatalog() {
+        if (tdhCatalogInput && dataLayerSelect) {
+          const newVal = dataLayerSelect.value.toLowerCase() + "_" + siteId;
+          tdhCatalogInput.placeholder = newVal;
+          tdhCatalogInput.value = newVal;
+        }
+      }
+
+      toggleWrappers();
+
+      $(dataAccessSelect).on('change', toggleWrappers);
+      $(dataLayerSelect).on('change', updateCatalog);
     });
   </script>
 {% endblock %}

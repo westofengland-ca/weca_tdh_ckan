@@ -15,11 +15,11 @@ from flask import flash, request
 import ckanext.weca_tdh.config as C
 import ckanext.weca_tdh.logic.actions as pages_actions
 from ckanext.pages.interfaces import IPagesSchema
-from ckanext.weca_tdh.auth import adauthbp
+from ckanext.weca_tdh.platform.auth.azure import adauthbp
 from ckanext.weca_tdh.controller import actionbp
 from ckanext.weca_tdh.databricks import databricksbp
 from ckanext.weca_tdh.lib import helpers
-from ckanext.weca_tdh.redis_config import RedisConfig
+from ckanext.weca_tdh.platform.redis_config import RedisConfig
 from ckanext.weca_tdh.upload import uploadbp
 
 log = logging.getLogger(__name__)
@@ -113,15 +113,18 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_converter('convert_to_extras')],
             'expressed_interest': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
-            'last_reviewed': [toolkit.get_validator('ignore_missing'),
-                                toolkit.get_converter('convert_to_extras')],
             'featured': [toolkit.get_validator('ignore_missing'),
                         toolkit.get_validator('boolean_validator'),
-                        toolkit.get_converter('convert_to_extras')]
+                        toolkit.get_converter('convert_to_extras')],
+            'last_reviewed': [toolkit.get_validator('ignore_missing'),
+                                toolkit.get_converter('convert_to_extras')],
+            'user_group': [toolkit.get_validator('ignore_missing'),
+                                toolkit.get_converter('convert_to_extras')],
         })
         schema['resources'].update({
                 'resource_data_access': [toolkit.get_validator('ignore_missing')],
                 'resource_data_category': [toolkit.get_validator('ignore_missing')],
+                'resource_data_layer': [toolkit.get_validator('ignore_missing')],
                 'tdh_catalog': [toolkit.get_validator('ignore_missing')],
                 'tdh_table': [toolkit.get_validator('ignore_missing')]
         })
@@ -153,15 +156,18 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                              toolkit.get_converter('convert_to_json_if_string')],
             'expressed_interest': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing')],
-            'last_reviewed': [toolkit.get_converter('convert_from_extras'),
-                                toolkit.get_validator('ignore_missing')],
             'featured': [toolkit.get_converter('convert_from_extras'),
                         toolkit.get_validator('boolean_validator'),
-                        toolkit.get_validator('ignore_missing')]
+                        toolkit.get_validator('ignore_missing')],
+            'last_reviewed': [toolkit.get_converter('convert_from_extras'),
+                                toolkit.get_validator('ignore_missing')],
+            'user_group': [toolkit.get_converter('convert_from_extras'),
+                                toolkit.get_validator('ignore_missing')]
         })
         schema['resources'].update({
                 'resource_data_access': [toolkit.get_validator('ignore_missing')],
                 'resource_data_category': [toolkit.get_validator('ignore_missing')],
+                'resource_data_layer': [toolkit.get_validator('ignore_missing')],
                 'tdh_catalog': [toolkit.get_validator('ignore_missing')],
                 'tdh_table': [toolkit.get_validator('ignore_missing')]
         })

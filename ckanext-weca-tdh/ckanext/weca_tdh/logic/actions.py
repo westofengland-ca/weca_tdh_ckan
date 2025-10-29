@@ -23,7 +23,7 @@ def pages_show(original_action, context, data_dict):
     visibility = page.get("visibility", "public")
 
     if not _user_can_view_page(user, visibility):
-        toolkit.abort(401, toolkit._('Not authorized to see this page'))
+        toolkit.abort(401, toolkit._('Not authorised to see this page'))
 
     return page
 

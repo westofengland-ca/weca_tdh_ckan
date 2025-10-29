@@ -8269,13 +8269,12 @@ main {
   margin-bottom: 20px;
 }
 
-/* Responsive behavior for smaller screens */
 @media (max-width: 890px) {
   .access-connect-content,
   .landing-overlay-action {
     width: 100%;
-    margin-left: 0; /* remove left margin to prevent awkward spacing */
-    margin-top: 20px; /* add spacing between stacked blocks */
+    margin-left: 0;
+    margin-top: 20px;
   }
   .landing-access-methods {
     flex-wrap: wrap;
@@ -8798,10 +8797,6 @@ p.gem-c-lead-paragraph {
   margin-right: 3px;
 }
 
-.resource-data-category {
-  text-transform: uppercase;
-}
-
 .data-category-open {
   background-color: #00703c;
 }
@@ -8818,6 +8813,22 @@ p.gem-c-lead-paragraph {
 
 .data-category-con {
   background-color: #660000;
+}
+
+.medallion-level-wood {
+  color: #cd7f32;
+}
+
+.medallion-level-bronze {
+  color: #9e6a03;
+}
+
+.medallion-level-silver {
+  color: #595959;
+}
+
+.medallion-level-gold {
+  color: #d29922;
 }
 
 .metadata-box--in-dataset {
@@ -8850,7 +8861,17 @@ p.gem-c-lead-paragraph {
 }
 
 .dataset-right {
-  padding-left: 25px;
+  padding: 25px 0 0 25px;
+}
+
+.dataset-data-access {
+  border-left: 4px solid #354753;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.mgb-0 {
+  margin-bottom: 0;
 }
 
 .package-content {
@@ -9077,8 +9098,17 @@ html {
 
 .info-icon {
   color: #354753;
+  position: absolute;
+  margin-left: 3px;
+  font-size: 14px;
 }
 
+@media (max-width: 640px) {
+  .info-icon {
+    position: relative;
+    margin-left: 0;
+  }
+}
 .content-seperator {
   border-bottom: 1px solid #ccc;
 }

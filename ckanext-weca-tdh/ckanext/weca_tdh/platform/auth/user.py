@@ -21,6 +21,7 @@ class User(object):
             email = claims[C.CKAN_USER_EMAIL]
             fullname = claims[C.CKAN_USER_FULLNAME]
             is_sysadmin = claims.get(C.CKAN_ROLE_SYSADMIN, False)
+            ad_groups = claims.get(C.AD_USER_GROUPS, [])
 
             user = toolkit.get_action('user_show')(data_dict = {C.CKAN_USER_ID: ckan_id})
 
@@ -31,7 +32,11 @@ class User(object):
             if C.FF_AD_UPDATE_USER == 'True':
                 # update user records. Only email and fullname can be updated
                 user[C.CKAN_USER_EMAIL] = email # email cannot be retrieved, but must be set on update
-                user[C.CKAN_USER_FULLNAME] = fullname 
+                user[C.CKAN_USER_FULLNAME] = fullname
+                user['plugin_extras'] = {
+                    C.CKAN_AD_USER_ID: ad_id,
+                    C.AD_USER_GROUPS: ad_groups
+                }
                 user = toolkit.get_action('user_update')(context = {'ignore_auth': True}, data_dict = user)
 
             return user[C.CKAN_USER_NAME]
@@ -48,7 +53,8 @@ class User(object):
                 new_user.email = email
                 new_user.sysadmin = is_sysadmin
                 new_user.plugin_extras = {
-                    'ad_id': ad_id
+                    C.CKAN_AD_USER_ID: ad_id,
+                    C.AD_USER_GROUPS: ad_groups
                 }
                 
                 # Add the user to the database session

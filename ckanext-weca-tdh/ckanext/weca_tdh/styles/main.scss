@@ -211,13 +211,12 @@ main {
     margin-bottom: 20px;
 }
 
-/* Responsive behavior for smaller screens */
 @media (max-width: 890px) {
     .access-connect-content,
     .landing-overlay-action {
         width: 100%;
-        margin-left: 0; /* remove left margin to prevent awkward spacing */
-        margin-top: 20px; /* add spacing between stacked blocks */
+        margin-left: 0;
+        margin-top: 20px;
     }
 
     .landing-access-methods {
@@ -724,10 +723,6 @@ p.gem-c-lead-paragraph {
     margin-right: 3px;
 }
 
-.resource-data-category  {
-    text-transform: uppercase;
-}
-
 .data-category-open {
   background-color: $data-category-open;
 }
@@ -744,6 +739,22 @@ p.gem-c-lead-paragraph {
 
 .data-category-con {
   background-color: $data-category-conf;
+}
+
+.medallion-level-wood {
+    color: $medallion-level-wood;
+}
+
+.medallion-level-bronze {
+    color: $medallion-level-bronze;
+}
+
+.medallion-level-silver {
+    color: $medallion-level-silver;
+}
+
+.medallion-level-gold {
+    color: $medallion-level-gold;
 }
 
 .metadata-box--in-dataset {
@@ -777,7 +788,17 @@ p.gem-c-lead-paragraph {
 }
 
 .dataset-right {
-    padding-left: 25px;
+    padding: 25px 0 0 25px;
+}
+
+.dataset-data-access {
+    border-left: 4px solid $tdh-background-main;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.mgb-0 {
+    margin-bottom: 0;
 }
 
 .package-content {
@@ -1005,6 +1026,16 @@ html {
 
 .info-icon {
     color: $tdh-background-main;
+    position: absolute;
+    margin-left: 3px;
+    font-size: 14px;
+}
+
+@media (max-width: 640px) {
+    .info-icon {
+        position: relative;
+        margin-left: 0;
+    }
 }
 
 .content-seperator {

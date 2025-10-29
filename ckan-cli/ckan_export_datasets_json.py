@@ -52,7 +52,7 @@ def get_datasets(filepath):
             response = requests.request("GET", url, headers=headers, data=payload, files=files, verify=False)
             if response.status_code == 200:
                 response_dict = response.json()
-                if response_dict['success'] == True:
+                if response_dict['success']:
                   datasets.append(response_dict['result'])
 
             else:

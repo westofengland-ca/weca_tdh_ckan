@@ -49,8 +49,8 @@ def import_publishers(publishers):
             if err.code == 409:
                 raise Exception(f'import_publishers(): data conflict in row {publisher}')
             raise Exception(f'import_publishers(): failed to import publisher. {err}')
-        except URLError:
-            raise Exception(f'import_publishers(): invalid URL')
+        except URLError as err:
+            raise Exception(f'import_publishers(): invalid URL. {err}')
         
     return count
 
@@ -75,8 +75,8 @@ def import_topics(topics):
             if err.code == 409:
                 raise Exception(f'import_topics(): data conflict in row {topic}')
             raise Exception(f'import_topics(): failed to import topic. {err}')
-        except URLError:
-            raise Exception(f'import_topics(): invalid URL')
+        except URLError as err:
+            raise Exception(f'import_topics(): invalid URL. {err}')
             
     return count
 
@@ -101,8 +101,8 @@ def import_datasets(datasets):
             if err.code == 409:
                 raise Exception(f'import_datasets(): data conflict in row {dataset}')
             raise Exception(f'import_datasets(): failed to import dataset. {err}')
-        except URLError:
-            raise Exception(f'import_datasets(): invalid URL')
+        except URLError as err:
+            raise Exception(f'import_datasets(): invalid URL {err}')
         
     return count
 

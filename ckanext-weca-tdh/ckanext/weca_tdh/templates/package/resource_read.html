@@ -78,6 +78,17 @@
   {% endblock %}
 
   {% block res_metadata %}
+    {% block data_layer %}
+      <p>{{ _('Data layer:') }} 
+        {% set data_layer = res.resource_data_layer %}
+        {% if data_layer %}
+          <i class="fa {% if data_layer=='Wood' %}fa-signs-post{% else %}fa-database{% endif %} medallion-level-{{data_layer|lower}}"></i> {{ data_layer }}
+        {% else %}
+          <i class="fa fa-signs-post medallion-level-wood"></i> {{ _('Wood') }}
+        {% endif %}
+      </p>
+    {% endblock %}
+
     <div class="resource-data-access">
       {% block data_access %}
         {% if res.resource_data_access %}

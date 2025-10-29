@@ -10,7 +10,7 @@ import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
 from bs4 import BeautifulSoup
 from ckanext.weca_tdh.lib.forms import get_form
-from ckanext.weca_tdh.redis_config import RedisConfig
+from ckanext.weca_tdh.platform.redis_config import RedisConfig
 from flask import flash
 from markdown import markdown
 from markdown_it import MarkdownIt
@@ -204,7 +204,7 @@ def get_featured_datasets(limit: int = 5) -> list[dict]:
 
     featured_datasets = []
     queries = [
-        ("featured:true", "title desc"),
+        ("featured:true", "title asc"),
         ("featured:false AND availability:available", "metadata_created desc"),
         ("featured:false AND availability:upcoming", "metadata_created desc"),
     ]

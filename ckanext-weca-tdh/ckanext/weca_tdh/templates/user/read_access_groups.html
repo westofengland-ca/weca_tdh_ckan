@@ -1,0 +1,30 @@
+{% extends "user/read_base.html" %}
+
+{% block primary_content_inner %}
+  <h2 class="hide-heading">{{ _('User access groups') }}</h2>
+    <p>{{ _('User groups are used to control access to restricted data.') }}</p>
+    {% if ad_groups %}
+      <table class="table table-striped table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th scope="col">{{ _('Assigned Groups') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for group in ad_groups | sort(attribute='name') %}
+            <tr rel="dc:relation" resource="_:extra{{ i }}">
+              <th scope="row" property="rdfs:label">{{ group.name }}</th>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+    <p class="empty">
+      {% if is_myself %}
+        {{ h.humanize_entity_type('group', group_type, 'you not member') or _('You are not a member of any user groups.') }}
+      {% else %}
+        {{ h.humanize_entity_type('group', group_type, 'user not member') or _('User isn\'t a member of any user groups.') }}
+      {% endif %}
+    </p>
+    {% endif %}
+{% endblock %}

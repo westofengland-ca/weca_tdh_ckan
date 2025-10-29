@@ -21,7 +21,12 @@
       {{ res.format or 'Data' }}
     </td>
     <td class="govuk-table__cell">
-      {{ h.filter_datetime(res.created, 'short') }}
+      {% set data_layer = res.resource_data_layer %}
+      {% if data_layer %}
+        <i class="fa {% if data_layer=='Wood' %}fa-signs-post{% else %}fa-database{% endif %} medallion-level-{{data_layer|lower}}"></i> {{ data_layer }}
+      {% else %}
+        <i class="fa fa-signs-post medallion-level-wood"></i> {{ _('Wood') }}
+      {% endif %}
     </td>
     <td class="govuk-table__cell">
       {% if res.resource_data_access %}
@@ -42,13 +47,11 @@
         {% if res.resource_data_category %}
           {% for category in categories %}
             {% if category.id == res.resource_data_category | int %}
-              <span class="badge resource-data-category {{ category.class }}">{{ category.name }} {% if category.desc %}<i class="fa fa-info-circle" 
-                title="{{ category.desc }}"></i>{% endif %}</span>
+              <span class="badge {{ category.class }}">{{ category.name }}</span>
             {% endif %}
           {% endfor %}
         {% else %}
-          <span class="badge resource-data-category {{ categories[0].class }}">{{ categories[0].name }} <i class="fa fa-info-circle" 
-            title="{{ categories[0].desc }}"></i></span>
+          <span class="badge {{ categories[0].class }}">{{ categories[0].name }}</span>
         {% endif %}
       </a>
     </td>
@@ -56,7 +59,8 @@
       {% block resource_item_explore %}
         {% if not url_is_edit %}
           <div class="dropdown btn-group">
-            <a href="#" class="btn btn-primary dropdown-toggle" type="button" id="dropdownExplorer" data-bs-toggle="dropdown" aria-expanded="false">
+            <a href="#" class="btn btn-primary dropdown-toggle" type="button" id="dropdownExplorer" 
+              data-bs-toggle="dropdown" aria-expanded="false" aria-label="Explore data">
               <i class="fa fa-share"></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownExplorer">
