@@ -350,44 +350,6 @@ def update_package_metadata_list(pkg_dict: dict, key: str, value: any) -> dict:
     return toolkit.get_action('package_update')(context = {'ignore_auth': True}, data_dict = pkg_dict)
 
 
-def transform_collaborators(collaborators: tuple) -> str:
-    """Converts a tuple of collaborator user IDs into a JSON list of full names.
-
-    :param collaborators: Tuple of (user_id, ...) values.
-    :return: JSON string of user full names.
-    """
-    ids_list = [user[0] for user in collaborators]
-    names_list = []
-
-    for ckan_id in ids_list:
-        try:
-            user = toolkit.get_action('user_show')(data_dict={C.CKAN_USER_ID: ckan_id})
-            names_list.append(user[C.CKAN_USER_FULLNAME])
-        except Exception as e:
-            log.error(f"Failed to fetch user with ID {ckan_id}: {e}")
-
-    if names_list:
-        return json.dumps(names_list)
-    else:
-        names_list.append('Unassigned')
-        return json.dumps(names_list)
-   
- 
-def transform_data_owners(data_owners: dict) -> str:
-    """Converts a list of data owner user objects into a JSON list of full names.
-
-    :param data_owners: List of user dicts.
-    :return: JSON string of user full names.
-    """
-    names_list = [user[C.CKAN_USER_FULLNAME] for user in data_owners]
-
-    if names_list:
-        return json.dumps(names_list)
-    else:
-        names_list.append('Unassigned')
-        return json.dumps(names_list)
-    
-
 def json_loads(string_list):
     """Safely loads a JSON list from a string.
 
