@@ -117,7 +117,16 @@
         {% if res.resource_data_access == "TDH Query" and request.args.get("autodownload") %}
           <script>
             document.addEventListener("DOMContentLoaded", function() {
-              start_query_download(res.id, "{{ request.args.get('autodownload') }}");
+              const autoDownloadIndex = "{{ request.args.get('autodownload') }}";
+              const queryCollapseId = `collapse-${autoDownloadIndex}`;
+              const queryCollapseEl = document.getElementById(queryCollapseId);
+
+              if (queryCollapseEl) {
+                const bsCollapse = new bootstrap.Collapse(queryCollapseEl, { toggle: true });
+                bsCollapse.show();
+              }
+
+              start_query_download("{{ res.id }}", autoDownloadIndex);
 
               if (window.history.replaceState) {
                 const url = new URL(window.location);
