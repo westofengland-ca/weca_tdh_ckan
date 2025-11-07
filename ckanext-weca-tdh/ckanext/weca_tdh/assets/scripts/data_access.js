@@ -44,14 +44,17 @@ function pollDownloadTaskStatus(taskId, downloadUrl, $spinner) {
     });
 }
 
-function start_query_download(id, sql_query, tdh_table) {
-    const $spinner = $("#query-spinner-" + id);
+function start_query_download(resource_id, query_id) {
+    const $spinner = $("#query-spinner-" + query_id);
     $spinner.css("display", "inline-block");
 
     $.ajax({
         url: "/databricks/query/start_download",
         method: "POST",
-        data: JSON.stringify({ sql_query: sql_query, tdh_table: tdh_table }),
+        data: JSON.stringify({ 
+            resource_id: resource_id, 
+            query_id: query_id,
+        }),
         contentType: "application/json",
         success: function (response) {
             const taskId = response.task_id;
@@ -81,7 +84,7 @@ function pollQueryDownloadTaskStatus(taskId, downloadUrl, $spinner) {
                 window.location.reload();
                 document.getElementById('tdh-query-response-0').innerHTML = response.message
             } else {
-                setTimeout(() => pollQueryDownloadTaskStatus(taskId, downloadUrl), 2000);
+                setTimeout(() => pollQueryDownloadTaskStatus(taskId, downloadUrl, $spinner), 2000);
             }
         },
         error: function () {

@@ -173,8 +173,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'resource_data_access': [toolkit.get_validator('ignore_missing')],
             'resource_data_category': [toolkit.get_validator('ignore_missing')],
             'resource_data_layer': [toolkit.get_validator('ignore_missing')],
-            'resource_queries': [toolkit.get_validator('ignore_missing'), 
-                                 toolkit.get_converter('convert_to_json_if_string')],
+            'resource_queries': [toolkit.get_validator('ignore_missing')],
             'tdh_catalog': [toolkit.get_validator('ignore_missing')],
             'tdh_table': [toolkit.get_validator('ignore_missing')]
         })

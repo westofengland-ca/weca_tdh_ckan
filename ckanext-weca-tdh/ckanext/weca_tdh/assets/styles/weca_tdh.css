@@ -9075,6 +9075,11 @@ p.gem-c-lead-paragraph {
   font-size: 0.95rem;
 }
 
+.accordion-button:not(.collapsed) {
+  color: #333333;
+  background-color: white;
+}
+
 /* GLOBAL /
 ////////*/
 html {
@@ -9147,6 +9152,11 @@ iframe {
 ///////*/
 .control-required {
   color: #da3633;
+}
+
+.form-actions {
+  padding-top: 20px;
+  border-top: 1px solid #ccc;
 }
 
 .form-actions .control-required-message {

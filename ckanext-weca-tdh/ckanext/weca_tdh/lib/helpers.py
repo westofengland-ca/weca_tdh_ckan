@@ -350,20 +350,17 @@ def update_package_metadata_list(pkg_dict: dict, key: str, value: any) -> dict:
     return toolkit.get_action('package_update')(context = {'ignore_auth': True}, data_dict = pkg_dict)
 
 
-def json_loads(string_list):
-    """Safely loads a JSON list from a string.
+def load_json(json_string: str) -> list:
+    """Safely loads JSON from a string.
 
-    :param string_list: JSON-encoded string.
+    :param string: JSON-encoded string.
     :return: List of stringified elements or empty list if parsing fails.
     """
-    if not string_list:
+    if not json_string:
         return []
-
     try:
-        parsed_list = json.loads(string_list)
-        clean_list = [str(item) for item in parsed_list if item is not None]
+        return json.loads(json_string)
 
-        return clean_list
     except (json.JSONDecodeError, TypeError):
         return []
 

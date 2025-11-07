@@ -92,8 +92,7 @@
     <div class="resource-data-access">
       {% block data_access %}
         {% if res.resource_data_access %}
-          {% set ns = namespace(queries=[]) %}
-          {{ data_access_macro.render(res, tdh_schema, ns=ns) }}
+          {{ data_access_macro.render(res, tdh_schema) }}
           <p class="heading-small data-access-support-link">{{ _('To learn more about data access methods, visit the') }} 
             <a class="govuk-link" href="{{ h.url_for('pages.show', page='support') ~ '#data-access' }}">{{ _('Support page') }}</a>.
           </p>
@@ -118,10 +117,7 @@
         {% if res.resource_data_access == "TDH Query" and request.args.get("autodownload") %}
           <script>
             document.addEventListener("DOMContentLoaded", function() {
-              id = "{{ request.args.get('autodownload') }}";
-              ns_queries = JSON.parse('{{ ns.queries | tojson | safe }}');
-
-              start_query_download(id, ns_queries[id].sql_query, '{{ res.tdh_table }}');
+              start_query_download(res.id, "{{ request.args.get('autodownload') }}");
 
               if (window.history.replaceState) {
                 const url = new URL(window.location);

@@ -2,38 +2,37 @@ import csv
 import json
 import logging
 import os
+import re
 import threading
-import time
 import uuid
-from pathlib import Path
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
 from ckanext.weca_tdh.platform.redis_config import RedisConfig
 from flask import flash, jsonify, request, send_file
+from slugify import slugify
 
 from .workspace import DatabricksWorkspace
 
 log = logging.getLogger(__name__)
 redis_client = RedisConfig(C.REDIS_URL)
-#workspace = DatabricksWorkspace()
 
 
-class QueryLoader:
-    def __init__(self, json_path: str):
-        self.json_path = Path(json_path)
-        self._queries = None
+def get_resource_query(resource_id: str, query_id: int) -> str:
+    """Return resource sql query for given query id."""
+    if resource_id is None or query_id is None:
+        raise toolkit.ValidationError("resource_id and query_index are required")
 
-    def _load_json(self):
-        if not self.json_path.exists():
-            raise FileNotFoundError(f"JSON file not found: {self.json_path}")
-        with open(self.json_path, "r") as f:
-            self._queries = json.load(f)
-
-    def get_queries_for_resource(self, resource_id: str):
-        if self._queries is None:
-            self._load_json()
-        return self._queries.get(resource_id, [])
+    try:
+        res_dict = toolkit.get_action('resource_show')(None, {'id': resource_id})
+        queries_str = res_dict.get('resource_queries')
+        
+        queries = json.loads(queries_str)
+        
+        return queries[query_id]
+    except Exception as e:
+        log.warning(f"Failed to get resource queries for {resource_id}: {e}")
+        return ""
 
 
 def download_file_from_query(task_id, stmt, output_path):
@@ -64,17 +63,24 @@ def start_query_download():
     try:
         data = request.get_json()
         task_id = str(uuid.uuid4())
-        tdh_table = data.get("tdh_table", task_id)
-        sql_query = data.get("sql_query")
+        resource_id = data.get("resource_id")
+        query_id = int(data.get("query_id"))
 
-        if not sql_query:
-            raise Exception("missing SQL query")
+        query = get_resource_query(resource_id, query_id)
+        
+        if not query:
+            raise Exception("missing resource query")
+        
+        query_title = query.get('title') or task_id
+        query_output = query.get('format') or "csv"
+        query_statement = query.get('statement')
+        statement = re.sub(r'\s+', ' ', query_statement.strip())
         
         workspace_client = workspace.get_workspace_client()
-        stmt = workspace.execute_statement(workspace_client, sql_query)
+        stmt = workspace.execute_statement(workspace_client, statement)
         
-        ext = "csv"
-        output_path = os.path.join("/tmp", tdh_table + os.extsep + ext)
+        file_name = slugify(query_title, separator="_")
+        output_path = os.path.join("/tmp", file_name + os.extsep + query_output)
 
         redis_client.set_download_status(task_id, status="pending", message="Task started.")
 
