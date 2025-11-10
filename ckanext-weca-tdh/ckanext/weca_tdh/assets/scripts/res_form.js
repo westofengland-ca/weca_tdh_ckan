@@ -68,8 +68,8 @@ document.addEventListener("DOMContentLoaded", function() {
       queryModalSaveBtn.addEventListener('click', () => this.saveChanges());
       queryModalCancelBtn.addEventListener('click', () => this.discardChanges());
       queryModalCloseBtn.addEventListener('click', () => this.discardChanges());
-      document.querySelector('#queries-table tbody').addEventListener('input', e => this.handleInput(e));
-      document.querySelector('#queries-table tbody').addEventListener('click', e => this.handleClick(e));
+      document.querySelector('#modal-accordion').addEventListener('input', e => this.handleInput(e));
+      document.querySelector('#modal-accordion').addEventListener('click', e => this.handleClick(e));
     },
     loadInitialQueries() {
       if (!varResourceQueries) return [];
@@ -90,40 +90,106 @@ document.addEventListener("DOMContentLoaded", function() {
       this.renderTable();
     },
     renderTable() {
-      const tbody = document.querySelector('#queries-table tbody');
-      tbody.innerHTML = '';
-      this.queries.forEach((q, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><textarea class="form-control form-control-sm" data-index="${index}" data-field="title">${q.title}</textarea></td>
-          <td><textarea class="form-control form-control-sm" data-index="${index}" data-field="summary">${q.summary}</textarea></td>
-          <td><textarea class="form-control form-control-sm" data-index="${index}" data-field="statement">${q.statement}</textarea></td>
-          <td><input type="text" class="form-control form-control-sm" value="${q.format}" data-index="${index}" data-field="format"></td>
-          <td><button class="btn btn-sm btn-danger btn-delete" data-index="${index}">Delete</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      const container = document.getElementById('modal-accordion');
+      container.innerHTML = '';
+
+      if (this.queries && this.queries.length > 0) {
+        this.queries.forEach((q, index) => {
+          const queryId = `tdh-query-${index}`;
+          const spinnerId = `query-spinner-${index}`;
+          const formatOptions = ["csv", "json", "xml", "parquet"].map(fmt => {
+            const checked = q.formats.includes(fmt) ? "checked" : "";
+            return `<div class="form-check form-check-inline">
+                      <input class="form-check-input query-format-checkbox" type="checkbox"
+                            data-index="${index}" data-field="formats" value="${fmt}" id="format-${fmt}-${index}" ${checked}>
+                      <label class="form-check-label no-after" for="format-${fmt}-${index}" style="font-size:11px;">${fmt.toUpperCase()}</label>
+                    </div>`;
+          }).join('');
+
+          const div = document.createElement('div');
+          div.className = index === 0 ? '' : 'tdh-query-block';
+
+          div.innerHTML = `
+            <div class="accordion" id="queryAccordion">
+              <div id="${queryId}" class="accordion-item" style="border:2px solid black;">
+                <h2 class="accordion-header" id="heading-${index}">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${index}">
+                    ${q.title || 'New Query'}
+                  </button>
+                </h2>
+                <div id="collapse-${index}" class="accordion-collapse collapse" data-bs-parent="#queryAccordion">
+                  <div class="accordion-body">
+                    <div class="mb-2">
+                      <label>Title</label>
+                      <textarea class="form-control" data-index="${index}" data-field="title">${q.title}</textarea>
+                    </div>
+                    <div class="mb-2">
+                      <label>Summary</label>
+                      <textarea class="form-control" data-index="${index}" data-field="summary">${q.summary}</textarea>
+                    </div>
+                    <div class="mb-2">
+                      <label>SQL Query</label>
+                      <textarea class="form-control" data-index="${index}" data-field="statement">${q.statement}</textarea>
+                    </div>
+                    <div class="mb-2">
+                      <label>Formats</label>
+                      <div>
+                        ${formatOptions}
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-danger btn-delete" data-index="${index}">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      } else {
+        const emptyMessage = document.createElement('p');
+        emptyMessage.classList.add('text-muted', 'mt-2');
+        emptyMessage.textContent = 'No queries have been assigned to this resource. Add a new query below.';
+        container.appendChild(emptyMessage);
+      }
+    },
+    getSelectedFormats(selector) {
+      const checkboxes = document.querySelectorAll(selector);
+      return Array.from(checkboxes).map(cb => cb.value.toLowerCase());
     },
     addQuery() {
       const title = document.getElementById('query-title').value.trim();
       const summary = document.getElementById('query-summary').value.trim();
       const statement = document.getElementById('query-statement').value.trim();
-      const format = document.getElementById('query-format').value.trim().toLowerCase();
+      const formats = this.getSelectedFormats('input[name="query-formats"]:checked');
+
+      console.log(formats)
+
       if (!title || !statement) return;
 
-      this.queries.push({ title, summary, statement, format });
+      this.queries.push({ title, summary, statement, formats });
       this.renderTable();
-      ['query-title','query-summary','query-statement','query-format'].forEach(id => document.getElementById(id).value = '');
+
+      document.getElementById('query-title').value = '';
+      document.getElementById('query-summary').value = '';
+      document.getElementById('query-statement').value = '';
+      document.querySelectorAll('input[name="query-formats"]').forEach(cb => cb.checked = false);
     },
     handleInput(e) {
       const target = e.target;
       const { index, field } = target.dataset;
+
       if (index !== undefined && field) {
-        this.queries[index][field] = target.value;
+        if (field === "formats") {
+          this.queries[index][field] = this.getSelectedFormats(`input[data-index="${index}"][data-field="formats"]:checked`)
+        } else {
+          this.queries[index][field] = target.value;
+        }
       }
     },
     handleClick(e) {
+      console.log(e.target)
       if (e.target.classList.contains('btn-delete')) {
+        console.log("here")
         const index = e.target.dataset.index;
         this.queries.splice(index, 1);
         this.renderTable();

@@ -8,6 +8,7 @@ import uuid
 
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
+import pandas as pd
 from ckanext.weca_tdh.platform.redis_config import RedisConfig
 from flask import flash, jsonify, request, send_file
 from slugify import slugify
@@ -35,18 +36,28 @@ def get_resource_query(resource_id: str, query_id: int) -> str:
         return ""
 
 
-def download_file_from_query(task_id, stmt, output_path):
+def download_file_from_query(task_id, stmt, query_output, output_path):
     try:
         redis_client.set_download_status(task_id, status="in_progress", message="Query running...")
 
         columns = stmt.manifest.schema.columns
         column_names = [col.name for col in columns]
         data = stmt.result.data_array
+        
+        if query_output.lower() =="json":
+            rows = [dict(zip(column_names, row)) for row in data]
+            with open(output_path, "w", encoding="utf-8") as file:
+                json.dump(rows, file, indent=2)
+                
+        elif query_output.lower() == "parquet":
+            df = pd.DataFrame(data, columns=column_names)
+            df.to_parquet(output_path, index=False)
 
-        with open(output_path, "w", newline="", encoding="utf-8") as file:
-            writer = csv.writer(file)
-            writer.writerow(column_names)
-            writer.writerows(data)
+        else:
+            with open(output_path, "w", newline="", encoding="utf-8") as file:
+                writer = csv.writer(file)
+                writer.writerow(column_names)
+                writer.writerows(data)
 
         redis_client.set_download_status(
             task_id,
@@ -62,17 +73,18 @@ def start_query_download():
     workspace = DatabricksWorkspace()
     try:
         data = request.get_json()
-        task_id = str(uuid.uuid4())
         resource_id = data.get("resource_id")
         query_id = int(data.get("query_id"))
+        format = data.get("format")
 
         query = get_resource_query(resource_id, query_id)
         
         if not query:
             raise Exception("missing resource query")
         
+        task_id = str(uuid.uuid4())
         query_title = query.get('title') or task_id
-        query_output = query.get('format') or "csv"
+        query_output = format if format in query.get('formats') else "csv"
         query_statement = query.get('statement')
         statement = re.sub(r'\s+', ' ', query_statement.strip())
         
@@ -84,7 +96,7 @@ def start_query_download():
 
         redis_client.set_download_status(task_id, status="pending", message="Task started.")
 
-        thread = threading.Thread(target=download_file_from_query, args=(task_id, stmt, output_path))
+        thread = threading.Thread(target=download_file_from_query, args=(task_id, stmt, query_output, output_path))
         thread.daemon = True
         thread.start()
 

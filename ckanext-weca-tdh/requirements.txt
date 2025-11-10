@@ -7,3 +7,5 @@ databricks-sdk==0.70.0
 markdown-it-py[linkify,plugins]
 mdit-py-plugins
 markdown==3.6
+pandas==2.3.3
+pyarrow==22.0.0

@@ -9117,6 +9117,10 @@ html {
   border-bottom: 1px solid #ccc;
 }
 
+label.no-after::after {
+  content: none;
+}
+
 /* Data Preview /
 //////////////*/
 iframe {

@@ -44,7 +44,7 @@ function pollDownloadTaskStatus(taskId, downloadUrl, $spinner) {
     });
 }
 
-function start_query_download(resource_id, query_id) {
+function start_query_download(resource_id, query_id, format) {
     const $spinner = $("#query-spinner-" + query_id);
     $spinner.css("display", "inline-block");
 
@@ -54,6 +54,7 @@ function start_query_download(resource_id, query_id) {
         data: JSON.stringify({ 
             resource_id: resource_id, 
             query_id: query_id,
+            format: format
         }),
         contentType: "application/json",
         success: function (response) {

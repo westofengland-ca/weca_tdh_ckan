@@ -72,22 +72,12 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="queries-modal-label">{{ _('Manage SQL Queries') }}</h5>
+            <h4 class="modal-title" id="queries-modal-label">{{ _('Manage SQL Queries') }}</h4>
             <button type="button" class="btn-close" data-bs-dismiss="modal" id="queries-modal-btn-close"></button>
           </div>
           <div class="modal-body">
-            <table class="table" id="queries-table">
-              <thead>
-                <tr>
-                  <th class="col-2">{{ _('Title') }}</th>
-                  <th class="col-2">{{ _('Summary') }}</th>
-                  <th class="col-4">{{ _('SQL Query') }}</th>
-                  <th class="col-1">{{ _('Format') }}</th>
-                  <th class="col-1">{{ _('Actions') }}</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+            <h6>{{ _('Current Queries') }}</h6>
+            <div id="modal-accordion" class="resource-data-access"></div>
 
             <hr>
             <h6>{{ _('Add New Query') }}</h6>
@@ -101,8 +91,18 @@
               <textarea class="form-control" id="query-statement" placeholder="SQL Query"></textarea>
             </div>
             <div class="mb-3">
-              <input type="text" class="form-control" id="query-format" placeholder="Format">
-            </div>
+              <label class="form-label">{{ _('Formats') }}</label>
+              <div id="query-format-options">
+                {% for fmt in ["csv", "json", "xml", "parquet"] %}
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="query-formats" id="format-{{ fmt }}" value="{{ fmt }}"
+                    {% if fmt == "csv" %}checked{% endif %}>
+                    <label class="form-check-label no-after" for="format-{{ fmt }}">{{ fmt | upper }}</label>
+                  </div>
+                {% endfor %}
+              </div>
+              <small class="form-text text-muted">{{ _('Select one or more formats.') }}</small>
+            </div>  
             <button type="button" class="btn btn-primary" id="queries-modal-btn-add">{{ _('Add Query') }}</button>
           </div>
           <div class="modal-footer">
