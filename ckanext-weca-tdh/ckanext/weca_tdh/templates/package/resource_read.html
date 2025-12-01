@@ -117,7 +117,9 @@
         {% if res.resource_data_access == "TDH Query" and request.args.get("autodownload") %}
           <script>
             document.addEventListener("DOMContentLoaded", function() {
-              const autoDownloadIndex = "{{ request.args.get('autodownload') }}";
+              const args = "{{ request.args.get('autodownload') }}".split('_');
+              const autoDownloadIndex = args[0]
+              const autoDownloadFormat = args[1]
               const queryCollapseId = `collapse-${autoDownloadIndex}`;
               const queryCollapseEl = document.getElementById(queryCollapseId);
 
@@ -126,7 +128,7 @@
                 bsCollapse.show();
               }
 
-              start_query_download("{{ res.id }}", autoDownloadIndex);
+              start_query_download('{{ res.id }}', autoDownloadIndex, autoDownloadFormat);
 
               if (window.history.replaceState) {
                 const url = new URL(window.location);

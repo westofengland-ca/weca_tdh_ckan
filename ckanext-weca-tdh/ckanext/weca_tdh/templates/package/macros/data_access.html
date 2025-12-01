@@ -121,8 +121,13 @@
                             {% for format in query.formats %}
                               <li style="cursor:pointer;">
                                 <a class="dropdown-item"
-                                  onclick="return start_query_download('{{ res.id }}', '{{ loop_index }}', '{{ format | lower }}');">
-                                  {{ format | upper }}
+                                  {% if h.user_has_valid_db_token() %}
+                                    onclick="return start_query_download('{{ res.id }}', '{{ loop_index }}', '{{ format | lower }}');"
+                                  {% else %}
+                                    {% set args = loop_index ~ '_' ~ format | lower %}
+                                    href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}&autodownload={{ args }}"
+                                  {% endif %}>
+                                  {{ format | upper }}    
                                 </a>
                               </li>
                             {% else %}

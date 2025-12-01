@@ -9,3 +9,4 @@ mdit-py-plugins
 markdown==3.6
 pandas==2.3.3
 pyarrow==22.0.0
+python-slugify==8.0.4
