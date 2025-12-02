@@ -83,17 +83,19 @@
             <h6>{{ _('Add New Query') }}</h6>
             <div class="mb-3">
               <input type="text" class="form-control" id="query-title" placeholder="Title">
+              <div class="invalid-feedback">{{ _('Title is required.') }}</div>
             </div>
             <div class="mb-3">
               <textarea class="form-control" id="query-summary" placeholder="Summary"></textarea>
             </div>
             <div class="mb-3">
               <textarea class="form-control" id="query-statement" placeholder="SQL Query"></textarea>
+              <div class="invalid-feedback">{{ _('Statement is required.') }}</div>
             </div>
             <div class="mb-3">
               <label class="form-label">{{ _('Formats') }}</label>
               <div id="query-format-options">
-                {% for fmt in ["csv", "json", "xml", "parquet"] %}
+                {% for fmt in ["csv", "json", "parquet"] %}
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" name="query-formats" id="format-{{ fmt }}" value="{{ fmt }}"
                     {% if fmt == "csv" %}checked{% endif %}>

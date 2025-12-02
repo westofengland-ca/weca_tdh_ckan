@@ -101,7 +101,7 @@
                     <div id="{{query_id}}" class="accordion-item">
                       <h2 class="accordion-header" id="heading-{{loop_index}}">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{loop_index}}">
-                          {{ query.title }}
+                          {{ query.title or 'Query ' ~ loop_index }}
                         </button>
                       </h2>
                       <div id="collapse-{{loop_index}}" class="accordion-collapse collapse" data-bs-parent="#queryAccordion">
@@ -135,7 +135,7 @@
                             {% endfor %}
                           </ul>
                           <p>{{ query.summary }}</p>
-                          <p>{{ "Available formats: " ~ query.formats | join(', ') | upper }}</p>
+                          <small>{{ "Available format(s): " ~ query.formats | join(', ') | upper }}</small>
                         </div>
                       </div>
                     </div>

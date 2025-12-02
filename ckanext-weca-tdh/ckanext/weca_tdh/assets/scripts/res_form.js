@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const queryModalObj = {
     queries: [],
     initialQueries: [],
+    allowedFormats: ["csv", "json", "parquet"],
     init() {
       this.initialQueries = this.loadInitialQueries();
       this.queries = this.initialQueries;
@@ -96,8 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if (this.queries && this.queries.length > 0) {
         this.queries.forEach((q, index) => {
           const queryId = `tdh-query-${index}`;
-          const spinnerId = `query-spinner-${index}`;
-          const formatOptions = ["csv", "json", "xml", "parquet"].map(fmt => {
+          const formatOptions = this.allowedFormats.map(fmt => {
             const checked = q.formats.includes(fmt) ? "checked" : "";
             return `<div class="form-check form-check-inline">
                       <input class="form-check-input query-format-checkbox" type="checkbox"
@@ -157,14 +157,30 @@ document.addEventListener("DOMContentLoaded", function() {
       return Array.from(checkboxes).map(cb => cb.value.toLowerCase());
     },
     addQuery() {
-      const title = document.getElementById('query-title').value.trim();
+      const titleInput = document.getElementById('query-title');
+      const statementInput = document.getElementById('query-statement');
+
+      const title = titleInput.value.trim();
       const summary = document.getElementById('query-summary').value.trim();
-      const statement = document.getElementById('query-statement').value.trim();
+      const statement = statementInput.value.trim();
       const formats = this.getSelectedFormats('input[name="query-formats"]:checked');
 
-      console.log(formats)
+      const requiredFields = [
+        { input: titleInput, value: title },
+        { input: statementInput, value: statement }
+      ];
 
-      if (!title || !statement) return;
+      let hasError = false;
+
+      requiredFields.forEach(({ input, value }) => {
+        input.classList.remove('is-invalid');
+        if (!value) {
+          input.classList.add('is-invalid');
+          hasError = true;
+        }
+      });
+
+      if (hasError) return;
 
       this.queries.push({ title, summary, statement, formats });
       this.renderTable();
@@ -172,7 +188,9 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById('query-title').value = '';
       document.getElementById('query-summary').value = '';
       document.getElementById('query-statement').value = '';
-      document.querySelectorAll('input[name="query-formats"]').forEach(cb => cb.checked = false);
+      document.querySelectorAll('input[name="query-formats"]').forEach(cb => {
+        cb.checked = (cb.value === this.allowedFormats[0]);
+      });
     },
     handleInput(e) {
       const target = e.target;
@@ -187,9 +205,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     },
     handleClick(e) {
-      console.log(e.target)
       if (e.target.classList.contains('btn-delete')) {
-        console.log("here")
         const index = e.target.dataset.index;
         this.queries.splice(index, 1);
         this.renderTable();
