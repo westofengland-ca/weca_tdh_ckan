@@ -83,7 +83,6 @@ function pollQueryDownloadTaskStatus(taskId, downloadUrl, $spinner) {
             } else if (status === "error") {
                 $spinner.hide()
                 window.location.reload();
-                document.getElementById('tdh-query-response-0').innerHTML = response.message
             } else {
                 setTimeout(() => pollQueryDownloadTaskStatus(taskId, downloadUrl, $spinner), 2000);
             }

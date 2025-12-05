@@ -1,3 +1,4 @@
+import logging
 import time
 
 import ckan.plugins.toolkit as toolkit
@@ -6,9 +7,9 @@ import requests
 from ckanext.weca_tdh.platform.redis_config import RedisConfig
 from ckanext.weca_tdh.platform.upload.blob_storage import BlobStorage
 from databricks.sdk import WorkspaceClient
-from databricks.sdk.service.sql import StatementState
+from databricks.sdk.service.sql import Disposition, Format, StatementState
 from flask import request
-import logging
+
 log = logging.getLogger(__name__)
 redis_client = RedisConfig(C.REDIS_URL)
 
@@ -28,7 +29,9 @@ class DatabricksWorkspace(object):
     def execute_statement(self, client, statement, timeout=30):
         stmt = client.statement_execution.execute_statement(
             statement=statement,
-            warehouse_id=self.warehouse_id
+            warehouse_id=self.warehouse_id,
+            disposition=Disposition.EXTERNAL_LINKS,
+            format=Format.CSV
         )
         
         start_time = time.time()

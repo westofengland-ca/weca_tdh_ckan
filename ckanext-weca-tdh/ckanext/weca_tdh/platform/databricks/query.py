@@ -1,4 +1,5 @@
 import csv
+import io
 import json
 import logging
 import os
@@ -9,6 +10,7 @@ import uuid
 import ckan.plugins.toolkit as toolkit
 import ckanext.weca_tdh.config as C
 import pandas as pd
+import requests
 from ckanext.weca_tdh.platform.redis_config import RedisConfig
 from flask import flash, jsonify, request, send_file
 from slugify import slugify
@@ -36,7 +38,7 @@ def get_resource_query(resource_id: str, query_id: int) -> str:
         return ""
 
 
-def download_file_from_query(task_id, stmt, query_output, output_path):
+def download_file_from_query_inline(task_id, stmt, query_output, output_path):
     try:
         redis_client.set_download_status(task_id, status="in_progress", message="Query running...")
 
@@ -65,6 +67,40 @@ def download_file_from_query(task_id, stmt, query_output, output_path):
             message="Query results ready for download.",
             file_path=output_path
         )
+    except Exception as e:
+        redis_client.set_download_status(task_id, status="error", message=f"Query failed: {e}")
+
+
+def download_file_from_query(task_id, stmt, query_output, output_path):
+    try:
+        redis_client.set_download_status(task_id, status="in_progress", message="Query running...")
+
+        links = stmt.result.external_links
+        dfs = []
+
+        for link in links:
+            resp = requests.get(link.external_link)
+            resp.raise_for_status()
+
+            for chunk in pd.read_csv(io.BytesIO(resp.content), chunksize=50000, low_memory=False):
+                dfs.append(chunk)
+
+        df = pd.concat(dfs, ignore_index=True)
+
+        if query_output.lower() == "json":
+            df.to_json(output_path, orient="records", indent=2)
+        elif query_output.lower() == "parquet":
+            df.to_parquet(output_path, index=False)
+        else:
+            df.to_csv(output_path, index=False)
+
+        redis_client.set_download_status(
+            task_id,
+            status="completed",
+            message="Query results ready for download.",
+            file_path=output_path
+        )
+
     except Exception as e:
         redis_client.set_download_status(task_id, status="error", message=f"Query failed: {e}")
 

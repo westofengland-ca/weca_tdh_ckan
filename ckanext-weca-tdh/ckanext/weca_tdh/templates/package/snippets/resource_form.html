@@ -60,8 +60,8 @@
     
     <label for="field-resource_queries" class="form-label">{{ _('SQL Queries') }}</label>
     {% set res_queries = data.get('resource_queries')  %}
-    {% set res_quries_len = h.load_json(res_queries) | length %}
-    <p class="heading-small">{{ _('This resource has ') ~ res_quries_len ~ ngettext(' query', ' queries', res_quries_len) ~ _(' assigned to it.') }}</p>
+    {% set res_queries_len = h.load_json(res_queries) | length %}
+    <p class="heading-small">{{ _('This resource has ') }}<span id="queries-len">{{ res_queries_len }}</span>{{ ngettext(' query', ' queries', res_queries_len) ~ _(' assigned to it.') }}</p>
     <input type="hidden" value={{res_queries}} id="field-resource_queries" name="resource_queries" class="form-control">
 
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#queries-modal">

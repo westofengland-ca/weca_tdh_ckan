@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const queryModalSaveBtn = document.getElementById('queries-modal-btn-save');
   const queryModalCancelBtn = document.getElementById('queries-modal-btn-cancel');
   const queryModalCloseBtn = document.getElementById('queries-modal-btn-close');
+  const queryListLenField = document.getElementById('queries-len');
 
   const queryModalObj = {
     queries: [],
@@ -213,6 +214,7 @@ document.addEventListener("DOMContentLoaded", function() {
     },
     saveChanges() {
       queryInputField.value = JSON.stringify(this.queries);
+      queryListLenField.innerText = this.queries.length;
     },
     discardChanges() {
       this.queries = this.initialQueries;
