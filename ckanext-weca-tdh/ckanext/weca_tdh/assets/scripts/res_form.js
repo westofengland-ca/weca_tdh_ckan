@@ -343,7 +343,11 @@ class QueryManager {
     warningEl.style.display = 'none';
 
     this.queryInputField.value = JSON.stringify(this.queries);
-    this.queryListLenField.innerText = this.queries.length;
+
+    const len = this.queries.length;
+    const plural = len === 1 ? 'query' : 'queries';
+    document.getElementById('queries-len').innerText = len;
+    document.getElementById('queries-text').innerText = `${plural} assigned to it.`;
 
     const modalInstance = bootstrap.Modal.getOrCreateInstance(this.queryModal);
     modalInstance.hide();
