@@ -108,8 +108,11 @@
             <button type="button" class="btn btn-primary" id="queries-modal-btn-add">{{ _('Add Query') }}</button>
           </div>
           <div class="modal-footer">
+            <span id="invalid-fields-warning" class="text-danger me-auto" style="display:none;">
+              {{ _('There are invalid query fields.') }}
+            </span>
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="queries-modal-btn-cancel">{{ _('Cancel') }}</button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="queries-modal-btn-save">{{ _('Save') }}</button>
+            <button type="button" class="btn btn-primary" id="queries-modal-btn-save">{{ _('Save') }}</button>
           </div>
         </div>
       </div>

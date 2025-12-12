@@ -1,225 +1,363 @@
-document.addEventListener("DOMContentLoaded", function() {
-   // ======== Data Access / TDH Catalog ========
-  const dataAccessSelect = document.querySelector('select[name="resource_data_access"]');
-  const dataLayerWrapper = document.getElementById('data-layer-wrapper');
-  const tdhQueryWrapper = document.getElementById('tdh-query-wrapper');
-  const dataLayerSelect = document.querySelector('select[name="resource_data_layer"]');
-  const tdhCatalogInput = document.getElementById('field-tdh_catalog');
-  const tdhTableInput = document.getElementById('field-tdh_table');
-  const varSiteId = document.getElementById('site-id');
+class DataAccessManager {
+  constructor() {
+    this.dataAccessSelect = document.querySelector('select[name="resource_data_access"]');
+    this.dataLayerWrapper = document.getElementById('data-layer-wrapper');
+    this.tdhQueryWrapper = document.getElementById('tdh-query-wrapper');
+    this.dataLayerSelect = document.querySelector('select[name="resource_data_layer"]');
+    this.tdhCatalogInput = document.getElementById('field-tdh_catalog');
+    this.tdhTableInput = document.getElementById('field-tdh_table');
+    this.varSiteId = document.getElementById('site-id');
+  }
 
-  const dataAccessObj = {
-    init() {
-      this.toggleWrappers();
-      $(dataAccessSelect).on('change', () => this.toggleWrappers());
-      $(dataLayerSelect).on('change', () => this.updateCatalog());
-    },
-    toggleWrappers() {
-      const val = dataAccessSelect.value;
-      if (val !== 'External Link') {
-        dataLayerWrapper.style.display = 'block';
-        if (!dataLayerSelect.value) dataLayerSelect.value = 'Wood';
-      } else {
-        dataLayerWrapper.style.display = 'none';
-        dataLayerSelect.value = 'Wood';
-      }
+  init() {
+    this.toggleWrappers();
+    $(this.dataAccessSelect).on('change', () => this.toggleWrappers());
+    $(this.dataLayerSelect).on('change', () => this.updateCatalog());
+  }
 
-      if (val === 'TDH Query') {
-        tdhQueryWrapper.style.display = 'block';
-        this.updateCatalog();
-      } else {
-        tdhQueryWrapper.style.display = 'none';
-        tdhCatalogInput.value = '';
-        tdhCatalogInput.placeholder = '';
-        tdhTableInput.value = '';
-      }
-    },
-    updateCatalog() {
-      if (tdhCatalogInput && dataLayerSelect && varSiteId) {
-        const newVal = `${dataLayerSelect.value.toLowerCase()}_${varSiteId.textContent}`;
-        tdhCatalogInput.placeholder = newVal;
-        tdhCatalogInput.value = newVal;
-      }
+  toggleWrappers() {
+    const val = this.dataAccessSelect.value;
+
+    if (val !== 'External Link') {
+      this.dataLayerWrapper.style.display = 'block';
+      if (!this.dataLayerSelect.value) this.dataLayerSelect.value = 'Wood';
+    } else {
+      this.dataLayerWrapper.style.display = 'none';
+      this.dataLayerSelect.value = 'Wood';
     }
-  };
 
-  dataAccessObj.init();
+    if (val === 'TDH Query') {
+      this.tdhQueryWrapper.style.display = 'block';
+      this.updateCatalog();
+    } else {
+      this.tdhQueryWrapper.style.display = 'none';
+      this.tdhCatalogInput.value = '';
+      this.tdhCatalogInput.placeholder = '';
+      this.tdhTableInput.value = '';
+    }
+  }
 
+  updateCatalog() {
+    if (this.tdhCatalogInput && this.dataLayerSelect && this.varSiteId) {
+      const newVal = `${this.dataLayerSelect.value.toLowerCase()}_${this.varSiteId.textContent}`;
+      this.tdhCatalogInput.placeholder = newVal;
+      this.tdhCatalogInput.value = newVal;
+    }
+  }
+}
 
-  // ======== Query Modal ========
-  const varResourceQueries = document.getElementById('resource-queries-data');
-  const queryInputField = document.getElementById('field-resource_queries');
-  const queryModal = document.getElementById('queries-modal');
-  const queryModalAddBtn = document.getElementById('queries-modal-btn-add');
-  const queryModalSaveBtn = document.getElementById('queries-modal-btn-save');
-  const queryModalCancelBtn = document.getElementById('queries-modal-btn-cancel');
-  const queryModalCloseBtn = document.getElementById('queries-modal-btn-close');
-  const queryListLenField = document.getElementById('queries-len');
+class QueryManager {
+  constructor() {
+    this.varResourceQueries = document.getElementById('resource-queries-data');
+    this.queryInputField = document.getElementById('field-resource_queries');
+    this.queryModal = document.getElementById('queries-modal');
+    this.queryModalAddBtn = document.getElementById('queries-modal-btn-add');
+    this.queryModalSaveBtn = document.getElementById('queries-modal-btn-save');
+    this.queryModalCancelBtn = document.getElementById('queries-modal-btn-cancel');
+    this.queryModalCloseBtn = document.getElementById('queries-modal-btn-close');
+    this.queryListLenField = document.getElementById('queries-len');
 
-  const queryModalObj = {
-    queries: [],
-    initialQueries: [],
-    allowedFormats: ["csv", "json", "parquet"],
-    init() {
-      this.initialQueries = this.loadInitialQueries();
-      this.queries = this.initialQueries;
-      this.saveChanges();
+    this.allowedFormats = ["csv", "json", "parquet"];
+    this.queries = [];
+    this.initialQueries = [];
+  }
 
-      queryModal.addEventListener('show.bs.modal', () => this.onModalShow());
-      queryModalAddBtn.addEventListener('click', () => this.addQuery());
-      queryModalSaveBtn.addEventListener('click', () => this.saveChanges());
-      queryModalCancelBtn.addEventListener('click', () => this.discardChanges());
-      queryModalCloseBtn.addEventListener('click', () => this.discardChanges());
-      document.querySelector('#modal-accordion').addEventListener('input', e => this.handleInput(e));
-      document.querySelector('#modal-accordion').addEventListener('click', e => this.handleClick(e));
-    },
-    loadInitialQueries() {
-      if (!varResourceQueries) return [];
-      try {
-        const parsed = JSON.parse(varResourceQueries.textContent);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch {
-        return [];
-      }
-    },
-    onModalShow() {
-      try {
-        this.queries = JSON.parse(queryInputField.value || '[]');
-        if (!Array.isArray(this.queries)) this.queries = [];
-      } catch {
-        this.queries = [];
-      }
-      this.renderTable();
-    },
-    renderTable() {
-      const container = document.getElementById('modal-accordion');
-      container.innerHTML = '';
+  init() {
+    this.initialQueries = this.loadInitialQueries();
+    this.queries = [...this.initialQueries];
+    this.saveChanges();
 
-      if (this.queries && this.queries.length > 0) {
-        this.queries.forEach((q, index) => {
-          const queryId = `tdh-query-${index}`;
-          const formatOptions = this.allowedFormats.map(fmt => {
-            const checked = q.formats.includes(fmt) ? "checked" : "";
-            return `<div class="form-check form-check-inline">
-                      <input class="form-check-input query-format-checkbox" type="checkbox"
-                            data-index="${index}" data-field="formats" value="${fmt}" id="format-${fmt}-${index}" ${checked}>
-                      <label class="form-check-label no-after" for="format-${fmt}-${index}" style="font-size:11px;">${fmt.toUpperCase()}</label>
-                    </div>`;
-          }).join('');
+    this.queryModal.addEventListener('show.bs.modal', () => this.onModalShow());
+    this.queryModalAddBtn.addEventListener('click', () => this.addQuery());
+    this.queryModalSaveBtn.addEventListener('click', () => this.saveChanges());
+    this.queryModalCancelBtn.addEventListener('click', () => this.discardChanges());
+    this.queryModalCloseBtn.addEventListener('click', () => this.discardChanges());
 
-          const div = document.createElement('div');
-          div.className = index === 0 ? '' : 'tdh-query-block';
+    document.querySelector('#modal-accordion')
+      .addEventListener('input', e => this.handleInput(e));
+    document.querySelector('#modal-accordion')
+      .addEventListener('click', e => this.handleClick(e));
 
-          div.innerHTML = `
-            <div class="accordion" id="queryAccordion">
-              <div id="${queryId}" class="accordion-item" style="border:2px solid black;">
-                <h2 class="accordion-header" id="heading-${index}">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${index}">
-                    ${q.title || 'New Query'}
-                  </button>
-                </h2>
-                <div id="collapse-${index}" class="accordion-collapse collapse" data-bs-parent="#queryAccordion">
-                  <div class="accordion-body">
-                    <div class="mb-2">
-                      <label>Title</label>
-                      <textarea class="form-control" data-index="${index}" data-field="title">${q.title}</textarea>
-                    </div>
-                    <div class="mb-2">
-                      <label>Summary</label>
-                      <textarea class="form-control" data-index="${index}" data-field="summary">${q.summary}</textarea>
-                    </div>
-                    <div class="mb-2">
-                      <label>SQL Query</label>
-                      <textarea class="form-control" data-index="${index}" data-field="statement">${q.statement}</textarea>
-                    </div>
-                    <div class="mb-2">
-                      <label>Formats</label>
-                      <div>
-                        ${formatOptions}
-                      </div>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-danger btn-delete" data-index="${index}">Delete</button>
-                  </div>
+    this.initAddFormLiveValidation();
+  }
+
+  loadInitialQueries() {
+    if (!this.varResourceQueries) return [];
+    try {
+      const parsed = JSON.parse(this.varResourceQueries.textContent);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  onModalShow() {
+    try {
+      const val = JSON.parse(this.queryInputField.value || '[]');
+      this.queries = Array.isArray(val) ? val : [];
+    } catch {
+      this.queries = [];
+    }
+    this.renderTable();
+  }
+
+  renderTable() {
+    const container = document.getElementById('modal-accordion');
+    container.innerHTML = '';
+
+    if (!this.queries.length) {
+      container.innerHTML =
+        `<p class="text-muted mt-2">No queries have been assigned to this resource. Add a new query below.</p>`;
+      return;
+    }
+
+    this.queries.forEach((q, index) => {
+      const div = document.createElement('div');
+      div.className = index === 0 ? '' : 'tdh-query-block';
+
+      const formatOptions = this.allowedFormats.map(fmt => `
+        <div class="form-check form-check-inline">
+          <input class="form-check-input query-format-checkbox" 
+                  type="checkbox"
+                  data-index="${index}" 
+                  data-field="formats"
+                  value="${fmt}" 
+                  id="format-${fmt}-${index}"
+                  ${q.formats.includes(fmt) ? "checked" : ""}>
+          <label class="form-check-label no-after"
+                  for="format-${fmt}-${index}" style="font-size:11px;">
+            ${fmt.toUpperCase()}
+          </label>
+        </div>`
+      ).join('');
+
+      div.innerHTML = `
+        <div class="accordion" id="queryAccordion">
+          <div class="accordion-item" id="tdh-query-${index}" style="border:2px solid black;">
+            <h2 class="accordion-header" id="heading-${index}">
+              <button class="accordion-button collapsed" type="button"
+                      data-bs-toggle="collapse" data-bs-target="#collapse-${index}">
+                      ${q.title || 'New Query'}
+              </button>
+            </h2>
+            <div id="collapse-${index}" class="accordion-collapse collapse"
+                 data-bs-parent="#queryAccordion">
+              <div class="accordion-body">
+                <div class="mb-2">
+                  <label>Title</label>
+                  <textarea class="form-control" 
+                            data-index="${index}" 
+                            data-field="title">${q.title}</textarea>
                 </div>
+                <div class="mb-2">
+                  <label>Summary</label>
+                  <textarea class="form-control" 
+                            data-index="${index}" 
+                            data-field="summary">${q.summary}</textarea>
+                </div>
+                <div class="mb-2">
+                  <label>SQL Query</label>
+                  <textarea class="form-control" 
+                            data-index="${index}" 
+                            data-field="statement">${q.statement}</textarea>
+                </div>
+                <div class="mb-2">
+                  <label>Formats</label>
+                  <div>${formatOptions}</div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger btn-delete"
+                        data-index="${index}">Delete</button>
               </div>
             </div>
-          `;
-          container.appendChild(div);
-        });
-      } else {
-        const emptyMessage = document.createElement('p');
-        emptyMessage.classList.add('text-muted', 'mt-2');
-        emptyMessage.textContent = 'No queries have been assigned to this resource. Add a new query below.';
-        container.appendChild(emptyMessage);
-      }
-    },
-    getSelectedFormats(selector) {
-      const checkboxes = document.querySelectorAll(selector);
-      return Array.from(checkboxes).map(cb => cb.value.toLowerCase());
-    },
-    addQuery() {
-      const titleInput = document.getElementById('query-title');
-      const statementInput = document.getElementById('query-statement');
+          </div>
+        </div>
+      `;
 
-      const title = titleInput.value.trim();
-      const summary = document.getElementById('query-summary').value.trim();
-      const statement = statementInput.value.trim();
-      const formats = this.getSelectedFormats('input[name="query-formats"]:checked');
+      container.appendChild(div);
 
-      const requiredFields = [
-        { input: titleInput, value: title },
-        { input: statementInput, value: statement }
-      ];
+      this.setupFieldValidation(div.querySelector('[data-field="title"]'), [this.validateRequired]);
+      this.setupFieldValidation(div.querySelector('[data-field="summary"]'), [this.validateRequired]);
+      this.setupFieldValidation(div.querySelector('[data-field="statement"]'), [
+        this.validateRequired,
+        this.validateSQL
+      ]);
+    });
+  }
 
-      let hasError = false;
+  validateRequired(value) {
+    return value.trim() ? null : "This field is required.";
+  }
 
-      requiredFields.forEach(({ input, value }) => {
-        input.classList.remove('is-invalid');
-        if (!value) {
-          input.classList.add('is-invalid');
-          hasError = true;
-        }
-      });
+  validateSQL(value) {
+    const v = value.trim().toUpperCase();
+    const forbidden = ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "MERGE", "CREATE"];
+    return forbidden.some(f => v.includes(f)) ? "Write operations are not allowed." : null;
+  }
 
-      if (hasError) return;
-
-      this.queries.push({ title, summary, statement, formats });
-      this.renderTable();
-
-      document.getElementById('query-title').value = '';
-      document.getElementById('query-summary').value = '';
-      document.getElementById('query-statement').value = '';
-      document.querySelectorAll('input[name="query-formats"]').forEach(cb => {
-        cb.checked = (cb.value === this.allowedFormats[0]);
-      });
-    },
-    handleInput(e) {
-      const target = e.target;
-      const { index, field } = target.dataset;
-
-      if (index !== undefined && field) {
-        if (field === "formats") {
-          this.queries[index][field] = this.getSelectedFormats(`input[data-index="${index}"][data-field="formats"]:checked`)
-        } else {
-          this.queries[index][field] = target.value;
-        }
-      }
-    },
-    handleClick(e) {
-      if (e.target.classList.contains('btn-delete')) {
-        const index = e.target.dataset.index;
-        this.queries.splice(index, 1);
-        this.renderTable();
-      }
-    },
-    saveChanges() {
-      queryInputField.value = JSON.stringify(this.queries);
-      queryListLenField.innerText = this.queries.length;
-    },
-    discardChanges() {
-      this.queries = this.initialQueries;
+  validateField(inputEl, validators) {
+    let msgEl = inputEl.parentNode.querySelector(".invalid-feedback");
+    if (!msgEl) {
+      msgEl = document.createElement("div");
+      msgEl.className = "invalid-feedback";
+      inputEl.parentNode.appendChild(msgEl);
     }
-  };
 
-  queryModalObj.init();
+    const value = inputEl.value;
+    const error = validators.map(v => v(value)).find(e => e !== null);
+
+    if (error) {
+      inputEl.classList.add("is-invalid");
+      inputEl.classList.remove("is-valid");
+      msgEl.textContent = error;
+      return false;
+    }
+
+    inputEl.classList.remove("is-invalid");
+    inputEl.classList.add("is-valid");
+    msgEl.textContent = "";
+    return true;
+  }
+
+  setupFieldValidation(inputEl, validators) {
+    inputEl.addEventListener("input", () => {
+      this.validateField(inputEl, validators);
+    });
+  }
+
+  initAddFormLiveValidation() {
+    const titleInput = document.getElementById('query-title');
+    const summaryInput = document.getElementById('query-summary');
+    const statementInput = document.getElementById('query-statement');
+
+    this.setupFieldValidation(titleInput, [this.validateRequired]);
+    this.setupFieldValidation(summaryInput, [this.validateRequired]);
+    this.setupFieldValidation(statementInput, [
+      this.validateRequired,
+      this.validateSQL
+    ]);
+  }
+
+  addQuery() {
+    const titleInput = document.getElementById('query-title');
+    const summaryInput = document.getElementById('query-summary');
+    const statementInput = document.getElementById('query-statement');
+
+    const inputs = [
+      { input: titleInput, validators: [this.validateRequired] },
+      { input: summaryInput, validators: [this.validateRequired] },
+      { input: statementInput, validators: [this.validateRequired, this.validateSQL] }
+    ];
+
+    const allValid = inputs.every(({ input, validators }) =>
+      this.validateField(input, validators)
+    );
+
+    if (!allValid) return;
+
+    this.queries.push({
+      title: titleInput.value.trim(),
+      summary: summaryInput.value.trim(),
+      statement: statementInput.value.trim(),
+      formats: this.getSelectedFormats('input[name="query-formats"]:checked')
+    });
+
+    this.renderTable();
+
+    inputs.forEach(({ input }) => {
+      input.value = '';
+      input.classList.remove('is-valid');
+    });
+
+    document.querySelectorAll('input[name="query-formats"]').forEach(cb => {
+      cb.checked = cb.value === this.allowedFormats[0];
+    });
+  }
+
+  getSelectedFormats(selector) {
+    return [...document.querySelectorAll(selector)]
+      .map(cb => cb.value.toLowerCase());
+  }
+
+  handleInput(e) {
+    const el = e.target;
+    const { index, field } = el.dataset;
+    if (index === undefined || !field) return;
+
+    if (field === "formats") {
+      this.queries[index].formats = this.getSelectedFormats(
+        `input[data-index="${index}"][data-field="formats"]:checked`
+      );
+    } else {
+      this.queries[index][field] = el.value;
+    }
+  }
+
+  handleClick(e) {
+    if (!e.target.classList.contains('btn-delete')) return;
+    const idx = e.target.dataset.index;
+    this.queries.splice(idx, 1);
+    this.renderTable();
+  }
+
+  saveChanges() {
+    const allFields = document.querySelectorAll(
+      '#modal-accordion textarea[data-field]'
+    );
+    const warningEl = document.getElementById('invalid-fields-warning');
+
+    let allValid = true;
+    let firstInvalid = null;
+
+    allFields.forEach(field => {
+      const validators = [this.validateRequired];
+
+      if (field.dataset.field === "statement")
+        validators.push(this.validateSQL);
+
+      const isValid  = this.validateField(field, validators);
+      if (!isValid) {
+        allValid = false;
+        if (!firstInvalid) firstInvalid = field;
+      }
+    });
+
+    if (!allValid) {
+      warningEl.style.display = 'inline';
+
+      if (firstInvalid) {
+        const collapseDiv = firstInvalid.closest('.accordion-collapse');
+        if (collapseDiv && !collapseDiv.classList.contains('show')) {
+          const bsCollapse = bootstrap.Collapse.getOrCreateInstance(collapseDiv);
+          bsCollapse.show();
+        }
+
+        setTimeout(() => {
+          firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+          firstInvalid.focus();
+        }, 300);
+      }
+
+      return;
+    }
+
+    warningEl.style.display = 'none';
+
+    this.queryInputField.value = JSON.stringify(this.queries);
+    this.queryListLenField.innerText = this.queries.length;
+
+    const modalInstance = bootstrap.Modal.getOrCreateInstance(this.queryModal);
+    modalInstance.hide();
+  }
+
+  discardChanges() {
+    this.queries = [...this.initialQueries];
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const dataAccessManager = new DataAccessManager();
+  dataAccessManager.init();
+
+  const queryManager = new QueryManager();
+  queryManager.init();
 });
