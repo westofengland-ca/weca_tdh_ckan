@@ -2,6 +2,7 @@ trigger: none
   # branches:
   #   include:
   #     - main
+
 pool:
   name: Azure Pipelines
 
@@ -23,17 +24,29 @@ variables:
 - group: Pipeline_vars
 
 steps:
-- task: Docker@2
-  displayName: Build and push
+# Login to ACR via ARM service connection
+- task: AzureCLI@2
+  displayName: Login to ACR (OIDC)
   inputs:
-    containerRegistry: $(ACR_SERVICE_CONNECTION)
-    repository: $(NAMESPACE)/$(CKAN_IMAGE_NAME)
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-    buildContext: 'ckanext-weca-tdh'
-    tags: $(buildtag)
-    arguments: --no-cache
+    azureSubscription: $(ARM_SERVICE_CONNECTION)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az acr login --name $(AZURE_CONTAINER_REGISTRY)
 
+# Build and push image
+- script: |
+    docker build \
+      --no-cache \
+      -t $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag) \
+      -f **/Dockerfile \
+      ckanext-weca-tdh
+
+    docker push \
+      $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag)
+  displayName: Build and push image
+
+# Save image to artifact
 - script: mkdir -p $(Build.ArtifactStagingDirectory)/$(NAMESPACE)
   displayName: 'Create Directory'
 
@@ -41,9 +54,12 @@ steps:
   displayName: Save an image
   inputs:
     repository: $(NAMESPACE)/$(CKAN_IMAGE_NAME)
-    command: 'save'
-    arguments: '-o $(Build.ArtifactStagingDirectory)/$(NAMESPACE)/$(CKAN_IMAGE_NAME).image.tar $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag)'
-  
+    command: save
+    arguments: >
+      -o $(Build.ArtifactStagingDirectory)/$(NAMESPACE)/$(CKAN_IMAGE_NAME).image.tar 
+      $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag)
+
+# Deploy to Azure Container Apps
 - task: AzureContainerApps@1
   displayName: Update revision
   inputs:
@@ -52,15 +68,20 @@ steps:
     resourceGroup: $(CONTAINER_APP_RESOURCE_GROUP)
     imageToDeploy: $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag)
 
+# Update build version env var
 - task: AzureCLI@2
   displayName: Update ckan build version tag
   inputs:
     azureSubscription: $(ARM_SERVICE_CONNECTION)
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
+    scriptType: bash
+    scriptLocation: inlineScript
     inlineScript: |
-     az containerapp update --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --name $(CONTAINER_APP_NAME) --set-env-vars ''TDH_BUILD_VERSION=$(buildtag)
+     az containerapp update \
+        --resource-group $(CONTAINER_APP_RESOURCE_GROUP) \
+        --name $(CONTAINER_APP_NAME) \
+        --set-env-vars TDH_BUILD_VERSION=$(buildtag)
     
+# Update index rebuild job image
 - task: AzureCLI@2
   displayName: Update index rebuild job
   inputs:
@@ -68,17 +89,21 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-     az containerapp job update --name $(DEV_CKAN_INDEX_REBUILD_JOB_NAME) --resource-group $(CONTAINER_APP_RESOURCE_GROUP) --image $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag) 
+     az containerapp job update \
+      --name $(DEV_CKAN_INDEX_REBUILD_JOB_NAME) \
+      --resource-group $(CONTAINER_APP_RESOURCE_GROUP) \
+      --image $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag) 
 
+# Publish build artifacts
 - task: PublishBuildArtifacts@1
   displayName: Publish artifacts
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'ckan-build'
-    publishLocation: 'Container'
-  # Update image tag variable which is passed to the release pipeline
+    PathtoPublish: $(Build.ArtifactStagingDirectory)
+    ArtifactName: ckan-build
+    publishLocation: Container
+  
+# Update image tag variable which is passed to the release pipeline
 - powershell: |
-    # Base64-encodes the Personal Access Token (PAT) appropriately 
     $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f "", "$(PAT)")))
     
     $url = "https://dev.azure.com/$(organization_name)/$(project_name)/_apis/distributedtask/variablegroups/$(group_id)?api-version=5.0-preview.1"
