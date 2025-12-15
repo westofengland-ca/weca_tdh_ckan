@@ -39,7 +39,7 @@ steps:
     docker build \
       --no-cache \
       -t $(AZURE_CONTAINER_REGISTRY).azurecr.io/$(NAMESPACE)/$(CKAN_IMAGE_NAME):$(buildtag) \
-      -f **/Dockerfile \
+      -f ckanext-weca-tdh/docker/ckan/Dockerfile \
       ckanext-weca-tdh
 
     docker push \
