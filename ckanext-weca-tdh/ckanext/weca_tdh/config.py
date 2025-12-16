@@ -2,7 +2,8 @@ from ckan.common import config
 
 # Global
 CKAN_SITE_ID = config['ckan.site_id']
-CKAN_SITE_URL= config['ckan.site_url']
+CKAN_SITE_URL = config['ckan.site_url']
+TDH_VERSION = "1.3.6"
 
 # CKAN user
 CKAN_USER_ID = "id"
@@ -82,6 +83,7 @@ TDH_UPLOAD_FILE_SIZE = 16 * 1024 * 1024 # 16MB
 TDH_UPLOAD_HTTP_TRIGGER = config.get('tdh.upload.http_trigger', "")
 
 # Databricks Workspace config
+TDH_DB_APP_USER_AGENT = config.get('tdh.db_app.user_agent', "CKAN")
 TDH_DB_APP_CLIENT_ID = config.get('tdh.db_app.client_id', "")
 TDH_DB_APP_REDIRECT_URL = f"{CKAN_SITE_URL}/databricks/auth"
 

@@ -6,12 +6,14 @@ import ckanext.weca_tdh.config as C
 import requests
 from ckanext.weca_tdh.platform.redis_config import RedisConfig
 from ckanext.weca_tdh.platform.upload.blob_storage import BlobStorage
-from databricks.sdk import WorkspaceClient
+from databricks.sdk import useragent, WorkspaceClient
+from databricks.sdk.core import Config
 from databricks.sdk.service.sql import Disposition, Format, StatementState
 from flask import request
 
 log = logging.getLogger(__name__)
 redis_client = RedisConfig(C.REDIS_URL)
+useragent.with_product(C.TDH_DB_APP_USER_AGENT, C.TDH_VERSION)
 
 
 class DatabricksWorkspace(object):
@@ -24,7 +26,12 @@ class DatabricksWorkspace(object):
         return toolkit.current_user.id if toolkit.current_user else "anon"
     
     def get_workspace_client(self):
-        return WorkspaceClient(host=self.host, token=self.get_workspace_access_token())
+        config = Config(
+            host=self.host,
+            token=self.get_workspace_access_token()
+        )
+
+        return WorkspaceClient(config=config)
     
     def execute_statement(self, client, statement, timeout=30):
         stmt = client.statement_execution.execute_statement(
