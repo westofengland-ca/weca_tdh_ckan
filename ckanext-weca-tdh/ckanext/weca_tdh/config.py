@@ -3,7 +3,7 @@ from ckan.common import config
 # Global
 CKAN_SITE_ID = config['ckan.site_id']
 CKAN_SITE_URL = config['ckan.site_url']
-TDH_VERSION = "1.3.6"
+TDH_VERSION = "1.4.0"
 
 # CKAN user
 CKAN_USER_ID = "id"
