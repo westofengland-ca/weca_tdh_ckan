@@ -6,7 +6,8 @@
     {% block item_inner %}
       {% block image %}
         <div class="media-image-container">
-          <img src="{{ package.organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" alt="{{ package.title }}" class="media-image img-fluid">    
+          {% set org = h.get_organization(package.organization.name) %}
+          <img src="{{ org.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" alt="{{ package.title }}" class="media-image img-fluid">    
         </div>
         <p class="content-seperator" style="margin-top: 5px;"></p>
       {% endblock %}
