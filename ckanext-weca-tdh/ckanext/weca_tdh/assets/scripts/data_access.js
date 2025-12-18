@@ -13,7 +13,7 @@ function start_download(resource_id) {
             pollDownloadTaskStatus(taskId, downloadUrl, $spinner);
         },
         error: function () {
-            $spinner.hide()
+            $spinner.css("display", "none");
             window.location.reload();
         }
     });
@@ -28,17 +28,17 @@ function pollDownloadTaskStatus(taskId, downloadUrl, $spinner) {
         success: function (response) {
             const status = response.status;
             if (status === "completed") {
-                $spinner.hide()
+                $spinner.css("display", "none");
                 window.location.href = downloadUrl;
             } else if (status === "error") {
-                $spinner.hide()
+                $spinner.css("display", "none");
                 window.location.reload();
             } else {
                 setTimeout(() => pollDownloadTaskStatus(taskId, downloadUrl), 2000);
             }
         },
         error: function () {
-            $spinner.hide()
+            $spinner.css("display", "none");
             window.location.reload();
         }
     });
@@ -63,7 +63,7 @@ function start_query_download(resource_id, query_id, format) {
             pollQueryDownloadTaskStatus(taskId, downloadUrl, $spinner);
         },
         error: function () {
-            $spinner.hide()
+            $spinner.css("display", "none");
             window.location.reload();
         }
     });
@@ -78,17 +78,17 @@ function pollQueryDownloadTaskStatus(taskId, downloadUrl, $spinner) {
         success: function (response) {
             const status = response.status;
             if (status === "completed") {
-                $spinner.hide()
+                $spinner.css("display", "none");
                 window.location.href = downloadUrl;
             } else if (status === "error") {
-                $spinner.hide()
+                $spinner.css("display", "none");
                 window.location.reload();
             } else {
                 setTimeout(() => pollQueryDownloadTaskStatus(taskId, downloadUrl, $spinner), 2000);
             }
         },
         error: function () {
-            $spinner.hide()
+            $spinner.css("display", "none");
             window.location.reload();
         }
     });
