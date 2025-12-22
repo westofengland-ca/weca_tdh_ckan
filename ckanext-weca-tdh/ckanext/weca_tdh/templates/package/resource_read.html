@@ -113,6 +113,31 @@
             });
           </script>
         {% endif %}
+
+        {% if res.resource_data_access == "TDH Query" and request.args.get("autodownload") %}
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              const args = "{{ request.args.get('autodownload') }}".split('_');
+              const autoDownloadIndex = args[0]
+              const autoDownloadFormat = args[1]
+              const queryCollapseId = `collapse-${autoDownloadIndex}`;
+              const queryCollapseEl = document.getElementById(queryCollapseId);
+
+              if (queryCollapseEl) {
+                const bsCollapse = new bootstrap.Collapse(queryCollapseEl, { toggle: true });
+                bsCollapse.show();
+              }
+
+              start_query_download('{{ res.id }}', autoDownloadIndex, autoDownloadFormat);
+
+              if (window.history.replaceState) {
+                const url = new URL(window.location);
+                url.searchParams.delete("autodownload");
+                window.history.replaceState({}, document.title, url.toString());
+              }
+            });
+          </script>
+        {% endif %}
       {% endblock %}
     </div>
   {% endblock %}

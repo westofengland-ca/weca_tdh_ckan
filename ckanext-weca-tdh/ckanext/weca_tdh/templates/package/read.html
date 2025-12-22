@@ -59,7 +59,7 @@
                 </dd>
                 <dt>{{ _('Data Quality:') }}</dt>
                 <dd property="dc:quality" data-cy="package-quality">
-                  <a href="{{ h.url_for('pages.show', page='support') ~ '#data-quality'}}">
+                  <a href="{{ h.url_for('pages.show', page='data-owner-and-steward-guide') }}">
                     {% set data_quality_markings = h.get_data_quality_markings() %}
                     {% if pkg.data_quality %}
                       {% set data_quality = data_quality_markings[pkg.data_quality | int] %}

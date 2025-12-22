@@ -1,5 +1,5 @@
 """
-Tests for databricks.py
+Tests for databricks
 """
 
 import logging
@@ -10,16 +10,15 @@ from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
 import requests
-from flask import Flask
-
-from ckanext.weca_tdh.databricks import (
+from ckanext.weca_tdh.platform.databricks.download import download_file_from_url
+from ckanext.weca_tdh.platform.databricks.utils import oauth_code_verify_and_challenge
+from ckanext.weca_tdh.platform.databricks.views import databricksbp
+from ckanext.weca_tdh.platform.databricks.workspace import (
     DatabricksWorkspace,
-    databricksbp,
-    download_file_from_url,
-    oauth_code_verify_and_challenge,
     redis_client,
 )
-from ckanext.weca_tdh.upload import BlobStorage
+from ckanext.weca_tdh.platform.upload.blob_storage import BlobStorage
+from flask import Flask
 
 log = logging.getLogger(__name__)
 
@@ -150,8 +149,8 @@ def test_get_task_status_not_found(client):
     assert response.json["status"] == "not_found"
 
 
-@patch("ckanext.weca_tdh.databricks.toolkit.redirect_to")
-@patch("ckanext.weca_tdh.databricks.flash")
+@patch("ckanext.weca_tdh.platform.databricks.download.toolkit.redirect_to")
+@patch("ckanext.weca_tdh.platform.databricks.download.flash")
 def test_download_file(mock_flash, mock_redirect, client):
     task_id = "test_task"
     
@@ -171,8 +170,8 @@ def test_download_file(mock_flash, mock_redirect, client):
         mock_redirect.assert_not_called()
 
 
-@patch("ckanext.weca_tdh.databricks.toolkit.redirect_to")
-@patch("ckanext.weca_tdh.databricks.flash")
+@patch("ckanext.weca_tdh.platform.databricks.download.toolkit.redirect_to")
+@patch("ckanext.weca_tdh.platform.databricks.download.flash")
 def test_download_file_not_found(mock_flash, mock_redirect, client):
     task_id = "test_task"
     redis_client.set_download_status(task_id, status="completed", message="Download completed.", file_path="/tmp/missing_file")
@@ -185,8 +184,8 @@ def test_download_file_not_found(mock_flash, mock_redirect, client):
     mock_redirect.assert_called_once_with("/")
     
 
-@patch("ckanext.weca_tdh.databricks.toolkit.redirect_to")
-@patch("ckanext.weca_tdh.databricks.flash")
+@patch("ckanext.weca_tdh.platform.databricks.download.toolkit.redirect_to")
+@patch("ckanext.weca_tdh.platform.databricks.download.flash")
 def test_download_file_missing_task_id(mock_flash, mock_redirect, client):
     client.get("/databricks/download/test_task")
 

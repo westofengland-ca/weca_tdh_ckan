@@ -41,7 +41,7 @@
             href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}&autodownload={{ res.id }}"
           {% endif %}>
           <i class="fa fa-arrow-circle-down"></i> {{ _('Download File') }}
-          <div id="spinner" class="download-spinner"></div>
+          <div id="download-spinner" class="download-spinner"></div>
         </a>
       {% elif res.resource_data_access == "TDH Query" %}
         <a id="ga-tdh-connect" 
@@ -68,8 +68,8 @@
       <p>{{ access.description | safe }}</p>
 
       {% if res.resource_data_access == "TDH Query" %}
-        {% if tdh_schema and res.tdh_table %}
-          <div class="connection-details">
+        {% if res.tdh_catalog and tdh_schema and res.tdh_table %}
+          <div class="tdh-query-block">
             <label for="tdh-query-path">{{ _('TDH Query Path') }}</label>
             <div class="tdh-query-path">
               <code id="tdh-query-path">{{ res.tdh_catalog }}.{{ tdh_schema }}.{{ res.tdh_table }}</code>
@@ -78,6 +78,73 @@
               </button>
             </div>
           </div>
+
+          {% set queries = h.load_json(res.resource_queries) %}
+          {% if queries %}
+            <p class="content-seperator" style="margin-top: 1rem;"></p>
+            <div class="tdh-query-block">
+              <h2>{{ _('Data download') }}
+                <span class="data-access-icon" aria-hidden="true">
+                  <i class="fa fa-arrow-circle-down"></i>
+                </span>
+              </h2>
+              <p>{{ _('Download data directly using the queries below:') }}</p>
+            </div>
+            <div class="tdh-query-block">
+              {% for query in queries %}
+                {% set loop_index = loop.index0 %}
+                {% set query_id = "tdh-query-" ~ loop_index %}
+                {% set query_spinner_id = "query-spinner-" ~ loop_index %}
+
+                <div class="{% if not loop.first %}tdh-query-block{% endif %}">
+                  <div class="accordion" id="queryAccordion">
+                    <div id="{{query_id}}" class="accordion-item">
+                      <h2 class="accordion-header" id="heading-{{loop_index}}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{loop_index}}">
+                          {{ query.title or 'Query ' ~ loop_index }}
+                        </button>
+                      </h2>
+                      <div id="collapse-{{loop_index}}" class="accordion-collapse collapse" data-bs-parent="#queryAccordion">
+                        <div class="accordion-body">
+                          <a role="button" id="ga-res-query-db-{{query_id}}" class="btn btn-primary dropdown-toggle resource-data-action" 
+                            data-bs-toggle="dropdown" aria-expanded="false" aria-label="list of downloadable formats">         
+                            <span class="caret">
+                              <i class="fa fa-arrow-circle-down" style="margin-right:5px;"></i>
+                              {{ _('Download') }}
+                            </span>
+                            <div id="{{query_spinner_id}}" class="download-spinner"></div>
+                          </a>
+                          <ul class="dropdown-menu" aria-labelledby="ga-res-query-db-{{ query_id }}">
+                            <li class="dropdown-header">
+                              <i class="fa fa-arrow-circle-down"></i> {{ _('Choose format') }}
+                            </li>
+                            {% for format in query.formats %}
+                              <li style="cursor:pointer;">
+                                <a class="dropdown-item"
+                                  {% if h.user_has_valid_db_token() %}
+                                    onclick="return start_query_download('{{ res.id }}', '{{ loop_index }}', '{{ format | lower }}');"
+                                  {% else %}
+                                    {% set args = loop_index ~ '_' ~ format | lower %}
+                                    href="{{ h.url_for('databricks.authenticate', resource_id=res.id) }}?referrer={{ request.path }}&autodownload={{ args }}"
+                                  {% endif %}>
+                                  {{ format | upper }}    
+                                </a>
+                              </li>
+                            {% else %}
+                              <li class="dropdown-item disabled text-muted">{{ _('No formats available') }}</li>
+                            {% endfor %}
+                          </ul>
+                          <p>{{ query.summary }}</p>
+                          <small>{{ "Available format(s): " ~ query.formats | join(', ') | upper }}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <p class="content-seperator" style="margin-top: 1rem;"></p>
+          {% endif %}
         {% endif %}
       {% endif %}
     </div>
