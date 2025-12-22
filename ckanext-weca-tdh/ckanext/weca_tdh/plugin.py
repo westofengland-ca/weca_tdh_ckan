@@ -13,14 +13,14 @@ from ckan.types import Context, Schema
 from flask import flash, request
 
 import ckanext.weca_tdh.config as C
-import ckanext.weca_tdh.logic.actions as pages_actions
+import ckanext.weca_tdh.logic.actions as actions
 from ckanext.pages.interfaces import IPagesSchema
-from ckanext.weca_tdh.platform.auth.azure import adauthbp
 from ckanext.weca_tdh.controller import actionbp
-from ckanext.weca_tdh.databricks import databricksbp
 from ckanext.weca_tdh.lib import helpers
+from ckanext.weca_tdh.platform.auth.azure import adauthbp
+from ckanext.weca_tdh.platform.databricks.views import databricksbp
 from ckanext.weca_tdh.platform.redis_config import RedisConfig
-from ckanext.weca_tdh.upload import uploadbp
+from ckanext.weca_tdh.platform.upload.views import uploadbp
 
 log = logging.getLogger(__name__)
 redis_client = RedisConfig(C.REDIS_URL)
@@ -46,8 +46,12 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     # IActions
     def get_actions(self):
         return {
-            "ckanext_pages_list": pages_actions.pages_list,
-            "ckanext_pages_show": pages_actions.pages_show
+            "ckanext_pages_list": actions.pages_list,
+            "ckanext_pages_show": actions.pages_show,
+            'organization_member_create': actions.organization_member_create,
+            'organization_member_delete': actions.organization_member_delete,
+            'package_collaborator_create': actions.package_collaborator_create,
+            'package_collaborator_delete': actions.package_collaborator_delete
         }
 
     def get_helpers(self) -> dict:       
@@ -122,11 +126,12 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_converter('convert_to_extras')],
         })
         schema['resources'].update({
-                'resource_data_access': [toolkit.get_validator('ignore_missing')],
-                'resource_data_category': [toolkit.get_validator('ignore_missing')],
-                'resource_data_layer': [toolkit.get_validator('ignore_missing')],
-                'tdh_catalog': [toolkit.get_validator('ignore_missing')],
-                'tdh_table': [toolkit.get_validator('ignore_missing')]
+            'resource_data_access': [toolkit.get_validator('ignore_missing')],
+            'resource_data_category': [toolkit.get_validator('ignore_missing')],
+            'resource_data_layer': [toolkit.get_validator('ignore_missing')],
+            'resource_queries': [toolkit.get_validator('ignore_missing')],
+            'tdh_catalog': [toolkit.get_validator('ignore_missing')],
+            'tdh_table': [toolkit.get_validator('ignore_missing')]
         })
         return schema
 
@@ -165,11 +170,12 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                                 toolkit.get_validator('ignore_missing')]
         })
         schema['resources'].update({
-                'resource_data_access': [toolkit.get_validator('ignore_missing')],
-                'resource_data_category': [toolkit.get_validator('ignore_missing')],
-                'resource_data_layer': [toolkit.get_validator('ignore_missing')],
-                'tdh_catalog': [toolkit.get_validator('ignore_missing')],
-                'tdh_table': [toolkit.get_validator('ignore_missing')]
+            'resource_data_access': [toolkit.get_validator('ignore_missing')],
+            'resource_data_category': [toolkit.get_validator('ignore_missing')],
+            'resource_data_layer': [toolkit.get_validator('ignore_missing')],
+            'resource_queries': [toolkit.get_validator('ignore_missing')],
+            'tdh_catalog': [toolkit.get_validator('ignore_missing')],
+            'tdh_table': [toolkit.get_validator('ignore_missing')]
         })
         return schema
     

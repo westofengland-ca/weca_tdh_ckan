@@ -90,6 +90,7 @@ ckan config-tool $CKAN_INI "tdh.connect.address_path = $TDH_CONNECT_ADDRESS_PATH
 
 # Set Databricks app connection config
 ckan config-tool $CKAN_INI "tdh.db_app.client_id = $TDH_DB_APP_CLIENT_ID"
+ckan config-tool $CKAN_INI "tdh.db_app.user_agent = $TDH_DB_APP_USER_AGENT"
 
 # Set upload blob storage container connection
 ckan config-tool $CKAN_INI "tdh.upload.storage_account = $TDH_UPLOAD_STORAGE_ACCOUNT"

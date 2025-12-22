@@ -38,5 +38,4 @@ Work takes place on short-lived feature branches taken from and merging back
 into the main branch. The main branch can then be deployed, as part of a CI/CD
 process to a development environment.
 
-Releases are made from the main branch and are simply tagged using a semantic
-version number.
+Releases are generated from the main branch and are tagged using a semantic before being merged into the deploy/weca-prod branch.

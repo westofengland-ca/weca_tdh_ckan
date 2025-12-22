@@ -1,6 +1,6 @@
 {% ckan_extends %}
 
-{% block basic_fields_url %}
+{% block metadata_fields  %}
   {{ super() }}
 
   {% set site_id = config.get('ckan.site_id', 'tdh-development').split('-')[-1] %}
@@ -53,55 +53,76 @@
       {% set value = data.get('tdh_table', '') %}
       <input value="{{value}}" placeholder="e.g. trips_route" id="field-tdh_table" name="tdh_table" class="form-control">
     </div>
-    <span class="info-block">
+    <span class="info-block" style="margin-bottom: 30px;">
       <i class="fa fa-info-circle"></i>
         {{ _('Databricks table query path (catalog.schema.table). The catalog and schema will be filled automatically.') }}
     </span>
+    
+    <label for="field-resource_queries" class="form-label">{{ _('SQL Queries') }}</label>
+    {% set res_queries = data.get('resource_queries')  %}
+    {% set res_queries_len = h.load_json(res_queries) | length %}
+    <p class="heading-small">{{ _('This resource has ') }}
+      <span id="queries-len">{{ res_queries_len }}</span>
+      <span id="queries-text">{{ ngettext(' query', ' queries', res_queries_len) ~ _(' assigned to it.') }}</span>
+    </p>
+    <input type="hidden" value={{res_queries}} id="field-resource_queries" name="resource_queries" class="form-control">
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#queries-modal">
+      <i class="fa fa-cog"></i>{{ _('Manage Queries') }}
+    </button>
+
+    <div class="modal fade" id="queries-modal" tabindex="-1" aria-labelledby="queries-modal-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="queries-modal-label">{{ _('Manage SQL Queries') }}</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" id="queries-modal-btn-close"></button>
+          </div>
+          <div class="modal-body">
+            <h6>{{ _('Current Queries') }}</h6>
+            <div id="modal-accordion" class="resource-data-access"></div>
+
+            <hr>
+            <h6>{{ _('Add New Query') }}</h6>
+            <div class="mb-3">
+              <input type="text" class="form-control" id="query-title" placeholder="Title">
+              <div class="invalid-feedback">{{ _('Title is required.') }}</div>
+            </div>
+            <div class="mb-3">
+              <textarea class="form-control" id="query-summary" placeholder="Summary"></textarea>
+            </div>
+            <div class="mb-3">
+              <textarea class="form-control" id="query-statement" placeholder="SQL Query"></textarea>
+              <div class="invalid-feedback">{{ _('Statement is required.') }}</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ _('Formats') }}</label>
+              <div id="query-format-options">
+                {% for fmt in ["csv", "json", "parquet"] %}
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="query-formats" id="format-{{ fmt }}" value="{{ fmt }}"
+                    {% if fmt == "csv" %}checked{% endif %}>
+                    <label class="form-check-label no-after" for="format-{{ fmt }}">{{ fmt | upper }}</label>
+                  </div>
+                {% endfor %}
+              </div>
+              <small class="form-text text-muted">{{ _('Select one or more formats.') }}</small>
+            </div>  
+            <button type="button" class="btn btn-primary" id="queries-modal-btn-add">{{ _('Add Query') }}</button>
+          </div>
+          <div class="modal-footer">
+            <span id="invalid-fields-warning" class="text-danger me-auto" style="display:none;">
+              {{ _('There are invalid query fields.') }}
+            </span>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="queries-modal-btn-cancel">{{ _('Cancel') }}</button>
+            <button type="button" class="btn btn-primary" id="queries-modal-btn-save">{{ _('Save') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const dataAccessSelect = document.querySelector('select[name="resource_data_access"]');
-      const dataLayerWrapper = document.getElementById('data-layer-wrapper');
-      const tdhQueryWrapper = document.getElementById('tdh-query-wrapper');
-      const dataLayerSelect = document.querySelector('select[name="resource_data_layer"]');
-      const tdhCatalogInput = document.getElementById('field-tdh_catalog');
-      const tdhTableInput = document.getElementById('field-tdh_table');
-      const siteId = "{{ site_id }}";
-
-      function toggleWrappers() {
-        const val = dataAccessSelect.value;
-        if (val != 'External Link') {
-          dataLayerWrapper.style.display = 'block';
-          if (!dataLayerSelect.value) dataLayerSelect.value = 'Wood';
-        } else {
-          dataLayerWrapper.style.display = 'none';
-          dataLayerSelect.value = 'Wood';
-        }
-
-        if (val === 'TDH Query') {
-          tdhQueryWrapper.style.display = 'block';
-          updateCatalog();
-        } else {
-          tdhQueryWrapper.style.display = 'none';
-          tdhCatalogInput.value = '';
-          tdhCatalogInput.placeholder = '';
-          tdhTableInput.value = '';
-        }
-      }
-
-      function updateCatalog() {
-        if (tdhCatalogInput && dataLayerSelect) {
-          const newVal = dataLayerSelect.value.toLowerCase() + "_" + siteId;
-          tdhCatalogInput.placeholder = newVal;
-          tdhCatalogInput.value = newVal;
-        }
-      }
-
-      toggleWrappers();
-
-      $(dataAccessSelect).on('change', toggleWrappers);
-      $(dataLayerSelect).on('change', updateCatalog);
-    });
-  </script>
+  <script id="resource-queries-data" type="application/json">{{ res_queries | safe }}</script>
+  <script id="site-id" type="application/json">{{ site_id }}</script>
+  {% asset 'weca_tdh/res_form-js' %}
 {% endblock %}

@@ -9039,9 +9039,8 @@ p.gem-c-lead-paragraph {
   margin-left: 0.5rem;
 }
 
-.connection-details {
+.tdh-query-block {
   margin-top: 1rem;
-  font-family: monospace;
 }
 
 .tdh-query-path {
@@ -9074,6 +9073,11 @@ p.gem-c-lead-paragraph {
 .data-access-support-link {
   margin-top: 1rem;
   font-size: 0.95rem;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #333333;
+  background-color: white;
 }
 
 /* GLOBAL /
@@ -9113,6 +9117,10 @@ html {
   border-bottom: 1px solid #ccc;
 }
 
+label.no-after::after {
+  content: none;
+}
+
 /* Data Preview /
 //////////////*/
 iframe {
@@ -9148,6 +9156,11 @@ iframe {
 ///////*/
 .control-required {
   color: #da3633;
+}
+
+.form-actions {
+  padding-top: 20px;
+  border-top: 1px solid #ccc;
 }
 
 .form-actions .control-required-message {

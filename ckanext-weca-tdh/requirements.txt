@@ -3,6 +3,10 @@ azure-keyvault-secrets==4.9.0
 azure-storage-blob==12.24.0
 beautifulsoup4
 ckanext-pdfview
+databricks-sdk==0.70.0
 markdown-it-py[linkify,plugins]
 mdit-py-plugins
 markdown==3.6
+pandas==2.3.3
+pyarrow==22.0.0
+python-slugify==8.0.4

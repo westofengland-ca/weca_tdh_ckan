@@ -87,7 +87,7 @@
               {{ govukButton({
               'id': 'ga-submit-idea',
               'text': "Submit idea",
-              'href': "{{ h.build_form_url('submit_idea', name=g.userobj.fullname, email=g.userobj.email) }}",
+              'href': h.build_form_url('submit_idea', name=g.userobj.fullname, email=g.userobj.email),
               'classes': 'action-button',
               'attributes': {'target': '_blank', 'data-cy': 'submit-us-button'}
               }) }}
