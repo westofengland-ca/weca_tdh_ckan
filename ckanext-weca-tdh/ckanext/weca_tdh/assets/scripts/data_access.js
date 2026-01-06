@@ -34,7 +34,7 @@ function pollDownloadTaskStatus(taskId, downloadUrl, $spinner) {
                 $spinner.css("display", "none");
                 window.location.reload();
             } else {
-                setTimeout(() => pollDownloadTaskStatus(taskId, downloadUrl), 2000);
+                setTimeout(() => pollDownloadTaskStatus(taskId, downloadUrl, $spinner), 2000);
             }
         },
         error: function () {
