@@ -1,4 +1,4 @@
-FROM ckan/ckan-base:2.11.3-py3.10
+FROM ckan/ckan-base:2.11.4-py3.10
 
 # Set up environment variables
 ENV APP_DIR=/srv/app
