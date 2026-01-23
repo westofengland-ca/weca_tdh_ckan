@@ -13,5 +13,5 @@ jobs:
     uses: ./.github/workflows/reusable-build-and-test.yml
     with:
       ckan-base-version: "2.11"
-      ckan-version: "2.11.3"
-      tdh-version: "1.4.0"
+      ckan-version: "2.11.4"
+      tdh-version: "1.4.1"
