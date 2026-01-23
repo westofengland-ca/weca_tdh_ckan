@@ -1,6 +1,6 @@
 {
   "name": "ckanext-weca-tdh",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "https://github.com/westofengland-ca/weca_tdh_ckan#readme",
   "main": "index.js",
   "scripts": {
