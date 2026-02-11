@@ -233,29 +233,6 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def package_types(self) -> list[str]:
         return []
-    
-    def set_defaults(self, data_dict):
-        log.error(f"DATA: {data_dict}")
-        if not data_dict.get("data_owners"):
-            try:
-                log.warning("Setting default data owner")
-                data_dict["data_owners"] = "Unassigned"
-                extras = data_dict.setdefault("extras", [])
-                if not any(e.get("key") == "data_owners" for e in extras):
-                    extras.append({"key": "data_owners", "value": data_dict["data_owners"]})
-            except Exception as e:
-                log.error(f"Failed to set defaults: {e}")
-
-        if not data_dict.get("data_stewards"):
-                try:
-                    log.warning("Setting default data steward")
-                    data_dict["data_stewards"] = "Unassigned"
-                    extras = data_dict.setdefault("extras", [])
-                    if not any(e.get("key") == "data_stewards" for e in extras):
-                        extras.append({"key": "data_stewards", "value": data_dict["data_stewards"]})
-                except Exception as e:
-                    log.error(f"Failed to set defaults: {e}")
-        return data_dict
 
     '''
     Override package search
