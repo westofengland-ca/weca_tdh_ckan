@@ -25,6 +25,39 @@ from ckanext.weca_tdh.platform.upload.views import uploadbp
 log = logging.getLogger(__name__)
 redis_client = RedisConfig(C.REDIS_URL)
 
+def default_if_missing(default_value):
+    def validator(value):
+        if value is toolkit.missing or not value:
+            return default_value
+        return value
+    return validator
+
+def insert_publisher(key, data, errors, context):
+    try:
+        value = data.get(key[0],None)    
+        if value is toolkit.missing or not value:
+            pub_id = data.get(('owner_org',)) or data.get(('organization',))
+        
+        if pub_id:
+            try:
+                pub = toolkit.get_action('organization_show')(context, {'id': pub_id})
+                pub_users = pub.get('users',[])
+                pub_display_names =  [dn.get("display_name") for dn in pub_users]
+                data[key] = pub_display_names
+
+            except Exception as e:
+                log.error(f"Failed to get publisher info: {e}")
+                data[key] = 'Unassigned'
+        else:
+            log.warning(f"No publisher found for dataset, setting {key} to 'Unassigned'")
+            data[key] = 'Unassigned'
+    
+    except Exception as e:
+        logging.error(f"ERROR: {e}")
+
+def json_to_string_array(value):
+    value = [v.replace("{","").replace("}","") for v in value]
+    return value
 
 class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IActions, inherit=True)
@@ -36,6 +69,7 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IPackageController)
     plugins.implements(IPagesSchema)
     plugins.implements(plugins.ITemplateHelpers)
+    plugins.implements(plugins.IValidators) 
 
     # IConfigurer
     def update_config(self, config: CKANConfig):
@@ -98,6 +132,13 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         Return flask blueprints for routing
         '''
         return [actionbp, adauthbp, databricksbp, uploadbp]
+    
+    def get_validators(self):
+        return {
+            "default_if_missing":default_if_missing,
+            "insert_publisher": insert_publisher,
+            "json_to_string_array":json_to_string_array
+        }
 
     ''' 
     Modify dataset metadata fields
@@ -107,14 +148,14 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         schema.update({
             'availability': [toolkit.get_validator('ignore_missing'),
                             toolkit.get_converter('convert_to_extras')],
-            'data_owners': [toolkit.get_validator('ignore_missing'),
-                                toolkit.get_converter('convert_to_extras')],
+            'data_owners': [toolkit.get_validator('insert_publisher'),
+                            toolkit.get_converter('convert_to_extras')],
             'data_quality': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
             'data_quality_score': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
-            'data_stewards': [toolkit.get_validator('ignore_missing'),
-                                toolkit.get_converter('convert_to_extras')],
+            'data_stewards': [toolkit.get_validator('default_if_missing')('Unassigned'),
+                               toolkit.get_converter('convert_to_extras')],
             'expressed_interest': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
             'featured': [toolkit.get_validator('ignore_missing'),
@@ -151,14 +192,16 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                             toolkit.get_validator('ignore_missing')],
             'data_owners': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing'),
-                             toolkit.get_converter('convert_to_json_if_string')],
+                             toolkit.get_converter('json_list_or_string'),
+                             toolkit.get_validator('json_to_string_array')],
             'data_quality': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')],
             'data_quality_score': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')],
             'data_stewards': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing'),
-                             toolkit.get_converter('convert_to_json_if_string')],
+                              toolkit.get_converter('json_list_or_string'),
+                             toolkit.get_validator('json_to_string_array')],
             'expressed_interest': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing')],
             'featured': [toolkit.get_converter('convert_from_extras'),
@@ -191,6 +234,29 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     def package_types(self) -> list[str]:
         return []
     
+    def set_defaults(self, data_dict):
+        log.error(f"DATA: {data_dict}")
+        if not data_dict.get("data_owners"):
+            try:
+                log.warning("Setting default data owner")
+                data_dict["data_owners"] = "Unassigned"
+                extras = data_dict.setdefault("extras", [])
+                if not any(e.get("key") == "data_owners" for e in extras):
+                    extras.append({"key": "data_owners", "value": data_dict["data_owners"]})
+            except Exception as e:
+                log.error(f"Failed to set defaults: {e}")
+
+        if not data_dict.get("data_stewards"):
+                try:
+                    log.warning("Setting default data steward")
+                    data_dict["data_stewards"] = "Unassigned"
+                    extras = data_dict.setdefault("extras", [])
+                    if not any(e.get("key") == "data_stewards" for e in extras):
+                        extras.append({"key": "data_stewards", "value": data_dict["data_stewards"]})
+                except Exception as e:
+                    log.error(f"Failed to set defaults: {e}")
+        return data_dict
+
     '''
     Override package search
     '''
