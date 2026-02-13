@@ -25,38 +25,73 @@ from ckanext.weca_tdh.platform.upload.views import uploadbp
 log = logging.getLogger(__name__)
 redis_client = RedisConfig(C.REDIS_URL)
 
+def strip_unsafe(value):
+    logging.error(f"STRIP :{value}")
+    if isinstance(value,list):
+        return [v.replace(",","").strip() for v in  value]
+    else:
+        return value.replace(",","").strip().strip('"')
+
 def default_if_missing(default_value):
     def validator(value):
         if value is toolkit.missing or not value:
             return default_value
+        value = strip_unsafe(value)
         return value
     return validator
 
 def insert_publisher(key, data, errors, context):
     try:
-        value = data.get(key[0],None)    
+        value = data.get(key, None)
         if value is toolkit.missing or not value:
             pub_id = data.get(('owner_org',)) or data.get(('organization',))
-        
-        if pub_id:
-            try:
-                pub = toolkit.get_action('organization_show')(context, {'id': pub_id})
-                pub_users = pub.get('users',[])
-                pub_display_names =  [dn.get("display_name") for dn in pub_users]
-                data[key] = pub_display_names
-
-            except Exception as e:
-                log.error(f"Failed to get publisher info: {e}")
-                data[key] = 'Unassigned'
+            
+            if pub_id:
+                try:
+                    pub = toolkit.get_action('organization_show')(context, {'id': pub_id})
+                    pub_users = pub.get('users', [])
+                    pub_display_names = [strip_unsafe(dn.get("display_name")) for dn in pub_users]
+                    if pub_display_names:
+                        data[key] = pub_display_names 
+                    else:
+                        data[key] = ['Unassigned']
+                except Exception as e:
+                    log.error(f"Failed to get publisher info: {e}")
+                    data[key] = ['Unassigned']
+            else:
+                data[key] = ['Unassigned']
         else:
-            log.warning(f"No publisher found for dataset, setting {key} to 'Unassigned'")
-            data[key] = 'Unassigned'
+            data[key] = parse_json_list(value)
     
     except Exception as e:
         logging.error(f"ERROR: {e}")
+        data[key] = ['Unassigned']
 
-def json_to_string_array(value):
-    value = [v.replace("{","").replace("}","") for v in value]
+def json_list_normalise(value):
+    if value is toolkit.missing or not value:
+        return json.dumps(['Unassigned'])
+    
+    if isinstance(value, list):
+        return json.dumps(value)
+    
+    if isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+            if isinstance(parsed, list):
+                return json.dumps(parsed)
+            else:
+                return json.dumps([parsed])
+        except (json.JSONDecodeError, ValueError):
+            return json.dumps([value])
+    
+    return json.dumps([str(value)])
+
+def parse_json_list(value):
+    if isinstance(value, str):
+        try:
+            return json.loads(value)
+        except Exception:
+            return [value]
     return value
 
 class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
@@ -137,7 +172,8 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         return {
             "default_if_missing":default_if_missing,
             "insert_publisher": insert_publisher,
-            "json_to_string_array":json_to_string_array
+            "parse_json_list":parse_json_list,
+            "json_list_normalise":json_list_normalise
         }
 
     ''' 
@@ -149,12 +185,14 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             'availability': [toolkit.get_validator('ignore_missing'),
                             toolkit.get_converter('convert_to_extras')],
             'data_owners': [toolkit.get_validator('insert_publisher'),
+                            toolkit.get_validator('json_list_normalise'),
                             toolkit.get_converter('convert_to_extras')],
             'data_quality': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
             'data_quality_score': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
             'data_stewards': [toolkit.get_validator('default_if_missing')('Unassigned'),
+                              toolkit.get_converter('json_list_normalise'),
                                toolkit.get_converter('convert_to_extras')],
             'expressed_interest': [toolkit.get_validator('ignore_missing'),
                                 toolkit.get_converter('convert_to_extras')],
@@ -192,16 +230,14 @@ class WecaTdhPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
                             toolkit.get_validator('ignore_missing')],
             'data_owners': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing'),
-                             toolkit.get_converter('json_list_or_string'),
-                             toolkit.get_validator('json_to_string_array')],
+                             toolkit.get_validator('parse_json_list')],
             'data_quality': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')],
             'data_quality_score': [toolkit.get_converter('convert_from_extras'),
                                 toolkit.get_validator('ignore_missing')],
             'data_stewards': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing'),
-                              toolkit.get_converter('json_list_or_string'),
-                             toolkit.get_validator('json_to_string_array')],
+                             toolkit.get_validator('parse_json_list')],
             'expressed_interest': [toolkit.get_converter('convert_from_extras'),
                               toolkit.get_validator('ignore_missing')],
             'featured': [toolkit.get_converter('convert_from_extras'),
