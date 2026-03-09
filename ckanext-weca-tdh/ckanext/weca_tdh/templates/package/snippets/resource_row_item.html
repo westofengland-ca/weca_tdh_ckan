@@ -9,7 +9,7 @@
 #}
 
 {% set url_action = pkg.type ~ ('_resource.edit' if url_is_edit and can_edit else '_resource.read') %}
-{% set external = res.resource_data_access and res.resource_data_access in ('External Link', 'Power BI Report') %}
+{% set external = res.resource_data_access and res.resource_data_access in ('External Link', 'Power BI Report', 'Databricks Dashboard') %}
 {% set url = res.url if external else url or h.url_for(url_action, id=pkg.name, resource_id=res.id) %}
 
 {% block resource_item %}
