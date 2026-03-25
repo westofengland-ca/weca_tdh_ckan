@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block links -%}
+  <link rel="shortcut icon" href="/assets/images/branding/weca-favicon.png" />
+  <link rel="preload"
+        href="/assets/fonts/light-94a07e06a1-v2.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin="anonymous" />
+  <link rel="preload"
+        href="/assets/fonts/light-f591b13f7d-v2.woff"
+        as="font"
+        type="font/woff"
+        crossorigin="anonymous" />
+  <link rel="preload"
+        href="/assets/fonts/bold-b542beb274-v2.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin="anonymous" />
+  <link rel="preload"
+        href="/assets/fonts/bold-affa96571d-v2.woff"
+        as="font"
+        type="font/woff"
+        crossorigin="anonymous" />
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+{% endblock -%}
+{% block styles %}
+  {{ super() }}
+  {% asset 'weca_tdh/weca_tdh-css' %}
+{% endblock %}
+{% block scripts %}
+  {{ super() }}
+  {% asset 'weca_tdh/govuk-frontend-js' %}
+  {% if config['feature_flag.ga.enabled'] == 'True' %}
+    {% block google_analytics %}
+      {% asset 'weca_tdh/google_analytics-js' %}
+      {% set ga_config = h.get_google_analytics_config() %}
+      <script async
+              src="https://www.googletagmanager.com/gtag/js?id={{ ga_config.get('ga_id') }}"></script>
+      <div class="js-hide"
+           data-module="google_analytics"
+           data-module-ga_id="{{ ga_config.get('ga_id') }}"></div>
+    {% endblock %}
+  {% endif %}
+  {% block cookie_control %}
+    {% asset 'weca_tdh/cookie_control-js' %}
+    <script src="https://cc.cdn.civiccomputing.com/9/cookieControl-9.x.min.js"></script>
+    {% set cookie_control_config = h.get_cookie_control_config() %}
+    <div id="cookie-control"
+         class="js-hide"
+         data-module="cookie_control"
+         data-module-api_key="{{ cookie_control_config.get('api_key') }}"
+         data-module-license_type="{{ cookie_control_config.get('license_type') }}"
+         data-module-analytics_enabled="{{ config['feature_flag.ga.enabled'] }}"></div>
+  {% endblock %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+{% endblock %}

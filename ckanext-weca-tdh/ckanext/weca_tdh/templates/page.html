@@ -1,5 +1,4 @@
-{% extends "base.html" %}
-
+{% extends "base_tdh.html" %}
 {%- block page -%}
 
   {% block skip %}
@@ -11,6 +10,7 @@
   {% endblock -%}
 
   {%- block content %}
+    <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
     {% block maintag %}<main role="main" id="main-content" class="govuk-main-wrapper govuk-body">{% endblock %}
       <div id="content" class="govuk-width-container">
         {% block main_content %}
