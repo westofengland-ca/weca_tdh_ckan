@@ -15,7 +15,7 @@
 {% block resource_item %}
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">
-      <a class="govuk-link" href="{{ url }}">{{ h.resource_display_name(res) | truncate(100) }}</a>
+      <a class="govuk-link" href="{{ url }}">{{ h.resource_display_name(res) | truncate(75) }}</a>
     </td>
     <td class="govuk-table__cell">
       {{ res.format or 'Data' }}
