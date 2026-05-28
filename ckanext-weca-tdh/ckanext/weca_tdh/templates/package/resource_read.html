@@ -93,8 +93,8 @@
       {% block data_access %}
         {% if res.resource_data_access %}
           {{ data_access_macro.render(res, tdh_schema) }}
-          <p class="heading-small data-access-support-link">{{ _('To learn more about data access methods, visit the') }} 
-            <a class="govuk-link" href="{{ h.url_for('pages.show', page='support') ~ '#data-access' }}">{{ _('Support page') }}</a>.
+          <p class="heading-small data-access-support-link">{{ _('To learn more about data access methods, see the') }} 
+            <a class="govuk-link" href="{{ h.url_for('pages.show', page='master-support-page') }}">{{ _('Documentation') }}</a>.
           </p>
         {% else %}
           <p>{{ _('A data access type has not been assigned to this resource.') }}</p>
