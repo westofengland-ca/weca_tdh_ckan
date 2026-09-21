@@ -12,12 +12,15 @@ on:
       tdh-version:
         required: true
         type: string
+      python-version:
+        required: true
+        type: string
 jobs:
   test:
     name: Test CKAN ${{ inputs.ckan-version }}-${{ inputs.tdh-version }}
     runs-on: ubuntu-latest
     container:
-      image: ckan/ckan-dev:${{ inputs.ckan-version }}-py3.10
+      image: ckan/ckan-dev:${{ inputs.ckan-version }}-${{ inputs.python-version }}
       options: --user root
     services:
       solr:
