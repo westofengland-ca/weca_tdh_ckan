@@ -51,11 +51,11 @@ services:
       - ckan_storage:/var/lib/ckan
       - ../:/srv/app/src_extensions/ckanext-weca-tdh
       - pip_cache:/root/.cache/pip
-      - site_packages:/usr/local/lib/python3.10/site-packages
+      - site_packages:/usr/local/lib/python3.14/site-packages
       - local_bin:/usr/local/bin
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000"]
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:5000/api/3/action/status_show"]
     networks:
       - ckan-network
 
