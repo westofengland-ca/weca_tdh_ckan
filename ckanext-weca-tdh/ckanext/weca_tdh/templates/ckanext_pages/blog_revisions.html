@@ -29,7 +29,7 @@
               {{ _('{actor} updated page at {date}').format(
                 actor=actor(revision), date=h.render_datetime(revision.created, with_hours=True)
               )|safe }}
-              {% link_for _('Preview'), named_route='pages.blog_revisions_preview', page=c.page.name, revision=key, class_='btn btn-default' %}
+              {% link_for _('Preview'), named_route='pages.blog_revisions_preview', page=c.page.name, revision=key, class_='btn btn-secondary' %}
               {% if not revision.current %}
                 {% link_for _('Restore'), named_route='pages.blog_revision_restore', page=c.page.name, revision=key, class_='btn btn-primary' %}
               {% else %}
